@@ -39,8 +39,6 @@ cs2-mcp/
 │                       crates/cs2-bridge/src/generated/pins.rs, build-rs.sh /
 │                       install-rs.sh / runtime.sh, the live test_*.py
 ├── workflows/          cross-crate procedures (game update), update reports, upstream PR drafts
-├── cs2-docker/         git submodule: personcopperfine/cs2-docker, the client image's source
-│                       (`client/Dockerfile`, published as ghcr.io/personcopperfine/cs2-docker)
 └── workshop/           git submodule: personcopperfine/cs2-docker-workshop, the workshop tools
                         image's source (published as ghcr.io/personcopperfine/cs2-workshop);
                         `workshop/run/` (gitignored there) holds the runtime state
@@ -52,10 +50,12 @@ Python tools resolve a linked git worktree to the main checkout (`bridge/lib-roo
 `bridge/cs2mcp_root.py`); a Rust binary defaults to the checkout it was built in. Under the root:
 the Wine game + tools install `workshop/run/app` (copied out of the workshop image's `/app/`),
 `workshop/run/cache`, podman's runtime dir `.podman/xdg`, `artifacts/`. The containers run the
-client image (`ghcr.io/personcopperfine/cs2-docker:latest` by default; `CS2_MCP_IMAGE` /
-`--image`, `IMG` for `bridge/runtime.sh`, select a local build of `cs2-docker/client`); the Linux
-game lives in the podman volume `cs2-home`. An older layout, a parent directory holding this repo
-as `cs2-mcp/` next to `workshop/`, still works with `CS2_MCP_PROJECT_ROOT=<that directory>`.
+client image (`ghcr.io/personcopperfine/cs2-docker:latest` by default, built by CI in
+[personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker); a custom build,
+`podman build -t <tag> <clone>/client`, is selected with `CS2_MCP_IMAGE` / `--image`, `IMG` for
+`bridge/runtime.sh`); the Linux game lives in the podman volume `cs2-home`. An older layout, a
+parent directory holding this repo as `cs2-mcp/` next to `workshop/`, still works with
+`CS2_MCP_PROJECT_ROOT=<that directory>`.
 
 ## Who owns pointers
 
@@ -107,7 +107,7 @@ as `cs2-mcp/` next to `workshop/`, still works with `CS2_MCP_PROJECT_ROOT=<that 
 ## Checks that must stay green
 
 ```sh
-git submodule update --init crates/s2sdk/upstream crates/metamod/upstream cs2-docker workshop
+git submodule update --init crates/s2sdk/upstream crates/metamod/upstream workshop
 git -C crates/metamod/upstream submodule update --init third_party/khook   # metamod's own submodule (gen.py reads khook.hpp)
 cargo clippy --workspace --all-targets          # no warnings
 cargo test  --workspace                         # no game needed

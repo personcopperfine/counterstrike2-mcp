@@ -3,8 +3,8 @@
 //! call tools, through the read-only `get_playbook` tool. The text lives here and nowhere else;
 //! `tests/playbooks.rs` checks every tool name and argument key in it against the registry.
 //!
-//! Source: what ti_convoy actually did (workflows/streamline/ti_convoy-FIXME.md) and the
-//! acceptance runs (ACCEPTANCE.md). `<ARG>` markers are replaced by the prompt arguments.
+//! Source: what the ti_convoy map project actually did (its hack log, summarised in
+//! workflows/streamline/PLAN.md) and the acceptance runs (ACCEPTANCE.md). `<ARG>` markers are replaced by the prompt arguments.
 use crate::state::HammerState;
 use cs2_mcp_common::prompts::{PromptArg, PromptSet, PromptSpec};
 use cs2_mcp_common::tools::{CallCtx, Mutability::ReadOnly, Registry, ToolError, ToolOutput, ToolSpec};

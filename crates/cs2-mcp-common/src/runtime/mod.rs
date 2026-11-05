@@ -1,5 +1,5 @@
-//! Runtime/launcher abstraction. Phase 1 = `docker` (podman, images from the parent cs2-docker
-//! repo + our own image under ./docker). Phase 2 = `local` (a game install on the host).
+//! Runtime/launcher abstraction. Phase 1 = `docker` (podman, the published client image
+//! `ghcr.io/personcopperfine/cs2-docker` + our own image under ./docker). Phase 2 = `local` (a game install on the host).
 //!
 //! The MCP tools never shell out to podman themselves; they ask the `Runtime`.
 

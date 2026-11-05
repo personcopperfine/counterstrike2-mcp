@@ -4,7 +4,7 @@ Byte-identical copies of the vtest POC (`idabins/worknotes/vtest/`). Embedded wi
 `src/testscript/mod.rs`; `stage` writes them to `<app>/vtest/` next to the rendered suite. Do not edit
 them here: change the POC and copy again (`cmp` must stay silent).
 
-| File | Source (relative to `cs2-docker/`) |
+| File | Source (in the maintainer's research checkout) |
 |---|---|
 | `mark.vtest` | `idabins/worknotes/vtest/suites/mark.vtest` |
 | `setup_player.vtest` | `idabins/worknotes/vtest/suites/setup_player.vtest` |

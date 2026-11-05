@@ -20,11 +20,11 @@ write the report (last section), tell the user what you stopped on, and don't tr
 ```sh
 cd <cs2-mcp worktree>                       # never the shared main checkout
 git status --short                          # must be clean (see "Resuming" below if it is not)
-git submodule update --init crates/s2sdk/upstream crates/metamod/upstream cs2-docker workshop
+git submodule update --init crates/s2sdk/upstream crates/metamod/upstream workshop
 git -C crates/metamod/upstream submodule update --init third_party/khook   # metamod's own submodule (gen.py reads khook.hpp)
 # in a worktree whose submodule URLs point at local clones, add `-c protocol.file.allow=always` to both
 export CS2_MCP_PROJECT_ROOT=<project root>  # holds workshop/run/app + .podman (default: the main checkout); a worktree-built server needs it
-export CS2_MCP_IMAGE=${CS2_MCP_IMAGE:-ghcr.io/personcopperfine/cs2-docker:latest}   # the client image (or a local build of cs2-docker/client)
+export CS2_MCP_IMAGE=${CS2_MCP_IMAGE:-ghcr.io/personcopperfine/cs2-docker:latest}   # the client image (or a custom build of <cs2-docker clone>/client)
 export XDG_RUNTIME_DIR=$CS2_MCP_PROJECT_ROOT/.podman/xdg   # every podman call needs it
 export CS2_UPDATE_DIR=${CS2_UPDATE_DIR:-$PWD/target/cs2-update}   # downloads (several GB; never /tmp)
 APP=$CS2_MCP_PROJECT_ROOT/workshop/run/app  # the Wine install the bridge runs in
@@ -72,8 +72,8 @@ podman run --rm -v cs2-home:/home/steam --entrypoint cat "$CS2_MCP_IMAGE" \
   "/home/steam/steamapps/common/Counter-Strike Global Offensive/game/csgo/steam.inf"
 ```
 
-The `ClientVersion` printed must equal `NEW`. (Same steamcmd flags as `cs2-docker/client/entrypoint.sh`
-in the `cs2-docker` submodule; the image is built from `cs2-docker/client/Dockerfile`. CS2 is free to play, so anonymous login
+The `ClientVersion` printed must equal `NEW`. (Same steamcmd flags as the image's [`client/entrypoint.sh`](https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh);
+the image is built from [`client/Dockerfile`](https://github.com/personcopperfine/cs2-docker/blob/main/client/Dockerfile). CS2 is free to play, so anonymous login
 works for the Linux game.) That entrypoint also re-validates the game by itself when the install is
 more than 7 days old, so the volume can change without anyone running this step. Always read
 `steam.inf` instead of assuming the volume's build.

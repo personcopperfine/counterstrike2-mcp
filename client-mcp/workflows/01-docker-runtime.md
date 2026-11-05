@@ -7,15 +7,15 @@
 layer in `docker/`.
 
 ## Prerequisites
-- the client image: `ghcr.io/personcopperfine/cs2-docker:latest` (pulled), or a local build of the
-  `cs2-docker` submodule (`podman build -t localhost/cs2-docker cs2-docker/client`, then
-  `--image localhost/cs2-docker`); game volume `cs2-home` or host dir
-  `cs2-docker/client/.cache/game` for Linux; `workshop/run/app` materialised for Wine
+- the client image: `ghcr.io/personcopperfine/cs2-docker:latest` (pulled), or a custom build from a
+  clone of [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker) (`podman build -t localhost/cs2-docker <clone>/client`,
+  then `--image localhost/cs2-docker`); the Linux game lives in the podman volume `cs2-home`;
+  `workshop/run/app` materialised for Wine
   (`../idabins/worknotes/wine-tools-bringup.md`).
 - podman trap: `XDG_RUNTIME_DIR=<project root>/.podman/xdg`; `--network=host`
   (pasta/unshare denied on this host); several CS2 containers may run, capped by `--max-sessions`
   (about 3 fit in GPU memory at 1080p).
-- Read `cs2-docker/client/entrypoint.sh` (steamcmd validate, gbe setup, `cs2_video.txt` seeding with
+- Read [`client/entrypoint.sh`](https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh) (steamcmd validate, gbe setup, `cs2_video.txt` seeding with
   llvmpipe vendor id, `LD_PRELOAD` audio libs, `-condebug -conclearlog`, console tail),
   `../harness/run-cs2.sh` (restore-then-fix preamble, `Xvfb :99 -fbdir`, snapshots),
   `../.github/skills/cs2-lavapipe/SKILL.md` (environment facts, traps T1–T17).

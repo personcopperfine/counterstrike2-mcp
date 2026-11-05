@@ -31,13 +31,12 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
 ├── crates/cs2-mcp-common/  shared crate: bridge client, tool registry, rmcp adapter, runtime, sigs, capture, mock
 ├── hammer-mcp/             workshop-tools server (own AGENT.md)
 ├── client-mcp/             this server
-├── cs2-docker/             submodule: the client image source (client/Dockerfile, entrypoint.sh), published as ghcr.io/personcopperfine/cs2-docker
 └── workshop/               submodule: the workshop tools image source, published as ghcr.io/personcopperfine/cs2-workshop
     └── run/app             Windows CS2 + tools + Proton prefix (gitignored runtime state; mounted at /app)
 ```
 
 Paths are written from the repo root as `bridge/...`, `crates/cs2-mcp-common/...`,
-`cs2-docker/client/...`, `workshop/...`. Override with `--sigs` / `--project-root`.
+`workshop/...`. Override with `--sigs` / `--project-root`.
 Citations of the form `../idabins/...`, `../harness/...`, `../tests/...`, `../cs2-gym/...`,
 `../.github/skills/...` point into the maintainer's private research checkout (the directory this
 repo used to live in). They are not published; they record where a fact was established.
@@ -56,7 +55,7 @@ Required reading (skim; cite, do not re-derive):
 | Demo -> video | `../idabins/worknotes/movie-scratch.md`, `worknotes/vtest/suites/movie_demo.txt`, `check_movie_demo.py` |
 | Freecam world render (no Hammer) | `../idabins/docs/flows/map-preview-freecam.md`, `worknotes/worldpreview-scratch.md` |
 | Python bridge client / POC server (the contract we ported) | `../idabins/worknotes/mcpserver/bridge_client.py`, `server.py`, `mock_bridge.py`, `README.md` |
-| Linux headless client image | `cs2-docker/client/Dockerfile`, `cs2-docker/client/entrypoint.sh`, `../harness/run-cs2.sh`, `boot.sh`, `x11shim.c`, `xdump.c`, `xkey.c`, `../tests/README.md`, `../.github/skills/cs2-lavapipe/SKILL.md` |
+| Linux headless client image (`ghcr.io/personcopperfine/cs2-docker`) | [`client/Dockerfile`](https://github.com/personcopperfine/cs2-docker/blob/main/client/Dockerfile), [`client/entrypoint.sh`](https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh), `../harness/run-cs2.sh`, `boot.sh`, `x11shim.c`, `xdump.c`, `xkey.c`, `../tests/README.md`, `../.github/skills/cs2-lavapipe/SKILL.md` |
 | Windows runtime under Wine | `workshop/Dockerfile`, `workshop/entrypoint.sh`, `../idabins/worknotes/wine-tools-bringup.md` |
 | RL environment tie-in | `../cs2-gym/docs/DESIGN.md` |
 

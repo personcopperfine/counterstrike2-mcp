@@ -2,8 +2,10 @@
 
 Two Rust **stdio MCP servers** for Counter-Strike 2 / Source 2, built on the in-process bridge DLL
 (`bridge/`, pinned by the signature database in `sigs/`), Rust bindings of the Source 2 SDK
-(`crates/s2sdk/`), and two container images published from the `cs2-docker/` and `workshop/`
-submodules:
+(`crates/s2sdk/`), and two container images: the game client image
+`ghcr.io/personcopperfine/cs2-docker` (built by CI in
+[personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker)) and the workshop
+tools image published from the `workshop/` submodule:
 
 | Crate | Target | Guide |
 |---|---|---|
@@ -27,7 +29,7 @@ shared through `cs2-mcp-common`.
 ```sh
 git clone --recurse-submodules https://github.com/personcopperfine/counterstrike2-mcp.git
 # or, in an existing clone:
-git submodule update --init crates/s2sdk/upstream crates/metamod/upstream cs2-docker workshop
+git submodule update --init crates/s2sdk/upstream crates/metamod/upstream workshop
 git -C crates/metamod/upstream submodule update --init third_party/khook
 ```
 
@@ -35,7 +37,6 @@ git -C crates/metamod/upstream submodule update --init third_party/khook
 |---|---|---|
 | `crates/s2sdk/upstream` | [personcopperfine/s2sdk](https://github.com/personcopperfine/s2sdk) (branch `cs2mcp/main`) | the Source 2 SDK headers the bindings are generated from |
 | `crates/metamod/upstream` | [alliedmodders/metamod-source](https://github.com/alliedmodders/metamod-source) | Metamod:Source + KHook headers |
-| `cs2-docker` | [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker) | the game client image (`client/Dockerfile`), published as `ghcr.io/personcopperfine/cs2-docker` |
 | `workshop` | [personcopperfine/cs2-docker-workshop](https://github.com/personcopperfine/cs2-docker-workshop) | the workshop tools image (Hammer etc. under Wine/Proton, a file-source image), published as `ghcr.io/personcopperfine/cs2-workshop` |
 
 The **project root** is this checkout unless `CS2_MCP_PROJECT_ROOT` (or the servers'
@@ -56,11 +57,14 @@ holding this repo as `cs2-mcp/` next to `workshop/` (the layout this repo grew u
 `CS2_MCP_PROJECT_ROOT` names it.
 
 Images: the servers and `bridge/runtime.sh` run `ghcr.io/personcopperfine/cs2-docker:latest`
-(podman pulls it on first use). A local build of the submodule is selected with
-`CS2_MCP_IMAGE` / `--image` (servers) or `IMG` (`runtime.sh`):
+(podman pulls it on first use); its source is
+[personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker) (`client/`), whose
+CI publishes it. A custom build from a clone of that repo is selected with `CS2_MCP_IMAGE` /
+`--image` (servers) or `IMG` (`runtime.sh`):
 
 ```sh
-podman build -t localhost/cs2-docker cs2-docker/client
+git clone https://github.com/personcopperfine/cs2-docker.git <clone>
+podman build -t localhost/cs2-docker <clone>/client
 export CS2_MCP_IMAGE=localhost/cs2-docker
 ```
 

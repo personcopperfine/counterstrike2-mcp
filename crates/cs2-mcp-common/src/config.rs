@@ -80,8 +80,9 @@ pub struct CommonConfig {
 
     /// Container image the docker runtime runs (the game client userland: steamrt4, Xvfb,
     /// lavapipe, gbe; the Wine tools run in it too, from `<project-root>/workshop/run/app`).
-    /// Default: the published `ghcr.io/personcopperfine/cs2-docker:latest`; a local build of the
-    /// `cs2-docker` submodule (`podman build -t <name> cs2-docker/client`) is passed here.
+    /// Default: the published `ghcr.io/personcopperfine/cs2-docker:latest`; a custom build from a
+    /// clone of <https://github.com/personcopperfine/cs2-docker> (`podman build -t <name> <clone>/client`)
+    /// is passed here.
     #[arg(long, env = "CS2_MCP_IMAGE", default_value = crate::runtime::docker::DEFAULT_IMAGE)]
     pub image: String,
 

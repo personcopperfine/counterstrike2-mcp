@@ -22,7 +22,8 @@
 #   the main checkout of this repo, bridge/lib-root.sh; CS2DOCKER_ROOT is the deprecated alias);
 #   CONTAINER;
 #   IMG (default ghcr.io/personcopperfine/cs2-docker:latest, or CS2_MCP_IMAGE when set: the
-#   client image the Wine tools run in; a local build of the cs2-docker submodule goes here),
+#   client image the Wine tools run in; a custom build from a clone of
+#   https://github.com/personcopperfine/cs2-docker, `podman build -t <tag> <clone>/client`, goes here),
 #   ADDON (default mcp_test; empty string disables -addon), POC_ASSET,
 #   WAIT_CHANNEL_S, WAIT_DISCOVERY_S, WAIT_DOC_S,
 #   TOOL (hammer | modeldoc, default hammer; labels the container cs2mcp.tool=<TOOL>).

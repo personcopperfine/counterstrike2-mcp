@@ -60,8 +60,8 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
 11. **The Windows servers are driven from the host over ssh stdio**
     (`target/fixmes-vm/{client.sh,hammer.sh}` + `mcp_tools.py`); posts that need the game's logon
     session go through `target/fixmes-vm/mcpdrive.ps1` (a PowerShell MCP stdio client) started by
-    `~/libvirt/cs2-wintest/runui.sh`.
-12. **Launching on the VM through `~/libvirt/cs2-wintest/runui.sh`** (a scheduled task in the
+    the VM host's `runui.sh` helper (outside this repo).
+12. **Launching on the VM through the VM host's `runui.sh` helper (outside this repo)** (a scheduled task in the
     interactive session; the ssh session has no desktop) with `C:\cs2test\fixmes\up*.cmd`
     wrappers that redirect `up`'s output to files. The scheduled task's job is the one that
     refuses breakaway (item 10).

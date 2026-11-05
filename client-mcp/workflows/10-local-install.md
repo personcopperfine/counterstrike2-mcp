@@ -6,7 +6,7 @@ CS2 from a Steam library, or the Windows build under the user's Proton), with no
 the `Runtime` trait.
 
 ## Prerequisites
-- 01 stable. Read `cs2-docker/client/entrypoint.sh` (what the container does that a host launch must
+- 01 stable. Read the client image's [`client/entrypoint.sh`](https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh) (what the container does that a host launch must
   replicate: gbe setup, `cs2_video.txt` seeding, `LD_PRELOAD` audio libs, `-condebug`),
   `../.github/skills/cs2-lavapipe/SKILL.md` (`cs2.sh` codename gate: `VERSION_CODENAME` must be
   `sniper` — on a host that is the Steam Runtime's job), `WORKFLOW.md` §10 step 7.

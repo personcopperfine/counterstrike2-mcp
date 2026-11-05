@@ -1,7 +1,7 @@
 //! podman backend (phase 1).
 //!
 //! Facts it encodes (from bridge/runtime.sh, ../idabins/worknotes/vtest/run_vtest.sh,
-//! the `cs2-docker` submodule's client/entrypoint.sh, an earlier harness/run-cs2.sh not in this repo):
+//! the client image's https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh, an earlier harness/run-cs2.sh not in this repo):
 //! * userland image [`DEFAULT_IMAGE`] (steamrt4 + lavapipe fork + Xvfb + gbe);
 //! * Wine sessions mount `<project>/workshop/run/app` at `/app` and `.../run/cache` at `/cache`,
 //!   run `./entrypoint.sh cs2mcp_launch.exe -tools -vulkan -console -condebug -insecure [args] +engine_no_focus_sleep 0 +r_always_render_all_windows 1`
@@ -70,7 +70,7 @@ pub const NAME_PREFIX: &str = "cs2mcp-";
 /// Running containers whose name starts with this count toward `--max-sessions`.
 pub const CAP_PREFIX: &str = "cs2";
 /// The published client image (https://github.com/personcopperfine/cs2-docker, `client/`);
-/// `--image` / `CS2_MCP_IMAGE` overrides it (e.g. a local build of the `cs2-docker` submodule).
+/// `--image` / `CS2_MCP_IMAGE` overrides it (e.g. `podman build -t <tag> <clone>/client` from a clone of it).
 pub const DEFAULT_IMAGE: &str = "ghcr.io/personcopperfine/cs2-docker:latest";
 /// The Linux game tree inside the `cs2-home` volume (harness/run-cs2.sh:9; tests/cs2/t30_cs2_boot.sh:31).
 pub const DEFAULT_LINUX_GAME_DIR: &str =

@@ -6,10 +6,6 @@
 	path = crates/metamod/upstream
 	url = https://github.com/alliedmodders/metamod-source.git
 	branch = master
-[submodule "cs2-docker"]
-	path = cs2-docker
-	url = https://github.com/personcopperfine/cs2-docker.git
-	branch = main
 [submodule "workshop"]
 	path = workshop
 	url = https://github.com/personcopperfine/cs2-docker-workshop.git

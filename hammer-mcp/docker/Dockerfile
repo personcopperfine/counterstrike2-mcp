@@ -1,6 +1,7 @@
 # Thin layer over the cs2-docker runtime image. STUB - fill in per workflows/01-docker-runtime.md.
-# Build context: this directory. Base: the published client image, or a local build of the
-# cs2-docker submodule (`podman build -t <tag> cs2-docker/client`, then `--build-arg BASE=<tag>`).
+# Build context: this directory. Base: the published client image, or a custom build from a clone
+# of https://github.com/personcopperfine/cs2-docker (`podman build -t <tag> <clone>/client`, then
+# `--build-arg BASE=<tag>`).
 ARG BASE=ghcr.io/personcopperfine/cs2-docker:latest
 FROM ${BASE}
 # OCR + headless display candidates (apt names to be confirmed on steamrt4/trixie):

@@ -39,8 +39,7 @@ pub mod tools;
 pub mod mock;
 
 /// Host layout default: the project root is this checkout (the crate lives at
-/// `<root>/crates/cs2-mcp-common`). The root carries the `cs2-docker/` and `workshop/` submodules
-/// and the runtime state under it (`workshop/run/app`, `.podman/xdg`). `--project-root` /
+/// `<root>/crates/cs2-mcp-common`). The root carries the `workshop/` submodule and the runtime state under it (`workshop/run/app`, `.podman/xdg`). `--project-root` /
 /// `CS2_MCP_PROJECT_ROOT` points elsewhere; [`mcp_repo_dir`] also accepts the older layout, a
 /// parent directory that holds this repo as `cs2-mcp/`.
 pub const DEFAULT_PROJECT_ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");

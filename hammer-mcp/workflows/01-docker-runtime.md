@@ -6,8 +6,8 @@ paths/logs — replacing `bridge/runtime.sh` for the server's needs. Plus a thin
 image layer of our own (`docker/`) on top of the published client image.
 
 ## Prerequisites
-- Images: `ghcr.io/personcopperfine/cs2-docker` (client userland: steamrt4, Xvfb, lavapipe fork, gbe; source in the
-  `cs2-docker` submodule), notes in
+- Images: `ghcr.io/personcopperfine/cs2-docker` (client userland: steamrt4, Xvfb, lavapipe fork, gbe; source in
+  [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker), `client/`), notes in
   `../.github/skills/cs2-lavapipe/SKILL.md`; the workshop tree materialised at `workshop/run/app`
   with content merged, gbe `steam_api64.dll`, `S:` drive disabled, `/cache` volume
   (`../idabins/worknotes/wine-tools-bringup.md` steps 1–5).

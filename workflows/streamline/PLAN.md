@@ -4,7 +4,7 @@ Goal: a weaker model (a "dumber" agent, no parent agent steering it) can finish 
 using only the MCP servers, and the tools tell it when it is done.
 
 Two inputs:
-- `ti_convoy-FIXME.md` (copy of `mapcore/ti-convoy:gamemodes/ti_convoy/FIXME.md`, 35 items): every
+- the ti_convoy map project's hack log (`gamemodes/ti_convoy/FIXME.md` on its branch, 35 items; not in this repo): every
   time the ti_convoy agent had to leave the MCP. Each such exit is a dead end for an agent with no
   parent. **This is the primary evidence.**
 - `research/source2-mcp-research.md` + `research/vdc-deep-dive.md`: an outside agent's survey of

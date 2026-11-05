@@ -58,7 +58,6 @@ streamline style: a weaker model finishes the task with MCP tools only, and the 
 - Live driver: main checkout `target/orch/mcp_session.py` (+ `target/orch/c.sh`); test addon accept_p4.
 - Bridge installed: m3.17 (backup of m3.16 in main `target/bridge/backup-2026-10-28-m316/`).
 - Hacks -> `workflows/import/FIXME.md`. Never /tmp, never sleep, no push/PR.
-- Update hold: touch `cs2-docker/client/.cache/.cs2-docker-date` before 2026-11-04.
 
 ## Status
 

@@ -2363,7 +2363,6 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
 ├── crates/cs2-mcp-common/  shared crate: bridge client, tool registry, rmcp adapter, runtime, sigs, capture, mock
 ├── hammer-mcp/             this server
 ├── client-mcp/             the game-client server (own AGENT.md)
-├── cs2-docker/             submodule: the client image source (the tools container runs this image)
 └── workshop/               submodule: the workshop tools image source, published as ghcr.io/personcopperfine/cs2-workshop
     └── run/app             Windows CS2 + tools + Proton prefix (gitignored runtime state; mounted at /app)
 ```

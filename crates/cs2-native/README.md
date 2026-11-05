@@ -68,8 +68,10 @@ takes `payload/gbe` (or `<repo>/target/gbe/`) when that has the host's files, el
 `<state dir>/gbe` when that has them (what `fetch-gbe` writes).
 
 `scripts/stage-gbe.sh` fills `<repo>/target/gbe/`. One pin block in the script names gbe_fork's
-release for `GBE_REF` (`GBE_REF`, else the one `GBE_DOCKERFILE` / `cs2-docker/client/Dockerfile` names, else the pin
-itself; another ref stops): tag, commit and each
+release for `GBE_REF` (`GBE_REF`, else the one `GBE_DOCKERFILE` names when it is set, else the pin
+itself; another ref stops. No Dockerfile is read unless `GBE_DOCKERFILE` points at one, e.g. a
+clone of [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker)'s
+`client/Dockerfile`): tag, commit and each
 asset's SHA-256, checked after the download (cached in `target/gbe-release/<tag>/`). The Windows
 DLL comes from that release's `emu-win-release-vs22.7z` (`7z`; gbe_fork builds Windows only with
 MSVC), or `GBE_WIN_DLL=<path>`. The Linux libs come from `GBE_LINUX_FROM`:
@@ -78,7 +80,7 @@ MSVC), or `GBE_WIN_DLL=<path>`. The Linux libs come from `GBE_LINUX_FROM`:
 |---|---|---|
 | `image` (default when podman has the client image: `GBE_IMAGE`, else `CS2_MCP_IMAGE`, else `ghcr.io/personcopperfine/cs2-docker:latest`) | the image's `/app/`, the libs every container run used | podman + the image |
 | `release` (default otherwise) | the release's `emu-linux-release.tar.bz2`, `release/regular/x64/` extracted with `tar` | curl, tar, bzip2 |
-| `source` (or `GBE_FROM_SOURCE=1`) | a client Dockerfile's `builder` stage at `GBE_REF` (`GBE_DOCKERFILE`: the published `cs2-docker/client/Dockerfile` pulls prebuilt gbe and has no such stage) | podman |
+| `source` (or `GBE_FROM_SOURCE=1`) | a client Dockerfile's `builder` stage at `GBE_REF` (`GBE_DOCKERFILE`, required: the published [`client/Dockerfile`](https://github.com/personcopperfine/cs2-docker/blob/main/client/Dockerfile) pulls prebuilt gbe and has no such stage) | podman + `GBE_DOCKERFILE` |
 
 The release and image libs are both gbe at `GBE_REF` but not byte-identical (their `.comment`
 names different compilers: Ubuntu GCC 13.3.0 in the release, Debian GCC 14.2.0 in the image).

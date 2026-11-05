@@ -8,11 +8,10 @@ Written 2026-10-26 by the planning session. Read this, then `PLAN.md` (same fold
 - Branch `streamline/agent-ux` off `main` df1d3cc; worktree
   `<repo>/.claude/worktrees/streamline`. Work here and in
   sub-worktrees off this branch; never in the main checkout (shared, other sessions use it).
-- `workflows/streamline/`: `PLAN.md` (approved), `ti_convoy-FIXME.md` (primary evidence),
+- `workflows/streamline/`: `PLAN.md` (approved; its primary evidence, the ti_convoy hack log, is not in this repo),
   `research/` (outside survey; treat its UNVERIFIED claims as unverified).
 - `mapcore/ti-convoy` (8b50309, worktree `.claude/worktrees/ti-convoy`) is someone's map branch:
   read it, don't commit to it. Its commit `6f0db76` holds hammer-mcp changes for WP0.1.
-- Main has an uncommitted `TODO.md` edit (pins-onto-SDK section 7). Not ours; leave it.
 
 ## Established facts (don't rediscover)
 

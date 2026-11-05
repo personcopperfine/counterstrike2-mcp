@@ -21,7 +21,7 @@
 #                                              GBE_REF (GBE_DOCKERFILE; or GBE_REF=<commit>), so
 #                                              the libs provably match the ref. The published
 #                                              cs2-docker Dockerfile has no such stage (it pulls
-#                                              prebuilt gbe), so source needs GBE_DOCKERFILE
+#                                              prebuilt gbe), so source needs GBE_DOCKERFILE.
 #                                              The release and image libs are not byte-identical
 #                                              (different compilers; workflows/native-launcher-report.md).
 # Each copy is refused unless it is an emulator (gbe names its own settings file, configs.main.ini), so
@@ -54,11 +54,17 @@ win_sha256=d311deadc2a8a8aed620fe66976646059388123587aa22d408f723c592fc9688
 linux_asset=emu-linux-release.tar.bz2
 linux_sha256=59b284b3a22513dabde29f2fe4e256e0e76ac154738d13bf46da064c78b9a12e
 
-# the cs2-docker submodule's client Dockerfile, unless GBE_DOCKERFILE names another one
-dockerfile="${GBE_DOCKERFILE:-$repo/cs2-docker/client/Dockerfile}"
+# GBE_DOCKERFILE: a client Dockerfile (e.g. <clone of personcopperfine/cs2-docker>/client/Dockerfile)
+# whose GBE_REF is read and, in source mode, whose builder stage is built. Unset: no Dockerfile
+# is read and the ref is GBE_REF, else the pin above.
+dockerfile="${GBE_DOCKERFILE:-}"
+if [ -n "$dockerfile" ] && [ ! -f "$dockerfile" ]; then
+    echo "stage-gbe: GBE_DOCKERFILE $dockerfile does not exist" >&2
+    exit 2
+fi
 if [ -n "${GBE_REF:-}" ]; then
     ref="$GBE_REF"
-elif [ -f "$dockerfile" ] && grep -q 'GBE_REF=[0-9a-f]' "$dockerfile"; then
+elif [ -n "$dockerfile" ] && grep -q 'GBE_REF=[0-9a-f]' "$dockerfile"; then
     ref="$(grep -m1 -o 'GBE_REF=[0-9a-f]*' "$dockerfile" | cut -d= -f2)"
 else
     ref="$rel_commit"   # no Dockerfile naming a GBE_REF: the pin is the only ref there is
@@ -123,6 +129,10 @@ case "$linux_from" in
         ;;
     image|source)
         if [ "$linux_from" = source ]; then
+            [ -n "$dockerfile" ] || {
+                echo "stage-gbe: GBE_LINUX_FROM=source needs GBE_DOCKERFILE (a client Dockerfile with a builder stage)" >&2
+                exit 2
+            }
             # the image's own builder stage (steamrt4 SDK, premake, make), nothing else; its
             # context is unused by that stage, so the Dockerfile's directory is passed as it is
             builder="localhost/cs2mcp-gbe-builder:$ref"
@@ -147,7 +157,7 @@ for f in libsteam_api.so steamclient.so; do
     is_gbe "$out/linux64/$f" || { echo "stage-gbe: linux64/$f ($linux_desc) is not the emulator" >&2; exit 1; }
 done
 
-# GBE_REF.txt: the ref the Dockerfile names (or GBE_REF), and where each half came from
+# GBE_REF.txt: GBE_REF, else the ref GBE_DOCKERFILE names, else the pin; and where each half came from
 {
     echo "GBE_REF=$ref"
     echo "win64: $win_from"
