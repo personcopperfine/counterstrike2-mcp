@@ -14,7 +14,7 @@
 //! so every function is unit-testable (see the tests at the bottom, ported from the POC's
 //! `tests/test_contract.py::test_geometry_unit_primitives_and_ops` plus the operator cases).
 //!
-//! Bounds follow `geometry.py` and the bridge's `geom_parse` (`bridge/mcp_bridge.c`, `GEO_MAX_*`):
+//! Bounds follow `geometry.py` and the bridge's `geom_parse` (`mcp_bridge.c`, `GEO_MAX_*`):
 //! at most [`MAX_VERTICES`] vertices, at most [`MAX_FACES`] faces, |coordinate| strictly below
 //! [`MAX_COORD`], at least 3 vertices per face, integer indices without repeats, at most 64
 //! distinct materials. Degenerate (zero-area) faces are refused by [`face_normal`], which every

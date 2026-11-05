@@ -1,7 +1,7 @@
 //! The EDIT lane (M4): `edit.batch`, `entity.tieMeshes`, `entity.untie` — the m2.19 tie/untie
 //! recipes and the batch runner, ported 1:1 from the frozen C bridge:
 //!
-//! * `edit.batch` (the arm `bridge/mcp_bridge.c:5855-5970`): the write gate, the `ops` member,
+//! * `edit.batch` (the arm `mcp_bridge.c:5855-5970`): the write gate, the `ops` member,
 //!   ONE undo group per batch (`batch_undo_label`, `:2468-2471`), the `"$N"` handle substitution
 //!   (`batch_subst_handle`, `:2474-2504`), the per-op dispatch to [`hammer::op_entity_create_no_group`]
 //!   and [`hammer::op_set_keyvalues_no_group`] (the C's own `op_*` bodies; unlike the standalone
@@ -173,7 +173,7 @@ fn tie_err_undo_group(code: i64, name: &'static str, reason: &str, label: &str) 
 ///
 /// KNOWN LIMIT (review L5, unchanged and deliberately so): the scan reads the ops *listed*,
 /// while the run stops at the first refusal, so a raw mixed batch can still be labelled
-/// "MCP: batch" and hold only a keyvalue write (protocol-diff-m2.15.md item 16).
+/// "MCP: batch" and hold only a keyvalue write (PROTOCOL.md §10).
 pub(crate) fn batch_undo_label(ops: &[u8]) -> &'static CStr {
     if batch_has_create(ops) {
         c"MCP: batch"
@@ -312,7 +312,7 @@ fn tie_kv_prescan(bytes: &[u8], vp: usize) -> Result<(), OpErr> {
 /// two cannot drift. The `doc` tail is appended by the dispatch tail ([`write_finish`]), not
 /// here. `handle` is `handle_new(ent)` (`:4441`) — the op issues it right before calling this;
 /// the C calls it from inside, but the token is bridge-side state (no game access) and its
-/// value is unaffected (protocol-diff-m3-edit.md). `nodeID` is OMITTED when the entity's id is
+/// value is unaffected. `nodeID` is OMITTED (PROTOCOL.md §9.8) when the entity's id is
 /// unreadable (review-b L6: entity.create's convention — read_tie treats a missing nodeID as
 /// an internal error, never a node -1), and a mesh row whose id is unreadable carries null.
 #[allow(clippy::too_many_arguments)] // the C's parameter list, kept 1:1
@@ -1036,7 +1036,7 @@ pub(crate) fn op_entity_untie(
 /// The op's params text: the C hands `pbuf` (a C string) to the op; this boundary converts the
 /// (possibly op-cut) bytes to the `&str`-shaped op signatures. The lossy replacement is one
 /// U+FFFD per maximal invalid subpart — the same one [`Sb::addjson`] emits for the echo, so no
-/// echo byte moves (protocol-diff-m3-edit.md).
+/// echo byte moves.
 fn pbuf_text(pbuf: &[u8]) -> String {
     String::from_utf8_lossy(cstr(pbuf)).into_owned()
 }
@@ -1455,7 +1455,7 @@ mod live {
 
         fn gd_type(&self, node: Node) -> i32 {
             // The C strides the same fields by `S2_OFF_CMapGameDataNode_m_pGameDataClass` /
-            // `S2_OFF_FgdClass_t_m_nType` (`bridge/s2sdk_gen.h`); the generated
+            // `S2_OFF_FgdClass_t_m_nType` (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`); the generated
             // `CMapGameDataNode` / `FgdClass_t` are the same records, so the generated field
             // addresses are those offsets.
             let gd_node = node.0 as *const CMapGameDataNode;
@@ -1499,7 +1499,7 @@ mod live {
 
         fn add_child(&self, ent: Node, node: Node) -> u8 {
             let ent = ent.0 as *mut CMapNode;
-            // The C header's own signature (`bridge/s2sdk.h:473`):
+            // The C header's own signature (`s2sdk.h:473`):
             // `u8 (*AddChild)(CMapNode *self, CMapNode *child)`. The generated typed field
             // returns a Rust `bool`, but the C reads `u8 added` and tests it — so the entry is
             // read through the generated slot index (`CMapNode_slots::AddChild`, 57) instead,
@@ -2101,7 +2101,7 @@ mod tests {
     // -----------------------------------------------------------------------------------------
 
     /// `op_entity_tie_meshes`'s param gates, in the C's check order
-    /// (`bridge/mcp_bridge.c:4117-4248`).
+    /// (`mcp_bridge.c:4117-4248`).
     #[test]
     fn tie_refuses_its_params_in_the_c_order_without_touching_the_game() {
         let cases: &[(&str, &str, &str, &str)] = &[
@@ -2789,7 +2789,7 @@ mod tests {
     // entity.untie
     // -----------------------------------------------------------------------------------------
 
-    /// `op_entity_untie`'s param gates (`bridge/mcp_bridge.c:4489-4501`).
+    /// `op_entity_untie`'s param gates (`mcp_bridge.c:4489-4501`).
     #[test]
     fn untie_refuses_its_params_in_the_c_order() {
         let cases: &[(&str, &str, &str)] = &[

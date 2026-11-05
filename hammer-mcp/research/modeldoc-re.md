@@ -13,9 +13,9 @@ route**, then make the running ModelDoc pick the change up (**reload**), save in
 are the second pass: their undo record/write order is still unverified (idabins
 `docs/flows/modeldoc-edit.md` MCP §5a).
 
-## Live facts (2026-10-12, `TOOL=modeldoc bridge/runtime.sh up`)
+## Live facts (2026-10-12, `TOOL=modeldoc cargo bridge runtime up`)
 
-- `vtmsend open_asset <path relative to the addon>` (`bridge/runtime.sh open models/<x>.vmdl`) loads
+- `vtmsend open_asset <path relative to the addon>` (`cargo bridge runtime open models/<x>.vmdl`) loads
   `modeldoc_editor.dll` (+ `modeldoc_utils.dll`, `modtools.dll`, `toolscenenodes.dll`) on demand and
   opens the document in its own top-level window titled `ModelDoc :: <name>`. [V]
   The content-root form `csgo_addons/mcp_test/models/...` raises the asset browser's modal
@@ -107,7 +107,7 @@ render always uses the central viewport with its current camera.
 
 ## Live results (2026-10-12, bridge m2.11)
 
-`bridge/test_modeldoc.py` passes on the single ModelDoc instance: active/open/reload/save/compile/
+`test_modeldoc.py` passes on the single ModelDoc instance: active/open/reload/save/compile/
 nodeTypes all answer on the main thread; `GetPath` gives `Z:\app\content\csgo_addons\...`;
 **413** node classes (`modeldoc-nodetypes.json`); editor Compile advances the `.vmdl_c` mtime.
 

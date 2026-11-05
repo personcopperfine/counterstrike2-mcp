@@ -340,13 +340,13 @@ pub async fn start_with_timeout(
                 error.message.push_str(
                     " (the installed bridge is probably older than m3.16, which added the map \
                      stage flags -world/-phys/-vis/-bakelighting: reinstall the bridge DLL, \
-                     bridge/install-rs.sh)",
+                     `cargo bridge install`)",
                 );
             }
             if input.ends_with(".js") && error.message.contains("input extension must be one of") {
                 error.message.push_str(
                     " (the installed bridge is older than m3.17, which added .js inputs for cs_script: \
-                     reinstall the bridge DLL, bridge/install-rs.sh)",
+                     reinstall the bridge DLL, `cargo bridge install`)",
                 );
             }
             return Err(error);

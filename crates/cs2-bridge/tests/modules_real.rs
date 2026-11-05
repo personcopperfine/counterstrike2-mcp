@@ -129,7 +129,7 @@ fn walk(dir: &Path, found: &mut HashMap<String, PathBuf>) {
 /// `GetModuleFileNameA` + `sha256_file` is [`pe::sha256`] of the file, and
 /// `GetModuleHandleExW(PIN)` has no host equivalent - there is nothing to pin in this process,
 /// so [`pin`](Platform::pin) asserts the argument the C would pass (the module's first byte-pin
-/// RVA, `bridge/mcp_bridge.c:1352-1356`) and reports success, as it does on Windows.
+/// RVA, `mcp_bridge.c:1352-1356`) and reports success, as it does on Windows.
 struct FilePlatform {
     bins: Bins,
     /// The modules the fake loader says are loaded (all of them for the full run).

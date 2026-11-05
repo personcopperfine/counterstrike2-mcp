@@ -1,9 +1,9 @@
 //! The four render-to-PNG methods: `view.render`, `world.render`, `pet.render`,
 //! `modeldoc.render` (M4 lane RENDER).
 //!
-//! Ported from the frozen C bridge (`bridge/mcp_bridge.c:2500-3134`, the C's render statics and
-//! the two Hammer/engine ops) and its two includes (`bridge/mcp_bridge_pet_render.inc`,
-//! `bridge/mcp_bridge_modeldoc_render.inc`). Everything the four share lives here:
+//! Ported from the frozen C bridge (`mcp_bridge.c:2500-3134`, the C's render statics and
+//! the two Hammer/engine ops) and its two includes (`mcp_bridge_pet_render.inc`,
+//! `mcp_bridge_modeldoc_render.inc`). Everything the four share lives here:
 //!
 //! * the PNG writer (`crc_init` / `crc_update` / `put_be32` / `png_encode`, `:2533-2601`),
 //! * the atomic file write (`write_file_atomic`, `:2602-2622`),
@@ -553,7 +553,7 @@ pub(crate) fn sb_addf3(b: &mut Sb, v: [f32; 3]) {
 
 /// `frustum_set` (`mcp_bridge.c:2657-2666`): the `CFrustum` fields Hammer's screenshot dialog
 /// sets after the default init. The C's bridge-owned `CFrustum` is the generated layout (the
-/// `_Static_assert`s in `bridge/s2sdk.h` bind `fovX`/`aspect`/`znear`/`ndc` to
+/// `_Static_assert`s in `s2sdk.h` bind `fovX`/`aspect`/`znear`/`ndc` to
 /// `S2_OFF_Camera_t_*` / `S2_OFF_CFrustum_m_flClipSpace*`), so the writes go through the
 /// generated fields; `reserved28` is `Camera_t::m_flWidth`/`m_flHeight`.
 #[cfg_attr(not(windows), allow(dead_code))]
@@ -1252,7 +1252,7 @@ mod tests {
     // -----------------------------------------------------------------------------------------
 
     /// The C's bridge-owned `CFrustum` field offsets are the generated ones (the `_Static_assert`s
-    /// in `bridge/s2sdk.h:283-292` bind them), so `frustum_set` writes the generated fields.
+    /// in `s2sdk.h:283-292` bind them), so `frustum_set` writes the generated fields.
     #[test]
     fn frustum_set_writes_the_c_fields() {
         use core::mem::offset_of;

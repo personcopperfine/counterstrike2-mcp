@@ -177,7 +177,7 @@ async fn status_without_the_module_reports_pet_not_loaded_and_a_hint() {
     assert_eq!(p["petLoaded"], json!(false));
     assert_eq!(p["capabilities"]["missing"].as_array().unwrap().len(), 6);
     let hint = p["hint"].as_str().unwrap();
-    assert!(hint.ends_with("runtime.sh up; then particle_load"), "{hint}");
+    assert!(hint.ends_with("cargo bridge runtime up; then particle_load"), "{hint}");
     // nothing pet.* was probed (pet.active is not advertised yet)
     assert!(mb.method_calls("pet.active").is_empty());
 }
@@ -189,7 +189,7 @@ async fn status_not_connected_never_raises() {
     let p = server.call("particle_status", json!({})).await.unwrap();
     assert_eq!(p["bridge"]["running"], json!(false));
     assert_eq!(p["petLoaded"], json!(false));
-    assert!(p["hint"].as_str().unwrap().ends_with("runtime.sh up"));
+    assert!(p["hint"].as_str().unwrap().ends_with("cargo bridge runtime up"));
     assert!(p.get("document").is_none());
     // the seven methods are reported missing even without a connection
     assert_eq!(p["capabilities"]["missing"].as_array().unwrap().len(), 7);

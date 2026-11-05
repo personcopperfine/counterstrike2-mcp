@@ -1,5 +1,5 @@
 //! Object identity for the method bodies: the C's `mem_ok` / `vt_slots_ok` / `obj_is`
-//! (`bridge/mcp_bridge.c:1182-1187`, `:1622-1641`), and `mod_iface` (`:4980-4987`).
+//! (`mcp_bridge.c:1182-1187`, `:1622-1641`), and `mod_iface` (`:4980-4987`).
 //!
 //! An object is "of the pinned class" when it is readable, its vptr is the pinned vtable
 //! (`module base + vt_rva`), and every pinned slot of that vtable still holds its pinned target

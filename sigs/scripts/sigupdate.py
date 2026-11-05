@@ -31,7 +31,7 @@ The bridge gate is fail closed:
     in the fingerprint file) and every identity-checked vtable slot (`<entry>#<slot>`, the
     function the slot must still hold). Without one it is UNVERIFIED, never OK. A vslot locator
     alone proves nothing: it reads vt[N] and accepts any image pointer, so if the game moves the
-    slot the value looks fine, pins.py re-pins the wrong target and the runtime check compares
+    slot the value looks fine, `cargo bridge pins` re-pins the wrong target and the runtime check compares
     vt[N] with itself. The fingerprint is what says "vt[N] is still this function".
   * A module that is unchanged AND has no expect[OLD] is only OK for a bridge entry when the
     fingerprints it needs are present and match; an entry added to the database with a bridge
@@ -45,8 +45,9 @@ The bridge gate is fail closed:
     names are printed with the count instead of hiding behind "present".
 `record` writes expect[NEW] + builds[NEW] for SAME/OK entries (and DRIFT entries listed in
 --accept-drift), and marks FAIL / unaccepted DRIFT entries status=stale. It refuses to write
-anything when a bridge entry is not SAME/OK, with or without --bridge-gate: pins.py only re-checks
-builds[NEW].sha256, so a recorded build with a bad bridge entry would be pinned silently.
+anything when a bridge entry is not SAME/OK, with or without --bridge-gate: `cargo bridge pins`
+only re-checks builds[NEW].sha256, so a recorded build with a bad bridge entry would be pinned
+silently.
 --accept-drift cannot accept an UNVERIFIED entry (the fix is to take its fingerprint on the old
 build, not to accept it).
 """
@@ -196,7 +197,7 @@ def main():
             print("  " + line)
         print("BRIDGE GATE " + ("FAIL" if gate else "PASS"))
     if a.cmd == "record" and gate:
-        print("not recording: %d bridge entries are not SAME/OK (nothing was written); pins.py would "
+        print("not recording: %d bridge entries are not SAME/OK (nothing was written); `cargo bridge pins` would "
               "re-pin them from this database" % len(gate))
         sys.exit(3)
     if a.cmd == "record":

@@ -556,7 +556,7 @@ async fn windows_path_form_resolves_through_the_path_map() {
 /// The map is Valve content under the install's `content/csgo/` (not an addon), so it is copied at
 /// test time into the temp app tree's addon — under `CARGO_TARGET_TMPDIR`, never /tmp and never the
 /// repo, and the tool's read stays under `<app_root>/content/`. The expected record is the oracle's
-/// (`bridge/vmapreader/vmap_dmx.py`, `Entity.connections`); data values only, no file bytes.
+/// (the retired oracle `vmap_dmx.py`, `Entity.connections`); data values only, no file bytes.
 #[tokio::test]
 #[ignore]
 async fn real_tree_template_wingman_connections_through_get_entity() {

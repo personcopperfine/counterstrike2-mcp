@@ -8,7 +8,8 @@ Read this first, then the guide for the part you were asked to touch. Each crate
 | update pointers / signatures / bindings after a CS2 update | [workflows/game-update.md](workflows/game-update.md): follow it step by step |
 | work on the Rust Source 2 SDK wrapper | [crates/s2sdk/README.md](crates/s2sdk/README.md) |
 | work on the signature database | [sigs/README.md](sigs/README.md) |
-| work on the bridge DLL (Wine/Hammer side) | [bridge/README.md](bridge/README.md) |
+| work on the bridge DLL (Wine/Hammer side) or its protocol | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md), [PROTOCOL.md](crates/cs2-bridge/PROTOCOL.md) |
+| build, pin, install or run the bridge (`cargo bridge ...`) | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md) "The commands" |
 | work on the client MCP server | [client-mcp/AGENT.md](client-mcp/AGENT.md) |
 | work on the Hammer/tools MCP server | [hammer-mcp/AGENT.md](hammer-mcp/AGENT.md) |
 | spawn a reverse-engineering (IDA) agent | [workflows/re-brief.md](workflows/re-brief.md): front-load its prompt from the skeleton there |
@@ -27,17 +28,18 @@ cs2-mcp/
 │   │   ├── s2sdk/          safe layer: CreateInterface, schema system, convars, game events
 │   │   └── s2sdk-probe/    LD_PRELOAD payload + live test in a Linux dedicated server
 │   ├── metamod/upstream/ git submodule: alliedmodders/metamod-source (+ nested third_party/khook); the
-│   │                   second gen.py upstream (METAMOD.lock), Metamod plugin + KHook interfaces
-│   ├── cs2-bridge/     the Rust bridge (cdylib, Linux + win64): tool plugin now, Metamod plugin next
+│   │                   second gen.py upstream (METAMOD.lock), Metamod plugin + KHook interfaces;
+│   │                   crates/metamod/{README.md,Containerfile}: the `cargo bridge metamod` build
+│   ├── cs2-bridge/     the Rust bridge (cdylib, Linux + win64): tool plugin + Metamod plugin;
+│   │                   PROTOCOL.md is its JSON-RPC wire contract
+│   ├── cs2-bridge-tools/ `cargo bridge <command>`: pins (-> cs2-bridge/src/generated/pins.rs),
+│   │                   build + export gate, install/ensure, the Wine tools runtime, metamod, testplugin
 │   ├── cs2-mcp-common/ shared crate
 │   ├── cs2-kv3/        KV3 text (Valve layout writer; reads ValveKeyValue's KV3 grammar too)
 │   ├── cs2-kv1/        KeyValues1 text + binary (port of ValveResourceFormat/ValveKeyValue)
 │   ├── cs2-dmx/        DMX binary 1-5/9 + keyvalues2 1-4 (port of ValveResourceFormat/Datamodel.NET)
 │   └── cs2-vk-capture/ Vulkan layer that captures frames from the game's renderer
 ├── sigs/               signature database + resolver for the bridge (Windows DLLs)
-├── bridge/             the Rust bridge's pins/tools: pins.py -> bridge_pins.h +
-│                       crates/cs2-bridge/src/generated/pins.rs, build-rs.sh /
-│                       install-rs.sh / runtime.sh, the live test_*.py
 ├── workflows/          cross-crate procedures (game update), update reports, upstream PR drafts
 └── workshop/           git submodule: personcopperfine/cs2-docker-workshop, the workshop tools
                         image's source (published as ghcr.io/personcopperfine/cs2-workshop);
@@ -45,15 +47,16 @@ cs2-mcp/
 ```
 
 **Project root** = this checkout by default (`CS2_MCP_PROJECT_ROOT` / `--project-root` points
-elsewhere; `CS2DOCKER_ROOT` is the deprecated alias the shell tools still read). The shell and
-Python tools resolve a linked git worktree to the main checkout (`bridge/lib-root.sh`,
-`bridge/cs2mcp_root.py`); a Rust binary defaults to the checkout it was built in. Under the root:
+elsewhere; `CS2DOCKER_ROOT` is the deprecated alias). `cargo bridge` and the remaining shell tools
+resolve a linked git worktree to the main checkout (`crates/cs2-bridge-tools/src/root.rs`,
+`crates/cs2-native/scripts/lib-root.sh`), so runtime state and installs are shared; the servers
+default to the checkout they were built in. Under the root:
 the Wine game + tools install `workshop/run/app` (copied out of the workshop image's `/app/`),
 `workshop/run/cache`, podman's runtime dir `.podman/xdg`, `artifacts/`. The containers run the
 client image (`ghcr.io/personcopperfine/cs2-docker:latest` by default, built by CI in
 [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker); a custom build,
-`podman build -t <tag> <clone>/client`, is selected with `CS2_MCP_IMAGE` / `--image`, `IMG` for
-`bridge/runtime.sh`); the Linux game lives in the podman volume `cs2-home`. An older layout, a
+`podman build -t <tag> <clone>/client`, is selected with `CS2_MCP_IMAGE` / `--image`, `IMG` /
+`--image` for `cargo bridge runtime up`); the Linux game lives in the podman volume `cs2-home`. An older layout, a
 parent directory holding this repo as `cs2-mcp/` next to `workshop/`, still works with
 `CS2_MCP_PROJECT_ROOT=<that directory>`.
 
@@ -64,20 +67,23 @@ parent directory holding this repo as `cs2-mcp/` next to `workshop/`, still work
   fix goes into the headers and gets regenerated, and it ends up as a pull request to
   alliedmodders/s2sdk so the community shares it. **Never hand-write an address, slot or offset in
   Rust.**
-- **Windows / bridge (`crates/cs2-bridge`, driven by `bridge/`)**: the bridge is the Rust crate;
-  its vtable slots, member offsets, struct sizes and consts come from the same headers via the
-  generated `s2sdk_sys` (`crates/s2sdk/s2sdk-sys/src/generated/`), and its RVAs from
-  `crates/cs2-bridge/src/generated/pins.rs`, which `bridge/pins.py --rust` writes alongside
-  `bridge/bridge_pins.h` (that generated header stays for `sigs/scripts/sdkcheck.py` and
-  history). A new one is a header declaration first. A sigs entry with an `sdk` field is the
-  binary measurement that holds a generated number to the game (`pins.py` and `sdkcheck.py`
-  refuse a mismatch). Never hand-write an address, slot or offset in the bridge.
+- **Windows / bridge (`crates/cs2-bridge`, driven by `cargo bridge`)**: the bridge is the Rust
+  crate; its vtable slots, member offsets, struct sizes and consts come from the same headers via
+  the generated `s2sdk_sys` (`crates/s2sdk/s2sdk-sys/src/generated/`), and its RVAs from
+  `crates/cs2-bridge/src/generated/pins.rs`, which `cargo bridge pins` writes from the signature
+  database. A new one is a header declaration first. A sigs entry with an `sdk` field is the
+  binary measurement that holds a generated number to the game: its expression is evaluated
+  against the generated C header `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, and
+  `cargo bridge pins` and `sdkcheck.py` refuse a mismatch. Never hand-write an address, slot or
+  offset in the bridge.
 
 ## Rules that apply everywhere
 
 1. **Generated files are never edited by hand**: `crates/s2sdk/s2sdk-sys/ir/`,
    `crates/s2sdk/s2sdk-sys/src/generated/`, `crates/s2sdk/s2sdk-sys/tests/layout.rs`,
-   `bridge/bridge_pins.h`. Change the input, then regenerate.
+   `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` (all `gen.py`),
+   `crates/cs2-bridge/src/generated/pins.rs` (`cargo bridge pins`). Change the input, then
+   regenerate.
 2. **Shared checkouts.** The main `cs2-mcp` checkout is used by other sessions. Never switch
    branches, reset, or use `git stash` there. Work in a git worktree, and commit only the files
    you changed.
@@ -95,9 +101,9 @@ parent directory holding this repo as `cs2-mcp/` next to `workshop/`, still work
 7. **At most ~3 game containers at once** (GPU memory). Check `podman ps` before starting one.
    Podman needs `XDG_RUNTIME_DIR=<project root>/.podman/xdg` on every call.
    **Only one ModelDoc instance at a time**: open models only in a tools container started with
-   `TOOL=modeldoc bridge/runtime.sh up` (labelled `cs2mcp.tool=modeldoc`). `runtime.sh` refuses a
-   second one and never replaces a running one; stop it explicitly
-   (`CONTAINER=<name> bridge/runtime.sh down`) only if it is yours. Agents share that instance
+   `TOOL=modeldoc cargo bridge runtime up` (labelled `cs2mcp.tool=modeldoc`). `cargo bridge
+   runtime` refuses a second one and never replaces a running one; stop it explicitly
+   (`cargo bridge runtime down --container <name>`) only if it is yours. Agents share that instance
    in turn; they never start their own.
 8. **Report honestly.** If a step failed or was skipped, say which one and paste the output. A
    claim is "verified" only if you read it in the binary or saw it live.
@@ -117,5 +123,7 @@ python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py --check   # Rust bindings match UPS
 python3 sigs/scripts/sdkcheck.py                # generated SDK numbers (incl. every sigs `sdk` entry) vs the game binaries (needs target/game-bins)
 python3 sigs/scripts/sigcheck.py validate       # signature DB structure
 python3 sigs/scripts/sigcheck.py resolve --strict # every signature resolves in the game binaries
-./bridge/build-rs.sh                            # pins.py --check --rust, builds the win64 + linux bridge, export gate (needs target/game-bins + target/game-bins-linux-<build>, sigs/README.md "Binaries")
+cargo bridge pins --check                       # pins.rs matches the signature DB and the binaries (needs target/game-bins + target/game-bins-linux-<build>, sigs/README.md "Binaries")
+cargo bridge build                              # pins --check, builds the win64 + linux bridge and loader, export gate (needs xwin + the binaries above)
+cargo test -p cs2-bridge-tools --test pins -- --ignored   # the pins generator against the real binaries (regen, linux fixtures, refusal)
 ```

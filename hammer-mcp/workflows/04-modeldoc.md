@@ -24,13 +24,11 @@ compiled. Live per-node edits with in-editor undo are the second pass (deferred,
 Typical loop: `model_status` → `model_open` → `model_edit` → `model_reload` → `model_render` (look) → `model_compile`.
 
 Pieces: `crates/cs2-kv3/` (KV3 text parser/writer), `hammer-mcp/src/vmdl/` (model layer), `src/tools/model_file.rs`
-and `model_live.rs`, bridge m2.11 `modeldoc.*` (`bridge/protocol-diff-m2.11.md`, live test
-`bridge/test_modeldoc.py`), `model_render.rs` + bridge m2.14 `modeldoc.render` (`bridge/protocol-diff-m2.14.md`,
-live test `bridge/test_modeldoc_render_live.py`), sigs `sigs/signatures/modeldoc_editor.json`. RE: `research/modeldoc-re.md`.
+and `model_live.rs`, bridge m2.11 `modeldoc.*` (`crates/cs2-bridge/PROTOCOL.md` §16), `model_render.rs` + bridge m2.14 `modeldoc.render` (`crates/cs2-bridge/PROTOCOL.md` §15.4), sigs `sigs/signatures/modeldoc_editor.json`. RE: `research/modeldoc-re.md`.
 
 ## Rule: one ModelDoc instance at a time
 Every live ModelDoc step runs in the single tools container started with
-`TOOL=modeldoc bridge/runtime.sh up` (label `cs2mcp.tool=modeldoc`). `runtime.sh` enforces it
+`TOOL=modeldoc cargo bridge runtime up` (label `cs2mcp.tool=modeldoc`). `cargo bridge runtime` enforces it
 (flock + label check): a second `TOOL=modeldoc up` fails, no `up` replaces the running instance,
 and `open <x>.vmdl` refuses in any other container. Workers never start their own: they queue
 on the one instance, and the orchestrator owns its lifecycle. `model_compile` only `exec`s into the
@@ -38,8 +36,8 @@ labelled container; any future Rust launch path for ModelDoc must apply the same
 
 ## Facts that shape the tools (all [V runtime])
 - `modeldoc.open` paths are relative to the **addon** content root (`models/x.vmdl`); `csgo_addons/<addon>/...` returns 0.
-  The same holds for `runtime.sh open`: `vtmsend open_asset csgo_addons/<addon>/models/...` raises the modal
-  "Unrecognized Asset", which blocks the main thread. Use `runtime.sh open models/<x>.vmdl`.
+  The same holds for `cargo bridge runtime open`: `vtmsend open_asset csgo_addons/<addon>/models/...` raises the modal
+  "Unrecognized Asset", which blocks the main thread. Use `cargo bridge runtime open models/<x>.vmdl`.
 - `model_render` follows the **active** session: after `model_open` of another file, the render shows
   that file. A `.vmdl` created after the tools started renders as an empty grid, because it has no asset
   and its mesh does not load.

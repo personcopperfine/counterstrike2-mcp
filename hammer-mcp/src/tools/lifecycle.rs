@@ -31,7 +31,7 @@
 //! to 0 only on a reply that confirms `reloaded:true` — any other success shape is treated as
 //! maybe-executed: the counter is kept and a note says the reload may not have taken (review M1;
 //! `reloaded:true` is "the reload call was made", because `ReloadFromDisk` has no return value to
-//! check — bridge/s2sdk.h, protocol-diff-m2.16.md).
+//! check — s2sdk.h, crates/cs2-bridge/PROTOCOL.md §8.2).
 //!
 //! `open_map {path}`: the bridge's `map.open` (m2.16, `CBaseEditorApp::OpenFile` with flags 1 —
 //! the call the UI makes). A dirty document is *not* a refusal: opening adds a session, it does not
@@ -66,7 +66,7 @@ pub(crate) use super::live_common::{
 
 /// The POC's `nodeIDs` bound (`op_node_delete`: up to 256 ids per request).
 pub(crate) const MAX_NODE_IDS: usize = 256;
-/// `map.open`'s path bound (the same 512 modeldoc.open/pet.open use; `bridge/map_path.h`).
+/// `map.open`'s path bound (the same 512 modeldoc.open/pet.open use; `map_path.h`).
 const MAP_PATH_MAX: usize = 512;
 
 pub fn register_save(r: &mut Registry<HammerState>) {
@@ -464,7 +464,7 @@ pub(crate) async fn delete_nodes_locked(
         other => {
             return Err(ToolError::internal(format!(
                 "node.delete returned a non-object result: {other} \
-                 (bridge/protocol-diff-m2.15.md §7)"
+                 (crates/cs2-bridge/PROTOCOL.md §11.2)"
             )))
         }
     };
@@ -723,7 +723,7 @@ pub async fn reload_map(
 /// The `map.open` path shape, refused locally so a garbled path is **never sent** (the bridge
 /// re-checks all of it; `OpenFile` pops a modal box on a bad one and blocks the editor's main
 /// thread until a person clicks it). One rule per reason, in the bridge's order
-/// (`bridge/map_path.h`): addon-content-relative, `maps/…vmap`, at most 512 bytes, printable, no
+/// (`map_path.h`): addon-content-relative, `maps/…vmap`, at most 512 bytes, printable, no
 /// `:` (a Windows name cannot carry one — that would be an alternate data stream), no `\` (the
 /// canonical spelling is forward slashes), no `"` (serde escapes it and the bridge's arm then
 /// refuses the raw parameter), no `..`, and — review M1 — no empty segment (`//`), no `.`/`..`
@@ -802,7 +802,7 @@ pub(crate) fn wrong_engine_addon(
              -addon {engine_addon:?} and map.open resolves maps under that addon only: \
              opening a map of another addon is not possible in this session. Start the \
              tools session on that addon (runtime ADDON={selected}, e.g. \
-             `ADDON={selected} bridge/runtime.sh up`) and start hammer-mcp with --addon \
+             `ADDON={selected} cargo bridge runtime up`) and start hammer-mcp with --addon \
              {selected}, or open a map of {engine_addon:?}"
         ),
     )
@@ -978,8 +978,8 @@ pub(crate) async fn open_map_locked(
                     return Err(error.with_data(json!({
                         "hint": "hammer.dll is not loaded until a document opens, and no running \
                                  tools container was found to open the first map over the \
-                                 VToolMessage channel. Start the session (runtime.sh up), or \
-                                 `bridge/runtime.sh open <maps/x.vmap>`",
+                                 VToolMessage channel. Start the session (cargo bridge runtime up), or \
+                                 `cargo bridge runtime open <maps/x.vmap>`",
                     })))
                 }
             }
@@ -1247,7 +1247,7 @@ async fn first_map_probe_inner(state: &HammerState, content_path: &str, limit_ms
 
 /// The first map of a fresh tools session (live-fix C item A). hammer.dll is not loaded until a
 /// document opens, so the bridge does not advertise `map.open`; the editor's own way in is the
-/// VToolMessage `open_asset` post (`bridge/runtime.sh open`), which loads the DLL and opens the
+/// VToolMessage `open_asset` post (`cargo bridge runtime open`), which loads the DLL and opens the
 /// map. The canonical addon-relative `maps/...vmap` path is the only spelling used: the
 /// `csgo_addons/<addon>/...` form raises a blocking "Unrecognized Asset" modal. The call then polls
 /// the capabilities and `doc.active` within the budget until the document is this map.
@@ -1398,7 +1398,7 @@ mod tests {
     }
 
     /// REVIEW M1: the local shape gate refuses every non-canonical spelling with the same sentence
-    /// the bridge's `map_path.h` uses (`bridge/test_map_path.c` pins the other side), and it never
+    /// the bridge's `map_path.h` uses (`test_map_path.c` pins the other side), and it never
     /// trims (review L6: `contentPath` is exactly what the caller sent).
     #[test]
     fn map_content_path_reasons_match_the_bridge() {

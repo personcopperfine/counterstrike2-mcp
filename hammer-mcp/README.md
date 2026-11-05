@@ -2,7 +2,7 @@
 
 Stdio MCP server (Rust) for the CS2 **workshop tools** (Hammer, ModelDoc, pet, asset browser; SFM
 and the workshop manager later), driving a live `cs2.exe -tools` session under Proton in a podman
-container through the in-process bridge DLL from `bridge/`.
+container through the in-process bridge DLL (`crates/cs2-bridge`).
 
 Read [AGENT.md](AGENT.md) first (purpose, architecture, conventions), then the numbered
 [workflows/](workflows/). Status: scaffold — nothing works yet.

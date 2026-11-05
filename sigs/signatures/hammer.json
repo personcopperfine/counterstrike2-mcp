@@ -1,7 +1,7 @@
 {
  "module": "hammer.dll",
  "image_base": 6442450944,
- "_doc": "hammer.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "hammer.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "f4ae9ec6659a8717",
@@ -15162,7 +15162,7 @@
      }
     ]
    },
-   "via": "the IsA call in CMapDocHistory's node-tree recorder (the HG_MAPNODE_TYPE_SYM site): mov r8,[rax+20h]; call r8, so byte offset 0x20 / 8 = slot 4; asserted in bridge/s2sdk.h S2_SLOT(CMapNodeVtbl, IsA, HVS_NODE_ISA)",
+   "via": "the IsA call in CMapDocHistory's node-tree recorder (the HG_MAPNODE_TYPE_SYM site): mov r8,[rax+20h]; call r8, so byte offset 0x20 / 8 = slot 4; asserted in s2sdk.h S2_SLOT(CMapNodeVtbl, IsA, HVS_NODE_ISA)",
    "tag": "V",
    "bridge": "HVS_NODE_ISA",
    "sdk": "S2_SLOT_CDmElement_IsA",

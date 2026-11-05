@@ -2,7 +2,7 @@
 //! plus `mesh.setFaceTexture` (bridge m3.14).
 //!
 //! This is the C bridge's polygon-soup region: the parser (`geom_parse`,
-//! `bridge/mcp_bridge.c:3188-3271`), the mesh reset/build helpers (`geo_reset_mesh` `:4671`,
+//! `mcp_bridge.c:3188-3271`), the mesh reset/build helpers (`geo_reset_mesh` `:4671`,
 //! `geo_build` `:4705`), the reply summary (`geo_mesh_summary` `:4736`), the three op bodies
 //! (`:5392`, `:5428`, `:5449`) and the `geo_dispatch` arm tail (`:5972-5977`).
 //!
@@ -49,7 +49,7 @@ const GEO_MAT_CAP: usize = 260;
 /// `GEO_MAX_FACES * 4` (`:4676`, `:5456`): the face count above which a mesh is refused.
 const GEO_FACE_CAP: i32 = (GEO_MAX_FACES * 4) as i32;
 
-/// The C's `S2MeshHandle` (`bridge/s2sdk.h:64`): 16 opaque bytes.
+/// The C's `S2MeshHandle` (`s2sdk.h:64`): 16 opaque bytes.
 pub(crate) type MeshHandle = [u8; 16];
 
 /// What Hammer's half-edge accessors answer for an invalid/stale handle: index `0x3FFFFF`,
@@ -1835,9 +1835,9 @@ pub static HANDLERS: &[(&str, crate::ops::Handler)] = &[
 // The production mesh calls (Windows tools build only)
 // ---------------------------------------------------------------------------------------------
 
-/// The C's `S2MeshHandle` and `S2HandleVec` (`bridge/s2sdk.h:64-83`), plus the polygon group the
+/// The C's `S2MeshHandle` and `S2HandleVec` (`s2sdk.h:64-83`), plus the polygon group the
 /// C declares locally (`mcp_bridge.c:3126-3128`). Every offset is asserted against the generated
-/// `CUtlVector_CEntityHandle` (`S2_SIZEOF_/S2_OFF_...` in `bridge/s2sdk.h:78-83`).
+/// `CUtlVector_CEntityHandle` (`S2_SIZEOF_/S2_OFF_...` in `s2sdk.h:78-83`).
 #[cfg(windows)]
 mod live {
     use core::ffi::c_void;
@@ -1873,7 +1873,7 @@ mod live {
         ]);
     }
 
-    /// `S2HandleVec` (`bridge/s2sdk.h:76`): `CUtlVector<S2MeshHandle>` with caller-owned memory.
+    /// `S2HandleVec` (`s2sdk.h:76`): `CUtlVector<S2MeshHandle>` with caller-owned memory.
     #[repr(C)]
     struct HandleVec {
         size: i32,
@@ -1909,7 +1909,7 @@ mod live {
         z: f32,
     }
 
-    // The C's `_Static_assert`s on the same shapes (`bridge/s2sdk.h:65`, `:78-83`).
+    // The C's `_Static_assert`s on the same shapes (`s2sdk.h:65`, `:78-83`).
     const _: () = {
         assert!(core::mem::size_of::<MeshHandle>() == 16);
         assert!(
@@ -1955,12 +1955,12 @@ mod live {
             .expect("cs2-bridge: a mesh name or material carries no interior NUL")
     }
 
-    /// `CMapMesh_PolyMesh` (`bridge/s2sdk.h:513`): the embedded `CHammerPolyMesh`.
+    /// `CMapMesh_PolyMesh` (`s2sdk.h:513`): the embedded `CHammerPolyMesh`.
     fn poly(mesh: Node) -> *mut u8 {
         (mesh.0 as *mut u8).wrapping_add(pins::HOFF_MESH_POLYMESH.value as usize)
     }
 
-    /// `CMapNode_Undoable` (`bridge/s2sdk.h:498`): the `IUndoable` subobject.
+    /// `CMapNode_Undoable` (`s2sdk.h:498`): the `IUndoable` subobject.
     fn undoable(node: Node) -> *mut c_void {
         // SAFETY: the base offset is generated from the same IR as the C's `S2_BASEOFF`;
         // `node` passed the identity chain.
@@ -2004,7 +2004,7 @@ mod live {
         ) -> Option<Node> {
             let table = table();
             // SAFETY: `HFN_CREATE_MESH_ELEMENT` is the verified hammer.dll function
-            // (`bridge/s2sdk.h:728`); `src` is the C's `"mcp_bridge"` literal (static storage
+            // (`s2sdk.h:728`); `src` is the C's `"mcp_bridge"` literal (static storage
             // Hammer may keep) and the other arguments are the C's own literals (`:5399`).
             let mesh = unsafe { (table.create_mesh_element)(file_id, name, src.as_ptr(), line) };
             (!mesh.is_null()).then_some(Node(mesh as usize))
@@ -2034,7 +2034,7 @@ mod live {
             let poly = poly(node);
             // SAFETY: `node` passed `is_mesh` (the pinned CMapMesh vtable); the two 4-byte
             // counts are the C's unguarded `hm->vertices.count` / `hm->faces.count`
-            // (`bridge/s2sdk.h:480-489`, `mcp_bridge.c:4742-4743`).
+            // (`s2sdk.h:480-489`, `mcp_bridge.c:4742-4743`).
             unsafe {
                 (
                     poly.wrapping_add(pins::HOFF_POLYMESH_VERTS.value as usize)
@@ -2126,7 +2126,7 @@ mod live {
                 flags: UTLVEC_EXTERNAL,
             };
             let material = cstring(defmat);
-            // SAFETY: verified HFN_MESH_INIT_FROM_POLYGONS (`bridge/s2sdk.h:729`): the mesh
+            // SAFETY: verified HFN_MESH_INIT_FROM_POLYGONS (`s2sdk.h:729`): the mesh
             // passed the identity check, `group`/`out` are the C's local structs (live for the
             // call), `material` is NUL-terminated and `uvMode` is the C's `GEO_UV_MODE`.
             unsafe {
@@ -2157,7 +2157,7 @@ mod live {
                 alloc: alloc as i32,
                 flags: UTLVEC_EXTERNAL,
             };
-            // SAFETY: verified HFN_MESH_DELETE_FACES (`bridge/s2sdk.h:732`) over the vector
+            // SAFETY: verified HFN_MESH_DELETE_FACES (`s2sdk.h:732`) over the vector
             // `CollectHandles` just filled; `handles` holds `alloc` handles and outlives the
             // call (`:4681`).
             unsafe {
@@ -2172,7 +2172,7 @@ mod live {
             let table = table();
             let handles = faces;
             let material = cstring(material);
-            // SAFETY: verified HFN_ASSIGN_MATERIAL_TO_FACES (`bridge/s2sdk.h:730`), called with
+            // SAFETY: verified HFN_ASSIGN_MATERIAL_TO_FACES (`s2sdk.h:730`), called with
             // the mesh's `CHammerPolyMesh` and a handle slice that outlives the call (`:4726`,
             // `:5465`).
             unsafe {
@@ -2221,7 +2221,7 @@ mod live {
                 z: value[2],
             };
             // SAFETY: slot 140 of the mesh's verified vtable is `CMapNode::SetPivotPosition`
-            // (`bridge/s2sdk.h:475`, `:4700`).
+            // (`s2sdk.h:475`, `:4700`).
             unsafe {
                 slot(
                     CMapNode::vtable(node).SetPivotPosition,

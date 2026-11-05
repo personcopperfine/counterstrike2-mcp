@@ -1,7 +1,7 @@
 {
  "module": "scenesystem.dll",
  "image_base": 6442450944,
- "_doc": "scenesystem.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "scenesystem.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "405f819a9e74d739",
@@ -1577,7 +1577,7 @@
    },
    "status": "verified",
    "bridge": "S2_VIEWFLAG_SIZED_SCRATCH",
-   "notes": "ISceneView::AddFlags bit (2) the bridge ORs in so CreateScratchTargets may allocate new targets of the requested size; sig-located at the scenesystem shadow-view AddFlags site (a real measurement). Emitted into bridge_pins.h. The sibling TOOLS3D bit (16) and the AddView nPriority (0x10000) are bridge-owned literals in mcp_bridge.c, no sigs entries."
+   "notes": "ISceneView::AddFlags bit (2) the bridge ORs in so CreateScratchTargets may allocate new targets of the requested size; sig-located at the scenesystem shadow-view AddFlags site (a real measurement). Emitted into pins.rs. The sibling TOOLS3D bit (16) and the AddView nPriority (0x10000) are bridge-owned literals (the C bridge spelled them in mcp_bridge.c), no sigs entries."
   },
   "S2OFF_FRUSTUM_FOV": {
    "kind": "offset",

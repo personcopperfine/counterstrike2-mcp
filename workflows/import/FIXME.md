@@ -68,7 +68,7 @@
 ## Bridge m3.18 (prefabs + absolute face axes)
 
 - DONE 2026-10-29: `mesh.setFaceTexture mode:"axes"`, `node.createPrefab`, `node.prefabFromSelection` live-verified
-  (`bridge/protocol-diff-m3.18.md` "Live result"); installed in the Wine tools tree (m3.17 backup:
+  (the m3.18 note's "Live result"; contract: `crates/cs2-bridge/PROTOCOL.md` §11.4, §11.5, §12.6); installed in the Wine tools tree (m3.17 backup:
   `target/import/cs2_bridge.m3.17.dll`).
 - HACK (not in git): `target/import/live_m318.py`, a raw bridge client for the three ops (needs the MCP session
   stopped: the bridge takes one client).
@@ -170,7 +170,7 @@ tiling 4x, checker with a yellow uv(0,0) corner and a red +u bar), the tool repl
   `overwrite:true`). Generated files are now written only when their bytes differ (`model_import::write_generated`),
   and `overwrite:true` compiles with `-f` (prop and hammer_mesh). Live re-check: hammer_mesh overwrite OK, 4 chunks,
   `uvExact:true`, every face paired by corners + winding.
-- HACK/NOTE: never start `bridge/runtime.sh up` from a shell that ran `ulimit -v` (the OOM guard): Wine inherits the
+- HACK/NOTE: never start `cargo bridge runtime up` from a shell that ran `ulimit -v` (the OOM guard): Wine inherits the
   cap and the engine dies with `mmap() Cannot allocate memory` (the VToolMessage channel never appears). Keep the
   ulimit inside a subshell around cargo.
 
@@ -446,8 +446,8 @@ block of a resource, not committed), `agents/*.json` (all 92 `agents/models/**` 
 - HACK (live harness): Hammer's own unclean-exit flags (`game/_toolsettings/hammer/settings.txt`, `"Closed Correctly"`
   / `"ClosedCorrectly <n>"` = false) blocked the first `open_map` on a "Recover Files?" modal after the game-update
   thread's cycle; no host input tool exists, so with no tools container running I reset them to true by hand (the
-  same sed `runtime.sh` runs for pet; a copy of the file before is `live/hammer_settings.before.txt`; autosaves kept).
-  Every `runtime.sh down` (podman rm -f) sets them false again. FOLLOW-UP: `runtime.sh` should clear Hammer's flags like
+  same edit `cargo bridge runtime up` makes for pet; a copy of the file before is `live/hammer_settings.before.txt`; autosaves kept).
+  Every `cargo bridge runtime down` (podman rm -f) sets them false again. FOLLOW-UP: `cargo bridge runtime up` should clear Hammer's flags like
   pet's.
 - GAP (not tested): hit registration by gunfire (a bot shooting the pawn, damage per group); only the debug overlay was
   seen. `sv_showplayerhitboxes 1` drew nothing here; `ent_hitbox player` did.

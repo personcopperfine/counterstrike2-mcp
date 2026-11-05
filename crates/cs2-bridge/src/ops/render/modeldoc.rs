@@ -1,5 +1,5 @@
 //! `modeldoc.render`: the ModelDoc editor's main 3D viewport rendered offscreen to a PNG
-//! (`bridge/mcp_bridge_modeldoc_render.inc`).
+//! (`mcp_bridge_modeldoc_render.inc`).
 //!
 //! The chain is `CModelDocEditorApp` -> session -> main window -> scene widget -> tool widget ->
 //! `(scene, camera)` (`modeldoc_render_chain`, `:54-97`); the render, stats, PNG and reply are

@@ -42,7 +42,7 @@ layer in `docker/`.
    +r_always_render_all_windows 1` (`FOCUS_ARGS` in `runtime/docker.rs`: without the second flag a
    `-tools` session renders nothing while its game window lacks focus). Stage suites
    into `<app>/vtest/` first (04). Bridge load = `tool_request cs2_bridge` via `vtmsend.exe`
-   (`bridge/runtime.sh` `load_rs_bridge`), once the VToolMessage channel is up (see step 3).
+   (`cargo bridge runtime` `load_rs_bridge`), once the VToolMessage channel is up (see step 3).
    Headless WineTools is the hammer-mcp 08 problem (same fix applies; link, do not duplicate work).
 3. **Readiness ladder** as typed states: container up -> X server ok (`xdpyinfo`) -> `console.log`
    exists -> `SwitchToLoop game`/menu reached (Linux) or VToolMessage channel up (Wine) -> optional

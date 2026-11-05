@@ -3,7 +3,7 @@
 //! The snapshot is the authoritative offline description of what a `.vpcf` may contain: the nine
 //! arrays, every function class and the array types it is registered for, and every class's
 //! **flattened** field list (base-class fields included, each tagged with `declaredIn`). It is
-//! written by the live step (`test_pet.py --write-snapshot`, `particle_types {writeSnapshot:true}`)
+//! written by the live step (`particle_types {writeSnapshot:true}`)
 //! and committed; the committed version is the **live snapshot taken 2026-10-13 on build
 //! 2000930** (not a placeholder), so the offline validator checks against live pet data. A
 //! snapshot still loaded with `placeholder: true` fails with [`VpcfError::SchemaPlaceholder`]

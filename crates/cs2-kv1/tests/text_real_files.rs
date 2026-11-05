@@ -160,7 +160,7 @@ fn every_gameinfo_and_vdf_parses_and_round_trips() {
     // and 3 installer scripts (the multi-root ones), so at least 11 files of which at least 8
     // parse. A lower bound, since an install can only gain files. Two trees grow with use and are
     // parsed and round-tripped above but not counted: plugin vdfs under `addons/`
-    // (`bridge/install-rs.sh` lays down `addons/metamod/cs2mcp.vdf` on every launch, a third-party
+    // (`cargo bridge install` lays down `addons/metamod/cs2mcp.vdf` on every launch, a third-party
     // plugin may add more) and `game/csgo_addons/<addon>/` (every addon someone makes brings its
     // own `ServerConfig.vdf`). Their number is not the game's; the parse-everything assertion
     // above still covers them.

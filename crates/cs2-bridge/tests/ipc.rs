@@ -4,7 +4,7 @@
 //! `CARGO_TARGET_TMPDIR`, authenticates with the token the listener reports, and drives the
 //! process-wide queues the way the game does: a stub "main thread" drains
 //! [`queue::global`] while the test acts as the client. Each assertion cites the line of
-//! `bridge/mcp_bridge.c` it holds to.
+//! `mcp_bridge.c` it holds to.
 //!
 //! The tests share the process-wide queues, so they take a mutex and start from an empty
 //! outbound queue; each listener's close purges its generation, which is also what the corpus

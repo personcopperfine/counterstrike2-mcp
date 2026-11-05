@@ -142,7 +142,7 @@ use std::fmt;
 /// level is an object (`{`), an array (`[`) or a `flag:` in a chain, and the top-level object
 /// counts as level 1.
 ///
-/// 256 matches `KV3_CHECK_DEPTH_CAP` in `bridge/kv3_check.h`, which counts the same way over the
+/// 256 matches `KV3_CHECK_DEPTH_CAP` in `kv3_check.h`, which counts the same way over the
 /// raw token stream (the root `{` is already one level). The deepest real content file nests 19
 /// levels, so the cap only ever rejects hostile input — it exists because the parser recurses, and
 /// an MCP server thread has a 2 MB stack.

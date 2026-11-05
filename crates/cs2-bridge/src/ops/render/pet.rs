@@ -1,5 +1,5 @@
 //! `pet.render`: the particle editor's preview viewport rendered offscreen to a PNG
-//! (`bridge/mcp_bridge_pet_render.inc:169-221`).
+//! (`mcp_bridge_pet_render.inc:169-221`).
 //!
 //! The chain is `CPetApp` -> main window -> preview -> scene widget -> `(scene, camera)`, every
 //! hop identity-checked (`pet_render_chain`, `:172-201`); the render itself, the stats, the PNG
@@ -94,13 +94,13 @@ fn pet_chain() -> Result<(*mut c_void, *mut c_void), &'static str> {
     use s2sdk_sys::generated::CBaseEditorSharedWindowApp;
 
     /// `S2_FIELD(CPetApp, mainWnd, S2_SIZEOF_CBaseEditorSharedWindowApp)`
-    /// (`bridge/s2sdk.h:622-626`).
+    /// (`s2sdk.h:622-626`).
     const APP_MAIN_WND: usize = size_of::<CBaseEditorSharedWindowApp>();
     const _: () = assert!(APP_MAIN_WND == 488);
 
     let app = crate::ops::pet::game::platform::resolve_pet().ok_or("pet_unavailable")?; // :174-175
     // SAFETY: `resolve_pet` returned the identity-checked `CPetApp` (pinned module) and the
-    // member offset is the generated base size the C names (`bridge/s2sdk.h:626`); the read is
+    // member offset is the generated base size the C names (`s2sdk.h:626`); the read is
     // the C's `app->mainWnd`.
     let wnd = unsafe { ((app as *const u8).add(APP_MAIN_WND) as *const *mut c_void).read_unaligned() };
     if wnd.is_null() {

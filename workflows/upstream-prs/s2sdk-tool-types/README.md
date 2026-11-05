@@ -4,7 +4,7 @@ Published as 47 cherry-pickable commits on `git@github.com:personcopperfine/s2sd
 `cs2mcp/tool-types-split` (`cs2mcp/tool-types` holds the same tree squashed into one commit).
 
 47 patches on alliedmodders/s2sdk `cs2` at `ab23a7e3`. They declare every class that cs2-mcp's
-bridge pins (`bridge/bridge_pins.h`), verified against CS2 2000930 (win64 and linuxsteamrt64).
+bridge pins (`crates/cs2-bridge/src/generated/pins.rs`), verified against CS2 2000930 (win64 and linuxsteamrt64).
 Rebased from `e7086d0f` onto `89096c5d` for CS2 2000933 (2026-10-19): upstream obsoleted
 X360 code and deleted `mathlib/vertexcolor.h`, so 0003 drops its X360 branch, 0007 drops the
 unused include and 0008 takes `const Color &` for `modulationColor` (same 4-byte RGBA by reference,

@@ -15,8 +15,8 @@ Commands
                                     with expect[<build of that binary>] when present; --record stores
                                     the result under expect[BUILD] and refuses a file with bridge
                                     entries, whose build only `sigupdate.py record` (bridge gate)
-                                    may write (bridge/pins.py re-checks builds[BUILD].sha256 only,
-                                    so recording here would be a side door around that gate)
+                                    may write (`cargo bridge pins` re-checks builds[BUILD].sha256
+                                    only, so recording here would be a side door around that gate)
   selftest                          check the vtlen scan against known vtable lengths in $CS2_BINS
                                     (CSchemaSystem 40, CSchemaSystemTypeScope 35)
 
@@ -51,7 +51,7 @@ SIGDIR = SIGS / "signatures"
 BINS = Path(os.environ.get("CS2_BINS", ROOT / "target/game-bins")).resolve()
 IMAGE_BASE = 0x180000000
 # CS2 ClientVersion (steam.inf) of the binaries under $CS2_BINS; the game-update workflow bumps it
-# (workflows/game-update.md). bridge/pins.py emits it as PIN_GAME_BUILD.
+# (workflows/game-update.md). `cargo bridge pins` emits it as PIN_GAME_BUILD.
 CURRENT_BUILD = (SIGS / "CURRENT_BUILD").read_text().strip()
 
 # where each module lives under $CS2_BINS (same layout as the game install, under windows/)
@@ -109,7 +109,7 @@ def module_path(mod, root=None, platform="windows"):
     return p
 
 
-# ------------------------------------------------------------------ PE helpers (from pins.py)
+# ------------------------------------------------------------------ PE helpers
 def parse_pe(data):
     pe = struct.unpack_from("<I", data, 0x3C)[0]
     assert data[pe:pe + 4] == b"PE\0\0", "not a PE"
@@ -363,7 +363,7 @@ VTABLE_MAX_SLOTS = 4096
 
 def exec_ranges(img):
     """[(lo, hi)] of the image's executable sections. parse_pe/parse_elf fill `exec`; a hand-built
-    image dict (bridge/pins.py builds its own) falls back to the PE .text section."""
+    image dict falls back to the PE .text section."""
     rng = img.get("exec")
     if rng is None:
         rng = [(va, va + max(vs, rs)) for name, va, vs, rptr, rs in img.get("sections", [])
@@ -428,7 +428,7 @@ def pattern(text):
 class Resolver:
     def __init__(self, data, img):
         self.data, self.img = data, img
-        # a hand-built image dict (bridge/pins.py) may not carry the platform tag: it is a PE
+        # a hand-built image dict may not carry the platform tag: it is a PE
         self.base = img.get("base", IMAGE_BASE)
         self.exports = None
         self.done = {}
@@ -616,8 +616,8 @@ def fp_keys(name, e):
     """[(key, what)] - the fingerprints an entry's resolved value is checked against.
 
     kind=function -> the entry itself (its target's masked prologue); a `vslot` locator is pinned
-    by bridge/pins.py as a *slot target* whatever its kind says, so it needs one for the same
-    reason. A vtable entry with `ident_slot` (bridge/pins.py emits a PinSlot identity row for it,
+    by `cargo bridge pins` as a *slot target* whatever its kind says, so it needs one for the same
+    reason. A vtable entry with `ident_slot` (`cargo bridge pins` emits a PinSlot identity row for it,
     whose target it reads from that slot) -> "<entry>#<slot>", the function the slot must still
     hold. Bridge entries located by sig/rtti/string/export have no such key: their locator is the
     evidence, and what they resolve to is an RVA or an integer rather than code the bridge calls.
@@ -681,8 +681,8 @@ def slot_target(data, img, vt, slot):
     ELF-aware: a .so keeps its relocated vtable slots zero in the file (the loader fills them
     from .rela), so the qword is read the way the loader would leave it (`image_qword`)
     whenever the image is an ELF, and checked against the image's own base/size (a .so's
-    base 0; a PE's IMAGE_BASE). Windows images keep the previous file-content read, and
-    pins.py's PE img dicts (parse_pe pieces without `kind`) take the same path by default."""
+    base 0; a PE's IMAGE_BASE). Windows images keep the previous file-content read, and a
+    hand-built PE img dict (parse_pe pieces without `kind`) takes the same path by default."""
     va = vt + 8 * slot
     try:
         if img.get("kind") == "elf":
@@ -702,8 +702,8 @@ def fp_checks(name, e, value, data, img, fps):
     """[(key, rva or None, present)] - where each of the entry's fingerprints has to match.
 
     The one place the "where" of a fingerprint is decided: sigupdate.py --bridge-gate judges
-    SAME/OK/DRIFT/FAIL with it, and bridge/pins.py checks the same thing before it writes the
-    header (so a hand-edited or partially recorded database cannot be pinned either way).
+    SAME/OK/DRIFT/FAIL with it, and `cargo bridge pins` (pinsdata.py) checks the same thing before
+    it writes pins.rs (so a hand-edited or partially recorded database cannot be pinned either way).
     """
     out = []
     for key, what in fp_keys(name, e):
@@ -715,14 +715,14 @@ def fp_checks(name, e, value, data, img, fps):
 
 
 # ------------------------------------------------------------------ sdk (generated SDK owner)
-# An entry's optional `sdk` names the generated expression (bridge/s2sdk_gen.h, gen.py's tie
+# An entry's optional `sdk` names the generated expression (crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h, gen.py's tie
 # syntax) that owns the number: the bridge spells that S2_* macro, and the entry stays as the
-# binary-side measurement. bridge/pins.py does not emit an `sdk` entry as a #define and refuses to
+# binary-side measurement. `cargo bridge pins` does not emit an `sdk` entry as a pin and refuses to
 # write when the expression and the measurement differ; sdkcheck.py reports one row per entry.
 # The expression is a sum of terms; a term is a generated macro name, `S2_SLOT_<...>*8` (a slot the
 # game calls as a vtable byte displacement) or a decimal addend (`S2_OFF_CMapNode_m_Children+8`, the
 # data pointer of a vector member).
-SDK_GEN_H = ROOT / "bridge" / "s2sdk_gen.h"
+SDK_GEN_H = ROOT / "crates" / "s2sdk" / "s2sdk-sys" / "include" / "s2sdk_gen.h"
 SDK_TERM_RX = re.compile(r"^(?:(S2_[A-Za-z0-9_]+)(?:\*(8))?|(\d+))$")
 SDK_DEFINE_RX = re.compile(r"^#define\s+(S2_[A-Za-z0-9_]+)\s+(0x[0-9a-fA-F]+|\d+)[uUlL]*\b", re.M)
 SDK_KINDS = ("function", "offset", "const")
@@ -766,7 +766,7 @@ def sdk_eval(expr, defines):
         if mac is None:
             total += lit
         elif mac not in defines:
-            raise LookupError("sdk %r: %s is not emitted by bridge/s2sdk_gen.h" % (expr, mac))
+            raise LookupError("sdk %r: %s is not emitted by crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h" % (expr, mac))
         else:
             total += defines[mac] * factor
     return total
@@ -894,8 +894,8 @@ def validate_file(path, d):
                     except LookupError as ex:
                         e("%s: %s" % (where, ex))
             if platform != "windows":
-                e("%s: sdk is a Windows-entry field (bridge/s2sdk_gen.h is the MSVC side)" % where)
-        # ident_slot is a vtable-only extension (identity probe slot; pins.py emits the check)
+                e("%s: sdk is a Windows-entry field (crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h is the MSVC side)" % where)
+        # ident_slot is a vtable-only extension (identity probe slot; `cargo bridge pins` emits the check)
         if "ident_slot" in ent:
             if ent.get("kind") != "vtable":
                 e("%s: ident_slot is only allowed on kind=vtable" % where)
@@ -1002,7 +1002,7 @@ def validate_file(path, d):
                 e("%s: expect[%s] must be an integer" % (where, b))
     # every bridge entry that pins code needs a fingerprint in sigs/fingerprints/<module>-fp.json:
     # without one nothing on a new build says the locator still found the right function, so
-    # sigupdate.py --bridge-gate calls it UNVERIFIED and bridge/pins.py would re-pin whatever the
+    # sigupdate.py --bridge-gate calls it UNVERIFIED and `cargo bridge pins` would re-pin whatever the
     # locator resolved to. Same definition of "requires a fingerprint" as the gate's coverage:
     # fp_keys/required_fp_keys. Windows only: a `platform: linux` file has no bridge entries.
     if platform == "windows":
@@ -1037,18 +1037,18 @@ def validate_file(path, d):
             if not ent.get("bridge"):
                 continue
             if loc.get("type") == "vslot":
-                # pins.py emits the value a bridge entry resolved to as the PinSlot targetRva and
+                # pins.rs carries the value a bridge entry resolved to as the PinSlot target_rva and
                 # the address its fingerprint is checked at: only a plain kind=function slot read
                 # produces that (a value/dimension step would pin an integer, and any other kind
                 # would be emitted as a slot number or crash on loc["class"])
                 if ent.get("kind") != "function":
-                    e("entry %r (bridge) reads a vslot but is kind=%s: pins.py would pin its value as "
+                    e("entry %r (bridge) reads a vslot but is kind=%s: `cargo bridge pins` would pin its value as "
                       "a slot target" % (name, ent.get("kind")))
                 elif any(set(st) - {"check"} for st in loc.get("steps", [])):
-                    e("entry %r (bridge) takes steps after its vslot read: pins.py pins the stepped "
+                    e("entry %r (bridge) takes steps after its vslot read: `cargo bridge pins` pins the stepped "
                       "value as the slot target" % name)
                 elif loc.get("vtable") in entries and not entries[loc["vtable"]].get("bridge"):
-                    e("entry %r (bridge) reads its slot from %r, which has no bridge macro: pins.py "
+                    e("entry %r (bridge) reads its slot from %r, which has no bridge name: `cargo bridge pins` "
                       "would not pin that vtable" % (name, loc["vtable"]))
             # a bridge entry is only as good as the entry it is measured from (base/vtlen/vslot):
             # that entry must be on record for the build being pinned and must not have failed on it
@@ -1175,7 +1175,7 @@ def cmd_resolve(args):
     if args.module:
         db = {p: d for p, d in db.items() if d["module"] == args.module}
     if args.record:
-        # the side door around the bridge gate: pins.py only re-checks builds[BUILD].sha256, so a
+        # the side door around the bridge gate: `cargo bridge pins` only re-checks builds[BUILD].sha256, so a
         # build recorded here would be pinned with whatever the locators found, gate or no gate.
         # Only sigupdate.py record may write a file with bridge entries (it refuses while any of
         # them is not SAME/OK). Refused up front for the whole run, so a refused run cannot leave
@@ -1184,7 +1184,7 @@ def cmd_resolve(args):
                    if any(ent.get("bridge") for ent in d["entries"].values())]
         for _p, d in blocked:
             bridge = [n for n, ent in d["entries"].items() if ent.get("bridge")]
-            print("%s: REFUSE --record: %d bridge entries (%s%s) pin bridge_pins.h; their build must be "
+            print("%s: REFUSE --record: %d bridge entries (%s%s) are pinned in pins.rs; their build must be "
                   "recorded by sigs/scripts/sigupdate.py record (the bridge gate), not here"
                   % (d["module"], len(bridge), ", ".join(bridge[:4]), ", ..." if len(bridge) > 4 else ""))
         if blocked:

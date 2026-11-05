@@ -263,7 +263,7 @@ pub mod ISmmPlugin_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPlugin` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPlugin` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 17;
@@ -291,7 +291,7 @@ pub mod ISmmPlugin_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPlugin` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPlugin` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 16;
@@ -516,7 +516,7 @@ pub mod IMetamodListener_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_IMetamodListener` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_IMetamodListener` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 15;
@@ -853,7 +853,7 @@ pub mod ISmmAPI_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmAPI` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmAPI` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 34;
@@ -1144,7 +1144,7 @@ pub mod ISmmPluginManager_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPluginManager` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_ISmmPluginManager` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 8;
@@ -1350,7 +1350,7 @@ pub mod IKHook_slots {
     /// This ABI's vtable length in slots (the RTTI entry at vt[-1] excluded):
     /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium
     /// (where the IR has no dump). This class's group is not emitted into
-    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_IKHook` define;
+    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_IKHook` define;
     /// a consumer reads this instead of recomputing a length as the last
     /// slot + 1.
     pub const VTLEN: usize = 15;

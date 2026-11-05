@@ -1,5 +1,5 @@
 //! The KV3 gate over the installed workshop content tree: the Rust twin of
-//! `bridge/test_kv3_corpus.sh`. It needs the Wine tools install, so it is its own test target with
+//! `test_kv3_corpus.sh`. It needs the Wine tools install, so it is its own test target with
 //! `test = false` in Cargo.toml: `cargo test --workspace` (no game needed, AGENTS.md) does not run
 //! it; run it explicitly with `cargo test -p cs2-bridge --test kv3_corpus`. A missing tree fails
 //! loudly (`CS2_CONTENT` overrides the path).
@@ -11,7 +11,7 @@ use cs2_bridge::kv3_check::{kv3_check, vpcf_check};
 /// The corpus script's walk, in Rust: every kv3-header file and every `.vpcf` under the installed
 /// workshop content must be accepted, and the counts must be the C runner's.
 ///
-/// `bridge/test_kv3_corpus.sh` printed `109 kv3 files checked, 4 vpcf files checked, 0 refusals`
+/// `test_kv3_corpus.sh` printed `109 kv3 files checked, 4 vpcf files checked, 0 refusals`
 /// on 2026-10-19; the counts follow the user's content, so only the floor and 0 refusals are asserted.
 #[test]
 fn corpus_matches_the_c_runner() {
@@ -47,7 +47,7 @@ fn corpus_matches_the_c_runner() {
 }
 
 /// The installed workshop content tree; a missing tree fails loudly, like the C script's
-/// `exit 2`. `CS2_CONTENT` overrides the default, as it does for `bridge/test_kv3_corpus.sh`.
+/// `exit 2`. `CS2_CONTENT` overrides the default, as it does for `test_kv3_corpus.sh`.
 fn content_dir() -> PathBuf {
     let content = PathBuf::from(
         std::env::var("CS2_CONTENT")
@@ -59,7 +59,7 @@ fn content_dir() -> PathBuf {
     );
     assert!(
         content.is_dir(),
-        "the KV3 corpus test needs the installed content tree at {} (bridge/test_kv3_corpus.sh \
+        "the KV3 corpus test needs the installed content tree at {} (test_kv3_corpus.sh \
          has the same requirement); set CS2_CONTENT",
         content.display()
     );

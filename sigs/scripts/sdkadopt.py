@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
 """sdkadopt.py - hand a sigs entry's number to the generated SDK header (`sdk` field).
 
-The bridge compiles the generated macro (S2_SLOT_CBaseEditorSession_Save) instead of a sigs-derived
-one (HVS_SAVE); the entry stays as the binary-side measurement. Adopting writes the expression
-into the entry's `sdk` field. From then on bridge/pins.py does not emit a #define for it, refuses
-when the expression and the binary disagree, and sdkcheck.py reports an `sdk:` row. The C code
-then spells the S2_* macro itself.
+The bridge uses the generated number (S2_SLOT_CBaseEditorSession_Save, in Rust
+`CBaseEditorSession_slots::Save`) instead of a sigs-derived pin (HVS_SAVE); the entry stays as the
+binary-side measurement. Adopting writes the expression into the entry's `sdk` field. From then on
+`cargo bridge pins` does not emit a pin for it, refuses when the expression and the binary
+disagree, and sdkcheck.py reports an `sdk:` row.
 
 The expression is given explicitly and validated at once, before anything is written:
-  * every macro in it is emitted by bridge/s2sdk_gen.h (sigcheck.sdk_eval; MSVC packs overload
+  * every macro in it is emitted by crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h (sigcheck.sdk_eval; MSVC packs overload
     groups in reverse, so a name picked by eye is easily the wrong slot: StartSoundEvent_2 is
     slot 11, copy the exact name from s2sdk_gen.h);
   * the entry has a measurement locator, and sigcheck.sdk_measured (a vslot's slot index, else
     the resolved value, read from the game binary) equals the evaluated expression. An entry
     without a locator (a literal) backs nothing in a binary and is refused.
 
-The const-tie path stays: a bare NAME with no `=` takes its expression from gen.C_HEADER_CONST_TIES
-(the generated const a bridge-side alias must spell) and is validated the same way.
-
 A PIN is a bridge macro or an entry name. Entries that already carry the same `sdk` are left alone
 ((already)); a different one is refused.
 
 Usage:
   sigs/scripts/sdkadopt.py [--dry-run] PIN=S2_EXPR [PIN=S2_EXPR ...]
-  sigs/scripts/sdkadopt.py [--dry-run] CONST_TIE_PIN
-  sigs/scripts/sdkadopt.py --list            # every entry carrying `sdk`, and the const-tie rows
+  sigs/scripts/sdkadopt.py --list            # every entry carrying `sdk`
 Needs the game binaries ($CS2_BINS, sigs/README.md "Binaries"); run with plain python3 (numpy).
 """
 import argparse
@@ -34,19 +30,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(HERE.parents[1] / "crates" / "s2sdk" / "s2sdk-sys" / "gen"))
 import sigcheck as sc  # noqa: E402
 import sdkcheck  # noqa: E402
-import gen  # noqa: E402
-
-
-def const_tie_table():
-    out = {}
-    for generated, pin, _why in gen.C_HEADER_CONST_TIES:
-        if pin in out:
-            sys.exit("two const tie rows for %s" % pin)
-        out[pin] = generated
-    return out
 
 
 def entries_by_pin(db):
@@ -68,7 +53,6 @@ def main():
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args()
 
-    consts = const_tie_table()
     db = sc.load_db(platform="windows")
     by_pin = entries_by_pin(db)
 
@@ -77,8 +61,6 @@ def main():
             expr = d["entries"][name].get("sdk")
             if expr:
                 print("%-34s <- %s" % (pin, expr))
-        for pin, generated in consts.items():
-            print("%-34s <- %-50s (const tie row)" % (pin, generated))
         return 0
     if not a.pins:
         ap.error("name at least one PIN=S2_EXPR (or --list)")
@@ -87,9 +69,7 @@ def main():
     for arg in a.pins:
         pin, eq, expr = arg.partition("=")
         if not eq:
-            if pin not in consts:
-                sys.exit("%s: give PIN=S2_EXPR (only a gen.C_HEADER_CONST_TIES pin may omit the expression)" % pin)
-            expr = consts[pin]
+            sys.exit("%s: give PIN=S2_EXPR" % pin)
         if not pin or not expr:
             sys.exit("%r: expected PIN=S2_EXPR" % arg)
         wanted.append((pin, expr))
@@ -143,7 +123,7 @@ def main():
         lines = path.read_text().splitlines()
         indent = len(lines[1]) - len(lines[1].lstrip(" ")) if len(lines) > 1 else 1
         path.write_text(json.dumps(d, indent=indent or 1, ensure_ascii=False) + "\n")
-    print("wrote %d file(s); next: bridge/pins.py, sigs/scripts/sdkcheck.py, then switch the C code "
+    print("wrote %d file(s); next: `cargo bridge pins`, sigs/scripts/sdkcheck.py, then switch the C code "
           "to the S2_* macro" % len(touched))
     return 0
 

@@ -1,6 +1,6 @@
 # P1 live-test batch (2026-10-26, streamline/agent-ux at aadc6d9)
 
-One Hammer tools session (`TOOL=hammer bridge/runtime.sh up`, addon `mcp_test`), driven through the
+One Hammer tools session (`TOOL=hammer cargo bridge runtime up`, addon `mcp_test`), driven through the
 worktree's `target/debug/hammer-mcp`. Tested and recorded only; no code was changed. Raw evidence is
 under `target/live-p1/` in the worktree (`<NN>-*.txt` = every JSON-RPC reply in order; `scripts/` =
 the drivers that produced them; `console-session1.log` = the game console.log of session 1).
@@ -8,7 +8,7 @@ the drivers that produced them; `console-session1.log` = the game console.log of
 ## Versions
 
 - hammer-mcp / client-mcp: `cargo build -j2` debug at aadc6d9 (`target/live-p1/build.log`).
-- Bridge: `bridge/build-rs.sh` OK (exports gate passed, `target/live-p1/build-rs.log`), `hello.build`
+- Bridge: `cargo bridge build` OK (exports gate passed, `target/live-p1/build-rs.log`), `hello.build`
   **m3.15**, game build 2000933. Installed: `cs2_bridge.dll` sha256 `ff1084ee…672c`,
   `cs2mcp_launch.exe` `da0551c9…822f`, `cs2mcp_mmload.dll` `e0f8b76d…737a`
   (`target/live-p1/install-status-after.txt`).

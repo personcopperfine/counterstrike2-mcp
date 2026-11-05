@@ -52,7 +52,7 @@ fn request(method: &str, id: &str) -> Request {
 
 /// The rows this lane serves, in the C table's order (the same order as `registry.rs`'s
 /// `METHODS` table): the HAMMER-R reads and this lane's writes interleaved as the C lists them
-/// (`bridge/mcp_bridge.c:1061-1108`).
+/// (`mcp_bridge.c:1061-1108`).
 const ROWS: [&str; 12] = [
     "doc.active",
     "node.list",

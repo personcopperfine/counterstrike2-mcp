@@ -1,7 +1,7 @@
 //! The game group: the C bridge's game-state and engine ops (`console.exec`, `test.*`,
 //! `game.*`); `game.saveRestore` answers from [`save_restore`], the hooks lane's
 //! ISource2ServerConfig vptr swap. The bodies are the C's `op_test`
-//! (`bridge/mcp_bridge.c:5042-5098`) and `op_game_*` (`bridge/mcp_bridge_game.inc`), ported
+//! (`mcp_bridge.c:5042-5098`) and `op_game_*` (`mcp_bridge_game.inc`), ported
 //! 1:1: same checks in the same order, same error codes/names/`reason` strings, same JSON
 //! member order and number formatting.
 //!
@@ -181,8 +181,7 @@ fn game_tick(r: &Request) -> String {
     let mut sb = Sb::new(&mut buf);
     let outcome = op_game_tick(&mut sb);
     // The C's 512-byte arm has no overflow check (`mcp_bridge.c:5996-6008`; the game-state
-    // arm's is `:6017-6018`); `finish`'s check cannot fire for these replies (< 40 bytes) -
-    // see protocol-diff-m3-game.md.
+    // arm's is `:6017-6018`); `finish`'s check cannot fire for these replies (< 40 bytes).
     finish(&r.id, outcome, &sb, GAME_OVERFLOW)
 }
 

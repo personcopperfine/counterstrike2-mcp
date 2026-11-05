@@ -2,7 +2,7 @@
 
 Facts the trigger tools and bridge m2.19 are built on (`list_triggers`, `create_trigger`,
 `tie_to_entity`, `move_to_world`, `set_trigger_volume`). Every address the bridge uses is an entry
-in `sigs/signatures/hammer.json` (pins -> `bridge_pins.h`); never copy a number from here into
+in `sigs/signatures/hammer.json` (`cargo bridge pins` -> `crates/cs2-bridge/src/generated/pins.rs`); never copy a number from here into
 code. Distilled from the RE session's `target/re-triggers.md`; post-implementation facts (the live
 acceptance, the runtime verdicts) are in `hammer-mcp/AGENT.md` "## Triggers".
 
@@ -158,11 +158,11 @@ Already pinned and used by the recipes: `HFN_CREATE_NODE_BY_NAME`, `HFN_INSERT_N
 * `MoveToWorld` changes the Hammer selection (selects the children) — UI-only.
 
 ## Probe (how the [V live] evidence was produced)
-`target/orch/re/probe/` = copy of `bridge/` + a hidden `probe.trig` method (ops
+`target/orch/re/probe/` = copy of the (since retired) C bridge sources + a hidden `probe.trig` method (ops
 info/tie/untie/meshIn/setOrigin, raw RVAs), built with `build.sh` against the main checkout's
 `target/game-bins`, installed temporarily. Installed DLL before: m2.18
 `d5899665…`; **restored afterwards, sha256 verified identical**. Container `cs2tools-trig`
 stopped; the doc was saved clean before `down` (no autosave). Renders:
 `workshop/run/app/renders/tr_tied.png`, `tr_setup.png`; driver scripts
-`target/orch/re/scripts/{rpc,t,q5,dump_ent,mats}.py`. The worktree's `bridge/` sources are
+`target/orch/re/scripts/{rpc,t,q5,dump_ent,mats}.py`. The worktree's bridge sources are
 unchanged (only the regenerated `bridge_pins.h`).

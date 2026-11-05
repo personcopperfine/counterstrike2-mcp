@@ -27,7 +27,8 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
 
 ```
 <repo>/                     THIS repo = the default project root
-├── bridge/                 pins.py/bridge_pins.h + build-rs/install-rs/runtime.sh; the bridge is crates/cs2-bridge (frozen C reference kept)
+├── crates/cs2-bridge/      the bridge DLL/.so (PROTOCOL.md: its wire contract)
+├── crates/cs2-bridge-tools/ `cargo bridge`: pins, build, install/ensure, the Wine tools runtime
 ├── crates/cs2-mcp-common/  shared crate: bridge client, tool registry, rmcp adapter, runtime, sigs, capture, mock
 ├── hammer-mcp/             workshop-tools server (own AGENT.md)
 ├── client-mcp/             this server
@@ -35,7 +36,7 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
     └── run/app             Windows CS2 + tools + Proton prefix (gitignored runtime state; mounted at /app)
 ```
 
-Paths are written from the repo root as `bridge/...`, `crates/cs2-mcp-common/...`,
+Paths are written from the repo root as `crates/cs2-bridge/...`, `crates/cs2-mcp-common/...`,
 `workshop/...`. Override with `--sigs` / `--project-root`.
 Citations of the form `../idabins/...`, `../harness/...`, `../tests/...`, `../cs2-gym/...`,
 `../.github/skills/...` point into the maintainer's private research checkout (the directory this
@@ -47,8 +48,8 @@ Required reading (skim; cite, do not re-derive):
 |---|---|
 | Page format, evidence tags `[V] [I] [?] [S] [D]` | `../idabins/docs/FORMAT.md` |
 | Addresses, game update, bridge/runtime rules | `../idabins/docs/WORKFLOW.md` §9, §10, §11 |
-| Bridge protocol, method table (§7), error codes (§8) | `../idabins/docs/data/bridge-protocol.md` |
-| Bridge DLL (this repo) | `bridge/README.md`, `crates/cs2-bridge/src/registry.rs` (the method table) + `ops/`, `bridge/pins.py`, `runtime.sh` |
+| Bridge protocol, methods, error codes (§5) | `crates/cs2-bridge/PROTOCOL.md` |
+| Bridge DLL (this repo) | `crates/cs2-bridge/README.md`, `crates/cs2-bridge/PROTOCOL.md` (the wire contract), `crates/cs2-bridge/src/registry.rs` (the method table) + `ops/`, `cargo bridge pins`, `cargo bridge runtime` |
 | Signature DB format | `../idabins/docs/data/signatures-format.md` |
 | Test scripts (`CTestScriptMgr`) | `../idabins/worknotes/vtest/README.md`, `vtest-scratch.md`, `docs/interfaces/ITestScriptMgr.md`, `worknotes/vtest/run_vtest.sh`, `run_gametest.sh`, `gametest/` |
 | Input hook (`input.*`) | `../idabins/docs/flows/client-input-pipeline.md`, `worknotes/inputhook-scratch.md`, `worknotes/vtest/input_hook_test.py` |
@@ -134,9 +135,9 @@ is on the forbidden list.
 `input.set` matches buttons by name and a mask of exactly `1 << i` (`in_find_bit`); `moveup` / `movedown` carry
 mask -1 (IN_ALL), so they cannot be matched and are not reachable through `input.set` / `input_set`.
 
-**The bridge source lives in this repo** (`bridge/`). Methods this server will need and that **do not
+**The bridge source lives in this repo** (`crates/cs2-bridge`). Methods this server will need and that **do not
 exist yet** — server-side hooks, any Linux-side hook — are added in `crates/cs2-bridge` (a handler in `src/ops/<group>`), pinned from `sigs/signatures`
-through `bridge/pins.py`, and documented in idabins' `bridge-protocol.md` §7 (`bridge/README.md`
+through `cargo bridge pins`, and documented in `crates/cs2-bridge/PROTOCOL.md` (`crates/cs2-bridge/README.md`
 "Adding a method"; request list in `research/bridge-wishlist.md`, workflow 02).
 
 ## Build, run, test
@@ -182,10 +183,10 @@ is an error). The result says `source`.
 ## Conventions (binding)
 
 1. **No addresses in Rust.** Never write an RVA, vtable slot or struct offset in any crate of this
-   repo. They live in `../idabins/signatures/<module>.json` and reach the game only through the bridge
-   DLL (`bridge/pins.py` -> `bridge_pins.h`, fail-closed `-32017`). `common::sigs` reads the DB by
-   entry name for build pinning and `doctor`. New symbol = new signature entry + bridge method in
-   `bridge/` first.
+   repo. They live in `sigs/signatures/<module>.json` and reach the game only through the bridge
+   DLL (`cargo bridge pins` -> `crates/cs2-bridge/src/generated/pins.rs`, fail-closed `-32017`).
+   `common::sigs` reads the DB by entry name for build pinning and `doctor`. New symbol = new
+   signature entry + bridge method in `crates/cs2-bridge` first.
 2. **stdout is the protocol.** Logs via `tracing` to stderr. Never `println!`. The stdio e2e test
    asserts every stdout line is a JSON-RPC frame.
 3. **Error taxonomy** (`common::bridge::errors`, `common::tools::ToolError`): `{type, name, code,
@@ -200,7 +201,7 @@ is an error). The result says `source`.
    retrySafe), `ToolBudgetExceeded` (less than 500 ms of call budget left), later `SessionNotRunning`,
    `AnotherCs2Running`, `DisplayUnavailable`; the launch ensure's `InstallBusy` (exit 4, retrySafe),
    `InstallFailed` (other non-zero exit, retrySafe), `InstallTimeout` (retrySafe: false, data
-   `{timeoutSecs, hint}`: the tree may be half-repaired) and `InstallScriptMissing` (a configuration
+   `{timeoutSecs, hint}`: the tree may be half-repaired) and `InstallToolMissing` (a configuration
    error: the path, retrySafe: false — retrying without fixing the configuration fails the same way).
 4. **Deadlines** on every bridge request (explicit `deadlineMs`, never 0) from the per-call `Budget`;
    timeout classification as the POC (`QueueTimeout` safe, `OutcomeUnknown`/`ConnectionLost` not).
@@ -226,16 +227,19 @@ is an error). The result says `source`.
      An identical request while its session runs returns that session (`reused: true`).
    - TODO before lifting the per-kind rule: isolate per-session writes (overlay the game dir and
      the home volume) so two sessions of one kind cannot share state.
-   Every launch first runs `bridge/install-rs.sh ensure` for its tree (Wine app dir /
-   `cs2-home`) under the same gate and lock: read-only while the tree is current, repaired when
-   something is missing/stale, and refused with `InstallBusy` (naming the containers) while a
-   running container mounts a tree that needs repair; a reused session does not run it. The script
-   is the `bridge/install-rs.sh` of the checkout this client-mcp was built from, so a worktree-built
-   client-mcp installs **that worktree's** `target/bridge-rs` build into the shared tree (ensure
-   re-installs whichever build launched last); backups and the Metamod build stay in the canonical
-   checkout's `target/` (`install-rs.sh`'s `CS2_MCP_DIR`, default the repo's main checkout; the
-   runtime does not pass it, it passes `CS2_MCP_PROJECT_ROOT` = its own project root). A checkout with
-   no `target/bridge-rs` build and nothing installed fails the launch with the script's message.
+   Every launch first runs `cs2-bridge-tools install --platform <wine|linux> ensure` for its tree
+   (Wine app dir / `cs2-home`) under the same gate and lock: read-only while the tree is current,
+   repaired when something is missing/stale, and refused with `InstallBusy` (naming the containers)
+   while a running container mounts a tree that needs repair; a reused session does not run it. The
+   program is `--install-tool` / `CS2_MCP_INSTALL_TOOL` when given, else the `cs2-bridge-tools`
+   binary next to this client-mcp (`cargo build --release -p cs2-bridge-tools` builds it; a missing
+   one fails the launch with `InstallToolMissing`, never a skipped ensure). It installs the
+   `target/bridge-rs` build of the checkout it was built from, so a worktree build installs **that
+   worktree's** bridge into the shared tree (ensure re-installs whichever build launched last);
+   backups and the Metamod build stay in the canonical checkout's `target/` (`CS2_MCP_DIR`, default
+   the repo's main checkout; the runtime does not pass it, it passes `CS2_MCP_PROJECT_ROOT` = its
+   own project root). A checkout with no `target/bridge-rs` build and nothing installed fails the
+   launch with the tool's message.
    The ensure is bounded at 120 s and runs in its own process group (a timeout SIGTERMs, waits 5 s,
    then SIGKILLs the group while the launch lock is held; a cancelled call may leave a partial
    install that the next ensure repairs).
@@ -244,7 +248,7 @@ is an error). The result says `source`.
    failure is exit 3 with `[cs2mcp-launch] FAIL: ...` instead of a Metamod-less session; Linux
    sessions prepend `csgo/addons/cs2mcp/bin/linuxsteamrt64/libcs2mcp_mmload.so` to `LD_PRELOAD`
    on the `cs2.sh` command only and refuse to launch without it. Neither edits `gameinfo.gi`;
-   real Windows / Steam-launched retail CS2 is not a target (bridge/metamod/README.md
+   real Windows / Steam-launched retail CS2 is not a target (crates/metamod/README.md
    "Launching").
    Every session loads Metamod:Source with the cs2-mcp bridge as one plugin (third-party Metamod
    plugins may sit next to it), and Linux client and wine-client sessions pass `-insecure` (VAC
@@ -261,7 +265,7 @@ is an error). The result says `source`.
    on the absence of errors; `TESTSCRIPT: CheckPoint -> '<name>'` lines (with `testscript_debug 1`)
    are the timeline. A checkpoint that arrives during `Test_Wait` is dropped — use barriers.
 10. **Ask before driving the desktop** (host X keypresses/focus).
-11. **Game update** = idabins WORKFLOW §10 + `bridge/pins.py --rust`/`bridge/build-rs.sh`; here only `BuildMismatch`
+11. **Game update** = `workflows/game-update.md` + `cargo bridge pins`/`cargo bridge build`; here only `BuildMismatch`
     until the DB and bridge move.
 12. **Waits.** Two kinds, two shapes. *Job waits* (`wait_session`, `test_wait`) wait for a job to
     reach a stage or finish and return a status report: when the budget or timeout ends the wait, the
@@ -307,7 +311,7 @@ client-mcp/
 |---|---|---|
 | 00 | `workflows/00-bootstrap.md` | **done**: rmcp stdio server, bridge client, mock bridge, `session_status`, `console_exec` guard, tests |
 | 01 | `workflows/01-docker-runtime.md` | `docker` backend: `launch_session`, `wait_session`, `stop_session` (podman; both flavours; limits; readiness ladder). **Implemented, not yet live-verified.** Headless Wine and our image layer open. |
-| 02 | `workflows/02-sigs.md` | build pinning, `doctor`, update drill, new-method procedure (in `bridge/`) |
+| 02 | `workflows/02-sigs.md` | build pinning, `doctor`, update drill, new-method procedure (in `crates/cs2-bridge`) |
 | 03 | `workflows/03-console-convars.md` | console.log tail/wait, command routes, convar snapshots |
 | 04 | `workflows/04-unit-tests.md` | `run_testscript`, `test_status`, `test_wait`, judges: **implemented, not yet live-verified**; parked harness + JUnit open (step 4) |
 | 05 | `workflows/05-multiplayer.md` | dedicated server (`server_up`), `client_connect`, `server_console_exec` (RCON): **implemented, not yet live-verified**; bots over RCON |
@@ -353,15 +357,15 @@ not for, units, and the traps that cost a call. Everything else lives here. The 
 wording is in git history (`git log -p -- client-mcp/src/tools/client.rs`, commit "client-mcp
 WP2.2").
 
-- **launch_session.** Every launch first runs `bridge/install-rs.sh ensure` for its tree: a current
+- **launch_session.** Every launch first runs `cs2-bridge-tools install ... ensure` for its tree: a current
   tree is untouched, a missing/stale one is repaired, and the launch is refused (`InstallBusy`,
   naming the containers) while a running container mounts a tree that needs repair. The install
   phase can exceed the call budget on a first install or right after a game update; the call then
   returns the install outcome as it stands (`InstallFailed`/`InstallTimeout`/`InstallBusy`). The
-  script is the `bridge/install-rs.sh` of the checkout this client-mcp was built from, so a
-  worktree-built client-mcp installs that worktree's bridge build into the shared tree (ensure
-  re-installs whichever build launched last); a checkout without a `target/bridge-rs` build and
-  nothing installed fails with the script's message. Every session loads Metamod:Source with the
+  program is the `cs2-bridge-tools` next to this client-mcp (or `--install-tool`), and it installs
+  the bridge build of the checkout it was built from, so a worktree build installs that worktree's
+  bridge into the shared tree (ensure re-installs whichever build launched last); a checkout without
+  a `target/bridge-rs` build and nothing installed fails with the tool's message. Every session loads Metamod:Source with the
   cs2-mcp bridge as one plugin; third-party Metamod plugins can sit next to it. linux-client and
   wine-client run with `-insecure` (VAC off, no official servers; local/LAN servers unaffected).
   wine-client: Metamod loads the bridge as a plugin; bridge RPC only once a map runs (the GameFrame
@@ -444,7 +448,7 @@ WP2.2").
   (>= 10000 B, EBML magic), with ffprobe the stream/packet/decoded-frame count (within 2%) and
   `r_frame_rate`, and a contact sheet with ffmpeg. Absent tools are in `skipped`.
 - **server_up.** `cs2 -dedicated`, `--network=host`, no X; the `cs2-home` volume is shared with
-  clients under a flock. Every launch first runs `bridge/install-rs.sh --platform linux ensure`
+  clients under a flock. Every launch first runs `cs2-bridge-tools install --platform linux ensure`
   on the shared tree (stale trees repaired unless a running container mounts them: `InstallBusy`).
   RCON password random if absent, saved to `server-session.json` (mode 0600). Full log is stdout,
   saved to `server.log`. Markers seen live: `SetServerState ss_active`, socket opened,

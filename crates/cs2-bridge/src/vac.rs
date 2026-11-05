@@ -1,7 +1,7 @@
 //! The `-insecure` gate: the bridge never starts in a VAC-secured client session.
 //!
 //! Injected code must not run where VAC is on (crates/cs2-native README "VAC"). Every launch path
-//! this repo has passes `-insecure` (`bridge/runtime.sh`, the client-mcp runtime, `cs2mcp-native`),
+//! this repo has passes `-insecure` (`cargo bridge runtime`, the client-mcp runtime, `cs2mcp-native`),
 //! and `cs2mcp_launch.exe` refuses without it. What those checks do not cover is the tool-plugin
 //! entry in `sdkenginetools.txt`: while `cs2mcp-native` has an install prepared, a `-tools`
 //! session the user starts from the Steam UI loads this image without `-insecure`
@@ -15,7 +15,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 static ALLOW_FOR_TESTS: AtomicBool = AtomicBool::new(false);
 
 /// The refusal, for the bridge log and the Metamod error buffer.
-pub const REFUSAL: &str = "cs2-mcp bridge: refusing to start without -insecure on the command line (a VAC-secured session; launch with cs2mcp-native, bridge/runtime.sh or -insecure)";
+pub const REFUSAL: &str = "cs2-mcp bridge: refusing to start without -insecure on the command line (a VAC-secured session; launch with cs2mcp-native, cargo bridge runtime or -insecure)";
 
 /// Does this process run with `-insecure` (or `-dedicated`)? A unit-test build always answers yes.
 pub fn insecure_session() -> bool {

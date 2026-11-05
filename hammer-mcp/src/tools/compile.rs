@@ -15,7 +15,7 @@
 //!   **result**, never an error (the caller reads `failLines`/`fatal`);
 //! * `resourcecompiler` skips an input whose output is newer: "0 compiled, 1 skipped" with an
 //!   output at least as new as the source is up to date, not a stale build;
-//! * the tools container is started by the orchestrator (`bridge/runtime.sh up`), never by this
+//! * the tools container is started by the orchestrator (`cargo bridge runtime up`), never by this
 //!   server: no container -> `RuntimeUnavailable` with the label and the launch hint;
 //! * the container path is embedded in a `bash -c` command line, so characters outside
 //!   `safe_container_path` are refused instead of quoted through.
@@ -56,10 +56,10 @@ pub struct CompileTarget {
 }
 
 impl CompileTarget {
-    /// The ModelDoc instance (`TOOL=modeldoc bridge/runtime.sh up`).
+    /// The ModelDoc instance (`TOOL=modeldoc cargo bridge runtime up`).
     pub const MODELDOC: CompileTarget = CompileTarget {
         label: "cs2mcp.tool=modeldoc",
-        hint: "TOOL=modeldoc bridge/runtime.sh up",
+        hint: "TOOL=modeldoc cargo bridge runtime up",
     };
     /// Any tools container: the bare label key, so the particle route also finds a container
     /// started with the default `TOOL=hammer`. Two running tools containers both carrying
@@ -67,7 +67,7 @@ impl CompileTarget {
     /// `--tools-container`).
     pub const ANY_TOOLS: CompileTarget = CompileTarget {
         label: "cs2mcp.tool",
-        hint: "bridge/runtime.sh up",
+        hint: "cargo bridge runtime up",
     };
 }
 

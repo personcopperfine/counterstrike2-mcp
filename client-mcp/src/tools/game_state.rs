@@ -6,7 +6,7 @@
 //!
 //! Entity fields are resolved by the bridge through the game's SchemaSystem at runtime; this crate
 //! only names classes/fields in docs and never carries offsets. Bridge handlers:
-//! `bridge/mcp_bridge_game.inc`. Live-verified 2026-10-11 for game_state/weapons/radar/select_weapon/sounds
+//! `mcp_bridge_game.inc`. Live-verified 2026-10-11 for game_state/weapons/radar/select_weapon/sounds
 //! in wrap mode; listener mode failed live (`research/evidence/2026-10-11-game-state-probe-weaponselect.json`).
 pub use cs2_mcp_common::play::wait::is_weapon_name;
 use crate::state::ClientState;

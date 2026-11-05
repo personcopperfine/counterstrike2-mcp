@@ -166,7 +166,7 @@
       "value": "Source2EngineToClient001"
     },
     {
-      "doc": "bridge/mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h).",
+      "doc": "mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h).",
       "expr": "SOURCE2SERVERCONFIG_INTERFACE_VERSION",
       "itanium": {
         "value": "Source2ServerConfig001"
@@ -196,7 +196,7 @@
       "value": "Source2Server001"
     },
     {
-      "doc": "bridge/mcp_bridge.c:2657 asks for TestScriptMgr001.",
+      "doc": "mcp_bridge.c:2657 asks for TestScriptMgr001.",
       "expr": "TESTSCRIPTMANAGER_INTERFACE_VERSION",
       "itanium": {
         "value": "TestScriptMgr001"
@@ -241,7 +241,7 @@
       "value": "SoundOpSystem001"
     },
     {
-      "doc": "bridge/s2sdk.h S2_TOOLFRAMEWORK2_VERSION.",
+      "doc": "s2sdk.h S2_TOOLFRAMEWORK2_VERSION.",
       "expr": "TOOLFRAMEWORK2_INTERFACE_VERSION",
       "itanium": {
         "value": "ToolFramework2_002"
@@ -256,7 +256,7 @@
       "value": "ToolFramework2_002"
     },
     {
-      "doc": "bridge/s2sdk.h S2_SCENESYSTEM_VERSION.",
+      "doc": "s2sdk.h S2_SCENESYSTEM_VERSION.",
       "expr": "SCENESYSTEM_INTERFACE_VERSION",
       "itanium": {
         "value": "SceneSystem_002"
@@ -271,7 +271,7 @@
       "value": "SceneSystem_002"
     },
     {
-      "doc": "bridge/s2sdk.h S2_SCENEUTILS_VERSION.",
+      "doc": "s2sdk.h S2_SCENEUTILS_VERSION.",
       "expr": "SCENEUTILS_INTERFACE_VERSION",
       "itanium": {
         "value": "SceneUtils_001"
@@ -286,7 +286,7 @@
       "value": "SceneUtils_001"
     },
     {
-      "doc": "bridge/s2sdk.h S2_RENDERSERVICE_VERSION.",
+      "doc": "s2sdk.h S2_RENDERSERVICE_VERSION.",
       "expr": "RENDERSERVICE_INTERFACE_VERSION",
       "itanium": {
         "value": "RenderService_001"
@@ -301,7 +301,7 @@
       "value": "RenderService_001"
     },
     {
-      "doc": "bridge/s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator).",
+      "doc": "s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator).",
       "expr": "RENDER_DEVICE_INTERFACE_VERSION",
       "itanium": {
         "value": "RenderDevice003"

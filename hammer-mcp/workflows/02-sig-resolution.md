@@ -6,7 +6,7 @@ The server never contains an address, yet a game update is a mechanical drill: t
 precisely what is stale until then.
 
 ## Prerequisites
-- Read `sigs/README.md`, `workflows/game-update.md`, `bridge/pins.py`.
+- Read `sigs/README.md`, `workflows/game-update.md`, `cargo bridge pins`.
 - `python3` on the host (dev tooling only).
 
 ## Steps
@@ -20,15 +20,15 @@ precisely what is stale until then.
 3. **`doctor` tool** (read-only, never raises): per module — bridge pin state from
    `control.capabilities.modules` (`verified|failed|not_loaded|verifying`), sig DB build coverage,
    count of `bridge`-tagged entries without `expect[<build>]`, and the exact next command from
-   WORKFLOW §10 (`scripts/sigupdate.py check --tree ... --old OLD --build NEW`, then `pins.py`,
-   `build-rs.sh`, `install-rs.sh`).
+   WORKFLOW §10 (`scripts/sigupdate.py check --tree ... --old OLD --build NEW`, then `cargo bridge pins`,
+   `cargo bridge build`, `cargo bridge install`).
 4. **Dev tooling** (`research/sigs.sh`): wrappers that call `sigs/scripts/sigcheck.py validate|resolve
    --strict` and `sigupdate.py check` so a developer can run the drill from this repo. No Rust
    resolver port (byte-pattern/RTTI resolution stays in Python; it is used at build time, not at
    runtime).
-5. **New symbol procedure** (`bridge/README.md` "Adding a method"): find in IDA -> `sigs/ida/ida_sigs.py
-   dump_auto` -> entry with a `bridge` macro in `sigs/signatures` -> `bridge/pins.py`
-   -> handler in `crates/cs2-bridge/src/ops/` + its `registry.rs` row (this repo) -> protocol §7 row (idabins) -> tool
+5. **New symbol procedure** (`crates/cs2-bridge/README.md` "Adding a method"): find in IDA -> `sigs/ida/ida_sigs.py
+   dump_auto` -> entry with a `bridge` macro in `sigs/signatures` -> `cargo bridge pins`
+   -> handler in `crates/cs2-bridge/src/ops/` + its `registry.rs` row (this repo) -> its `crates/cs2-bridge/PROTOCOL.md` section -> tool
    here. The server consumes the **method**, never the macro.
 6. **Update drill test**: a fixture sig DB with a module missing `expect["<new>"]` must make
    `doctor` list it and `session_status` say `BuildMismatch` when hello reports `<new>`.
@@ -46,4 +46,4 @@ precisely what is stale until then.
 
 ## Evidence
 - `../idabins/signatures/*.json` (9 406 of 9 879 citations backed on 2000930), `scripts/sigcheck.py`
-  (`CURRENT_BUILD = "2000930"`), `scripts/sigupdate.py`, `bridge/pins.py` (fail-closed consumer) [proven].
+  (`CURRENT_BUILD = "2000930"`), `scripts/sigupdate.py`, `cargo bridge pins` (fail-closed consumer) [proven].

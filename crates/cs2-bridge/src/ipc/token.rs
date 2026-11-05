@@ -1,6 +1,6 @@
 //! The session token: 32 bytes from the OS RNG, written as 64 lowercase hex characters.
 //!
-//! `start_listener_once` (`bridge/mcp_bridge.c:6734-6742`) fills `g_token` from
+//! `start_listener_once` (`mcp_bridge.c:6734-6742`) fills `g_token` from
 //! `BCryptGenRandom(0, raw, 32, BCRYPT_USE_SYSTEM_PREFERRED_RNG)` and **fails closed** when the
 //! call fails: a log line, no threads, no discovery file. [`from_bytes`] is the hex half
 //! (`:6739-6741`); [`random`] is the OS half, `getrandom(2)` on Linux instead of

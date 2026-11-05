@@ -1,7 +1,7 @@
 //! The `pet.*` reply builders and the loadability gates, held to the C's bytes.
 //!
 //! Every expectation below is written from the C's `sb_add` sequence in
-//! `bridge/mcp_bridge_pet.inc` (frozen, m2.20) - the line numbers in each test name the block.
+//! `mcp_bridge_pet.inc` (frozen, m2.20) - the line numbers in each test name the block.
 //! The builders take plain inputs, so this runs on the host with no game.
 
 use cs2_bridge::kv3_check::vpcf_check;

@@ -1,4 +1,4 @@
-//! `cs2-bridge`: the Rust port of the Windows C bridge (`bridge/mcp_bridge.c`), built as a
+//! `cs2-bridge`: the Rust port of the Windows C bridge (`mcp_bridge.c`), built as a
 //! cdylib for two targets - the workshop tools under Wine (`x86_64-pc-windows-msvc`) and the
 //! Linux dedicated server (`x86_64-unknown-linux-gnu`) - and as an rlib so the host tests can
 //! link against it.
@@ -11,7 +11,7 @@
 //! * [`toolsys`], the workshop tools' tool-plugin object and its vtable: the C `M0Obj` /
 //!   `build_vtable` / `m0_*` block (`mcp_bridge.c:6765-6839`), including the per-frame tick;
 //! * [`json_text`], the JSON string-body unescaper for `pet.apply`: the Rust port of
-//!   `bridge/json_text.h` (escaping/writing helper, m2.13 WP-B1);
+//!   `json_text.h` (escaping/writing helper, m2.13 WP-B1);
 //! * [`plugin`], the Metamod:Source 2.0-dev plugin object (`CreateInterface("ISmmPlugin")`):
 //!   `Load` installs Metamod's `IKHook` into [`s2sdk::hook`] and registers the listener whose
 //!   `OnMetamodQuery` serves [`iface`]; `Unload` tears the hook owners down, drains the hooks
@@ -22,7 +22,7 @@
 //! * [`iface`], `McpBridge_001`: a provisional status object (`metamod`, `khook`, `tick`,
 //!   `roles` - see [`iface::status_json`]);
 //! * [`log`], the line-at-a-time bridge log.
-//! * [`kv3_check`], the pre-load gate for KV3 text (the C `bridge/kv3_check.h`) and pet.open's
+//! * [`kv3_check`], the pre-load gate for KV3 text (the C `kv3_check.h`) and pet.open's
 //!   host-path derivation.
 //! * [`queue`], the bounded main-thread request queue, the bounded outbound queue, the deadline
 //!   sweep and the per-frame `drain` (the C `Req`/`Out`/`q_*`/`out_*` block,
@@ -99,38 +99,29 @@ pub mod wiring;
 mod khook_mock;
 
 /// The build string every reply envelope, the discovery file and `control.version` carry - the
-/// C's `BRIDGE_BUILD` (`bridge/mcp_bridge.c:127`), one constant for the whole crate.
+/// C's `BRIDGE_BUILD` (`mcp_bridge.c:127`), one constant for the whole crate.
 ///
-/// `m3.0` is the first Rust build that answers the wire (WP2.D): it serves the `control.*`
-/// methods and refuses every other method with `-32011` + `blockedOn` until the ops are ported
-/// (M4). The C bridge stays at `m2.20`; hosts tell the two apart by this string (there is no
-/// ordering comparison anywhere in the host crates - see `bridge/protocol-diff-m3.0.md`).
-/// Each merged M4 method group bumps the minor: `m3.1` adds the game group
-/// (`bridge/protocol-diff-m3.1.md`), `m3.2` the Hammer core + read ops (`protocol-diff-m3.2.md`), `m3.3` pet without
-/// render (`protocol-diff-m3.3.md`), `m3.4` ModelDoc without render
-/// (`protocol-diff-m3.4.md`), `m3.5` the Hammer document writes (`protocol-diff-m3.5.md`),
-/// `m3.6` the map lifecycle (`protocol-diff-m3.6.md`),
-/// `m3.7` the mesh writes (`protocol-diff-m3.7.md`),
-/// `m3.8` the renders (`protocol-diff-m3.8.md`),
-/// `m3.9` the hooks: game.saveRestore, input.*, sound.* (`protocol-diff-m3.9.md`).
-/// `m3.10` edit.batch, entity.tieMeshes, entity.untie: every C row served (`protocol-diff-m3.10.md`).
-/// `m3.11` KHook + Metamod everywhere: the hooks on KHook, the GameFrame tick, `metamod.plugins`,
-/// conflict counters, module selection by full path (`protocol-diff-m3.11.md`).
-/// `m3.12` the last blocked rows: job.* (resourcecompiler jobs), mesh.get, selection.*, the
-/// `RUST_OVERRIDES` table (`protocol-diff-m3.12.md`).
-/// `m3.13` adds `console.exec` in `-tools` sessions and `cvar.get` (`protocol-diff-m3.13.md`).
-/// `m3.14` adds `mesh.setFaceTexture` (`protocol-diff-m3.14.md`).
-/// `m3.15` adds no method: `input.set` with `release` and `tap` of the same held button now re-presses
-/// it (`protocol-diff-m3.15.md`).
-/// `m3.16` adds no method: `job.start` accepts the map-stage flags `-world -phys -vis -bakelighting`
-/// (`protocol-diff-m3.16.md`).
-/// `m3.17` adds no method: `job.start` accepts a `.js` input (a cs_script source; the compiler writes the
-/// `.vjs_c`) (`protocol-diff-m3.17.md`).
-/// `m3.18` adds `node.createPrefab` and `node.prefabFromSelection`, and `mesh.setFaceTexture` gains
-/// `mode:"axes"` (absolute per-face texture axes) (`protocol-diff-m3.18.md`).
+/// Hosts tell builds apart by this string only (there is no ordering comparison anywhere in the
+/// host crates; PROTOCOL.md §1). `m3.0` was the first Rust build on the wire. Each merged method
+/// group, and each wire-visible change, bumps the minor; the wire contract of the current build
+/// is `crates/cs2-bridge/PROTOCOL.md`. The waves, with the section that now holds each one:
+/// `m3.1` the game group (§20, §22), `m3.2` the Hammer core + read ops (§8.1, §9.1, §9.2, §11.1),
+/// `m3.3` pet without render (§17), `m3.4` ModelDoc without render (§16), `m3.5` the Hammer
+/// document writes (§8.5, §8.6, §9.3, §9.4, §11.2, §11.3), `m3.6` the map lifecycle (§8.2-§8.4),
+/// `m3.7` the mesh writes (§12.1-§12.4), `m3.8` the renders (§15), `m3.9` the hooks:
+/// game.saveRestore, input.*, sound.* (§18, §19, §20.10), `m3.10` edit.batch, entity.tieMeshes,
+/// entity.untie: every C row served (§10, §9.8, §9.9), `m3.11` KHook + Metamod everywhere: the
+/// hooks on KHook, the GameFrame tick, `metamod.plugins`, conflict counters, module selection by
+/// full path (§23, §4.2), `m3.12` the last blocked rows: job.*, mesh.get, selection.*, the
+/// `RUST_OVERRIDES` table (§14, §12.5, §13), `m3.13` `console.exec` in `-tools` sessions and
+/// `cvar.get` (§21, §22.1), `m3.14` `mesh.setFaceTexture` (§12.6), `m3.15` `input.set` with
+/// `release` and `tap` of the same held button re-presses it (§19.1), `m3.16` / `m3.17`
+/// `job.start` accepts the map-stage flags `-world -phys -vis -bakelighting` and a `.js` input
+/// (§14.1), `m3.18` `node.createPrefab`, `node.prefabFromSelection` and `mesh.setFaceTexture`
+/// `mode:"axes"` (§11.4, §11.5, §12.6).
 pub const BRIDGE_BUILD: &str = "m3.18";
 
-/// The generated pins (`bridge/pins.py` -> `src/generated/pins.rs`): the module identities,
+/// The generated pins (`cargo bridge pins` -> `src/generated/pins.rs`): the module identities,
 /// vtable RVAs, slots and prologue bytes the coming IPC listener gates its callers with.
 ///
 /// Generated code is exempted narrowly: `missing_docs` (the generator's `///` comments are
@@ -141,7 +132,7 @@ pub mod generated {
     pub mod pins;
 }
 
-/// The interface version string the tools framework asks for: `bridge/s2sdk.h:55`
+/// The interface version string the tools framework asks for: `s2sdk.h:55`
 /// (`S2_TOOLSYSTEM2_VERSION`), which has no upstream macro.
 const TOOLSYSTEM2_VERSION: &core::ffi::CStr = c"ToolSystem2_001";
 
@@ -161,7 +152,7 @@ pub(crate) fn guard<R>(default: R, body: impl FnOnce() -> R) -> R {
 }
 
 /// The module's exported entry point - the only symbol this cdylib exports
-/// (`bridge/mcp_bridge.c:6846`).
+/// (`mcp_bridge.c:6846`).
 ///
 /// Three names are served:
 ///

@@ -2,12 +2,12 @@
 //!
 //! # Where the expectations come from
 //!
-//! Every case below is a case of `bridge/test_kv3_check.c`, with the verdict the C gate prints
+//! Every case below is a case of `test_kv3_check.c`, with the verdict the C gate prints
 //! for it (the `PASS …` lines of that test: `105 cases, 0 failed`). The fixtures are read from
 //! `hammer-mcp/fixtures/vpcf/` at test time exactly as the C test reads them - a missing fixture
 //! is a failure naming the path, never a skip.
 //!
-//! [`corpus_matches_the_c_runner`] is `bridge/test_kv3_corpus.sh` in Rust: the same walk over the
+//! [`corpus_matches_the_c_runner`] is `test_kv3_corpus.sh` in Rust: the same walk over the
 //! installed workshop content (`_toolsautosave/` and `mcp_*` skipped), the same two checks, the
 //! same `>= 50 kv3 files` floor. The C runner reports `109 kv3 files checked, 4 vpcf files
 //! checked, 0 refusals`; this test asserts the same counts. A missing content tree is a failure

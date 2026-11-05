@@ -34,8 +34,8 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/../../.." && pwd)"
-# shellcheck source=../../../bridge/lib-root.sh
-. "$repo/bridge/lib-root.sh"
+# shellcheck source=lib-root.sh
+. "$repo/crates/cs2-native/scripts/lib-root.sh"
 project_root="$(cs2mcp_project_root "$repo")"
 out="${1:-$repo/target/gbe}"
 img="${GBE_IMAGE:-${CS2_MCP_IMAGE:-ghcr.io/personcopperfine/cs2-docker:latest}}"

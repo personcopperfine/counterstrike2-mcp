@@ -1,5 +1,5 @@
 //! The C bridge's single method table and the module-verification gate, ported from
-//! `bridge/mcp_bridge.c` (frozen, m2.20): the NEED_* bits and the `Method` record
+//! `mcp_bridge.c` (frozen, m2.20): the NEED_* bits and the `Method` record
 //! (`mcp_bridge.c:1030-1051`), the 84-row `k_methods[]` table (`:1053-1143`), `find_method`
 //! (`:1144-1147`), the module states and `verified_mask` (`:1149-1160`), `mod_state_name`
 //! (`:1170-1176`) and the dispatch gate (`exec_request:5657-5698`, `ipc_thread:6601-6623`).
@@ -81,7 +81,7 @@ pub const NEED_PET: u32 = 2048;
 /// do not reach `in_install` at all. The C's `sound.status`/`sound.drain` do run its `mode`
 /// sink selection and clients rely on the first of them arming the wrap, so those two run it
 /// **while the API is present** and otherwise answer their normal reply with a `blockedOn`
-/// note - no install, no error (lane B3 round 2; see `target/protocol-diff-b3.md`).
+/// note - no install, no error (PROTOCOL.md §18.2, §4.2).
 pub const NEED_KHOOK: u32 = 4096;
 
 /// The `blockedOn` text of the [`NEED_KHOOK`] prerequisite. Metamod is where the `IKHook` comes
@@ -278,9 +278,7 @@ pub fn effective_methods() -> impl Iterator<Item = &'static Method> {
 /// Each row names an **existing** C row and supersedes it for this build: [`find`], [`gate`],
 /// [`crate::dispatch::decide`] and the advertisement ([`crate::control`]) read "override if
 /// present, else the C row". At most one override per name, and a name is never also in
-/// [`RUST_METHODS`] (`tests/overrides.rs` holds all three). Same row syntax as the other
-/// tables (one row per `Method`, no inner comments, no trailing comma):
-/// `bridge/bridge_build.py` parses all of them with one regex. The reason for each override:
+/// [`RUST_METHODS`] (`tests/overrides.rs` holds all three). The reason for each override:
 ///
 /// * `map.run`: stays blocked, with a `blockedOn` that says what superseded it
 ///   (hammer-mcp `run_map` over the VToolMessage `command` channel), not the C's phase-3 note.
@@ -302,8 +300,8 @@ pub static RUST_OVERRIDES: &[Method] = &[
     Method { name: "mesh.get", needs: NEED_HAMMER, implemented: true, hidden: false, blocked_on: None }
 ];
 
-/// This build's own method rows - never in [`METHODS`], which the differential
-/// (`tests/registry.rs`) pins row for row to the frozen C table's 84 rows.
+/// This build's own method rows - never in [`METHODS`], which keeps the retired C table's 84
+/// rows (`tests/registry.rs`).
 ///
 /// `metamod.plugins` is the first, `job.start` the second (a lane-answered row too, with
 /// `job.status`/`job.cancel` as [`RUST_OVERRIDES`]): a status row over Metamod's plugin table
@@ -314,9 +312,7 @@ pub static RUST_OVERRIDES: &[Method] = &[
 /// whose op says so via `serves`, and a future Rust row that needs a module bit may name one
 /// like any C row. The lane answers a served name before the C's `find_method` chain would
 /// matter, and [`crate::dispatch::is_ported`] serves it, so `decide`/`gate` stay honest for
-/// it too. A row is spelled exactly like a `METHODS` row (no trailing comma, no inner
-/// comments): `bridge/bridge_build.py`'s `methods()` parses both tables with one regex, and
-/// the live tests' static modes read it.
+/// it too.
 pub static RUST_METHODS: &[Method] = &[
     Method { name: "metamod.plugins", needs: 0, implemented: true, hidden: false, blocked_on: None },
     Method { name: "job.start", needs: 0, implemented: true, hidden: false, blocked_on: None },
@@ -478,12 +474,6 @@ pub fn gate(name: &str, verified: u32) -> Gate {
 /// `verified` - it is `khook_present` that satisfies it.
 pub fn gate_with(name: &str, verified: u32, khook_present: bool) -> Gate {
     gate_row(find(name), verified, khook_present)
-}
-
-/// [`gate_with`] over the **C table alone** (no [`RUST_OVERRIDES`], no [`RUST_METHODS`]): what
-/// the frozen C's gate answers, for the differential in `tests/control.rs`.
-pub fn gate_c_with(name: &str, verified: u32, khook_present: bool) -> Gate {
-    gate_row(METHODS.iter().find(|m| m.name == name), verified, khook_present)
 }
 
 fn gate_row(row: Option<&'static Method>, verified: u32, khook_present: bool) -> Gate {

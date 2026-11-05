@@ -9,7 +9,7 @@ No header change was needed: convar.h/icvar.h already match the binary, and gen.
 the MSVC hidden-return shape for FindConVar. No fork commit, UPSTREAM.lock untouched.
 The only source change: 8 `FCVAR_*` entries in allowlist.toml `[consts]` (+ `tier0/convar.h` in the
 consts header list and probe.cpp), so gen.py emits `s2sdk_sys::consts::FCVAR_*` (u64) and
-`S2_CONST_FCVAR_*` in bridge/s2sdk_gen.h, then 13 tier0.json `sdk` rows.
+`S2_CONST_FCVAR_*` in crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h, then 13 tier0.json `sdk` rows.
 
 ## 1. FindConVar Win64 call shape [V]
 CCvar::FindConVar = tier0!0x18006C6B0 (slot 11, sdk row PASS 11=11).

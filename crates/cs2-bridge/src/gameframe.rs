@@ -130,7 +130,7 @@
 //! `{"blockedOn":"khook: retry next tick"}`) when another thread holds it at that moment; a
 //! disable is accepted (its removal is deferred to the asynchronous path, exactly as the
 //! teardown's own drop). The tools host does not have the problem: there the tick is the
-//! framework's `RunFrame`, outside any thunk. See `bridge/README.md` "The GameFrame tick".
+//! framework's `RunFrame`, outside any thunk. See `crates/cs2-bridge/README.md` "The GameFrame tick".
 
 use core::cell::Cell;
 use core::ffi::c_void;

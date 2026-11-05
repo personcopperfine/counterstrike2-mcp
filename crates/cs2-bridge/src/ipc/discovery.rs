@@ -1,7 +1,7 @@
 //! The discovery file: `session.json`, written after the listener is bound and before any
 //! client can connect.
 //!
-//! Ported from `write_discovery` (`bridge/mcp_bridge.c:6703-6729`): the exact field order and
+//! Ported from `write_discovery` (`mcp_bridge.c:6703-6729`): the exact field order and
 //! whitespace, the numbers unquoted, `pipeName` null, and the tmp-file-plus-rename that makes a
 //! reader see either the previous file or the complete new one, never a partial write. The
 //! directory is created first (the C does it in `start_listener_once`, `:6759`).

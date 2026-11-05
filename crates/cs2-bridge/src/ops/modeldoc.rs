@@ -1,7 +1,7 @@
 //! The ModelDoc document ops: `modeldoc.active`, `modeldoc.open`, `modeldoc.reload`,
 //! `modeldoc.save`, `modeldoc.compile`, `modeldoc.nodeTypes` (M4 lane MODELDOC) - the C's
-//! `op_modeldoc` (`bridge/mcp_bridge.c:5098-5391`) without `modeldoc.render` (the render lane,
-//! `bridge/mcp_bridge_modeldoc_render.inc`: it stays unregistered, so `modeldoc.render` keeps
+//! `op_modeldoc` (`mcp_bridge.c:5098-5391`) without `modeldoc.render` (the render lane,
+//! `mcp_bridge_modeldoc_render.inc`: it stays unregistered, so `modeldoc.render` keeps
 //! its `-32011 NotImplemented` answer until its own lane ports it).
 //!
 //! # How it is split
@@ -150,29 +150,29 @@ pub(crate) trait Chain {
     /// `resolve_modeldoc()` (`mcp_bridge.c:5124-5145`): the `CModelDocEditorApp *`, or `None`
     /// after the hop's own log line.
     fn app(&self) -> Option<usize>;
-    /// `CModelDocEditorApp_ActiveSession` (`bridge/s2sdk.h:557`): may be null.
+    /// `CModelDocEditorApp_ActiveSession` (`s2sdk.h:557`): may be null.
     fn session(&self, app: usize) -> Option<usize>;
     /// `obj_is(obj, PIN_MODELDOC, vt)`.
     fn is_of(&self, object: usize, vt: u32) -> bool;
-    /// `session->doc` (`bridge/s2sdk.h:593`, the generated `m_pDoc`), 0 when unset.
+    /// `session->doc` (`s2sdk.h:593`, the generated `m_pDoc`), 0 when unset.
     fn doc(&self, session: usize) -> usize;
-    /// `session->isNewFile` (`bridge/s2sdk.h:579`, the generated `m_bIsNew` byte).
+    /// `session->isNewFile` (`s2sdk.h:579`, the generated `m_bIsNew` byte).
     fn is_new(&self, session: usize) -> bool;
-    /// `session->asset != 0` (`bridge/s2sdk.h:583`, the generated `m_pAsset`).
+    /// `session->asset != 0` (`s2sdk.h:583`, the generated `m_pAsset`).
     fn has_asset(&self, session: usize) -> bool;
-    /// `md_str(session->vt->GetPath(session), out, cap)` (`bridge/s2sdk.h:569`): the status and
+    /// `md_str(session->vt->GetPath(session), out, cap)` (`s2sdk.h:569`): the status and
     /// the C-string bytes of the copy.
     fn path(&self, session: usize, cap: usize) -> (i32, Vec<u8>);
-    /// `session->vt->IsModified(session)` (`bridge/s2sdk.h:567`).
+    /// `session->vt->IsModified(session)` (`s2sdk.h:567`).
     fn is_modified(&self, session: usize) -> bool;
-    /// `session->vt->SetModified(session, 0)` (`bridge/s2sdk.h:568`).
+    /// `session->vt->SetModified(session, 0)` (`s2sdk.h:568`).
     fn set_modified(&self, session: usize, modified: u8);
-    /// `session->vt->ReloadDocument(session)` (`bridge/s2sdk.h:565`).
+    /// `session->vt->ReloadDocument(session)` (`s2sdk.h:565`).
     fn reload(&self, session: usize);
-    /// `session->vt->SaveAndNotify(session, oldPath, newPath, 0, 0)` (`bridge/s2sdk.h:573`;
+    /// `session->vt->SaveAndNotify(session, oldPath, newPath, 0, 0)` (`s2sdk.h:573`;
     /// the C passes the same buffer twice, `mcp_bridge.c:5324`).
     fn save(&self, session: usize, old_path: &[u8], new_path: &[u8]) -> bool;
-    /// `app->vt->OpenFile(app, path, 1)` (`bridge/s2sdk.h:551`; flags 1 = what the UI passes).
+    /// `app->vt->OpenFile(app, path, 1)` (`s2sdk.h:551`; flags 1 = what the UI passes).
     fn open(&self, app: usize, path: &[u8]) -> usize;
     /// `modeldoc_bind(); g_mdCompile(session, 0)` (`mcp_bridge.c:5343-5344`).
     fn compile(&self, session: usize);
@@ -612,7 +612,7 @@ mod win {
     /// Main thread only.
     static MD_COMPILE: Mutex<Option<FnCompile>> = Mutex::new(None);
 
-    /// The C's `ModelDocCompileFn` (`bridge/s2sdk.h:601`):
+    /// The C's `ModelDocCompileFn` (`s2sdk.h:601`):
     /// `void (*)(CModelDocEditorSession *, int)`.
     type FnCompile = unsafe extern "C" fn(*mut c_void, i32);
 
@@ -630,7 +630,7 @@ mod win {
             + pins::MDFN_SESSION_COMPILE.value as usize;
         // SAFETY: `address` is a verified module's image at the pinned function RVA (the module
         // gate re-checked the prologue bytes) and `FnCompile` is the C's own signature
-        // (`bridge/s2sdk.h:601`). The C writes the same address into the same typed slot
+        // (`s2sdk.h:601`). The C writes the same address into the same typed slot
         // (`mcp_bridge.c:5118`).
         unsafe { *lock(&MD_COMPILE) = Some(core::mem::transmute::<usize, FnCompile>(address)) };
     }
@@ -664,7 +664,7 @@ mod win {
             log::line("modeldoc: CreateInterface export missing"); // :5131
             return None;
         };
-        // `S2CreateInterfaceFn` (`bridge/s2sdk.h:60`): called directly (not through
+        // `S2CreateInterfaceFn` (`s2sdk.h:60`): called directly (not through
         // `Module::create_interface`) because the C's failure branch logs the factory's `ret`
         // (`:5135`), which the safe wrapper does not surface.
         type CreateInterfaceFn = unsafe extern "C" fn(*const c_char, *mut c_int) -> *mut c_void;
@@ -737,7 +737,7 @@ mod win {
         fn session(&self, app: usize) -> Option<usize> {
             // SAFETY: `app` is the pinned static `CModelDocEditorApp` (identity-checked by
             // `resolve_modeldoc`); `m_pActiveSession` is the generated `CBaseEditorApp` member
-            // the C reads through `CModelDocEditorApp_ActiveSession` (`bridge/s2sdk.h:557`).
+            // the C reads through `CModelDocEditorApp_ActiveSession` (`s2sdk.h:557`).
             let session = unsafe { (*(app as *const CBaseEditorApp)).m_pActiveSession as usize };
             (session != 0).then_some(session)
         }
@@ -748,7 +748,7 @@ mod win {
 
         fn doc(&self, session: usize) -> usize {
             // SAFETY: the session passed `obj_is(MDV_SESSION_VT)` in `active_modeldoc_with`;
-            // `m_pDoc` is the generated member (`bridge/s2sdk.h:593`).
+            // `m_pDoc` is the generated member (`s2sdk.h:593`).
             let doc = unsafe { (*(session as *const CModelDocEditorSession)).m_pDoc };
             doc as usize
         }
@@ -770,7 +770,7 @@ mod win {
 
         fn has_asset(&self, session: usize) -> bool {
             // SAFETY: the session passed `obj_is(MDV_SESSION_VT)`; `m_pAsset` is the generated
-            // member (`bridge/s2sdk.h:583`).
+            // member (`s2sdk.h:583`).
             let asset = unsafe { (*(session as *const CModelDocEditorSession)).m_pAsset };
             !asset.is_null()
         }
@@ -778,7 +778,7 @@ mod win {
         fn path(&self, session: usize, cap: usize) -> (i32, Vec<u8>) {
             // SAFETY: the session passed `obj_is(MDV_SESSION_VT)`: its vptr is the pinned
             // `MDV_SESSION_VT` and slot 13 still holds its pinned target, so the typed field
-            // is the game's GetPath (`bridge/s2sdk.h:569`).
+            // is the game's GetPath (`s2sdk.h:569`).
             let get_path =
                 unsafe { CBaseEditorSession::vtable(session as *const CBaseEditorSession).GetPath };
             let mut buf = vec![0u8; cap];
@@ -786,7 +786,7 @@ mod win {
                 return (0, Vec::new());
             };
             // SAFETY: the verified game's GetPath slot, called with the identity-checked
-            // session; the answer is a game-owned C string (`bridge/s2sdk.h:569`).
+            // session; the answer is a game-owned C string (`s2sdk.h:569`).
             let p = unsafe { get_path(session as *mut CBaseEditorSession) };
             // SAFETY: `md_str` re-probes every page boundary.
             let status = unsafe { md_str(p.cast::<u8>(), &mut buf) };
@@ -794,7 +794,7 @@ mod win {
         }
 
         fn is_modified(&self, session: usize) -> bool {
-            // bridge/s2sdk.h:567 declares `u8 (*IsModified)(CModelDocEditorSession *self)`.
+            // s2sdk.h:567 declares `u8 (*IsModified)(CModelDocEditorSession *self)`.
             // The generated `CBaseEditorSession_vtable::IsModified` returns a Rust `bool`,
             // which this port must never form from a game return (the wave-1 rule), so slot 11
             // is called through the C header's own u8 signature.
@@ -837,7 +837,7 @@ mod win {
             // The C passes the same buffer twice (`mcp_bridge.c:5324`).
             let old = cstring(old_path);
             let new = cstring(new_path);
-            // bridge/s2sdk.h:573 declares `u8 (*SaveAndNotify)(session, oldPath, newPath, u8,
+            // s2sdk.h:573 declares `u8 (*SaveAndNotify)(session, oldPath, newPath, u8,
             // u8)`; the generated field returns a Rust `bool`, so slot 18 is called through
             // the C header's own u8 signature (as `is_modified` above).
             type FnSaveAndNotify =
@@ -859,7 +859,7 @@ mod win {
             // SAFETY: `app` is the pinned static `CModelDocEditorApp` (identity-checked by
             // `resolve_modeldoc`); its vptr is the pinned `MDV_APP_VT` and slot 18 still holds
             // its pinned target, so the typed field is the game's OpenFile
-            // (`bridge/s2sdk.h:551`).
+            // (`s2sdk.h:551`).
             let open_file = unsafe { CBaseEditorApp::vtable(app as *const CBaseEditorApp).OpenFile };
             match open_file {
                 // SAFETY: the verified game's OpenFile slot, called with the identity-checked
@@ -1029,25 +1029,25 @@ mod tests {
         reason: Option<&'static str>,
         /// `resolve_modeldoc`'s answer.
         app: Cell<Option<usize>>,
-        /// `ActiveSession(app)` (`bridge/s2sdk.h:557`).
+        /// `ActiveSession(app)` (`s2sdk.h:557`).
         session: Cell<Option<usize>>,
         /// `obj_is(session, MDV_SESSION_VT)`.
         session_ok: bool,
-        /// `session->doc` (`bridge/s2sdk.h:593`).
+        /// `session->doc` (`s2sdk.h:593`).
         doc: usize,
         /// `obj_is(doc, MDV_DOC_VT)`.
         doc_ok: bool,
-        /// `session->isNewFile` (`bridge/s2sdk.h:579`).
+        /// `session->isNewFile` (`s2sdk.h:579`).
         is_new: bool,
-        /// `session->asset` (`bridge/s2sdk.h:583`).
+        /// `session->asset` (`s2sdk.h:583`).
         asset: usize,
-        /// `md_str(GetPath(session))` (`bridge/s2sdk.h:569`).
+        /// `md_str(GetPath(session))` (`s2sdk.h:569`).
         path: (i32, Vec<u8>),
-        /// `IsModified(session)` (`bridge/s2sdk.h:567`).
+        /// `IsModified(session)` (`s2sdk.h:567`).
         dirty: bool,
-        /// `OpenFile(app, path, 1)`'s answer (`bridge/s2sdk.h:551`).
+        /// `OpenFile(app, path, 1)`'s answer (`s2sdk.h:551`).
         open_result: usize,
-        /// `SaveAndNotify(...)`'s answer (`bridge/s2sdk.h:573`).
+        /// `SaveAndNotify(...)`'s answer (`s2sdk.h:573`).
         save_result: bool,
         /// `nodeTypes`' table read.
         node_types: Option<NodeTypes>,
@@ -1139,14 +1139,14 @@ mod tests {
             }
         }
         fn save(&self, _session: usize, old_path: &[u8], new_path: &[u8]) -> bool {
-            // bridge/s2sdk.h:573: `SaveAndNotify(session, oldPath, newPath, u8 a4, u8 a5)`;
+            // s2sdk.h:573: `SaveAndNotify(session, oldPath, newPath, u8 a4, u8 a5)`;
             // the C passes the same buffer twice (mcp_bridge.c:5324).
             self.save_calls.set(self.save_calls.get() + 1);
             self.save_args.borrow_mut().push((old_path.to_vec(), new_path.to_vec()));
             self.save_result
         }
         fn open(&self, app: usize, path: &[u8]) -> usize {
-            // bridge/s2sdk.h:551: `OpenFile(app, const char *path, u32 flags)`; the C passes
+            // s2sdk.h:551: `OpenFile(app, const char *path, u32 flags)`; the C passes
             // flags 1 (mcp_bridge.c:5259) - the flag lives in the reader, not the op.
             self.open_args.borrow_mut().push((app, path.to_vec()));
             self.open_result

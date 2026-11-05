@@ -5,8 +5,8 @@ binaries, and each has its own lane in this workflow:
 
 | Lane | What breaks | Where the knowledge lives | Who fixes it |
 |---|---|---|---|
-| **A: s2sdk (Linux, Rust; also the bridge's slots and offsets)** | interface version strings, vtable slots, struct layouts, call signatures | the C++ headers in `crates/s2sdk/upstream` (our fork branch of alliedmodders/s2sdk), turned into Rust by `crates/s2sdk/s2sdk-sys/gen/gen.py` and into `bridge/s2sdk_gen.h` (the `S2_SLOT_`/`S2_OFF_` numbers the bridge compiles) | update the headers, regenerate; a fix we make goes upstream as a PR so the community shares it |
-| **B: bridge (Windows/Wine)** | RVAs of vtables, functions, globals, Qt chains in 10 DLLs, and the binary measurement of every slot/offset the headers own | `sigs/signatures/*.json` (locators; an entry with `sdk` names the generated expression it measures), turned into `bridge/bridge_pins.h` by `bridge/pins.py` | mechanical: re-resolve the locators, gate, regenerate. A broken locator needs a person with IDA. |
+| **A: s2sdk (Linux, Rust; also the bridge's slots and offsets)** | interface version strings, vtable slots, struct layouts, call signatures | the C++ headers in `crates/s2sdk/upstream` (our fork branch of alliedmodders/s2sdk), turned into Rust by `crates/s2sdk/s2sdk-sys/gen/gen.py` and into `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` (the `S2_SLOT_`/`S2_OFF_` numbers the bridge compiles) | update the headers, regenerate; a fix we make goes upstream as a PR so the community shares it |
+| **B: bridge (Windows/Wine)** | RVAs of vtables, functions, globals, Qt chains in 10 DLLs, and the binary measurement of every slot/offset the headers own | `sigs/signatures/*.json` (locators; an entry with `sdk` names the generated expression it measures), turned into `crates/cs2-bridge/src/generated/pins.rs` by `cargo bridge pins` | mechanical: re-resolve the locators, gate, regenerate. A broken locator needs a person with IDA. |
 
 The lanes are not independent where a slot or offset moves: the header (lane A) and the sigs
 measurement (lane B) must change together, and `sdkcheck.py` is where they meet (A2b, B5). Do lane
@@ -34,7 +34,7 @@ NEW=$(curl -s https://raw.githubusercontent.com/SteamDatabase/GameTracking-CS2/m
 echo "OLD=$OLD NEW=$NEW"
 ```
 
-**Resuming.** If `sed -n 's/^#define PIN_GAME_BUILD "\([0-9]*\)".*/\1/p' bridge/bridge_pins.h` is
+**Resuming.** If `sed -n 's/^pub const PIN_GAME_BUILD: &str = "\([0-9]*\)";/\1/p' crates/cs2-bridge/src/generated/pins.rs` is
 not equal to `$OLD`, an earlier run stopped between B3 and B5. Set `NEW=$OLD`, set `OLD` to the
 pinned value, read `workflows/updates/$NEW.md` for what was done, and continue at **B4**. Don't
 redo B1–B3.
@@ -53,7 +53,7 @@ Write each step's result into it as soon as the step finishes, so a later run ca
 
 The Rust crates never contain a hand-written address, slot or offset. Everything comes from the
 headers at the commit pinned in `crates/s2sdk/s2sdk-sys/UPSTREAM.lock`, and the bridge reads its slots
-and offsets from the same headers (`bridge/s2sdk_gen.h`). The pin is **our fork branch**
+and offsets from the same headers (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`). The pin is **our fork branch**
 `cs2mcp/main` (remote `https://github.com/personcopperfine/s2sdk.git`, the `.gitmodules` URL; the series of tool-class headers
 that sits on `origin/cs2` until alliedmodders merges it), not `origin/cs2` itself. Your job is to (1) move
 that branch onto newer upstream headers when they exist, (2) prove the result works in the real game, and (3) when the
@@ -82,7 +82,7 @@ The update also rewrote the files Metamod:Source and the bridge live in, so re-e
 before anything reads it (read-only while current; A1 already requires that no container mounts it):
 
 ```sh
-./bridge/install-rs.sh --platform linux ensure
+cargo bridge install --platform linux ensure
 ```
 
 Then stage the Linux tree (the Linux `sdkcheck.py` row in A2b and the ELF entries in B3 read it):
@@ -120,7 +120,7 @@ git -C crates/s2sdk/upstream rebase origin/cs2                      # expect con
 # edit crates/s2sdk/s2sdk-sys/UPSTREAM.lock: commit = the new full sha, date = today (YYYY-MM-DD),
 #   and the `# fork:` comment's base sha
 python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py
-git diff --stat crates/s2sdk/s2sdk-sys/ir crates/s2sdk/s2sdk-sys/src/generated bridge/s2sdk_gen.h
+git diff --stat crates/s2sdk/s2sdk-sys/ir crates/s2sdk/s2sdk-sys/src/generated crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h
 cargo test -p s2sdk-sys -p s2sdk
 cargo clippy --workspace --all-targets
 ```
@@ -149,7 +149,7 @@ python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py --check        # both ABIs: regener
 python3 sigs/scripts/sdkcheck.py                     # generated numbers vs the Windows binaries
 ```
 
-`sdkcheck.py` needs `target/game-bins` (lane B's B0 stages it). `bridge/build-rs.sh` does NOT run
+`sdkcheck.py` needs `target/game-bins` (lane B's B0 stages it). `cargo bridge build` does NOT run
 it, so run it yourself before every build: an `sdk` entry has no compile-time tie any more, and the
 `sdk:` row is the only thing that holds the header to the binary. The check must print `0 FAIL` on the build
 `sigs/CURRENT_BUILD` pins:
@@ -262,7 +262,7 @@ sigs entry re-measured in lane B (B2); the `sdkcheck.py` row is green only when 
 ### A6. Commit lane A
 
 ```sh
-git add crates/s2sdk/upstream crates/s2sdk/s2sdk-sys bridge/s2sdk_gen.h bridge/s2sdk_gen_ties.h workflows/
+git add crates/s2sdk/upstream crates/s2sdk/s2sdk-sys workflows/   # s2sdk-sys includes include/s2sdk_gen.h
 git commit -m "s2sdk: CS2 $NEW, upstream <short sha>[, local patch $TOPIC]"
 ```
 
@@ -356,7 +356,7 @@ The exit status must be 0. `STALE` lines are fine (entries the bridge doesn't us
 or `DIFF` line means STOP.
 
 `sigupdate.py record` refuses to write anything while a bridge entry is not SAME/OK, whether or not
-`--bridge-gate` was passed: pins.py only re-checks `builds[NEW].sha256`, so a recorded build with a
+`--bridge-gate` was passed: `cargo bridge pins` only re-checks `builds[NEW].sha256`, so a recorded build with a
 bad bridge entry would be pinned silently.
 
 Don't touch `sigs/fingerprints/`. They stay at the build in `sigs/fingerprints/BUILD` until someone
@@ -392,54 +392,56 @@ rm -rf target/game-bins-check
 
 ```sh
 python3 sigs/scripts/sdkcheck.py         # first: header vs the NEW binaries; 0 FAIL, else STOP (A2b)
-python3 bridge/pins.py --rust crates/cs2-bridge/src/generated/pins.rs
-                                         # rewrites bridge/bridge_pins.h AND the Rust pins the bridge
-                                         # embeds; refuses if any `sdk` expression disagrees with
-                                         # s2sdk_gen.h or anything else is inconsistent
-git diff --stat bridge/bridge_pins.h crates/cs2-bridge/src/generated/pins.rs
+cargo bridge pins                        # rewrites crates/cs2-bridge/src/generated/pins.rs, the pins
+                                         # the bridge embeds; refuses if any `sdk` expression disagrees
+                                         # with s2sdk_gen.h or anything else is inconsistent
+git diff --stat crates/cs2-bridge/src/generated/pins.rs
                                          # only RVAs (and Qt chains, literals) move now; goes in the report
-./bridge/build-rs.sh                     # runs `pins.py --check --rust` again and builds both targets
-./bridge/install-rs.sh ensure            # the new cs2_bridge.dll + Metamod + the launcher files into
+cargo bridge build                       # runs `pins --check` again and builds both targets
+cargo bridge install ensure              # the new cs2_bridge.dll + Metamod + the launcher files into
                                          # the Wine tools tree (ensure re-installs what is missing/stale;
                                          # read-only while current). No gameinfo.gi edit: the loader is
-                                         # injected at launch (bridge/metamod/README.md "Launching")
-./bridge/runtime.sh cycle                # up -> open map -> test_client
+                                         # injected at launch (crates/metamod/README.md "Launching")
+cargo bridge runtime cycle               # up -> open map
+cargo bridge runtime status              # container, discovery file, control.hello answers
 ```
 
-`bridge_pins.h` holds only measurements the SDK cannot give (170 `#define`s today:
-`grep -c '^#define' bridge/bridge_pins.h`), so a normal update moves far fewer macros than it used
-to. Slots and offsets do not appear in that diff at all: they move with `s2sdk_gen.h` (lane A).
+`pins.rs` holds only measurements the SDK cannot give (`grep -c ': Pin = '
+crates/cs2-bridge/src/generated/pins.rs` counts them), so a normal update moves far fewer pins
+than it used to. Slots and offsets do not appear in that diff at all: they move with
+`s2sdk_gen.h` and `s2sdk_sys::generated` (lane A).
 
-`runtime.sh cycle` needs the host X display (Wine tools can't run headless yet). If it can't start,
-the update is **built but not live-tested**: say exactly that in the report. Look at
-`./bridge/runtime.sh logs` for `verify:` lines: every pinned module must be `verified`.
+`cargo bridge runtime cycle` needs the host X display (Wine tools can't run headless yet). If it
+can't start, the update is **built but not live-tested**: say exactly that in the report. Look at
+`cargo bridge runtime logs` for `verify:` lines: every pinned module must be `verified`.
 
 ### B6. Metamod still loads
 
 B5's `ensure` re-installs the Metamod layout, the launcher files and the bridge in the Wine tools
 tree, and A1's `--platform linux ensure` does the same for `cs2-home`, so what remains is whether
-the Metamod core still loads in this game build: B5's `./bridge/runtime.sh cycle` is the proof
-(`runtime.sh up` starts `cs2mcp_launch.exe`, which injects the loader; a launcher/DLL failure is
+the Metamod core still loads in this game build: B5's `cargo bridge runtime cycle` is the proof
+(`cargo bridge runtime up` starts `cs2mcp_launch.exe`, which injects the loader; a launcher/DLL failure is
 exit 3 with `[cs2mcp-launch] FAIL: ...`, and a missing Linux loader fails the session's launch
 script before the game starts). A Metamod/game
 mismatch shows up there as a Metamod load failure in `console.log` (the core refuses
 `metamod.2.cs2.dll`, or the plugin's factory), not as a bridge pin error: rebuild/refetch Metamod
-per `bridge/metamod/README.md` when the game's Metamod-facing interfaces changed.
+per `crates/metamod/README.md` when the game's Metamod-facing interfaces changed.
 
 An abort with `MMS: Fatal error: Metamod:Source requires -dedicated or -insecure` is not a Metamod
 build problem: the launch lost `-insecure`. Check the fixed flags in
-`client-mcp/docker/linux-client.sh` (Linux client) and `bridge/runtime.sh` (Wine) and restore them,
+`client-mcp/docker/linux-client.sh` (Linux client) and `crates/cs2-bridge-tools/src/runtime/podman.rs`
+(Wine) and restore them,
 do not drop `-insecure`.
 
 `ensure` is read-only while the tree is current and repairs only what is missing/stale: exit 0 =
 current or repaired, 1 = failure, 2 = usage, 4 = a container mounts the tree that needs repair
-(stderr names it and what is stale). Stop that container (`./bridge/runtime.sh down`) and run
+(stderr names it and what is stale). Stop that container (`cargo bridge runtime down`) and run
 `ensure` again.
 
 ### B7. Commit lane B
 
 ```sh
-git add sigs/ bridge/bridge_pins.h crates/cs2-bridge/src/generated/pins.rs workflows/updates/$NEW.md
+git add sigs/ crates/cs2-bridge/src/generated/pins.rs workflows/updates/$NEW.md
 git commit -m "sigs: CS2 $NEW (bridge gate pass, N entries stale), bridge pins regenerated"
 ```
 
@@ -468,8 +470,8 @@ git commit -m "sigs: CS2 $NEW (bridge gate pass, N entries stale), bridge pins r
 - Changed modules: <list from sigupdate>
 - Gate: PASS | FAIL (paste the gate lines)
 - Stale non-bridge entries: <module: n, …>
-- bridge_pins.h: <n> macros moved (RVAs only) · sdkcheck: <n> PASS / <n> SKIP / 0 FAIL
-- Live: runtime.sh cycle PASS | not run (<why>)
+- pins.rs: <n> pins moved (RVAs only) · sdkcheck: <n> PASS / <n> SKIP / 0 FAIL
+- Live: cargo bridge runtime cycle + status PASS | not run (<why>)
 - Fingerprints last regenerated on: <sigs/fingerprints/BUILD>
 
 ## Stopped on / needs a human

@@ -71,11 +71,14 @@ hold one `Entity.to_dict` record per entity — `guid`, `nodeClass`, `nodeID`, `
 `classname`, `targetname`, `origin`, `angles`, `scales`, `connections` and the full `keyvalues` map
 — sorted by `nodeID` so the checked-in file is stable.
 
-Generator (from the repo root; `find ""` matches every entity, `--json` prints the records; the
-helper goes under `target/`, never `/tmp`, which is a RAM tmpfs):
+The oracle, `vmap_dmx.py`, is retired from the tree; regenerating takes it out of history
+(`git show 8cdea42:bridge/vmapreader/vmap_dmx.py`). Generator (from the repo root; `find ""`
+matches every entity, `--json` prints the records; the helpers go under `target/`, never `/tmp`,
+which is a RAM tmpfs):
 
 ```sh
-mkdir -p target/gen
+mkdir -p target/gen/vmapreader
+git show 8cdea42:bridge/vmapreader/vmap_dmx.py > target/gen/vmapreader/vmap_dmx.py
 cat > target/gen/sortgolden.py <<'EOF'
 import json, sys
 d = json.load(sys.stdin)
@@ -84,7 +87,7 @@ json.dump(d, sys.stdout, indent=2)
 sys.stdout.write("\n")
 EOF
 for name in probe defuse_poc; do
-  python3 -I bridge/vmapreader/vmap_dmx.py "hammer-mcp/fixtures/vmap/$name.vmap" find "" --json \
+  python3 -I target/gen/vmapreader/vmap_dmx.py "hammer-mcp/fixtures/vmap/$name.vmap" find "" --json \
     | python3 -I target/gen/sortgolden.py > "hammer-mcp/fixtures/vmap/$name.entities.json"
 done
 ```
@@ -100,13 +103,13 @@ record per usable `CMapMesh` element, in element order (`nodeID`, raw `origin`/`
 counts, `materials`, 3-decimal `bounds`, plus `vertices` (4 decimals), `faces` and
 `faceMaterials`). Both fixtures hold 18 / 35 usable CMapMeshes (all with `angles` `[0,0,0]` and
 `scales` `[1,1,1]`, one wedge with two materials — `probe` nodeID 106). Generator (from the repo
-root):
+root; the oracle extracted into `target/gen/vmapreader/` as above):
 
 ```sh
 python3 -I - <<'EOF'
 import sys, json
 sys.path.insert(0, 'idabins/worknotes')            # the POC package (mcpserver.vmap_reader)
-sys.path.insert(0, 'bridge/vmapreader')            # the oracle DMX reader (DmxFile)
+sys.path.insert(0, 'target/gen/vmapreader')        # the oracle DMX reader (DmxFile)
 from mcpserver.vmap_reader import _mesh_from_element
 from vmap_dmx import DmxFile
 for name in ('probe', 'defuse_poc'):

@@ -12,7 +12,7 @@ only, in a fresh addon. Each run measures:
 - **Addon:** a fresh `accept_p1`, made the way ti_convoy was: an empty `content/csgo_addons/<addon>/maps/`
   and a `game/csgo_addons/<addon>/addoninfo.txt` (IsTemplate 0, IsPlayable 1). This is harness
   setup and is not counted against the agent (LIVE-P1c.md Part 2).
-- **Session:** `TOOL=hammer ADDON=accept_p1 bridge/runtime.sh up`, with one long-lived hammer-mcp
+- **Session:** `TOOL=hammer ADDON=accept_p1 cargo bridge runtime up`, with one long-lived hammer-mcp
   behind `target/orch/mcp_session.py` (start / call / list / stop). Every request and reply is logged
   in `target/orch/mcp_session/transcript.jsonl`.
 - **The agent's instructions:** call the MCP only through that driver; read `list --full` (the tool

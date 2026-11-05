@@ -109,7 +109,7 @@ async fn session_status_dead_bridge_never_raises() {
     assert!(p["launch"]["command"]
         .as_str()
         .unwrap()
-        .ends_with("runtime.sh up"));
+        .ends_with("cargo bridge runtime up"));
 }
 
 #[tokio::test]

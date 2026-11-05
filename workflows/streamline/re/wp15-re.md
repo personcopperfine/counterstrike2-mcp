@@ -3,7 +3,7 @@
 hammer.dll build 2000933, IDB `target/ida/win64-2000933/hammer.dll.i64`. Addresses use the 0x180000000 base.
 Tags: [V] read in the decompile or disassembly of this build, [I] inferred, [L] needs a live check.
 Pinned in `sigs/signatures/hammer.json` (+ `sigs/fingerprints/hammer-fp.json`), regenerated into
-`bridge/bridge_pins.h` and `crates/cs2-bridge/src/generated/pins.rs`:
+`crates/cs2-bridge/src/generated/pins.rs` and `crates/cs2-bridge/src/generated/pins.rs`:
 
 | Pin | RVA | Function |
 |---|---|---|

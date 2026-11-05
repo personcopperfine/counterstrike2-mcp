@@ -1317,7 +1317,7 @@ pub async fn create_sound_entities(
     note_edit(&state, doc_id.as_deref());
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
-            "edit.batch returned a non-object result: {} (bridge/protocol-diff-m2.15.md §7)",
+            "edit.batch returned a non-object result: {} (crates/cs2-bridge/PROTOCOL.md §10)",
             reply.result
         )));
     }
@@ -1628,7 +1628,7 @@ async fn find_by_targetname(
     drop(bridge);
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
-            "entity.find returned a non-object result: {} (bridge/protocol-diff-m2.15.md §7)",
+            "entity.find returned a non-object result: {} (crates/cs2-bridge/PROTOCOL.md §9.2)",
             reply.result
         )));
     }

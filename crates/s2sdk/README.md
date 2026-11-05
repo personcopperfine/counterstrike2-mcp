@@ -24,13 +24,15 @@ submodule with its own init commands, and `gen.py --check` holds both checkouts 
 
 - **No hand-written addresses, slots or offsets in Rust.** Every slot/offset in `s2sdk-sys` comes
   from the generator (clang's record/vtable layout dumps of the upstream headers). MSVC slots are
-  computed by `abi`; the bridge compiles the same numbers from the generated `bridge/s2sdk_gen.h`, and `sigs/scripts/sdkcheck.py` holds them to the game binaries.
+  computed by `abi`; the bridge (`crates/cs2-bridge`) reads the same numbers from `s2sdk_sys`,
+  the generated `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` spells them as the C macros sigs'
+  `sdk` expressions name, and `sigs/scripts/sdkcheck.py` holds them to the game binaries.
 - Never patch Valve code: listeners are Rust-owned objects registered through the game's own APIs.
 - `s2sdk-sys` is generated for both targets the game ships for: the Itanium (Linux x86_64) and
   the MSVC (Windows x64) numbers, each emitted behind the `cfg` that selects it. It is built and
   tested on Linux; the Windows half is compiled with
   `cargo check --target x86_64-pc-windows-msvc -p s2sdk-sys` (no linker needed) because the
-  Windows *runtime* consumer of those layouts is the C bridge (`../../bridge/`).
+  Windows *runtime* consumer of those layouts is the bridge DLL (`../cs2-bridge/`).
 - The safe layer (`s2sdk/`) also covers both targets — see [Windows support](#windows-support).
 - Generator scratch output goes under `<repo>/target/s2sdk-gen/`, never `/tmp` (tmpfs).
 
@@ -38,7 +40,7 @@ submodule with its own init commands, and `gen.py --check` holds both checkouts 
 
 Both `s2sdk-sys` and `s2sdk` build for `x86_64-pc-windows-msvc`; the Windows half is proven by
 `cargo check`/`cargo clippy` (no linker, no game), because the Windows runtime consumers are the
-C bridge (`../../bridge/`) and the game process itself.
+bridge DLL (`../cs2-bridge/`) and the game process itself.
 
 ```sh
 rustup target add x86_64-pc-windows-msvc          # once
@@ -242,7 +244,7 @@ nothing about any binary: the Rust is emitted from the MSVC numbers only, its mo
 `#[cfg(windows)]` in `generated/mod.rs`, the Itanium half of `tests/layout.rs` never names
 it, `[checks]` refuses an Itanium key (`size`, `length`, `itanium_slot`, ...) for it, a group
 for both platforms may not refer to one of its types, and `sdkcheck.py --platform linux`
-SKIPs it with that reason. `bridge/s2sdk_gen.h` is MSVC-only anyway. Consumers that read
+SKIPs it with that reason. `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` is MSVC-only anyway. Consumers that read
 the top-level (Itanium) keys must skip a group whose `platforms` lacks `linux`.
 
 ### The second upstream (`metamod`)
@@ -304,8 +306,9 @@ virtuals with no destructor, so it is 15 on both. `ISmmAPI::GetDetourInterface` 
 virtual (`ISmmAPI.h:449`), asserted with `last_slot = true`. The generated `metamod.rs` has the
 same shape as every other group (`ISmmPlugin_vtable`, `ISmmPlugin_slots` including the WP1.D
 `_SRET`/`_RET_SIZE`/`_RET_REGS` consts for a class returned by value, `ISmmPlugin_VCLASS`,
-layout tests). The group is deliberately **not** in `bridge/s2sdk_gen.h`: the frozen C bridge
-cannot name a metamod type, so it has no consumer there (`C_HEADER_EXCLUDED_GROUPS`).
+layout tests). The group is deliberately **not** in `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`: the header is
+frozen at the s2sdk groups the retired C bridge consumed, and no sigs `sdk` expression names a
+metamod type, so it has no consumer there (`C_HEADER_EXCLUDED_GROUPS`).
 
 ### The two ABIs in the IR
 

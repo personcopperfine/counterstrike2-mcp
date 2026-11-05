@@ -14,8 +14,8 @@
 //! `pet.dll` is a Windows DLL, so this crate's other half answers the Rust-only `-32603` naming
 //! the missing platform (see `ops::pet::game`); `pet.active`, `pet.open` and the two document
 //! errors still give the C's own shapes because no game object is needed for them. Those cases
-//! are asserted here so the platform split cannot drift silently, and they are listed in
-//! `bridge/protocol-diff-m3-pet.md`.
+//! are asserted here so the platform split cannot drift silently (the split itself is
+//! documented in `ops::pet::game`'s module docs).
 
 use std::sync::Arc;
 use std::time::Instant;

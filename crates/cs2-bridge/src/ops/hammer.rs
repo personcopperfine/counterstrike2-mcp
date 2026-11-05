@@ -4,9 +4,9 @@
 //! This module is the C bridge's Hammer half below the writes:
 //!
 //! * the object chain - `resolve_hammer` / `active_doc` with every identity hop
-//!   (`bridge/mcp_bridge.c:1693-1735`), the document fingerprint (`:1736-1779`),
+//!   (`mcp_bridge.c:1693-1735`), the document fingerprint (`:1736-1779`),
 //!   `doc_editable` (`:1780-1802`) and the undo-history readers (`:1810-1829`);
-//! * the whole `g_hfn` bind table (`:1642-1691`, signatures from `bridge/s2sdk.h:698-742`),
+//! * the whole `g_hfn` bind table (`:1642-1691`, signatures from `s2sdk.h:698-742`),
 //!   bound once from the generated `HFN_*` pins, including the entries no read uses yet (the
 //!   write lanes build on them);
 //! * the DataModel/node helpers the reads use (`:1938-1989`, `:3119-3442`): `data_model`,
@@ -98,7 +98,7 @@ const PROBE_PAGE_MASK: usize = 4095;
 pub(crate) const OP_RESULT_CAP: usize = 512 * 1024;
 
 /// The C's `S2_ATTR_TYPE_MASK` and the four DME types the bridge reads and writes
-/// (`bridge/s2sdk.h:316-321`). These are bridge literals read out of hammer.dll - no upstream
+/// (`s2sdk.h:316-321`). These are bridge literals read out of hammer.dll - no upstream
 /// enum, so no generated name exists.
 #[allow(dead_code)] // the Windows writer and the host tests' fake use it; a read-only host build does not
 const ATTR_TYPE_MASK: u32 = 0x3F;
@@ -2270,7 +2270,7 @@ pub(crate) trait Write: Chain + Nodes {
     fn class_exists(&self, cls: &[u8]) -> bool;
     /// `CreateNodeByName` + the `SetScales` vtable write the C does right after it
     /// (`mcp_bridge.c:2101-2110`). `target` is `&mut` because the C's prototype takes the arrays as
-    /// `float *` (`bridge/s2sdk.h:704`) and prints them AFTER the call (`:2122-2129`), so a
+    /// `float *` (`s2sdk.h:704`) and prints them AFTER the call (`:2122-2129`), so a
     /// write-back by Hammer lands in the very storage the reply is built from.
     fn create_node(&self, doc: Doc, target: &mut CreateTarget) -> Option<Node>;
     /// `g_hfn.GetEntityProperties(node)` with the C's non-null guard (`:2372-2375`, `:2208`).
@@ -3427,7 +3427,7 @@ pub(crate) type FnDocOrDependencyChanged = unsafe extern "C" fn(*mut c_void, i32
 pub(crate) type FnChangedSinceSave = unsafe extern "C" fn(*mut c_void, *mut c_void) -> u8;
 
 // ---------------------------------------------------------------------------------------------
-// The `g_hfn` bind table (`mcp_bridge.c:1642-1691`, signatures `bridge/s2sdk.h:698-742`)
+// The `g_hfn` bind table (`mcp_bridge.c:1642-1691`, signatures `s2sdk.h:698-742`)
 // ---------------------------------------------------------------------------------------------
 
 /// The bind table exists only on the Windows tools build: its entries are hammer.dll's
@@ -3539,7 +3539,7 @@ type FnSelSetMode = unsafe extern "C" fn(*mut c_void, i32, i32);
 type FnFaceSelGetFaces = unsafe extern "C" fn(*mut c_void, *mut c_void, *mut c_void);
 type FnFaceSelSelectFaces = unsafe extern "C" fn(*mut c_void, *mut c_void, *const c_void, i32, u8);
 
-/// The C's `HammerFns` (`bridge/s2sdk.h:698-742`), field for field.
+/// The C's `HammerFns` (`s2sdk.h:698-742`), field for field.
 ///
 /// The whole table is bound even where no read calls an entry: the write lanes (`entity.*`,
 /// `mesh.*`, `undo.*`, `edit.batch`) call the rest, and binding is one pass over the pins.
@@ -3642,7 +3642,7 @@ pub(super) fn hammer_bind() {
             let address = hb + pins::$pin.value as usize;
             // SAFETY: `address` is a verified module's image at the pinned function RVA (the
             // module gate re-checked the prologue bytes) and `$ty` is the C's own signature
-            // from `bridge/s2sdk.h`. The C writes the same address into the same typed slot
+            // from `s2sdk.h`. The C writes the same address into the same typed slot
             // (`:1645`).
             unsafe { core::mem::transmute::<usize, $ty>(address) }
         }};
@@ -3755,7 +3755,7 @@ pub(crate) mod win {
     /// module only spells the C's own reason strings and the module's identity path.
     static APP: std::sync::Mutex<Option<usize>> = std::sync::Mutex::new(None);
 
-    /// The C asserts `sizeof(S2ConnectionSrc) == 80` (`bridge/s2sdk.h:447`); the generated
+    /// The C asserts `sizeof(S2ConnectionSrc) == 80` (`s2sdk.h:447`); the generated
     /// element the live vector holds must be the same record, and the reader strides by it.
     const _: () = assert!(core::mem::size_of::<MapEntityConnection_t>() == 80);
 
@@ -3803,7 +3803,7 @@ pub(crate) mod win {
             log::line("doc: hammer CreateInterface export missing"); // :1700
             return None;
         };
-        // `S2CreateInterfaceFn` (`bridge/s2sdk.h:60`).
+        // `S2CreateInterfaceFn` (`s2sdk.h:60`).
         type CreateInterfaceFn =
             unsafe extern "C" fn(*const c_char, *mut c_int) -> *mut c_void;
         // SAFETY: `sym` is the module's exported factory, found by name in the verified module.
@@ -4047,7 +4047,7 @@ pub(crate) mod win {
 
     /// `CHammerPolyMesh`'s two component counts (`:3207-3208`): the mesh object plus the
     /// pinned `HOFF_MESH_POLYMESH` / `HOFF_POLYMESH_VERTS` / `HOFF_POLYMESH_FACES` offsets
-    /// (`bridge/s2sdk.h:482-489`), read with the guards the C omits.
+    /// (`s2sdk.h:482-489`), read with the guards the C omits.
     fn mesh_slots(node: *mut CMapNode) -> Option<(i32, i32)> {
         let poly = (node as *const u8).wrapping_add(pins::HOFF_MESH_POLYMESH.value as usize);
         let verts = poly.wrapping_add(pins::HOFF_POLYMESH_VERTS.value as usize);
@@ -4059,7 +4059,7 @@ pub(crate) mod win {
             return None;
         }
         // SAFETY: both 4-byte counts were just proven readable; `S2ComponentList` is `{int
-        // count}` (`bridge/s2sdk.h:479`).
+        // count}` (`s2sdk.h:479`).
         unsafe {
             Some((
                 (verts as *const i32).read_unaligned(),
@@ -4068,7 +4068,7 @@ pub(crate) mod win {
         }
     }
 
-    /// `CMapNode`'s child handles (`CMapNode_ChildHandles`, `bridge/s2sdk.h:497`): the
+    /// `CMapNode`'s child handles (`CMapNode_ChildHandles`, `s2sdk.h:497`): the
     /// generated `CUtlVector_CEntityHandle` shape over `m_Children`, whose IR type is bytes.
     ///
     /// Returns the vector header's address after proving its count readable; the caller reads
@@ -4159,7 +4159,7 @@ pub(crate) mod win {
         }
         // SAFETY: the caller's history came from `GetUndoHistory`/the active-history global and
         // passed `obj_is` where the C checks it. `m_unk001` is `CUndoHistory`'s
-        // `CUtlVector<UndoGroup_t *>` (`CMapDocHistory_Count`/`_Groups`, `bridge/s2sdk.h:407`);
+        // `CUtlVector<UndoGroup_t *>` (`CMapDocHistory_Count`/`_Groups`, `s2sdk.h:407`);
         // `addr_of!` computes its address and no reference into game memory is created here.
         let vector = unsafe {
             ptr::addr_of!((*history).base.m_unk001).cast::<CUtlVector_CEntityHandle>()
@@ -4529,7 +4529,7 @@ pub(crate) mod win {
         fn session(&self, app: usize) -> Option<usize> {
             // SAFETY: `app` is the pinned static `CHammerApp`, whose layout is
             // `S2_CBaseEditorApp` with the generated `m_pActiveSession` member
-            // (`bridge/s2sdk.h:335`, `S2_OBJECT(CHammerApp, S2_CBaseEditorApp, ..)`).
+            // (`s2sdk.h:335`, `S2_OBJECT(CHammerApp, S2_CBaseEditorApp, ..)`).
             let session =
                 unsafe { (*(app as *const CBaseEditorApp)).m_pActiveSession } as usize;
             (session != 0).then_some(session)
@@ -4550,7 +4550,7 @@ pub(crate) mod win {
 
         fn doc_of(&self, doc_session: usize) -> usize {
             // SAFETY: the doc session passed `obj_is`; the document is embedded at `m_Doc`
-            // (`CMapDocSession_Doc`, `bridge/s2sdk.h:388`).
+            // (`CMapDocSession_Doc`, `s2sdk.h:388`).
             unsafe {
                 ptr::addr_of!((*(doc_session as *const CMapDocSession)).m_Doc) as usize
             }
@@ -4586,7 +4586,7 @@ pub(crate) mod win {
 
         fn scope_depth(&self, doc: usize) -> u32 {
             // SAFETY: `doc` passed `obj_is(HV_DOC_VT)`; `m_Scopes` is the generated
-            // `CUtlVector_CEntityHandle` shape (`bridge/s2sdk.h:384`).
+            // `CUtlVector_CEntityHandle` shape (`s2sdk.h:384`).
             let vector = unsafe {
                 &*(ptr::addr_of!((*(doc as *const CMapDoc)).m_EditScopeStack.m_Scopes)
                     .cast::<CUtlVector_CEntityHandle>())
@@ -4673,7 +4673,7 @@ pub(crate) mod win {
 
         fn doc_facts(&self, doc: Doc) -> DocFacts {
             let document = doc.0 as *mut CMapDoc;
-            // CMapDoc_Session (`bridge/s2sdk.h:389`): the embedding session is the document's
+            // CMapDoc_Session (`s2sdk.h:389`): the embedding session is the document's
             // address minus the embedded member's offset.
             let session = (doc.0 - offset_of!(CMapDocSession, m_Doc)) as *const CMapDocSession;
             // SAFETY: `doc` passed the identity chain, so the session's `m_Doc` is this very
@@ -4685,8 +4685,8 @@ pub(crate) mod win {
             } else {
                 // The C hands the raw `char *` to `sb_addjson` (`:6252`), i.e. the whole
                 // string. This port caps it at ENTITY_STR_CAP (4096) bytes with `probe_str`,
-                // which also cuts at a UTF-8 boundary; protocol-diff-m3-hammer.md records the
-                // one difference (a longer path is cut instead of read to its NUL).
+                // which also cuts at a UTF-8 boundary: a longer path is cut instead of read to
+                // its NUL (PROTOCOL.md §8.1).
                 probe_text(path_ptr.cast_const(), ENTITY_STR_CAP)
             };
             // SAFETY: `HG_DOCDATA_MANAGER` is the pinned global the C reads; `doc` is live.
@@ -4844,7 +4844,7 @@ pub(crate) mod win {
             // SAFETY: the verified HFN_CREATE_NODE_BY_NAME function, called exactly as the C does
             // (`mcp_bridge.c:2101`): `doc` passed the identity chain, `cls` is a NUL-terminated
             // name that outlives the call, and the two mutable pointers are the caller's `target`
-            // arrays (`float *origin, float *angles`, `bridge/s2sdk.h:704`) - they outlive the
+            // arrays (`float *origin, float *angles`, `s2sdk.h:704`) - they outlive the
             // call and any write-back lands in the storage the reply is built from (`:2122-2129`).
             let node = unsafe {
                 (table.create_node_by_name)(
@@ -4898,7 +4898,7 @@ pub(crate) mod win {
         fn record_node_tree(&self, hist: usize, node: Node) {
             let table = table();
             // SAFETY: `CMapNode_Undoable` is the `IUndoable` subobject at the generated base offset
-            // (`bridge/s2sdk.h:498-499`); `hist` is the token `undo_open` returned and the C's
+            // (`s2sdk.h:498-499`); `hist` is the token `undo_open` returned and the C's
             // recursion flag is 1.
             let undoable = unsafe {
                 (node.0 as *const u8)
@@ -6636,7 +6636,7 @@ mod tests {
         class_exists: bool,
         create: Option<usize>,
         /// `create_node` writes these into `target.origin`/`target.angles` before it returns -
-        /// `CreateNodeByName`'s `float *` parameters (`bridge/s2sdk.h:704`), which the C prints
+        /// `CreateNodeByName`'s `float *` parameters (`s2sdk.h:704`), which the C prints
         /// after the call (`mcp_bridge.c:2122-2129`).
         writeback: Option<([f32; 3], [f32; 3])>,
         properties: Option<usize>,
@@ -7298,7 +7298,7 @@ mod tests {
     #[test]
     fn a_create_write_back_shows_in_the_reply() {
         // `CreateNodeByName`'s prototype is `float *origin, float *angles`
-        // (`bridge/s2sdk.h:704`) and the C prints `t->origin` AFTER the call
+        // (`s2sdk.h:704`) and the C prints `t->origin` AFTER the call
         // (`mcp_bridge.c:2122-2125`), so a write-back by Hammer is what the caller reads back. The
         // fake writes back what Hammer would: the reply must carry the new values, not the ones
         // the caller sent.

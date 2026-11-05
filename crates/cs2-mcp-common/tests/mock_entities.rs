@@ -1,6 +1,6 @@
 //! Mock semantics of the Hammer entity world (WP-M, plan §3 + §4.1) against the real
 //! `BridgeClient` (pattern of `tests/pet_mock.rs` / `tests/modeldoc_mock.rs`): result shapes
-//! and error codes mirror `bridge/mcp_bridge.c`'s `op_entity_create` / `op_set_keyvalues` /
+//! and error codes mirror `mcp_bridge.c`'s `op_entity_create` / `op_set_keyvalues` /
 //! `edit.batch` / `node.*` / `undo.undo` / `map.save` / `map.reload` / `doc.active`.
 use cs2_mcp_common::bridge::{BridgeClient, BridgeError, ClientOptions, RequestOpts};
 use cs2_mcp_common::mock::{make_doc, MockBridge, MockNode, HAMMER_METHODS};
@@ -341,7 +341,7 @@ async fn entity_create_scales_store_into_the_object_properties() {
     assert_eq!(mb.hammer_nodes().len(), 1, "the scaled node is gone");
     // a create without scales stores nothing: hammer_scales reads back the identity and the read
     // reports the identity the field holds. The reply echoes `scales` unconditionally — the real
-    // bridge sends `[1.0, 1.0, 1.0]` when the request had none (protocol-diff §7, review w2b #6).
+    // bridge sends `[1.0, 1.0, 1.0]` when the request had none (crates/cs2-bridge/PROTOCOL.md §9.3, review w2b #6).
     let r = call_req(
         &mb,
         "entity.create",
@@ -878,7 +878,7 @@ async fn keyvalue_undo_records_the_values() {
 
 /// A batch with **no** `entity.create` op is labelled `MCP: set keyvalues` (the bridge patches
 /// this in 35528e8 via `batch_has_create`, decided on the listed ops before the group opens,
-/// protocol-diff-m2.15.md item 16) and pops without restoring; a batch with a create keeps the
+/// crates/cs2-bridge/PROTOCOL.md §10) and pops without restoring; a batch with a create keeps the
 /// batch label and its snapshot restores.
 #[tokio::test]
 async fn batch_without_create_op_is_labelled_set_keyvalues() {
@@ -1143,7 +1143,7 @@ async fn map_reload_with_a_stale_expect_doc_changes_nothing() {
     assert!(after["epoch"].as_i64().unwrap() > epoch);
 }
 
-/// `map.reload` mirrors the bridge arm (`mcp_bridge.c` + live `bridge/test_reload.py`): a dirty
+/// `map.reload` mirrors the bridge arm (`mcp_bridge.c` + live `test_reload.py`): a dirty
 /// document refuses without `force` (-32016), a forced reload discards (dirty cleared, undo
 /// history dropped, epoch bumped, `discardedChanges` = the dirty flag before the reload) and a
 /// clean document reloads with `discardedChanges:false`.
@@ -1246,7 +1246,7 @@ async fn map_open_world(files: Vec<&str>) -> MockBridge {
         .unwrap()
 }
 
-/// The shape gate is the bridge's own (`bridge/map_path.h`, mirrored in the mock): a path that is
+/// The shape gate is the bridge's own (`map_path.h`, mirrored in the mock): a path that is
 /// not a `maps/…vmap` of the addon is `-32602`, a path the host does not have is `-32014`
 /// `AssetNotFound` (both BEFORE anything runs: no document change either way).
 #[tokio::test]

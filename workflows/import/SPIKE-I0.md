@@ -1,6 +1,6 @@
 # I0 live spike — results (2026-10-29)
 
-Tools container `ADDON=accept_p4 bridge/runtime.sh up` (bridge m3.17, game build 2000933), hammer-mcp from
+Tools container `ADDON=accept_p4 cargo bridge runtime up` (bridge m3.17, game build 2000933), hammer-mcp from
 this branch. Evidence (dumps, generators, frames) in this worktree's `target/import/spike/` (gitignored);
 spike models stay in the test addon under `models/import_spike/` (content + compiled).
 

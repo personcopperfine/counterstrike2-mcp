@@ -9,7 +9,7 @@
 //! promptly after the moment you are observing, and again while `truncated` is true. A tool call
 //! holds no write gate and reads no document — the ring is engine state, not Hammer state.
 //!
-//! **What the bridge reports** (`bridge/mcp_bridge_game.inc`, verified live in the Wine tools
+//! **What the bridge reports** (`mcp_bridge_game.inc`, verified live in the Wine tools
 //! runtime, R3 of `target/orch/re-snd.md`): per event `seq`, `hash`, `name` (resolved through
 //! `ISoundEventManager` when the game has it), `entindex`, `guid`, `via` (the SOS slot: 11 for
 //! `StartSoundEventWithParams`, 12/13/81 the other routes), `flags`, `ageMs` (measured against
@@ -59,7 +59,7 @@
 //! ignored with a note for the same reason. The *capability* gate is the registry's and it runs
 //! before the handler, so `installOnly` needs the tool's declared `sound.drain` to be advertised
 //! as well: the bridge answers `sound.status` and `sound.drain` from one `op_sound` handler
-//! (`bridge/mcp_bridge_game.inc`), so the pair is never split in practice.
+//! (`mcp_bridge_game.inc`), so the pair is never split in practice.
 use crate::state::HammerState;
 use cs2_mcp_common::bridge::RequestOpts;
 use cs2_mcp_common::tools::{

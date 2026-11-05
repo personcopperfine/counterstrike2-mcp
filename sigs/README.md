@@ -1,38 +1,43 @@
 # sigs/ — signature database for the bridge
 
-The bridge DLL (`bridge/`) calls into Valve code at fixed places: vtables, virtual slots, a few
+The bridge (`crates/cs2-bridge`) calls into Valve code at fixed places: vtables, virtual slots, a few
 non-virtual functions, globals and struct field offsets. Their RVAs change with every game build.
 This directory stores each one as a **locator** (how to find it again) rather than a number, and the
-tools here re-find them on a new build. `bridge/pins.py` turns the result into `bridge_pins.h`
-(RVAs, Qt chains, literals). Slots, member offsets, sizes and consts the s2sdk headers describe are
-generated into `bridge/s2sdk_gen.h` instead; the entry for such a number carries an `sdk` field and
-stays here as the binary measurement that `pins.py` and `sdkcheck.py` hold the header to.
+tools here re-find them on a new build. `cargo bridge pins` turns the result into
+`crates/cs2-bridge/src/generated/pins.rs` (RVAs, prologue bytes, module identity). Slots, member offsets, sizes and consts the s2sdk headers describe are
+generated into `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` instead; the entry for such a number carries an `sdk` field and
+stays here as the binary measurement that `cargo bridge pins` and `sdkcheck.py` hold the header to.
 
-The same run can also emit the pins as Rust: `bridge/pins.py --rust crates/cs2-bridge/src/generated/pins.rs`
-writes one `pub const <macro>: Pin` per emitted `#define` (same names, values, comments and order), the
-module identity / fingerprint / slot / ident tables as `pub static` arrays with the same rows, and a
-`pub mod linux` holding the Linux platform's own module list (`lib<module>.json`): a Linux entry with a
-`bridge` name is resolved and gated by the same checks (`pin_checks`), but against the Linux tree
-(`$CS2_LINUX_BINS`, default `target/game-bins-linux-<CURRENT_BUILD>`). No Linux entry carries a `bridge`
-name yet, so that module is empty-but-present; its vtable text (a Rust `kind: "vtable"` Pin's
-comment) is the entry's `notes`, there being no MSVC RTTI class on Linux. `bridge/test_pins_rs.py`
-checks the C↔Rust parity **and order**, compiles pins.rs (committed and fixture output) with
-`rustc -D warnings`, and covers the Linux fixture (a plain const, and a real vtable entry with an
-`ident_slot` whose slot target is read through the `.rela` table), the narrowed linux block
-(runs only with `--rust`; a C-only run needs neither the Linux tree nor its binaries) and the
-refusal paths.
+`cargo bridge pins` has two halves. `scripts/pinsdata.py` resolves every bridge entry with this
+directory's Resolver (the one `sigcheck.py resolve` and the bridge gate use, so pins.rs and
+`sigcheck resolve` cannot disagree), runs the checks listed under "What `cargo bridge pins` checks
+itself" and prints one JSON document; run it with plain `python3`, not `-I` (the resolver's numpy
+lives in the user site-packages). The Rust half (`crates/cs2-bridge-tools/src/pins/`) maps the
+entries to sections and writes one `pub const <name>: Pin` per emitted entry, the module identity /
+fingerprint / slot / ident tables as `pub static` arrays, and a `pub mod linux` holding the Linux
+platform's own module list (`lib<module>.json`): a Linux entry with a `bridge` name is resolved and
+gated by the same checks, but against the Linux tree (`$CS2_LINUX_BINS`, default
+`target/game-bins-linux-<CURRENT_BUILD>`). No Linux entry carries a `bridge` name yet, so that module
+is empty-but-present; its vtable text (a `kind: "vtable"` Pin's comment) is the entry's `notes`, there
+being no MSVC RTTI class on Linux. `cargo bridge pins --check` writes nothing and fails when the
+committed pins.rs is stale (the build's up-to-date gate). `cargo test -p cs2-bridge-tools --test pins`
+renders a canned export and compiles the committed pins.rs with `rustc -D warnings`; with
+`-- --ignored` (needs both binary trees) it also regenerates pins.rs byte-identical, compiles the
+fixture outputs, and covers the Linux fixture (a plain const, and a real vtable entry with an
+`ident_slot` whose slot target is read through the `.rela` table) and the refusal paths.
 
 | Path | What |
 |---|---|
 | `signatures/<module>.json` | one file per DLL the bridge pins (hammer, toolframework2, scenesystem, engine2, rendersystemvulkan, client, server, tier0, schemasystem, soundsystem) |
 | `signatures/lib<module>.json` | one file per **Linux** `.so` (`platform: linux`): `libclient`, `libserver`, `libengine2`, `librendersystemvulkan`, `libschemasystem`, `libsoundsystem`, `libparticles`, `libtier0`; same schema, separate files because each is a *different* game build |
 | `signatures/SCHEMA.json` | JSON Schema of those files |
-| `CURRENT_BUILD` | CS2 `ClientVersion` (from `game/csgo/steam.inf`) the database and `bridge_pins.h` are on |
+| `CURRENT_BUILD` | CS2 `ClientVersion` (from `game/csgo/steam.inf`) the database and pins.rs are on |
 | `fingerprints/BUILD` | the build the fingerprints were taken on (a fingerprint stays valid across builds as long as the function's code does not change: relative branches, RIP displacements and image immediates are masked out) |
 | `fingerprints/<m>-fp.json` | masked code at every function entry, taken in IDA on the last IDA-checked build; `sigupdate.py` uses them to spot a locator that still matches but lands on changed code or on a different function. Entries the bridge consumes (`bridge` macro, `kind=function`, or any bridge entry located by a `vslot`) get a pattern long enough to be told apart from the functions they could silently be swapped with, so two neighbouring slots holding similar functions cannot compare equal; `ida_fp.py` prints what it had to extend and lists the entries it could not tell apart under the reserved `_weak` key (no entry lookup uses it; a weak entry is the gate's known blind spot, see "The bridge gate"). `validate` refuses a bridge entry that pins code and has no key here (and a value that could not
-fail: empty or all-`??`), and `bridge/pins.py` additionally refuses one whose key does not match the
+fail: empty or all-`??`), and `cargo bridge pins` additionally refuses one whose key does not match the
 bytes. A `kind=vtable` entry with `ident_slot` also gets `<entry>#<slot>`, the function the identity-checked slot must still hold |
 | `scripts/sigcheck.py` | `validate` (no binaries; also requires the fingerprints a bridge entry needs) and `resolve` (against `$CS2_BINS`, or a Linux tree with `--platform linux --tree`) |
+| `scripts/pinsdata.py` | the evidence half of `cargo bridge pins`: resolves and gates every bridge entry (Windows and Linux) and prints the JSON the Rust renderer writes pins.rs from |
 | `scripts/sigupdate.py` | judge a new build: SAME / OK / DRIFT / FAIL / UNVERIFIED per entry, `--bridge-gate`, `record`; see "The bridge gate" below. `--platform linux --tree <linux tree>` judges the Linux half the same way (see "Linux binaries") |
 | `scripts/stagebins.py` | copy the pinned DLLs out of a game install or depot download into a bins tree (`--linux` for the `.so` modules) |
 | `scripts/sdkcheck.py` | the s2sdk generator's own check: the dual-ABI IR (`crates/s2sdk/s2sdk-sys/ir/`, emitted as `S2_VTLEN_*`/`S2_SLOT_*`) vs the game binaries through this directory's Resolver (imported, never duplicated); Windows by default, `--platform linux --tree target/game-bins-linux-$(cat sigs/CURRENT_BUILD)` for the Linux build - see "sdkcheck.py" below |
@@ -92,7 +97,7 @@ What an ELF reader has to do differently from the PE one, and what the entries l
   file - the loader writes the value from `R_X86_64_RELATIVE`/`R_X86_64_64` at startup - so
   `sigcheck` reads every 8-byte slot through the `.rela.dyn` table (`image_qword`). Without that,
   every `_ZTV` vtable in `libtier0.so` reads as six zeroes. `slot_target` (the `ident_slot` read
-  pins.py's identity rows come from) takes the same path, and compares the value against the
+  `cargo bridge pins`' identity rows come from) takes the same path, and compares the value against the
   image's own base (a `.so`'s 0, not the PE's `0x180000000`).
 * **No RTTI, no MSVC COL.** There is no `.?AV…@@` type descriptor and no complete-object locator,
   so the `rtti` locator is Windows-only (the validator rejects it in a Linux file) and
@@ -144,19 +149,19 @@ Entry:
 | `via` | yes | `module!0x18… (Class::Method, what the site does)` on the build it was chosen. **The hint a person uses to re-find it** when the locator breaks. |
 | `tag` | yes | evidence for the *name's meaning*: `V` verified in disassembly, `I` inferred, `RTTI`, `S` SDK header, `D` GameTracking dump, `?` |
 | `expect` | no | build → resolved value; written by `sigupdate.py record`. `sigcheck.py resolve --record` writes it too, but a run that selects a file with bridge entries refuses `--record` before writing anything and points at `sigupdate.py record` |
-| `bridge` | no | the `bridge_pins.h` macro; only entries with this field reach the header (as a `#define` unless they carry `sdk`); with `sdk` it is just the entry's name in the `k_pinSlots` rows and the sigupdate output |
-| `sdk` | no | the generated SDK expression that owns the number: a string in tie syntax over the macros `bridge/s2sdk_gen.h` emits - `S2_SLOT_ISceneSystem_AddView`, `S2_SLOT_X*8` (a slot the game calls as a vtable byte displacement, e.g. `S2_SLOT_IParticleSystemMgr_GetFunctionDefinition*8`), `S2_OFF_CMapNode_m_Children+8`, or `S2_OFF_A+S2_OFF_B` (a member of an embedded object). The bridge spells that macro, so `pins.py` emits **no `#define`** for the entry; the entry stays resolved, gated and fingerprinted, and a vslot entry keeps its `k_pinSlots`/`k_pinBytes` runtime rows. `pins.py` refuses to write when the expression and the measurement (a vslot's slot index, else the resolved value) disagree, and `sdkcheck.py` reports an `sdk:<module>/<entry>` row (PASS, or SKIP (LITERAL) when the entry has no locator). Allowed on Windows `kind=function` + `vslot` (one bare `S2_SLOT_` macro), `offset`, `const`; `validate` checks the syntax. Written by `scripts/sdkadopt.py PIN=S2_EXPR`, which checks the macro exists and equals the measurement; never typed |
-| `ident_slot` | no | `kind=vtable` only: slot whose function pointer the bridge checks for identity (contents compared, not called). bridge/pins.py emits the check from this field. |
+| `bridge` | no | the name the bridge binds the entry by; only entries with this field reach pins.rs (as a `pub const <name>: Pin` unless they carry `sdk`); with `sdk` it is just the entry's name in the `PIN_SLOTS` rows and the sigupdate output |
+| `sdk` | no | the generated SDK expression that owns the number: a string in tie syntax over the macros `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` emits - `S2_SLOT_ISceneSystem_AddView`, `S2_SLOT_X*8` (a slot the game calls as a vtable byte displacement, e.g. `S2_SLOT_IParticleSystemMgr_GetFunctionDefinition*8`), `S2_OFF_CMapNode_m_Children+8`, or `S2_OFF_A+S2_OFF_B` (a member of an embedded object). The bridge spells that macro, so `cargo bridge pins` emits **no pin const** for the entry; the entry stays resolved, gated and fingerprinted, and a vslot entry keeps its `PIN_SLOTS`/`PIN_BYTES` runtime rows. `cargo bridge pins` refuses to write when the expression and the measurement (a vslot's slot index, else the resolved value) disagree, and `sdkcheck.py` reports an `sdk:<module>/<entry>` row (PASS, or SKIP (LITERAL) when the entry has no locator). Allowed on Windows `kind=function` + `vslot` (one bare `S2_SLOT_` macro), `offset`, `const`; `validate` checks the syntax. Written by `scripts/sdkadopt.py PIN=S2_EXPR`, which checks the macro exists and equals the measurement; never typed |
+| `ident_slot` | no | `kind=vtable` only: slot whose function pointer the bridge checks for identity (contents compared, not called). `cargo bridge pins` emits the check from this field. |
 | `struct` / `field` / `ctype` | no | `kind=offset` only: grouping metadata naming the C struct, field and type the offset is asserted against (e.g. `"CMapDoc"`, `"root"`, `"CMapRootElement *"`); a future struct emitter groups them into typedef blocks |
 | `structs` | no | retired (it kept an entry out of the old `bridge_structs.h`, which no longer exists); changes nothing, still validates |
-| `status` | no | `proposed` → `verified` → `stale` (failed on the newest build); `validate` rejects anything else. `bridge/pins.py` refuses to pin a bridge entry left `stale` |
-| `notes` | no | free text; `bridge_pins.h` uses it as the macro comment for vslots/functions/globals |
+| `status` | no | `proposed` → `verified` → `stale` (failed on the newest build); `validate` rejects anything else. `cargo bridge pins` refuses to pin a bridge entry left `stale` |
+| `notes` | no | free text; pins.rs uses it as the doc comment of vslot/const/function/global pins |
 
 (1) required for `function`/`vtable`/`global`/`string`; for `offset`/`const` either `locator` or `value` must be present.
 
-Entries without a `bridge` macro do not reach `bridge_pins.h`: a `kind=offset`/`const` entry without
+Entries without a `bridge` name do not reach pins.rs: a `kind=offset`/`const` entry without
 `bridge` or `sdk` is a measurement only `sigcheck`/`sdkcheck` use (the generated `bridge_structs.h`
-was retired by de-hardcode WP1b; its numbers are now generated macros, `bridge_pins.h` macros or
+was retired by de-hardcode WP1b; its numbers are now generated macros, pins or
 bridge literals). A value that comes from a
 locator is a binary-checked fact, because `resolve` derives it from the module and `expect`
 compares; a literal (`value`, no locator) remains a named, sourced assumption that `resolve`
@@ -239,9 +244,9 @@ python3 sigs/scripts/sigupdate.py check --platform linux --tree target/game-bins
 
 ## sdkcheck.py
 
-`s2sdk`'s check, run before `bridge/build-rs.sh` (an `sdk` entry has no compile-time tie: the build's
-`pins.py --check` gate does not hold the header to the binary) and of `workflows/game-update.md`
-lanes A (A2b) and B (B5, before `pins.py`): one line
+`s2sdk`'s check, run before `cargo bridge build` (an `sdk` entry has no compile-time tie: the build's
+`cargo bridge pins --check` gate does not hold the header to the binary) and of `workflows/game-update.md`
+lanes A (A2b) and B (B5, before `cargo bridge pins`): one line
 per fact `PASS|FAIL|SKIP <what> upstream=<n> game=<n> <why>`, exit 0 iff no FAIL. The default mode
 needs `target/game-bins` and checks the MSVC numbers; the `--platform
 linux --tree target/game-bins-linux-$(cat sigs/CURRENT_BUILD)` mode checks the Linux half the same way (a *different* build,
@@ -268,7 +273,7 @@ staged per "Linux binaries"), through the same Resolver:
   generated counterpart comes out SKIP with its resolved value, and a resolution failure is FAIL.
 
 * **(d) `sdk` entries** (`sdk:<module>/<entry>`, Windows lane): every sigs entry carrying `sdk`
-  has its expression evaluated against `bridge/s2sdk_gen.h` (which `gen.py --check` proves is the
+  has its expression evaluated against `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` (which `gen.py --check` proves is the
   pinned upstream's) and compared with the entry's measurement: a vslot locator's slot index, else
   the resolved value. A located entry is PASS; an entry with no locator (a bridge-side shape no
   binary backs) is SKIP (LITERAL) on equality; a difference is FAIL ("fix the header and the entry
@@ -293,7 +298,7 @@ is touched.
 
 ## The bridge gate (fail closed)
 
-`bridge/pins.py` emits the header the bridge DLL is built from, and `--bridge-gate` decides whether
+`cargo bridge pins` emits the pins.rs the bridge is built from, and `--bridge-gate` decides whether
 the database is good enough for that. Per entry, on the new binaries:
 
 | State | Meaning | Gate |
@@ -306,12 +311,12 @@ the database is good enough for that. Per entry, on the new binaries:
 
 The last row is the one that keeps the gate honest. A `vslot` locator proves nothing by itself: it
 reads `vt[N]` and accepts any image pointer, so when the game inserts or moves a virtual the value
-still looks fine, `pins.py` re-pins whatever it found together with that target's first bytes, and
+still looks fine, `cargo bridge pins` re-pins whatever it found together with that target's first bytes, and
 the runtime `PinSlot`/`PinBytes` checks compare `vt[N]` with a value read from `vt[N]` — a
 tautology end to end. What says "`vt[N]` still holds this function" is the fingerprint taken on the
 last IDA-checked build. So every bridge entry whose target is *code* — `kind=function`, which is
-exactly what `k_pinBytes`/`k_pinSlots` pin — and every identity-checked slot (`ident_slot`, whose
-target `pins.py` likewise reads from the binary) must have one, whatever the binary looks like; a
+exactly what `PIN_BYTES`/`PIN_SLOTS` pin — and every identity-checked slot (`ident_slot`, whose
+target `cargo bridge pins` likewise reads from the binary) must have one, whatever the binary looks like; a
 miss is `UNVERIFIED`, never `OK`.
 
 Bridge entries located by a value pattern (`sig`, `rtti`, `string`, `export`) carry their evidence
@@ -353,15 +358,17 @@ other functions of the module otherwise). `ida_fp.py` prints what it had to exte
 entries it could not tell apart within its cap under the file's `_weak` key. An entry added with a
 `bridge` macro and no fingerprint fails the gate — and `sigupdate.py record`, which refuses to write
 a build while any bridge entry is not SAME/OK — until someone with IDA adds one; the same entry
-makes `sigcheck.py validate` fail, and `bridge/pins.py` refuses as well, so the header cannot be
-built from it. To check the gate on a moved slot, swap two 8-byte pointers of a bridge-pinned vtable
+makes `sigcheck.py validate` fail, and `cargo bridge pins` refuses as well, so pins.rs cannot be
+generated from it. To check the gate on a moved slot, swap two 8-byte pointers of a bridge-pinned vtable
 in a scratch copy of the DLL under `target/` and judge a tree containing it: the affected entry must
 come out `DRIFT`, never `OK`.
 
-### What `bridge/pins.py` checks itself
+### What `cargo bridge pins` checks itself
 
-The gate judges a *new* build; `pins.py` writes the header from the *current* one, so it re-checks
-the same evidence instead of trusting that someone ran the gate:
+The gate judges a *new* build; `cargo bridge pins` writes pins.rs from the *current* one, so it re-checks
+the same evidence instead of trusting that someone ran the gate (all of it in `scripts/pinsdata.py`,
+before the Rust side renders anything; the Rust side adds only that an installed Wine copy under
+`workshop/run/app` holds the same bytes as `$CS2_BINS`):
 
 * `sigcheck.validate_file` on each module's JSON: structure, the status enum, the fingerprints each
   bridge entry requires (and that every fingerprint value is a pattern that could actually fail —
@@ -386,15 +393,15 @@ hand-edited pattern, an edited locator or a dropped `expect[]` would be pinned s
 
 * **The recorded evidence is self-asserted.** `expect[]`, the locator and the fingerprint are all in
   the same files, so a person who edits all three consistently (for example by re-taking the
-  fingerprint with `ida_fp.py` at the wrong address) is accepted by the gate and by `pins.py`
+  fingerprint with `ida_fp.py` at the wrong address) is accepted by the gate and by `cargo bridge pins`
   alike: nothing proves the recorded build was produced by `sigupdate.py record`. A future package
   could have `record` also write a digest over the bridge entries it judged (locator, `expect[CUR]`,
-  the required fingerprints, `_weak`) into `builds[CUR]` and have `pins.py` recompute it, which
+  the required fingerprints, `_weak`) into `builds[CUR]` and have `pinsdata.py` recompute it, which
   would turn "only `record` may write a bridge build" from a convention into a check.
 * **A bridge `kind=const` slot number is outside the gate.** `HVS_NODE_ISA`
   (`sigs/signatures/hammer.json`, `status: verified`, `sdk: S2_SLOT_CDmElement_IsA`) is the
-  `CMapNode::IsA` slot the bridge calls (`e->vt->IsA(...)`) through the struct in `bridge/s2sdk.h`.
-  It has no `k_pinSlots` row and no `k_pinBytes` prologue, so no fingerprint is required and the
+  `CMapNode::IsA` slot the bridge calls (`e->vt->IsA(...)`) through the struct in `s2sdk.h`.
+  It has no `PIN_SLOTS` row and no `PIN_BYTES` prologue, so no fingerprint is required and the
   `BRIDGE COVERAGE` count does not include it: if a build inserted a virtual into `CMapNode` the
   header would keep saying 4 and the bridge would call the wrong slot silently. What measures it is
   its locator, the IsA call in CMapDocHistory's node-tree recorder (`mov r8,[rax+20h]; call r8`:

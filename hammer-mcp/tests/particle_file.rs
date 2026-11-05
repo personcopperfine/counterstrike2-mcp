@@ -1265,7 +1265,7 @@ async fn compile_without_a_tools_container_is_runtime_unavailable() {
     let err = call(&server, "particle_compile", json!({"path": PROBE_ARG})).await.unwrap_err();
     assert_eq!(err.name, "RuntimeUnavailable");
     assert_eq!(err.data["label"], json!("cs2mcp.tool"));
-    assert_eq!(err.data["hint"], json!("bridge/runtime.sh up"));
+    assert_eq!(err.data["hint"], json!("cargo bridge runtime up"));
     assert!(err.message.contains("cs2mcp.tool"), "{err:?}");
     assert!(err.retry_safe);
 

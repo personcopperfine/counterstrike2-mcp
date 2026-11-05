@@ -35,7 +35,7 @@ struct Global {
     /// How files reach the game: overlay (Linux default), in-place (Windows default).
     #[arg(long, global = true, value_enum, default_value_t = Strategy::Auto)]
     strategy: Strategy,
-    /// `bridge/build-rs.sh` output (win64/, linuxsteamrt64/).
+    /// `cargo bridge build` output (win64/, linuxsteamrt64/).
     #[arg(long, global = true, env = "CS2MCP_BRIDGE_DIR")]
     bridge_dir: Option<PathBuf>,
     /// Metamod builds (win64/addons/metamod, linux/addons/metamod).
@@ -127,7 +127,7 @@ enum Cmd {
     /// (internal) the session supervisor.
     #[command(hide = true)]
     Supervise { session_file: PathBuf },
-    /// Post an `open_asset` into the running `-tools` session (runtime.sh `open`): a map opens in
+    /// Post an `open_asset` into the running `-tools` session (`cargo bridge runtime`'s `open`): a map opens in
     /// Hammer, a `.vmdl` loads ModelDoc. Run it on the game's desktop (the channel is per logon session).
     Open {
         /// Content-relative asset path (`maps/x.vmap`, `models/x.vmdl`).

@@ -207,8 +207,8 @@ async fn status_without_the_module_reports_the_missing_seven_and_a_hint() {
         .as_str()
         .unwrap()
         .contains("TOOL=modeldoc")
-        && p["hint"].as_str().unwrap().contains("runtime.sh up")
-        && p["hint"].as_str().unwrap().contains("runtime.sh open"));
+        && p["hint"].as_str().unwrap().contains("runtime up")
+        && p["hint"].as_str().unwrap().contains("runtime open"));
     // addon-relative: `open csgo_addons/...` raises the "Unrecognized Asset" modal live
     let hint = p["hint"].as_str().unwrap();
     assert!(hint.contains("open models/<file>.vmdl") && !hint.contains("csgo_addons"), "{hint}");
@@ -228,7 +228,7 @@ async fn status_not_connected_never_raises() {
     assert_eq!(p["bridge"]["running"], json!(false));
     assert_eq!(p["modeldocLoaded"], json!(false));
     let hint = p["hint"].as_str().unwrap();
-    assert!(hint.ends_with("runtime.sh up"), "{hint}");
+    assert!(hint.ends_with("cargo bridge runtime up"), "{hint}");
     assert!(p.get("document").is_none());
     // the seven methods are reported missing even without a connection
     assert_eq!(p["capabilities"]["missing"].as_array().unwrap().len(), 7);
