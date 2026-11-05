@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 11:26:56 -0500
+Subject: [PATCH 06/47] Fix IScreenshotCallback image format type
+
+---
+ public/engine2/iscreenshotcallback.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/public/engine2/iscreenshotcallback.h b/public/engine2/iscreenshotcallback.h
+index 3ad7a63f..19540c5a 100644
+--- a/public/engine2/iscreenshotcallback.h
++++ b/public/engine2/iscreenshotcallback.h
+@@ -5,6 +5,7 @@
+ #pragma once
+ #endif
+ 
++#include "bitmap/imageformat_declarations.h"
+ #include "tier0/platform.h"
+ 
+ //-----------------------------------------------------------------------------
+@@ -15,11 +16,11 @@
+ abstract_class IScreenshotCallback
+ {
+ public:
+-	virtual bool Screenshot( int nWidth, int nHeight, int nImageFormat, uint8 *pPixels, int nSize, int64 nContext ) = 0;
++	virtual bool Screenshot( int nWidth, int nHeight, ImageFormat nImageFormat, uint8 *pPixels, int nSize, int64 nContext ) = 0;
+ 	virtual bool ScreenshotJPEG( int nWidth, int nHeight, void *pData, int nSize, void *pContext ) = 0;
+ 	virtual bool ScreenshotPNG( int nWidth, int nHeight, void *pData, int nSize, void *pContext ) = 0;
+ 	// Returning false lets the engine go on to make the screenshot from these pixels
+-	virtual bool Screenshot_GPUFrame( uint32 nWidth, uint32 nHeight, int nImageFormat, const uint8 *pPixels, size_t nPitch, int64 nContext, uint32 ) = 0;
++	virtual bool Screenshot_GPUFrame( uint32 nWidth, uint32 nHeight, ImageFormat nImageFormat, const uint8 *pPixels, size_t nPitch, int64 nContext, uint32 ) = 0;
+ 	virtual bool IsDoneWithData( void *pContext ) = 0;
+ };
+ 

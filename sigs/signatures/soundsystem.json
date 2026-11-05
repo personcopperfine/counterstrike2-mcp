@@ -1,0 +1,1945 @@
+{
+ "module": "soundsystem.dll",
+ "image_base": 6442450944,
+ "builds": {
+  "2000921": {
+   "sha256": "0a0c30cab0942f7d",
+   "timestamp": 1790794770
+  },
+  "2000930": {
+   "sha256": "4517ee246256f972",
+   "timestamp": 1791491979
+  },
+  "2000933": {
+   "sha256": "4de8a596efcca261",
+   "timestamp": 1792003390
+  },
+  "2000940": {
+   "sha256": "2260047a6db739b6",
+   "timestamp": 1793662593
+  }
+ },
+ "entries": {
+  "sub_1800049C0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 4C 8D 0D ?? ?? ?? ?? 48 89 44 24 20 41 B8 82 40 10 00"
+   },
+   "via": "soundsystem!0x1800049C0 (sub_1800049C0 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 18880,
+    "2000930": 18880,
+    "2000933": 18880,
+    "2000940": 18912
+   },
+   "status": "verified"
+  },
+  "sub_1800056F0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF",
+    "steps": [
+     {
+      "add": 11
+     }
+    ]
+   },
+   "via": "soundsystem!0x1800056F0 (sub_1800056F0 anchored on the preceding code, +0xB (no unique own bytes))",
+   "tag": "V",
+   "expect": {
+    "2000921": 22256,
+    "2000930": 22256,
+    "2000933": 22256,
+    "2000940": 22320
+   },
+   "status": "verified"
+  },
+  "sub_180006CC0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC",
+    "steps": [
+     {
+      "add": 9
+     }
+    ]
+   },
+   "via": "soundsystem!0x180006CC0 (sub_180006CC0 anchored on the preceding code, +0x9 (no unique own bytes))",
+   "tag": "V",
+   "expect": {
+    "2000921": 27840,
+    "2000930": 27840,
+    "2000933": 27840,
+    "2000940": 27904
+   },
+   "status": "verified"
+  },
+  "sub_18000CD50": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "soundsystem!0x18000CD50 (sub_18000CD50 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 52560,
+    "2000930": 52560,
+    "2000933": 52560,
+    "2000940": 52624
+   },
+   "status": "verified"
+  },
+  "sub_18000DB30": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??"
+   },
+   "via": "soundsystem!0x18000DB30 (sub_18000DB30 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 56112,
+    "2000930": 56112,
+    "2000933": 56112,
+    "2000940": 56176
+   },
+   "status": "verified"
+  },
+  "sub_18000DB50": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 07 00 00 00"
+   },
+   "via": "soundsystem!0x18000DB50 (sub_18000DB50 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 56144,
+    "2000930": 56144,
+    "2000933": 56144,
+    "2000940": 56208
+   },
+   "status": "verified"
+  },
+  "CSoundSystem_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 4C 8D 0D ?? ?? ?? ?? 48 89 44 24 20 41 B8 82 40 10 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x1800049C7 (sub_1800049C0 references CSoundSystem_CreateInterfaceFn (prologue not unique): lea     rdx, CSoundSystem_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 365824,
+    "2000930": 365824,
+    "2000933": 365824,
+    "2000940": 372448
+   },
+   "status": "verified"
+  },
+  "CSoundSystem::Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundSystem",
+    "slot": 3
+   },
+   "via": "soundsystem!0x180059C20 (CSoundSystem slot 3 -> CSoundSystem::Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 367648,
+    "2000930": 367648,
+    "2000933": 367648,
+    "2000940": 374464
+   },
+   "status": "verified"
+  },
+  "CSoundSystem::Init_site_EC": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "BA 76 6D 69 78 48 8B 01"
+   },
+   "via": "soundsystem!0x180059D0C (mov     edx, 78696D76h)",
+   "tag": "V",
+   "expect": {
+    "2000921": 367884,
+    "2000930": 367884,
+    "2000933": 367884
+   },
+   "status": "stale"
+  },
+  "sub_18005DDC0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundSystem",
+    "slot": 93
+   },
+   "via": "soundsystem!0x18005DDC0 (CSoundSystem slot 93 -> sub_18005DDC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 384448,
+    "2000930": 384448,
+    "2000933": 384448,
+    "2000940": 390064
+   },
+   "status": "verified"
+  },
+  "sub_18005DED0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundSystem",
+    "slot": 94
+   },
+   "via": "soundsystem!0x18005DED0 (CSoundSystem slot 94 -> sub_18005DED0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 384720,
+    "2000930": 384720,
+    "2000933": 384720,
+    "2000940": 390336
+   },
+   "status": "verified"
+  },
+  "sub_180061080_site_56": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 70 01 00 00"
+   },
+   "via": "soundsystem!0x1800610D6 (mov     rcx, cs:g_pSteamAudio)",
+   "tag": "V",
+   "expect": {
+    "2000921": 397526,
+    "2000930": 397526,
+    "2000933": 397526,
+    "2000940": 403158
+   },
+   "status": "verified"
+  },
+  "CDSPEditorWrapper::CDSPEditorWrapper": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 56 48 83 EC 20 48 8D 05 ?? ?? ?? ??"
+   },
+   "via": "soundsystem!0x18008EFA0 (CDSPEditorWrapper::CDSPEditorWrapper)",
+   "tag": "V",
+   "expect": {
+    "2000921": 585632,
+    "2000930": 585632,
+    "2000933": 585632,
+    "2000940": 577088
+   },
+   "status": "verified"
+  },
+  "CDSPEditorWrapper_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 8B 05 ?? ?? ?? ?? BA 08 00 00 00"
+   },
+   "via": "soundsystem!0x18008F550 (CDSPEditorWrapper_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 587088,
+    "2000930": 587088,
+    "2000933": 587088,
+    "2000940": 578544
+   },
+   "status": "verified"
+  },
+  "CSosEdit_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 30 48 8B 0D ?? ?? ?? ?? 48 8B DA C7 02 00 00 00 00"
+   },
+   "via": "soundsystem!0x1800B3C50 (CSosEdit_CreateInterfaceFn (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 736336,
+    "2000930": 736336,
+    "2000933": 736336,
+    "2000940": 719712
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioReverb": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSosOperatorSteamAudioReverb"
+   },
+   "via": "soundsystem!0x1804A6218 (??_7CSosOperatorSteamAudioReverb@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4874776,
+    "2000930": 4874776,
+    "2000933": 4874776,
+    "2000940": 4866272
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioReverb_CreateSource": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSosOperatorSteamAudioReverb",
+    "slot": 8
+   },
+   "via": "soundsystem!0x180182600 (CSosOperatorSteamAudioReverb slot 8 -> CSosOperatorSteamAudioReverb_CreateSource)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1582592,
+    "2000930": 1582592,
+    "2000933": 1582592,
+    "2000940": 1566624
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioReverb_ReleaseSource_site_6": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B FA 48 85 C9 0F 84 ?? ?? ?? ?? 48 8B 92 88 00 00 00"
+   },
+   "via": "soundsystem!0x180182656 (mov     rcx, cs:g_pSteamAudio)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1582678,
+    "2000930": 1582678,
+    "2000933": 1582678,
+    "2000940": 1566710
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioReverb_Execute": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSosOperatorSteamAudioReverb",
+    "slot": 9
+   },
+   "via": "soundsystem!0x180182700 (CSosOperatorSteamAudioReverb slot 9 -> CSosOperatorSteamAudioReverb_Execute)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1582848,
+    "2000930": 1582848,
+    "2000933": 1582848,
+    "2000940": 1566880
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSosOperatorSteamAudioCustomData"
+   },
+   "via": "soundsystem!0x1804A5F98 (??_7CSosOperatorSteamAudioCustomData@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4874136,
+    "2000930": 4874136,
+    "2000933": 4874136,
+    "2000940": 4865600
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData_Execute": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSosOperatorSteamAudioCustomData",
+    "slot": 9
+   },
+   "via": "soundsystem!0x180188170 (CSosOperatorSteamAudioCustomData slot 9 -> CSosOperatorSteamAudioCustomData_Execute)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1606000,
+    "2000930": 1606000,
+    "2000933": 1606000,
+    "2000940": 1590016
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData_Execute_site_B9": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF 92 F8 00 00 00 F3 0F 2C 43 30"
+   },
+   "via": "soundsystem!0x180188229 (call    qword ptr [r10+0F8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1606185,
+    "2000930": 1606185,
+    "2000933": 1606185,
+    "2000940": 1590201
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData_Execute_site_12E": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF 93 00 01 00 00 F3 0F 2C 43 34"
+   },
+   "via": "soundsystem!0x18018829E (call    qword ptr [r11+100h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1606302,
+    "2000930": 1606302,
+    "2000933": 1606302,
+    "2000940": 1590318
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData_Execute_site_160": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 08 01 00 00 48 8B 0D ?? ?? ?? ?? 48 8B 01"
+   },
+   "via": "soundsystem!0x1801882D0 (call    qword ptr [rax+108h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1606352,
+    "2000930": 1606352,
+    "2000933": 1606352,
+    "2000940": 1590368
+   },
+   "status": "verified"
+  },
+  "CSosOperatorSteamAudioCustomData_RemoveOcclusionVizEntry": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSosOperatorSteamAudioCustomData",
+    "slot": 2
+   },
+   "via": "soundsystem!0x1801883C0 (CSosOperatorSteamAudioCustomData slot 2 -> CSosOperatorSteamAudioCustomData_RemoveOcclusionVizEntry)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1606592,
+    "2000930": 1606592,
+    "2000933": 1606592,
+    "2000940": 1590608
+   },
+   "status": "verified"
+  },
+  "CSoundOpSystem_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8D 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000CD57 (sub_18000CD50 references CSoundOpSystem_CreateInterfaceFn (prologue not unique): lea     rdx, CSoundOpSystem_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1922048,
+    "2000930": 1922048,
+    "2000933": 1922048,
+    "2000940": 1906832
+   },
+   "status": "verified"
+  },
+  "CSoundOpSystem::Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundOpSystem",
+    "slot": 3
+   },
+   "via": "soundsystem!0x1801D5410 (CSoundOpSystem slot 3 -> CSoundOpSystem::Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1922064,
+    "2000930": 1922064,
+    "2000933": 1922064,
+    "2000940": 1906848
+   },
+   "status": "verified"
+  },
+  "sub_1801EA880": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundBugBugService",
+    "slot": 19
+   },
+   "via": "soundsystem!0x1801EA880 (CSoundBugBugService slot 19 -> sub_1801EA880)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2009216,
+    "2000930": 2009216,
+    "2000933": 2009216,
+    "2000940": 1994384
+   },
+   "status": "verified"
+  },
+  "CSoundBugBugService_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000DB37 (sub_18000DB30 references CSoundBugBugService_CreateInterfaceFn (prologue not unique): lea     rdx, CSoundBugBugService_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2009728,
+    "2000930": 2009728,
+    "2000933": 2009728,
+    "2000940": 1994896
+   },
+   "status": "verified"
+  },
+  "sub_1801EAAA0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 56 48 83 EC 20 83 3A 00"
+   },
+   "via": "soundsystem!0x1801EAAA0 (sub_1801EAAA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2009760,
+    "2000930": 2009760,
+    "2000933": 2009760,
+    "2000940": 1994928
+   },
+   "status": "verified"
+  },
+  "S_UpdateVoicesPerFrame_site_98": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 48 8D 56 24"
+   },
+   "via": "soundsystem!0x1801EBC68 (mov     rcx, cs:g_pSteamAudio)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2014312,
+    "2000930": 2014312,
+    "2000933": 2014312,
+    "2000940": 1999896
+   },
+   "status": "verified"
+  },
+  "sub_18000DB50_site_1F90B0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 01 48 8B C1"
+   },
+   "via": "soundsystem!0x180206C00 (mov     rax, cs:qword_180553EA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2124800,
+    "2000930": 2124800,
+    "2000933": 2124800,
+    "2000940": 2110656
+   },
+   "status": "verified"
+  },
+  "sub_1800049C0_site_3B5790": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "soundsystem!0x1803BA150 (mov     [rcx+8], r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3907920,
+    "2000930": 3907920,
+    "2000933": 3907920,
+    "2000940": 3899888
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "soundsystem!0x1803BA170 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3907952,
+    "2000930": 3907952,
+    "2000933": 3907952,
+    "2000940": 3899920
+   },
+   "status": "verified"
+  },
+  "sub_1803F6620": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8B 15 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 33 DB 48 89 05 ?? ?? ?? ?? 8B 05 ?? ?? ?? ?? 89 1D ?? ?? ?? ?? A9 00 00 00 C0 75 ?? 48 85 D2 74 ?? 48 8B 05 ?? ?? ?? ?? 48 8B 08 48 8B 01 FF 50 18 8B 05 ?? ?? ?? ?? 8B D3 48 89 1D ?? ?? ?? ?? 89 1D ?? ?? ?? ?? A9 00 00 00 C0 75 ?? 48 85 D2 74 ?? 48 8B 05 ?? ?? ?? ?? 48 8B 08 48 8B 01 FF 50 18 48 89 1D ?? ?? ?? ?? 89 1D ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ??"
+   },
+   "via": "soundsystem!0x1803F6620 (sub_1803F6620)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4154912,
+    "2000930": 4154912,
+    "2000933": 4154912,
+    "2000940": 4146864
+   },
+   "status": "verified"
+  },
+  "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "?$_Func_impl_no_alloc@V<lambda_2>@?1??BindInstanceParams@CVoiceContainerParameterBlender@@UEAAXAEBUVoiceParamNamespace_t@@AEAV?$CUtlVector@V?$unique_ptr@VCParameterBase@CVoiceContainerBase@@U?$default_delete@VCParameterBase@CVoiceContainerBase@@@std@@@std@@HV?$CUtlVectorMemory_Growable@V?$unique_ptr@VCParameterBase@CVoiceContainerBase@@U?$default_delete@VCParameterBase@CVoiceContainerBase@@@std@@@std@@H$0A@@@@@@Z@XPEAVCParameterBlendInstance@@AEBM@std"
+   },
+   "via": "soundsystem!0x18047C260 (??_7?$_Func_impl_no_alloc@V_lambda_2_@?1??BindInstanceParams@CVoiceContainerParameterBlender@@UEAAXAEBUVoiceParamNamespace_t@@AEAV?$CUtlVector@V?$unique_ptr@VCParameterBase@CVoiceContainerBase@@U?$default_delete@VCParameterBase@CVoiceContainerBase@@@std@@@std@@HV?$CUtlVectorMemory_Growable@V?$unique_ptr@VCParameterBase@CVoiceContainerBase@@U?$default_delete@VCParameterBase@CVoiceContainerBase@@@std@@@std@@H$0A@@@@@@Z@XPEAVCParameterBlendInstance@@AEBM@std@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4702816,
+    "2000930": 4702816,
+    "2000933": 4702816,
+    "2000940": 4695392
+   },
+   "status": "verified"
+  },
+  "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std_slot_42": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std",
+    "steps": [
+     {
+      "add": 336
+     }
+    ]
+   },
+   "via": "soundsystem!0x18047C3B0 (___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std + 0x150 (slot 42))",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4703152,
+    "2000930": 4703152,
+    "2000933": 4703152,
+    "2000940": 4695728
+   },
+   "status": "verified"
+  },
+  "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std_slot_44": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std",
+    "steps": [
+     {
+      "add": 352
+     }
+    ]
+   },
+   "via": "soundsystem!0x18047C3C0 (___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std + 0x160 (slot 44))",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4703168,
+    "2000930": 4703168,
+    "2000933": 4703168,
+    "2000940": 4695744
+   },
+   "status": "verified"
+  },
+  "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std_slot_46": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std",
+    "steps": [
+     {
+      "add": 368
+     }
+    ]
+   },
+   "via": "soundsystem!0x18047C3D0 (___Func_impl_no_alloc_V<lambda_2>__1__BindInstanceParams_CVoiceContainerParameterBlender__UEAAXAEBUVoiceParamNamespace_t__AEAV__CUtlVector_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__HV__CUtlVectorMemory_Growable_V__unique_ptr_VCParameterBase_CVoiceContainerBase__U__default_delete_VCParameterBase_CVoiceContainerBase___std___std__H_0A______Z_XPEAVCParameterBlendInstance__AEBM_std + 0x170 (slot 46))",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4703184,
+    "2000930": 4703184,
+    "2000933": 4703184,
+    "2000940": 4695760
+   },
+   "status": "verified"
+  },
+  "str_SoundSystem001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "SoundSystem001"
+   },
+   "via": "soundsystem!0x180493280 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 4797056,
+    "2000930": 4797056,
+    "2000933": 4797056,
+    "2000940": 4789664
+   },
+   "status": "verified"
+  },
+  "off_1804935A8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 83 EC 28 48 89 15 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "soundsystem!0x180535350 (pointer to off_1804935A8 stored in g_SoundSystem+0x0; soundsystem!0x180059500 (CSoundSystem_CreateInterfaceFn reads g_SoundSystem))",
+   "tag": "V",
+   "expect": {
+    "2000921": 4797864,
+    "2000930": 4797864,
+    "2000933": 4797864
+   },
+   "status": "stale"
+  },
+  "str_VMixEditTool001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "VMixEditTool001"
+   },
+   "via": "soundsystem!0x180495910 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 4806928,
+    "2000930": 4806928,
+    "2000933": 4806928,
+    "2000940": 4798680
+   },
+   "status": "verified"
+  },
+  "CDSPEditorWrapper": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CDSPEditorWrapper"
+   },
+   "via": "soundsystem!0x180495928 (??_7CDSPEditorWrapper@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4806952,
+    "2000930": 4806952,
+    "2000933": 4806952,
+    "2000940": 4798728
+   },
+   "status": "verified"
+  },
+  "CDSPEditor": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CDSPEditor"
+   },
+   "via": "soundsystem!0x180495A20 (??_7CDSPEditor@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4807200,
+    "2000930": 4807200,
+    "2000933": 4807200,
+    "2000940": 4798976
+   },
+   "status": "verified"
+  },
+  "IVMixToolServices": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "IVMixToolServices"
+   },
+   "via": "soundsystem!0x180495B18 (??_7IVMixToolServices@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4807448,
+    "2000930": 4807448,
+    "2000933": 4807448,
+    "2000940": 4799224
+   },
+   "status": "verified"
+  },
+  "str_SoundOpSystemEdit001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "SoundOpSystemEdit001"
+   },
+   "via": "soundsystem!0x180498250 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 4817488,
+    "2000930": 4817488,
+    "2000933": 4817488,
+    "2000940": 4808928
+   },
+   "status": "verified"
+  },
+  "off_180498368": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 30 48 8B 0D ?? ?? ?? ?? 48 8B DA C7 02 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "soundsystem!0x1805359A0 (pointer to off_180498368 stored in g_SosEdit+0x0; soundsystem!0x1800B3C50 (CSosEdit_CreateInterfaceFn reads g_SosEdit))",
+   "tag": "V",
+   "expect": {
+    "2000921": 4817768,
+    "2000930": 4817768,
+    "2000933": 4817768,
+    "2000940": 4809208
+   },
+   "status": "verified"
+  },
+  "str_SoundOpSystem001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "SoundOpSystem001"
+   },
+   "via": "soundsystem!0x1804ACCE8 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 4902120,
+    "2000930": 4902120,
+    "2000933": 4902120,
+    "2000940": 4893344
+   },
+   "status": "verified"
+  },
+  "off_1804AD140": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 57 48 83 EC 30 FF 41 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "soundsystem!0x180535A90 (pointer to off_1804AD140 stored in g_SoundOpSystem+0x0; soundsystem!0x1801D5400 (CSoundOpSystem_CreateInterfaceFn reads g_SoundOpSystem))",
+   "tag": "V",
+   "expect": {
+    "2000921": 4903232,
+    "2000930": 4903232,
+    "2000933": 4903232,
+    "2000940": 4895816
+   },
+   "status": "verified"
+  },
+  "str_SoundBugBugService001_Client": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "SoundBugBugService001_Client"
+   },
+   "via": "soundsystem!0x1804AFDE0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 4914656,
+    "2000930": 4914656,
+    "2000933": 4914656,
+    "2000940": 4905920
+   },
+   "status": "verified"
+  },
+  "off_1804B0318": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 07 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "soundsystem!0x180535BB0 (pointer to off_1804B0318 stored in g_SoundBugBugService+0x0; soundsystem!0x18000DB50 (sub_18000DB50 reads g_SoundBugBugService))",
+   "tag": "V",
+   "expect": {
+    "2000921": 4915992,
+    "2000930": 4915992,
+    "2000933": 4915992,
+    "2000940": 4907352
+   },
+   "status": "verified"
+  },
+  "off_1804B3728": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? C3 CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "soundsystem!0x180535BF8 (pointer to off_1804B3728 stored in off_180535BF8+0x0; soundsystem!0x18000E22E (sub_18000E220 reads off_180535BF8))",
+   "tag": "V",
+   "expect": {
+    "2000921": 4929320,
+    "2000930": 4929320,
+    "2000933": 4929320,
+    "2000940": 4920680
+   },
+   "status": "verified"
+  },
+  "CSoundSystem::col_28": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundSystem",
+    "col_offset": 40
+   },
+   "via": "soundsystem!0x180493598 (off_180493598 secondary vtable, mdisp +0x28)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4797848,
+    "2000930": 4797848,
+    "2000933": 4797848,
+    "2000940": 4790456
+   },
+   "status": "verified"
+  },
+  "___R4CSoundSystem__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundSystem::col_28",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D2878 (??_R4CSoundSystem@@6B@ via CSoundSystem::col_28)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5056632,
+    "2000930": 5056632,
+    "2000933": 5056632,
+    "2000940": 5048056
+   },
+   "status": "verified"
+  },
+  "CSoundSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundSystem"
+   },
+   "via": "soundsystem!0x1804935A8 (off_1804935A8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4797864,
+    "2000930": 4797864,
+    "2000933": 4797864,
+    "2000940": 4790472
+   },
+   "status": "verified"
+  },
+  "___R4CSoundSystem__6B__0": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundSystem",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D28A0 (??_R4CSoundSystem@@6B@_0 via CSoundSystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5056672,
+    "2000930": 5056672,
+    "2000933": 5056672,
+    "2000940": 5048096
+   },
+   "status": "verified"
+  },
+  "___R4CDSPEditorWrapper__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CDSPEditorWrapper",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D3640 (??_R4CDSPEditorWrapper@@6B@ via CDSPEditorWrapper)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5060160,
+    "2000930": 5060160,
+    "2000933": 5060160,
+    "2000940": 5051056
+   },
+   "status": "verified"
+  },
+  "___R4CDSPEditor__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CDSPEditor",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D3668 (??_R4CDSPEditor@@6B@ via CDSPEditor)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5060200,
+    "2000930": 5060200,
+    "2000933": 5060200,
+    "2000940": 5051016
+   },
+   "status": "verified"
+  },
+  "___R4IVMixToolServices__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "IVMixToolServices",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D3690 (??_R4IVMixToolServices@@6B@ via IVMixToolServices)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5060240,
+    "2000930": 5060240,
+    "2000933": 5060240,
+    "2000940": 5051096
+   },
+   "status": "verified"
+  },
+  "CSosEdit": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSosEdit"
+   },
+   "via": "soundsystem!0x180498368 (off_180498368)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4817768,
+    "2000930": 4817768,
+    "2000933": 4817768,
+    "2000940": 4809208
+   },
+   "status": "verified"
+  },
+  "___R4CSosEdit__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSosEdit",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804D4438 (??_R4CSosEdit@@6B@ via CSosEdit)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5063736,
+    "2000930": 5063736,
+    "2000933": 5063736,
+    "2000940": 5054800
+   },
+   "status": "verified"
+  },
+  "CSoundOpSystem::col_8": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundOpSystem",
+    "col_offset": 8
+   },
+   "via": "soundsystem!0x1804AD748 (off_1804AD748 secondary vtable, mdisp +0x8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4904776,
+    "2000930": 4904776,
+    "2000933": 4904776,
+    "2000940": 4895304
+   },
+   "status": "verified"
+  },
+  "___R4CSoundOpSystem__6B__0": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundOpSystem::col_8",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DCC28 (??_R4CSoundOpSystem@@6B@_0 via CSoundOpSystem::col_8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5098536,
+    "2000930": 5098536,
+    "2000933": 5098536,
+    "2000940": 5089592
+   },
+   "status": "verified"
+  },
+  "CSoundOpSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundOpSystem"
+   },
+   "via": "soundsystem!0x1804AD140 (off_1804AD140)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4903232,
+    "2000930": 4903232,
+    "2000933": 4903232,
+    "2000940": 4895816
+   },
+   "status": "verified"
+  },
+  "___R4CSoundOpSystem__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundOpSystem",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DCC50 (??_R4CSoundOpSystem@@6B@ via CSoundOpSystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5098576,
+    "2000930": 5098576,
+    "2000933": 5098576,
+    "2000940": 5089632
+   },
+   "status": "verified"
+  },
+  "CSoundEventManager": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundEventManager"
+   },
+   "via": "soundsystem!0x1804AD480 (off_1804AD480)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4904064,
+    "2000930": 4904064,
+    "2000933": 4904064,
+    "2000940": 4894792
+   },
+   "status": "verified"
+  },
+  "___R4CSoundEventManager__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundEventManager",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DCCF0 (??_R4CSoundEventManager@@6B@ via CSoundEventManager)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5098736,
+    "2000930": 5098736,
+    "2000933": 5098736,
+    "2000940": 5089792
+   },
+   "status": "verified"
+  },
+  "CSoundBugBugService": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundBugBugService"
+   },
+   "via": "soundsystem!0x1804B0318 (off_1804B0318)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4915992,
+    "2000930": 4915992,
+    "2000933": 4915992,
+    "2000940": 4907352
+   },
+   "status": "verified"
+  },
+  "___R3CSoundBugBugService__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundBugBugService",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DD7A8 (??_R3CSoundBugBugService@@8 via CSoundBugBugService)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5101480,
+    "2000930": 5101480,
+    "2000933": 5101480,
+    "2000940": 5092536
+   },
+   "status": "verified"
+  },
+  "___R4CSoundBugBugService__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSoundBugBugService",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DD850 (??_R4CSoundBugBugService@@6B@ via CSoundBugBugService)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5101648,
+    "2000930": 5101648,
+    "2000933": 5101648,
+    "2000940": 5092624
+   },
+   "status": "verified"
+  },
+  "CSchemaRegistration_soundsystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaRegistration_soundsystem"
+   },
+   "via": "soundsystem!0x1804B3728 (off_1804B3728)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 4929320,
+    "2000930": 4929320,
+    "2000933": 4929320,
+    "2000940": 4920680
+   },
+   "status": "verified"
+  },
+  "___R4CSchemaRegistration_soundsystem__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSchemaRegistration_soundsystem",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804DE050 (??_R4CSchemaRegistration_soundsystem@@6B@ via CSchemaRegistration_soundsystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5103696,
+    "2000930": 5103696,
+    "2000933": 5103696,
+    "2000940": 5094752
+   },
+   "status": "verified"
+  },
+  "g_SoundSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 83 EC 28 48 89 15 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x180059500 (CSoundSystem_CreateInterfaceFn reads g_SoundSystem)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5460816,
+    "2000930": 5460816,
+    "2000933": 5460816
+   },
+   "status": "stale"
+  },
+  "g_SosEdit": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 30 48 8B 0D ?? ?? ?? ?? 48 8B DA C7 02 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x1800B3C50 (CSosEdit_CreateInterfaceFn reads g_SosEdit)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5462432,
+    "2000930": 5462432,
+    "2000933": 5462432,
+    "2000940": 5450288
+   },
+   "status": "verified"
+  },
+  "g_SoundOpSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 57 48 83 EC 30 FF 41 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801D5400 (CSoundOpSystem_CreateInterfaceFn reads g_SoundOpSystem)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5462672,
+    "2000930": 5462672,
+    "2000933": 5462672,
+    "2000940": 5450528
+   },
+   "status": "verified"
+  },
+  "g_SoundBugBugService": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 07 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000DB50 (sub_18000DB50 reads g_SoundBugBugService)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5462960,
+    "2000930": 5462960,
+    "2000933": 5462960,
+    "2000940": 5450816
+   },
+   "status": "verified"
+  },
+  "g_pSteamAudio": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 3D ?? ?? ?? ?? 00 49 8B F8",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 8
+     }
+    ]
+   },
+   "via": "soundsystem!0x18005DDD3 (sub_18005DDC0 reads g_pSteamAudio)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6268760,
+    "2000930": 6268760,
+    "2000933": 6268760,
+    "2000940": 6256472
+   },
+   "status": "verified"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x1803BA157 (sub_1800049C0 reads s_pInterfaceRegs)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6271280,
+    "2000930": 6271280,
+    "2000933": 6271280,
+    "2000940": 6258992
+   },
+   "status": "verified"
+  },
+  "unk_18064A110": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 4C 8D 0D ?? ?? ?? ?? 48 89 44 24 20 41 B8 82 40 10 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x1800049CE (sub_1800049C0 reads unk_18064A110)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6594832,
+    "2000930": 6594832,
+    "2000933": 6594832,
+    "2000940": 6582560
+   },
+   "status": "verified"
+  },
+  "g_pSosOperatorSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 4C 8D 44 24 40",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x180009FC6 (sub_180009F60 reads g_pSosOperatorSystem)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6643288,
+    "2000930": 6643288,
+    "2000933": 6643288,
+    "2000940": 6631024
+   },
+   "status": "verified"
+  },
+  "unk_180655FE8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8D 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000CD5E (sub_18000CD50 reads unk_180655FE8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6643688,
+    "2000930": 6643688,
+    "2000933": 6643688,
+    "2000940": 6631424
+   },
+   "status": "verified"
+  },
+  "unk_180656130": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000DB3E (sub_18000DB30 reads unk_180656130)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6644016,
+    "2000930": 6644016,
+    "2000933": 6644016,
+    "2000940": 6631752
+   },
+   "status": "verified"
+  },
+  "unk_180656148": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 07 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x18000DB5E (sub_18000DB50 reads unk_180656148)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6644040,
+    "2000930": 6644040,
+    "2000933": 6644040,
+    "2000940": 6631776
+   },
+   "status": "verified"
+  },
+  "g_SosOperatorStackCollection": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 4C 8D 44 24 40",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "soundsystem!0x180009FB8 (sub_180009F60 reads g_SosOperatorStackCollection)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6652064,
+    "2000930": 6652064,
+    "2000933": 6652064,
+    "2000940": 6639824
+   },
+   "status": "verified"
+  },
+  "SNV_SOUNDOPSYSTEM_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundOpSystem"
+   },
+   "via": "soundsystem!0x1804AD418 region (??_7CSoundOpSystem@@6B@ primary, 103 slots; singleton g_SoundOpSystem = CreateInterface(\"SoundOpSystem001\"))",
+   "tag": "RTTI",
+   "bridge": "SNV_SOUNDOPSYSTEM_VT",
+   "expect": {
+    "2000930": 4903232,
+    "2000933": 4903232,
+    "2000940": 4895816
+   }
+  },
+  "SNV_SOUNDEVENTMGR_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundOpSystem",
+    "col_offset": 8
+   },
+   "via": "soundsystem!0x1804AD748 (ISoundEventManager base vptr of CSoundOpSystem at +0x08, 63 slots)",
+   "tag": "RTTI",
+   "bridge": "SNV_SOUNDEVENTMGR_VT",
+   "expect": {
+    "2000930": 4904776,
+    "2000933": 4904776,
+    "2000940": 4895304
+   }
+  },
+  "SNVS_SOS_START_WITH_PARAMS": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 11
+   },
+   "via": "soundsystem!0x1801D5960 (ISoundOpSystem slot 11 StartSoundEventWithParams(SoundEventGuid_t* out, const SosStartParams_t*); client.dll sub_1803AE8B0 (GE_SosStartSoundEvent handler) calls it via the interface)",
+   "tag": "V",
+   "bridge": "SNVS_SOS_START_WITH_PARAMS",
+   "sdk": "S2_SLOT_ISoundOpSystem_StartSoundEvent_2",
+   "notes": "ISoundOpSystem::StartSoundEventWithParams",
+   "expect": {
+    "2000930": 1923424,
+    "2000933": 1923424,
+    "2000940": 1908208
+   }
+  },
+  "SNVS_SOS_START_BY_NAME": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 12
+   },
+   "via": "soundsystem!0x1801D5980 (ISoundOpSystem slot 12 StartSoundEventByNameWithParams(out, name, params))",
+   "tag": "V",
+   "bridge": "SNVS_SOS_START_BY_NAME",
+   "sdk": "S2_SLOT_ISoundOpSystem_StartSoundEvent_1",
+   "notes": "ISoundOpSystem::StartSoundEventByNameWithParams",
+   "expect": {
+    "2000930": 1923456,
+    "2000933": 1923456,
+    "2000940": 1908240
+   }
+  },
+  "SNVS_SOS_START": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 13
+   },
+   "via": "soundsystem!0x1801D5930 (ISoundOpSystem slot 13 StartSoundEvent(out, name, sourceEntityIndex, nLayer)); the 4th argument is the voice layer (RE: W reads a byte from the stack, L movzx ecx,cl)",
+   "tag": "V",
+   "bridge": "SNVS_SOS_START",
+   "sdk": "S2_SLOT_ISoundOpSystem_StartSoundEvent",
+   "notes": "ISoundOpSystem::StartSoundEvent( const char *, CEntityIndex, uint8 nLayer )",
+   "expect": {
+    "2000930": 1923376,
+    "2000933": 1923376,
+    "2000940": 1908160
+   }
+  },
+  "SNVS_SEM_GET_EVENT_NAME": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDEVENTMGR_VT",
+    "slot": 2
+   },
+   "via": "soundsystem!0x1801DE5F0 (ISoundEventManager slot 2 GetSoundEventName(hash) -> 0x18004A5B0; used for \"Start Sound Event: %s\")",
+   "tag": "V",
+   "bridge": "SNVS_SEM_GET_EVENT_NAME",
+   "sdk": "S2_SLOT_ISoundEventManager_GetSoundEventName",
+   "notes": "ISoundEventManager::GetSoundEventName(uint32 hash)",
+   "expect": {
+    "2000930": 1959408,
+    "2000933": 1959408,
+    "2000940": 1944544
+   }
+  },
+  "SNVS_SOS_ADD_LISTENER": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 81
+   },
+   "via": "soundsystem!0x1801DE7C0 -> 0x1801C8C20 CSosOperatorSystem_AddSoundEventListener(l): under the sos lock appends l (unique) to the listener vector sos+0x2518/+0x2520",
+   "tag": "V",
+   "bridge": "SNVS_SOS_ADD_LISTENER",
+   "sdk": "S2_SLOT_ISoundOpSystem_AddSoundEventListener",
+   "notes": "ISoundOpSystem slot 81 add sound-event listener (object with >= 6 virtual slots; see research/game-state.md)",
+   "expect": {
+    "2000930": 1959872,
+    "2000933": 1959872,
+    "2000940": 1945008
+   }
+  },
+  "SNVS_SOS_REMOVE_LISTENER": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 82
+   },
+   "via": "soundsystem!0x1801DE6C0: removes the pointer from the listener vector under the sos lock",
+   "tag": "V",
+   "bridge": "SNVS_SOS_REMOVE_LISTENER",
+   "sdk": "S2_SLOT_ISoundOpSystem_RemoveSoundEventListener",
+   "notes": "ISoundOpSystem slot 82 remove sound-event listener",
+   "expect": {
+    "2000930": 1959616,
+    "2000933": 1959616,
+    "2000940": 1944752
+   }
+  },
+  "SNVS_SOS_NAME_BY_GUID": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 68
+   },
+   "via": "soundsystem!0x1801DE800 CSoundOpSystem::GetSoundEventNameByGuid: active list (sos+0x23F8) entry +0xC hash -> ISoundEventManager slot 2",
+   "tag": "V",
+   "bridge": "SNVS_SOS_NAME_BY_GUID",
+   "sdk": "S2_SLOT_ISoundOpSystem_GetActiveSoundEventName",
+   "notes": "ISoundOpSystem slot 68 GetSoundEventNameByGuid (0 when the instance is no longer active)",
+   "expect": {
+    "2000930": 1959936,
+    "2000933": 1959936,
+    "2000940": 1945072
+   }
+  },
+  "SNVS_SOS_INST_INT150": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT",
+    "slot": 86
+   },
+   "via": "soundsystem!0x1801D6200: int* (int* out, guid) = active instance +0x150, -1 when not active (meaning unverified; candidate source entity index)",
+   "tag": "V",
+   "bridge": "SNVS_SOS_INST_INT150",
+   "sdk": "S2_SLOT_ISoundOpSystem_GetSoundEventSourceEntity",
+   "notes": "ISoundOpSystem slot 86 instance int +0x150 by guid [?]",
+   "expect": {
+    "2000930": 1925632,
+    "2000933": 1925632,
+    "2000940": 1910416
+   }
+  },
+  "SNC_SOS_VT_SLOTS": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT"
+   },
+   "via": "soundsystem!0x1804AD140 (??_7CSoundOpSystem@@6B@ primary vftable: 103 .text slot pointers from the first slot to the next COL pointer; mcp_bridge_game.inc:794)",
+   "tag": "V",
+   "expect": {
+    "2000930": 103,
+    "2000933": 103,
+    "2000940": 103
+   },
+   "status": "verified",
+   "bridge": "SNC_SOS_VT_SLOTS",
+   "notes": "CSoundOpSystem (concrete) vftable length, measured from its RTTI COL; sizes g_sosVtCopy. Not an SDK number: the interface ISoundOpSystem has 101 slots and the concrete class adds 2 (sdkcheck rule ==+2), and declaring the concrete class is not upstream material."
+  },
+  "SNVS_LISTENER_ON_START": {
+   "kind": "const",
+   "sdk": "S2_SLOT_ISoundEventListener_OnSoundEventStarted",
+   "via": "bridge/mcp_bridge_game.inc:894 (listener slot 5 (self, guid, aux0, aux1) called after every successful StartSoundEvent_Internal, soundsystem!0x1801C5D90 / 0x1801E1F80)",
+   "tag": "V",
+   "expect": {
+    "2000930": 5,
+    "2000933": 5,
+    "2000940": 5
+   },
+   "status": "verified",
+   "notes": "slot in the bridge-owned listener vtable the game calls for a started sound event; not pinned (the bridge fills it itself)",
+   "value": 5
+  },
+  "SNOFF_SOS_EVENTMGR_BASE": {
+   "kind": "offset",
+   "sdk": "S2_BASEOFF_ISoundOpSystem_ISoundEventManager",
+   "locator": {
+    "type": "base",
+    "base": "SNV_SOUNDEVENTMGR_VT",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "disp": 4,
+      "size": 4
+     }
+    ]
+   },
+   "via": "soundsystem!0x1804AD748 (COL of ??_7CSoundOpSystem@@6B@+8 at vt-8; the COL's own offset field (+4) is 8 - CSoundOpSystem's ISoundEventManager subobject sits at +0x08 of the object; mcp_bridge_game.inc:819)",
+   "tag": "V",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   },
+   "status": "verified"
+  },
+  "SNOFF_SEP_HASH": {
+   "kind": "offset",
+   "sdk": "S2_OFF_SosStartSoundEventParams_t_m_nSoundEventHash",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 43 ?? 89 87 AC 00 00 00 8B 43 ?? 89 87 B0 00 00 00 0F B6 43 ?? 88 87 ?? 00 00 00",
+    "steps": [
+     {
+      "disp": 2,
+      "size": 1
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801C5BFE (sub_1801C5B70, the target of SNVS_SOS_START_WITH_PARAMS (ISoundOpSystem slot 11): copies SosStartParams_t out into the internal sound-event object - hash <- [rbx+10h], entindex <- [rbx+14h], layer <- [rbx+22h] (SosStartSoundEventParams_t::m_nLayer, the voice layer; the pin name says FLAGS); mcp_bridge_game.inc:844,851-852). 2000940: the same block at soundsystem!0x1801C20BE in sub_1801C2030; Valve inserted a dword at +1Ch (m_unk201, copied to internal +0BCh), so layer is [rbx+26h] -> internal +0CAh; the internal destination byte is masked since 2000940",
+   "tag": "V",
+   "expect": {
+    "2000930": 16,
+    "2000933": 16,
+    "2000940": 16
+   },
+   "status": "verified",
+   "notes": "direct sig on the field-copy block in the StartSoundEventWithParams implementation (SNVS_SOS_START_WITH_PARAMS); steps read the source displacement in each instruction. A base+check+disp chain off the pinned slot cannot reach inside a function: `steps` follow one pointer/add a constant, they do not scan code."
+  },
+  "SNOFF_SEP_ENTINDEX": {
+   "kind": "offset",
+   "sdk": "S2_OFF_SosStartSoundEventParams_t_m_SourceEntity",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 43 ?? 89 87 AC 00 00 00 8B 43 ?? 89 87 B0 00 00 00 0F B6 43 ?? 88 87 ?? 00 00 00",
+    "steps": [
+     {
+      "disp": 11,
+      "size": 1
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801C5BFE (sub_1801C5B70, the target of SNVS_SOS_START_WITH_PARAMS (ISoundOpSystem slot 11): copies SosStartParams_t out into the internal sound-event object - hash <- [rbx+10h], entindex <- [rbx+14h], layer <- [rbx+22h] (SosStartSoundEventParams_t::m_nLayer, the voice layer; the pin name says FLAGS); mcp_bridge_game.inc:844,851-852). 2000940: the same block at soundsystem!0x1801C20BE in sub_1801C2030; Valve inserted a dword at +1Ch (m_unk201, copied to internal +0BCh), so layer is [rbx+26h] -> internal +0CAh; the internal destination byte is masked since 2000940",
+   "tag": "V",
+   "expect": {
+    "2000930": 20,
+    "2000933": 20,
+    "2000940": 20
+   },
+   "status": "verified",
+   "notes": "direct sig on the field-copy block in the StartSoundEventWithParams implementation (SNVS_SOS_START_WITH_PARAMS); steps read the source displacement in each instruction. A base+check+disp chain off the pinned slot cannot reach inside a function: `steps` follow one pointer/add a constant, they do not scan code."
+  },
+  "SNOFF_SEP_FLAGS": {
+   "kind": "offset",
+   "sdk": "S2_OFF_SosStartSoundEventParams_t_m_nLayer",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 43 ?? 89 87 AC 00 00 00 8B 43 ?? 89 87 B0 00 00 00 0F B6 43 ?? 88 87 ?? 00 00 00",
+    "steps": [
+     {
+      "disp": 21,
+      "size": 1
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801C5BFE (sub_1801C5B70, the target of SNVS_SOS_START_WITH_PARAMS (ISoundOpSystem slot 11): copies SosStartParams_t out into the internal sound-event object - hash <- [rbx+10h], entindex <- [rbx+14h], layer <- [rbx+22h] (SosStartSoundEventParams_t::m_nLayer, the voice layer; the pin name says FLAGS); mcp_bridge_game.inc:844,851-852). 2000940: the same block at soundsystem!0x1801C20BE in sub_1801C2030; Valve inserted a dword at +1Ch (m_unk201, copied to internal +0BCh), so layer is [rbx+26h] -> internal +0CAh; the internal destination byte is masked since 2000940",
+   "tag": "V",
+   "expect": {
+    "2000930": 34,
+    "2000933": 34,
+    "2000940": 38
+   },
+   "status": "verified",
+   "notes": "direct sig on the field-copy block in the StartSoundEventWithParams implementation (SNVS_SOS_START_WITH_PARAMS); steps read the source displacement in each instruction. A base+check+disp chain off the pinned slot cannot reach inside a function: `steps` follow one pointer/add a constant, they do not scan code."
+  },
+  "SNOFF_SEP_PACKED_PTR": {
+   "kind": "offset",
+   "sdk": "S2_OFF_SosStartSoundEventParams_t_m_pFieldData",
+   "locator": {
+    "type": "sig",
+    "sig": "44 8B 43 ?? 45 85 C0 7E ?? 48 8B 53 ?? 48 8D 4F ?? E8",
+    "steps": [
+     {
+      "disp": 12,
+      "size": 1
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801C5C67 (CSosOperatorSystem::StartSoundEventWithParams, sub_1801C5B70 - the SNVS_SOS_START_WITH_PARAMS implementation: mov r8d,[rbx+1Ch]; test r8d,r8d; jle; mov rdx,[rbx+8]; lea rcx,[rdi+10h]; call sub_1801E0220 copies the packed params; this step reads the +8 in mov rdx,[rbx+8]. 2000940: sub_1801C2030 at 0x1801C2130 reads mov r8d,[rbx+20h] (m_nFieldDataSize moved +4 behind the new m_unk201 at +1Ch), mov rdx,[rbx+8] unchanged)",
+   "tag": "V",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   },
+   "status": "verified",
+   "notes": "SndStartEventParams' packed start-params pointer (the caller's packed field buffer, e.g. the server's 4dce7c5a 0a 0c00 <f32 x><f32 y><f32 z> position blob for a snd_event_*). Same copy block as SNOFF_SEP_HASH/ENTINDEX/FLAGS; a direct sig on the block, steps read the source displacement in each instruction."
+  },
+  "SNOFF_SEP_PACKED_LEN": {
+   "kind": "offset",
+   "sdk": "S2_OFF_SosStartSoundEventParams_t_m_nFieldDataSize",
+   "locator": {
+    "type": "sig",
+    "sig": "44 8B 43 ?? 45 85 C0 7E ?? 48 8B 53 ?? 48 8D 4F ?? E8",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "soundsystem!0x1801C5C67 (CSosOperatorSystem::StartSoundEventWithParams, sub_1801C5B70 - the SNVS_SOS_START_WITH_PARAMS implementation: mov r8d,[rbx+1Ch]; test r8d,r8d; jle; mov rdx,[rbx+8]; lea rcx,[rdi+10h]; call sub_1801E0220 copies the packed params; this step reads the +1Ch in mov r8d,[rbx+1Ch]. 2000940: sub_1801C2030 at 0x1801C2130 reads mov r8d,[rbx+20h] (m_nFieldDataSize moved +4 behind the new m_unk201 at +1Ch), mov rdx,[rbx+8] unchanged)",
+   "tag": "V",
+   "expect": {
+    "2000930": 28,
+    "2000933": 28,
+    "2000940": 32
+   },
+   "status": "verified",
+   "notes": "SndStartEventParams' packed start-params byte length (the jle guard means len <= 0 skips the copy). Same copy block as SNOFF_SEP_HASH/ENTINDEX/FLAGS; a direct sig on the block, steps read the source displacement in each instruction."
+  }
+ }
+}

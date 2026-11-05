@@ -1,0 +1,10 @@
+// Fixture: a class whose header cannot be parsed is skipped with a warning at its own line and
+@PointClass base(Targetname) broken = never_reached : "This class is never parsed."
+[
+	never(integer) : "Never" : 0
+]
+
+@PointClass base(Targetname) = still_parses : "This class comes after the broken one."
+[
+	works(integer) : "Works" : 0
+]

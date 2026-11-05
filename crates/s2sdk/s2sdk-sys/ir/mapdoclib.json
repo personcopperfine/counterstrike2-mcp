@@ -1,0 +1,5591 @@
+{
+  "enums": [],
+  "platforms": [
+    "windows"
+  ],
+  "records": [
+    {
+      "align": 1,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[8]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 8]",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "MapNodeUnk8_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 1,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[4]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 4]",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "MapNodeUnk4_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IToolRenderCallbacks",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IHitTestable",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "ITransformable",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IToolAttr_Table",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IMapNodeToolAttrRoot",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IRaytraceEnvironmentOwner",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CDmElement",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk011",
+          "offset": 152,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[4]",
+          "name": "m_unk012",
+          "offset": 156,
+          "rust_type": "[u8; 4]",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 152,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk012",
+            "offset": 156,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 160
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 152,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk012",
+            "offset": 156,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 160
+      },
+      "name": "CMapAtom",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 160
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapAtom",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_Origin",
+          "offset": 160,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "QAngle",
+          "name": "m_Angles",
+          "offset": 172,
+          "rust_type": "QAngle",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_Scales",
+          "offset": 184,
+          "rust_type": "Vector",
+          "size": 12
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Origin",
+            "offset": 160,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Angles",
+            "offset": 172,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Scales",
+            "offset": 184,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 200
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Origin",
+            "offset": 160,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Angles",
+            "offset": 172,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Scales",
+            "offset": 184,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 200
+      },
+      "name": "CMapPoint",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 200
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapPoint",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IUndoable",
+          "offset": 200,
+          "virtual": false
+        },
+        {
+          "name": "IToolRenderCallbacks",
+          "offset": 208,
+          "virtual": false
+        },
+        {
+          "name": "IHitTestable",
+          "offset": 216,
+          "virtual": false
+        },
+        {
+          "name": "ITransformable",
+          "offset": 224,
+          "virtual": false
+        },
+        {
+          "name": "IMapNodeToolAttrRoot",
+          "offset": 232,
+          "virtual": false
+        },
+        {
+          "name": "IToolAttrNotifyRoot",
+          "offset": 240,
+          "virtual": false
+        },
+        {
+          "name": "IRaytraceEnvironmentOwner",
+          "offset": 248,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[152]",
+          "name": "m_unk031",
+          "offset": 256,
+          "rust_type": "[u8; 152]",
+          "size": 152
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapNode *",
+          "name": "m_pParent",
+          "offset": 408,
+          "rust_type": "*mut CMapNode",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[88]",
+          "name": "m_unk131",
+          "offset": 416,
+          "rust_type": "[u8; 88]",
+          "size": 88
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<DmElementHandle_t>",
+          "name": "m_Children",
+          "offset": 504,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[8]",
+          "name": "m_unk231",
+          "offset": 528,
+          "rust_type": "[u8; 8]",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CDmAttribute *",
+          "name": "m_unk232",
+          "offset": 536,
+          "rust_type": "*mut CDmAttribute",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[632]",
+          "name": "m_unk233",
+          "offset": 544,
+          "rust_type": "[u8; 632]",
+          "size": 632
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapnode.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk031",
+            "offset": 256,
+            "size": 152
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pParent",
+            "offset": 408,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk131",
+            "offset": 416,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Children",
+            "offset": 504,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk231",
+            "offset": 528,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk232",
+            "offset": 536,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk233",
+            "offset": 544,
+            "size": 632
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1176
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk031",
+            "offset": 256,
+            "size": 152
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pParent",
+            "offset": 408,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk131",
+            "offset": 416,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Children",
+            "offset": 504,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk231",
+            "offset": 528,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk232",
+            "offset": 536,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk233",
+            "offset": 544,
+            "size": 632
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1176
+      },
+      "name": "CMapNode",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1176
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk002",
+          "offset": 8,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk003",
+          "offset": 16,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk004",
+          "offset": 24,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk005",
+          "offset": 32,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk006",
+          "offset": 40,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "KeyValues3",
+          "name": "m_unk007",
+          "offset": 48,
+          "rust_type": null,
+          "size": 16
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_unk008",
+          "offset": 64,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk009",
+          "offset": 68,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8",
+          "name": "m_unk0010",
+          "offset": 72,
+          "rust_type": "u8",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk0011",
+          "offset": 76,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk005",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk006",
+            "offset": 40,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk007",
+            "offset": 48,
+            "size": 16
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk008",
+            "offset": 64,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk009",
+            "offset": 68,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk0010",
+            "offset": 72,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk0011",
+            "offset": 76,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 80
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk005",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk006",
+            "offset": 40,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk007",
+            "offset": 48,
+            "size": 16
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk008",
+            "offset": 64,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk009",
+            "offset": 68,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk0010",
+            "offset": 72,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk0011",
+            "offset": 76,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 80
+      },
+      "name": "MapEntityConnection_t",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 80
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[12]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 12]",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nType",
+          "offset": 12,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[272]",
+          "name": "m_unk002",
+          "offset": 16,
+          "rust_type": "[u8; 272]",
+          "size": 272
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nType",
+            "offset": 12,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 16,
+            "size": 272
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 288
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nType",
+            "offset": 12,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 16,
+            "size": 272
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 288
+      },
+      "name": "FgdClass_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 288
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IVDataLookupListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapNode",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk041",
+          "offset": 1176,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<MapEntityConnection_t>",
+          "name": "m_Connections",
+          "offset": 1184,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[112]",
+          "name": "m_unk141",
+          "offset": 1208,
+          "rust_type": "[u8; 112]",
+          "size": 112
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk041",
+            "offset": 1176,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Connections",
+            "offset": 1184,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk141",
+            "offset": 1208,
+            "size": 112
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1320
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk041",
+            "offset": 1176,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Connections",
+            "offset": 1184,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk141",
+            "offset": 1208,
+            "size": 112
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1320
+      },
+      "name": "CMapEntityIONode",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1320
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapEntityIONode",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IVDataLookupListener",
+          "offset": 1320,
+          "virtual": false
+        },
+        {
+          "name": "IToolsResourceListener",
+          "offset": 1328,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[24]",
+          "name": "m_unk051",
+          "offset": 1336,
+          "rust_type": "[u8; 24]",
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "FgdClass_t *",
+          "name": "m_pGameDataClass",
+          "offset": 1360,
+          "rust_type": "*mut FgdClass_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[4808]",
+          "name": "m_unk151",
+          "offset": 1368,
+          "rust_type": "[u8; 4808]",
+          "size": 4808
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk051",
+            "offset": 1336,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pGameDataClass",
+            "offset": 1360,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk151",
+            "offset": 1368,
+            "size": 4808
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 6176
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk051",
+            "offset": 1336,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pGameDataClass",
+            "offset": 1360,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk151",
+            "offset": 1368,
+            "size": 4808
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 6176
+      },
+      "name": "CMapGameDataNode",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 6176
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapGameDataNode",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[56]",
+          "name": "m_unk061",
+          "offset": 6176,
+          "rust_type": "[u8; 56]",
+          "size": 56
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapentity.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk061",
+            "offset": 6176,
+            "size": 56
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 6232
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk061",
+            "offset": 6176,
+            "size": 56
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 6232
+      },
+      "name": "CMapEntity",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 6232
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapmesh.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IHammerMeshChangeListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapNode",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[14088]",
+          "name": "m_unk041",
+          "offset": 1176,
+          "rust_type": "[u8; 14088]",
+          "size": 14088
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapmesh.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk041",
+            "offset": 1176,
+            "size": 14088
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 15264
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk041",
+            "offset": 1176,
+            "size": 14088
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 15264
+      },
+      "name": "CMapMeshBase",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 15264
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CMapMeshBase",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IHammerMeshChangeListener",
+          "offset": 15264,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[152]",
+          "name": "m_unk051",
+          "offset": 15272,
+          "rust_type": "[u8; 152]",
+          "size": 152
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapmesh.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk051",
+            "offset": 15272,
+            "size": 152
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 15424
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk051",
+            "offset": 15272,
+            "size": 152
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 15424
+      },
+      "name": "CMapMesh",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 15424
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IMapFileReference",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IUndoDoc",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CUndoHistory",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapDocHistory *",
+          "name": "m_unk011",
+          "offset": 1200,
+          "rust_type": "*mut CMapDocHistory",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 1200,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1208
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 1200,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1208
+      },
+      "name": "CMapDocHistory",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1208
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CDmElement",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[232]",
+          "name": "m_unk011",
+          "offset": 152,
+          "rust_type": "[u8; 232]",
+          "size": 232
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "DmElementHandle_t",
+          "name": "m_hWorld",
+          "offset": 384,
+          "rust_type": "DmElementHandle_t",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[188]",
+          "name": "m_unk111",
+          "offset": 388,
+          "rust_type": "[u8; 188]",
+          "size": 188
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapDocHistory *",
+          "name": "m_pUndoHistory",
+          "offset": 576,
+          "rust_type": "*mut CMapDocHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapDocHistory *",
+          "name": "m_pRedoHistory",
+          "offset": 584,
+          "rust_type": "*mut CMapDocHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[16]",
+          "name": "m_unk211",
+          "offset": 592,
+          "rust_type": "[u8; 16]",
+          "size": 16
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 152,
+            "size": 232
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_hWorld",
+            "offset": 384,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk111",
+            "offset": 388,
+            "size": 188
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pUndoHistory",
+            "offset": 576,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRedoHistory",
+            "offset": 584,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk211",
+            "offset": 592,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 608
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk011",
+            "offset": 152,
+            "size": 232
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_hWorld",
+            "offset": 384,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk111",
+            "offset": 388,
+            "size": 188
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pUndoHistory",
+            "offset": 576,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRedoHistory",
+            "offset": 584,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk211",
+            "offset": 592,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 608
+      },
+      "name": "CMapRootElement",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 608
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IUndoable",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapDoc *",
+          "name": "m_pDoc",
+          "offset": 8,
+          "rust_type": "*mut CMapDoc",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<void *>",
+          "name": "m_Scopes",
+          "offset": 16,
+          "rust_type": null,
+          "size": 24
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Scopes",
+            "offset": 16,
+            "size": 24
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Scopes",
+            "offset": 16,
+            "size": 24
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "name": "CEditScopeStack",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 40
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IMapFileReference",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IUndoDoc",
+          "offset": 8,
+          "virtual": false
+        },
+        {
+          "name": "IUndoListener",
+          "offset": 16,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[96]",
+          "name": "m_unk001",
+          "offset": 24,
+          "rust_type": "[u8; 96]",
+          "size": 96
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapDocSession *",
+          "name": "m_pDocSession",
+          "offset": 120,
+          "rust_type": "*mut CMapDocSession",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapRootElement *",
+          "name": "m_pRoot",
+          "offset": 128,
+          "rust_type": "*mut CMapRootElement",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CMapNode *",
+          "name": "m_pWorld",
+          "offset": 136,
+          "rust_type": "*mut CMapNode",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[8]",
+          "name": "m_unk101",
+          "offset": 144,
+          "rust_type": "[u8; 8]",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CEditScopeStack",
+          "name": "m_EditScopeStack",
+          "offset": 152,
+          "rust_type": "CEditScopeStack",
+          "size": 40
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[88]",
+          "name": "m_unk201",
+          "offset": 192,
+          "rust_type": "[u8; 88]",
+          "size": 88
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_bActive",
+          "offset": 280,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSelection *",
+          "name": "m_pSelection",
+          "offset": 288,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[1400]",
+          "name": "m_unk301",
+          "offset": 296,
+          "rust_type": "[u8; 1400]",
+          "size": 1400
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_Path",
+          "offset": 1696,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[1576]",
+          "name": "m_unk401",
+          "offset": 1704,
+          "rust_type": "[u8; 1576]",
+          "size": 1576
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mapdoclib/mapdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 24,
+            "size": 96
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDocSession",
+            "offset": 120,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRoot",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pWorld",
+            "offset": 136,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 144,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_EditScopeStack",
+            "offset": 152,
+            "size": 40
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 192,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bActive",
+            "offset": 280,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pSelection",
+            "offset": 288,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk301",
+            "offset": 296,
+            "size": 1400
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Path",
+            "offset": 1696,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk401",
+            "offset": 1704,
+            "size": 1576
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 3280
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 24,
+            "size": 96
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDocSession",
+            "offset": 120,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRoot",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pWorld",
+            "offset": 136,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 144,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_EditScopeStack",
+            "offset": 152,
+            "size": 40
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 192,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bActive",
+            "offset": 280,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pSelection",
+            "offset": 288,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk301",
+            "offset": 296,
+            "size": 1400
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Path",
+            "offset": 1696,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk401",
+            "offset": 1704,
+            "size": 1576
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 3280
+      },
+      "name": "CMapDoc",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 3280
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IToolRenderCallbacks",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderCallbacks, arg0: f32)"
+        }
+      ],
+      "msvc": {
+        "length": 6,
+        "own_entries": 6
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IHitTestable",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk007",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk008",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHitTestable) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 8,
+        "own_entries": 8
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ITransformable",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void (int, int)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITransformable, arg0: i32, arg1: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITransformable)"
+        },
+        {
+          "cxx_signature": "ITransformationBaseline *()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITransformable) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ITransformationBaseline *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITransformable, arg0: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 4,
+        "own_entries": 4
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IMapNodeToolAttrRoot",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "CMapNode *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapNodeToolAttrRoot) -> *mut CMapNode"
+        }
+      ],
+      "msvc": {
+        "length": 12,
+        "own_entries": 1
+      },
+      "primary_base": "IToolAttr_Table",
+      "secondary_bases": []
+    },
+    {
+      "class": "IRaytraceEnvironmentOwner",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "Color ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner, ret: *mut Color) -> *mut Color",
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner) -> Color"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk007",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRaytraceEnvironmentOwner) -> i32"
+        }
+      ],
+      "msvc": {
+        "length": 7,
+        "own_entries": 7
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapAtom",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 15,
+          "name": "unk011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapAtom)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 16,
+          "name": "unk012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapAtom, arg0: i32)"
+        }
+      ],
+      "msvc": {
+        "length": 17,
+        "own_entries": 2
+      },
+      "primary_base": "CDmElement",
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapPoint",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "void (const Vector &)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 17,
+          "name": "SetOrigin",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, vecOrigin: *const Vector)"
+        },
+        {
+          "cxx_signature": "void (const QAngle &)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 18,
+          "name": "SetAngles",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, angAngles: *const QAngle)"
+        },
+        {
+          "cxx_signature": "void (const Vector &)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 19,
+          "name": "SetScales",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, vecScales: *const Vector)"
+        },
+        {
+          "cxx_signature": "void (matrix3x4_t &)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 20,
+          "name": "GetWorldTransform",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, matrix: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (matrix3x4_t &)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 21,
+          "name": "unk121",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (matrix3x4_t &)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 22,
+          "name": "unk122",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (matrix3x4_t &)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "unk123",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "unk124",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint)"
+        },
+        {
+          "cxx_signature": "void (const VMatrix &, bool)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "unk125",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, arg0: *mut ::core::ffi::c_void, arg1: bool)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "unk126",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 27,
+          "name": "unk127",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapPoint) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 28,
+        "own_entries": 11
+      },
+      "primary_base": "CMapAtom",
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapNode",
+      "header": "public/mapdoclib/mapnode.h",
+      "methods": [
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "unk031",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<IBaseToolAttr *> *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 29,
+          "name": "unk032",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 30,
+          "name": "unk033",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "void *(const char *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 31,
+          "name": "unk034",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 32,
+          "name": "unk035",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "unk036",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 34,
+          "name": "unk037",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 35,
+          "name": "unk038",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 36,
+          "name": "unk039",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 37,
+          "name": "unk0310",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 38,
+          "name": "unk0311",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 39,
+          "name": "unk0312",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (CUtlString *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 40,
+          "name": "unk0313",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CUtlString *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 41,
+          "name": "unk0314",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 42,
+          "name": "unk0315",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 43,
+          "name": "unk0316",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 44,
+          "name": "unk0317",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 45,
+          "name": "unk0318",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 46,
+          "name": "unk0319",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 47,
+          "name": "unk0320",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 48,
+          "name": "unk0321",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 49,
+          "name": "unk0322",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 50,
+          "name": "unk0323",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 51,
+          "name": "unk0324",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 52,
+          "name": "unk0325",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 53,
+          "name": "unk0326",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 54,
+          "name": "unk0327",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 55,
+          "name": "unk0328",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 56,
+          "name": "unk0329",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CMapNode *)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 57,
+          "name": "AddChild",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, pChild: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (CMapNode *, bool)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 58,
+          "name": "unk131",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CMapNode, arg1: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 59,
+          "name": "unk132",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CMapNode *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 60,
+          "name": "unk133",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CMapNode *)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 61,
+          "name": "unk134",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "int (CMapNode *)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 62,
+          "name": "unk135",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "void (CMapNode *)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 63,
+          "name": "SetParent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, pParent: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 64,
+          "name": "unk231",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 65,
+          "name": "unk232",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 66,
+          "name": "unk233",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 67,
+          "name": "unk234",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 68,
+          "name": "unk235",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: bool)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 69,
+          "name": "unk236",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 70,
+          "name": "unk237",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 71,
+          "name": "unk238",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 72,
+          "name": "unk239",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 73,
+          "name": "unk2310",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 74,
+          "name": "unk2311",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 75,
+          "name": "unk2312",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 76,
+          "name": "unk2313",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 77,
+          "name": "unk2314",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 78,
+          "name": "unk2315",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 79,
+          "name": "unk2316",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 80,
+          "name": "unk2317",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 81,
+          "name": "unk2318",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 82,
+          "name": "unk2319",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 83,
+          "name": "unk2320",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 84,
+          "name": "unk2321",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 85,
+          "name": "unk2322",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 86,
+          "name": "unk2323",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 87,
+          "name": "unk2324",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, bool)",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 88,
+          "name": "unk2325",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: bool)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 89,
+          "name": "unk2326",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 90,
+          "name": "unk2327",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void *, void *)",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 91,
+          "name": "unk2328",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 92,
+          "name": "unk2329",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, void *)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 93,
+          "name": "unk2330",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void, arg4: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 94,
+          "name": "unk2331",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (void *, int)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 95,
+          "name": "unk2332",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 96,
+          "name": "unk2333",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_slot": 97,
+          "name": "unk2334",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_slot": 98,
+          "name": "unk2335",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 99,
+          "name": "unk2336",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 100,
+          "name": "unk2337",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 101,
+          "name": "unk2338",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 103,
+          "msvc_slot": 102,
+          "name": "unk2339",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 104,
+          "msvc_slot": 103,
+          "name": "unk2340",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 105,
+          "msvc_slot": 104,
+          "name": "unk2341",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 106,
+          "msvc_slot": 105,
+          "name": "unk2342",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 107,
+          "msvc_slot": 106,
+          "name": "unk2343",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 108,
+          "msvc_slot": 107,
+          "name": "unk2344",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 109,
+          "msvc_slot": 108,
+          "name": "unk2345",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 110,
+          "msvc_slot": 109,
+          "name": "unk2346",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 111,
+          "msvc_slot": 110,
+          "name": "unk2347",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 112,
+          "msvc_slot": 111,
+          "name": "unk2348",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 113,
+          "msvc_slot": 112,
+          "name": "unk2349",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 114,
+          "msvc_slot": 113,
+          "name": "unk2350",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 115,
+          "msvc_slot": 114,
+          "name": "unk2351",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 116,
+          "msvc_slot": 115,
+          "name": "unk2352",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 117,
+          "msvc_slot": 116,
+          "name": "unk2353",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 118,
+          "msvc_slot": 117,
+          "name": "unk2354",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 119,
+          "msvc_slot": 118,
+          "name": "unk2355",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 120,
+          "msvc_slot": 119,
+          "name": "unk2356",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 92,
+          "is_dtor": false,
+          "itanium_slot": 121,
+          "msvc_slot": 120,
+          "name": "unk2357",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 93,
+          "is_dtor": false,
+          "itanium_slot": 122,
+          "msvc_slot": 121,
+          "name": "unk2358",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 94,
+          "is_dtor": false,
+          "itanium_slot": 123,
+          "msvc_slot": 122,
+          "name": "unk2359",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, bool)",
+          "decl_index": 95,
+          "is_dtor": false,
+          "itanium_slot": 124,
+          "msvc_slot": 123,
+          "name": "unk2360",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 96,
+          "is_dtor": false,
+          "itanium_slot": 125,
+          "msvc_slot": 124,
+          "name": "unk2361",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 97,
+          "is_dtor": false,
+          "itanium_slot": 126,
+          "msvc_slot": 125,
+          "name": "unk2362",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 98,
+          "is_dtor": false,
+          "itanium_slot": 127,
+          "msvc_slot": 126,
+          "name": "unk2363",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 99,
+          "is_dtor": false,
+          "itanium_slot": 128,
+          "msvc_slot": 127,
+          "name": "unk2364",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 100,
+          "is_dtor": false,
+          "itanium_slot": 129,
+          "msvc_slot": 128,
+          "name": "unk2365",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 101,
+          "is_dtor": false,
+          "itanium_slot": 130,
+          "msvc_slot": 129,
+          "name": "unk2366",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 102,
+          "is_dtor": false,
+          "itanium_slot": 131,
+          "msvc_slot": 130,
+          "name": "unk2367",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 103,
+          "is_dtor": false,
+          "itanium_slot": 132,
+          "msvc_slot": 131,
+          "name": "unk2368",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void *, void *, void *)",
+          "decl_index": 104,
+          "is_dtor": false,
+          "itanium_slot": 133,
+          "msvc_slot": 132,
+          "name": "unk2369",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 105,
+          "is_dtor": false,
+          "itanium_slot": 134,
+          "msvc_slot": 133,
+          "name": "unk2370",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 106,
+          "is_dtor": false,
+          "itanium_slot": 135,
+          "msvc_slot": 134,
+          "name": "unk2371",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 107,
+          "is_dtor": false,
+          "itanium_slot": 136,
+          "msvc_slot": 135,
+          "name": "unk2372",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 108,
+          "is_dtor": false,
+          "itanium_slot": 137,
+          "msvc_slot": 136,
+          "name": "unk2373",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 109,
+          "is_dtor": false,
+          "itanium_slot": 138,
+          "msvc_slot": 137,
+          "name": "unk2374",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 110,
+          "is_dtor": false,
+          "itanium_slot": 139,
+          "msvc_slot": 138,
+          "name": "unk2375",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 111,
+          "is_dtor": false,
+          "itanium_slot": 140,
+          "msvc_slot": 139,
+          "name": "unk2376",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (const Vector &)",
+          "decl_index": 112,
+          "is_dtor": false,
+          "itanium_slot": 141,
+          "msvc_slot": 140,
+          "name": "SetPivotPosition",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, vecPivot: *const Vector)"
+        },
+        {
+          "cxx_signature": "Vector ()",
+          "decl_index": 113,
+          "is_dtor": false,
+          "itanium_slot": 142,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, ret: *mut Vector) -> *mut Vector",
+          "msvc_slot": 141,
+          "name": "unk331",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 12,
+              "sret": false
+            },
+            "msvc": {
+              "size": 12,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> Vector"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 114,
+          "is_dtor": false,
+          "itanium_slot": 143,
+          "msvc_slot": 142,
+          "name": "unk332",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (float *, float *, void *)",
+          "decl_index": 115,
+          "is_dtor": false,
+          "itanium_slot": 144,
+          "msvc_slot": 143,
+          "name": "unk333",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut f32, arg1: *mut f32, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (bool)",
+          "decl_index": 116,
+          "is_dtor": false,
+          "itanium_slot": 145,
+          "msvc_slot": 144,
+          "name": "unk334",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: bool) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 117,
+          "is_dtor": false,
+          "itanium_slot": 146,
+          "msvc_slot": 145,
+          "name": "unk335",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 118,
+          "is_dtor": false,
+          "itanium_slot": 147,
+          "msvc_slot": 146,
+          "name": "unk336",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 119,
+          "is_dtor": false,
+          "itanium_slot": 148,
+          "msvc_slot": 147,
+          "name": "unk337",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 120,
+          "is_dtor": false,
+          "itanium_slot": 149,
+          "msvc_slot": 148,
+          "name": "unk338",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "bool (void *, int)",
+          "decl_index": 121,
+          "is_dtor": false,
+          "itanium_slot": 150,
+          "msvc_slot": 149,
+          "name": "unk339",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 122,
+          "is_dtor": false,
+          "itanium_slot": 151,
+          "msvc_slot": 150,
+          "name": "unk3310",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 123,
+          "is_dtor": false,
+          "itanium_slot": 152,
+          "msvc_slot": 151,
+          "name": "unk3311",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "MapNodeUnk8_t (void *)",
+          "decl_index": 124,
+          "is_dtor": false,
+          "itanium_slot": 153,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, ret: *mut MapNodeUnk8_t, arg0: *mut ::core::ffi::c_void) -> *mut MapNodeUnk8_t",
+          "msvc_slot": 152,
+          "name": "unk3312",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> MapNodeUnk8_t"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 125,
+          "is_dtor": false,
+          "itanium_slot": 154,
+          "msvc_slot": 153,
+          "name": "unk3313",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool, void *)",
+          "decl_index": 126,
+          "is_dtor": false,
+          "itanium_slot": 155,
+          "msvc_slot": 154,
+          "name": "unk3314",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: bool, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 127,
+          "is_dtor": false,
+          "itanium_slot": 156,
+          "msvc_slot": 155,
+          "name": "unk3315",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void *(void *, void *)",
+          "decl_index": 128,
+          "is_dtor": false,
+          "itanium_slot": 157,
+          "msvc_slot": 156,
+          "name": "unk3316",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *, void *)",
+          "decl_index": 129,
+          "is_dtor": false,
+          "itanium_slot": 158,
+          "msvc_slot": 157,
+          "name": "unk3317",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 130,
+          "is_dtor": false,
+          "itanium_slot": 159,
+          "msvc_slot": 158,
+          "name": "unk3318",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 131,
+          "is_dtor": false,
+          "itanium_slot": 160,
+          "msvc_slot": 159,
+          "name": "unk3319",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 132,
+          "is_dtor": false,
+          "itanium_slot": 161,
+          "msvc_slot": 160,
+          "name": "unk3320",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 133,
+          "is_dtor": false,
+          "itanium_slot": 162,
+          "msvc_slot": 161,
+          "name": "unk3321",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 134,
+          "is_dtor": false,
+          "itanium_slot": 163,
+          "msvc_slot": 162,
+          "name": "unk3322",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 135,
+          "is_dtor": false,
+          "itanium_slot": 164,
+          "msvc_slot": 163,
+          "name": "unk3323",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 136,
+          "is_dtor": false,
+          "itanium_slot": 165,
+          "msvc_slot": 164,
+          "name": "unk3324",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, bool)",
+          "decl_index": 137,
+          "is_dtor": false,
+          "itanium_slot": 166,
+          "msvc_slot": 165,
+          "name": "unk3325",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 138,
+          "is_dtor": false,
+          "itanium_slot": 167,
+          "msvc_slot": 166,
+          "name": "unk3326",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 139,
+          "is_dtor": false,
+          "itanium_slot": 168,
+          "msvc_slot": 167,
+          "name": "unk3327",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 140,
+          "is_dtor": false,
+          "itanium_slot": 169,
+          "msvc_slot": 168,
+          "name": "unk3328",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 141,
+          "is_dtor": false,
+          "itanium_slot": 170,
+          "msvc_slot": 169,
+          "name": "unk3329",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 142,
+          "is_dtor": false,
+          "itanium_slot": 171,
+          "msvc_slot": 170,
+          "name": "unk3330",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, bool)",
+          "decl_index": 143,
+          "is_dtor": false,
+          "itanium_slot": 172,
+          "msvc_slot": 171,
+          "name": "unk3331",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void, arg3: bool)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 144,
+          "is_dtor": false,
+          "itanium_slot": 173,
+          "msvc_slot": 172,
+          "name": "unk3332",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(void *, void *)",
+          "decl_index": 145,
+          "is_dtor": false,
+          "itanium_slot": 174,
+          "msvc_slot": 173,
+          "name": "unk3333",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (float *)",
+          "decl_index": 146,
+          "is_dtor": false,
+          "itanium_slot": 175,
+          "msvc_slot": 174,
+          "name": "unk3334",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut f32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 147,
+          "is_dtor": false,
+          "itanium_slot": 176,
+          "msvc_slot": 175,
+          "name": "unk3335",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 148,
+          "is_dtor": false,
+          "itanium_slot": 177,
+          "msvc_slot": 176,
+          "name": "unk3336",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 149,
+          "is_dtor": false,
+          "itanium_slot": 178,
+          "msvc_slot": 177,
+          "name": "unk3337",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 150,
+          "is_dtor": false,
+          "itanium_slot": 179,
+          "msvc_slot": 178,
+          "name": "unk3338",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 151,
+          "is_dtor": false,
+          "itanium_slot": 180,
+          "msvc_slot": 179,
+          "name": "unk3339",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 152,
+          "is_dtor": false,
+          "itanium_slot": 181,
+          "msvc_slot": 180,
+          "name": "unk3340",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 153,
+          "is_dtor": false,
+          "itanium_slot": 182,
+          "msvc_slot": 181,
+          "name": "unk3341",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 154,
+          "is_dtor": false,
+          "itanium_slot": 183,
+          "msvc_slot": 182,
+          "name": "unk3342",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "bool (void *, void *)",
+          "decl_index": 155,
+          "is_dtor": false,
+          "itanium_slot": 184,
+          "msvc_slot": 183,
+          "name": "unk3343",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void *)",
+          "decl_index": 156,
+          "is_dtor": false,
+          "itanium_slot": 185,
+          "msvc_slot": 184,
+          "name": "unk3344",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 157,
+          "is_dtor": false,
+          "itanium_slot": 186,
+          "msvc_slot": 185,
+          "name": "unk3345",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 158,
+          "is_dtor": false,
+          "itanium_slot": 187,
+          "msvc_slot": 186,
+          "name": "unk3346",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 159,
+          "is_dtor": false,
+          "itanium_slot": 188,
+          "msvc_slot": 187,
+          "name": "unk3347",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (float *, float *)",
+          "decl_index": 160,
+          "is_dtor": false,
+          "itanium_slot": 189,
+          "msvc_slot": 188,
+          "name": "unk3348",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut f32, arg1: *mut f32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 161,
+          "is_dtor": false,
+          "itanium_slot": 190,
+          "msvc_slot": 189,
+          "name": "unk3349",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 162,
+          "is_dtor": false,
+          "itanium_slot": 191,
+          "msvc_slot": 190,
+          "name": "unk3350",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, void *, void *, void *, void *)",
+          "decl_index": 163,
+          "is_dtor": false,
+          "itanium_slot": 192,
+          "msvc_slot": 191,
+          "name": "unk3351",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void, arg4: *mut ::core::ffi::c_void, arg5: *mut ::core::ffi::c_void, arg6: *mut ::core::ffi::c_void, arg7: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CMapNode *()",
+          "decl_index": 164,
+          "is_dtor": false,
+          "itanium_slot": 193,
+          "msvc_slot": 192,
+          "name": "unk3352",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut CMapNode"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 165,
+          "is_dtor": false,
+          "itanium_slot": 194,
+          "msvc_slot": 193,
+          "name": "unk3353",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 166,
+          "is_dtor": false,
+          "itanium_slot": 195,
+          "msvc_slot": 194,
+          "name": "unk3354",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "Color ()",
+          "decl_index": 167,
+          "is_dtor": false,
+          "itanium_slot": 196,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, ret: *mut Color) -> *mut Color",
+          "msvc_slot": 195,
+          "name": "unk3355",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> Color"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 168,
+          "is_dtor": false,
+          "itanium_slot": 197,
+          "msvc_slot": 196,
+          "name": "unk3356",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "Color ()",
+          "decl_index": 169,
+          "is_dtor": false,
+          "itanium_slot": 198,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, ret: *mut Color) -> *mut Color",
+          "msvc_slot": 197,
+          "name": "unk3357",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> Color"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 170,
+          "is_dtor": false,
+          "itanium_slot": 199,
+          "msvc_slot": 198,
+          "name": "unk3358",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 171,
+          "is_dtor": false,
+          "itanium_slot": 200,
+          "msvc_slot": 199,
+          "name": "unk3359",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "bool (int, int, void *)",
+          "decl_index": 172,
+          "is_dtor": false,
+          "itanium_slot": 201,
+          "msvc_slot": 200,
+          "name": "unk3360",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32, arg1: i32, arg2: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 173,
+          "is_dtor": false,
+          "itanium_slot": 202,
+          "msvc_slot": 201,
+          "name": "unk3361",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 174,
+          "is_dtor": false,
+          "itanium_slot": 203,
+          "msvc_slot": 202,
+          "name": "unk3362",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 175,
+          "is_dtor": false,
+          "itanium_slot": 204,
+          "msvc_slot": 203,
+          "name": "unk3363",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 176,
+          "is_dtor": false,
+          "itanium_slot": 205,
+          "msvc_slot": 204,
+          "name": "unk3364",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *, bool)",
+          "decl_index": 177,
+          "is_dtor": false,
+          "itanium_slot": 206,
+          "msvc_slot": 205,
+          "name": "unk3365",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: bool)"
+        },
+        {
+          "cxx_signature": "Vector (int)",
+          "decl_index": 178,
+          "is_dtor": false,
+          "itanium_slot": 207,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, ret: *mut Vector, arg0: i32) -> *mut Vector",
+          "msvc_slot": 206,
+          "name": "unk3366",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 12,
+              "sret": false
+            },
+            "msvc": {
+              "size": 12,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32) -> Vector"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 179,
+          "is_dtor": false,
+          "itanium_slot": 208,
+          "msvc_slot": 207,
+          "name": "unk3367",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 180,
+          "is_dtor": false,
+          "itanium_slot": 209,
+          "msvc_slot": 208,
+          "name": "unk3368",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 181,
+          "is_dtor": false,
+          "itanium_slot": 210,
+          "msvc_slot": 209,
+          "name": "unk3369",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 182,
+          "is_dtor": false,
+          "itanium_slot": 211,
+          "msvc_slot": 210,
+          "name": "unk3370",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 183,
+          "is_dtor": false,
+          "itanium_slot": 212,
+          "msvc_slot": 211,
+          "name": "unk3371",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 184,
+          "is_dtor": false,
+          "itanium_slot": 213,
+          "msvc_slot": 212,
+          "name": "unk3372",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 185,
+          "is_dtor": false,
+          "itanium_slot": 214,
+          "msvc_slot": 213,
+          "name": "unk3373",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 186,
+          "is_dtor": false,
+          "itanium_slot": 215,
+          "msvc_slot": 214,
+          "name": "unk3374",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 187,
+          "is_dtor": false,
+          "itanium_slot": 216,
+          "msvc_slot": 215,
+          "name": "unk3375",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> f32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 188,
+          "is_dtor": false,
+          "itanium_slot": 217,
+          "msvc_slot": 216,
+          "name": "unk3376",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> f32"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 189,
+          "is_dtor": false,
+          "itanium_slot": 218,
+          "msvc_slot": 217,
+          "name": "unk3377",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 190,
+          "is_dtor": false,
+          "itanium_slot": 219,
+          "msvc_slot": 218,
+          "name": "unk3378",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 191,
+          "is_dtor": false,
+          "itanium_slot": 220,
+          "msvc_slot": 219,
+          "name": "unk3379",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 192,
+          "is_dtor": false,
+          "itanium_slot": 221,
+          "msvc_slot": 220,
+          "name": "unk3380",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 193,
+          "is_dtor": false,
+          "itanium_slot": 222,
+          "msvc_slot": 221,
+          "name": "unk3381",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 194,
+          "is_dtor": false,
+          "itanium_slot": 223,
+          "msvc_slot": 222,
+          "name": "unk3382",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 195,
+          "is_dtor": false,
+          "itanium_slot": 224,
+          "msvc_slot": 223,
+          "name": "unk3383",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 196,
+          "is_dtor": false,
+          "itanium_slot": 225,
+          "msvc_slot": 224,
+          "name": "unk3384",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 197,
+          "is_dtor": false,
+          "itanium_slot": 226,
+          "msvc_slot": 225,
+          "name": "unk3385",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 198,
+          "is_dtor": false,
+          "itanium_slot": 227,
+          "msvc_slot": 226,
+          "name": "unk3386",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> f32"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, void *, void *, void *, void *)",
+          "decl_index": 199,
+          "is_dtor": false,
+          "itanium_slot": 228,
+          "msvc_slot": 227,
+          "name": "unk3387",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void, arg4: *mut ::core::ffi::c_void, arg5: *mut ::core::ffi::c_void, arg6: *mut ::core::ffi::c_void, arg7: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 200,
+          "is_dtor": false,
+          "itanium_slot": 229,
+          "msvc_slot": 228,
+          "name": "unk3388",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 201,
+          "is_dtor": false,
+          "itanium_slot": 230,
+          "msvc_slot": 229,
+          "name": "unk3389",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 202,
+          "is_dtor": false,
+          "itanium_slot": 231,
+          "msvc_slot": 230,
+          "name": "unk3390",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> i32"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 203,
+          "is_dtor": false,
+          "itanium_slot": 232,
+          "msvc_slot": 231,
+          "name": "unk3391",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 204,
+          "is_dtor": false,
+          "itanium_slot": 233,
+          "msvc_slot": 232,
+          "name": "unk3392",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 205,
+          "is_dtor": false,
+          "itanium_slot": 234,
+          "msvc_slot": 233,
+          "name": "unk3393",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 206,
+          "is_dtor": false,
+          "itanium_slot": 235,
+          "msvc_slot": 234,
+          "name": "unk3394",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 207,
+          "is_dtor": false,
+          "itanium_slot": 236,
+          "msvc_slot": 235,
+          "name": "unk3395",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 208,
+          "is_dtor": false,
+          "itanium_slot": 237,
+          "msvc_slot": 236,
+          "name": "unk3396",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 209,
+          "is_dtor": false,
+          "itanium_slot": 238,
+          "msvc_slot": 237,
+          "name": "unk3397",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: i32)"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 210,
+          "is_dtor": false,
+          "itanium_slot": 239,
+          "msvc_slot": 238,
+          "name": "unk3398",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 211,
+          "is_dtor": false,
+          "itanium_slot": 240,
+          "msvc_slot": 239,
+          "name": "unk3399",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 212,
+          "is_dtor": false,
+          "itanium_slot": 241,
+          "msvc_slot": 240,
+          "name": "unk33100",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 213,
+          "is_dtor": false,
+          "itanium_slot": 242,
+          "msvc_slot": 241,
+          "name": "unk33101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 214,
+          "is_dtor": false,
+          "itanium_slot": 243,
+          "msvc_slot": 242,
+          "name": "unk33102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 215,
+          "is_dtor": false,
+          "itanium_slot": 244,
+          "msvc_slot": 243,
+          "name": "unk33103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode)"
+        },
+        {
+          "cxx_signature": "void (const char *, void *, void *)",
+          "decl_index": 216,
+          "is_dtor": false,
+          "itanium_slot": 245,
+          "msvc_slot": 244,
+          "name": "unk33104",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *const ::core::ffi::c_char, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 217,
+          "is_dtor": false,
+          "itanium_slot": 246,
+          "msvc_slot": 245,
+          "name": "unk33105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(void *)",
+          "decl_index": 218,
+          "is_dtor": false,
+          "itanium_slot": 247,
+          "msvc_slot": 246,
+          "name": "unk33106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 219,
+          "is_dtor": false,
+          "itanium_slot": 248,
+          "msvc_slot": 247,
+          "name": "unk33107",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(void *)",
+          "decl_index": 220,
+          "is_dtor": false,
+          "itanium_slot": 249,
+          "msvc_slot": 248,
+          "name": "unk33108",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 221,
+          "is_dtor": false,
+          "itanium_slot": 250,
+          "msvc_slot": 249,
+          "name": "unk33109",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 222,
+          "is_dtor": false,
+          "itanium_slot": 251,
+          "msvc_slot": 250,
+          "name": "unk33110",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int, void *)",
+          "decl_index": 223,
+          "is_dtor": false,
+          "itanium_slot": 252,
+          "msvc_slot": 251,
+          "name": "unk33111",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapNode, arg0: *mut ::core::ffi::c_void, arg1: i32, arg2: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 252,
+        "own_entries": 224
+      },
+      "primary_base": "CMapPoint",
+      "secondary_bases": [
+        {
+          "msvc_offset": 200,
+          "name": "IUndoable",
+          "offset": 200
+        },
+        {
+          "msvc_offset": 208,
+          "name": "IToolRenderCallbacks",
+          "offset": 208
+        },
+        {
+          "msvc_offset": 216,
+          "name": "IHitTestable",
+          "offset": 216
+        },
+        {
+          "msvc_offset": 224,
+          "name": "ITransformable",
+          "offset": 224
+        },
+        {
+          "msvc_offset": 232,
+          "name": "IMapNodeToolAttrRoot",
+          "offset": 232
+        },
+        {
+          "msvc_offset": 240,
+          "name": "IToolAttrNotifyRoot",
+          "offset": 240
+        },
+        {
+          "msvc_offset": 248,
+          "name": "IRaytraceEnvironmentOwner",
+          "offset": 248
+        }
+      ]
+    },
+    {
+      "class": "IVDataLookupListener",
+      "header": "public/mapdoclib/mapentity.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVDataLookupListener)"
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapEntityIONode",
+      "header": "public/mapdoclib/mapentity.h",
+      "methods": [
+        {
+          "cxx_signature": "const void *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 253,
+          "msvc_slot": 252,
+          "name": "unk041",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *, bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 254,
+          "msvc_slot": 253,
+          "name": "unk042",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *const ::core::ffi::c_char, arg1: bool)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 255,
+          "msvc_slot": 254,
+          "name": "unk043",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 256,
+          "msvc_slot": 255,
+          "name": "unk044",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void, arg1: i32)"
+        },
+        {
+          "cxx_signature": "int (void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 257,
+          "msvc_slot": 256,
+          "name": "unk045",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "MapNodeUnk4_t (int, int)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 258,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, ret: *mut MapNodeUnk4_t, arg0: i32, arg1: i32) -> *mut MapNodeUnk4_t",
+          "msvc_slot": 257,
+          "name": "unk046",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: i32, arg1: i32) -> MapNodeUnk4_t"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 259,
+          "msvc_slot": 258,
+          "name": "unk047",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 260,
+          "msvc_slot": 259,
+          "name": "unk048",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (void *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 261,
+          "msvc_slot": 260,
+          "name": "unk049",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 262,
+          "msvc_slot": 261,
+          "name": "unk0410",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(void *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 263,
+          "msvc_slot": 262,
+          "name": "unk0411",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 264,
+          "msvc_slot": 263,
+          "name": "unk0412",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(void *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 265,
+          "msvc_slot": 264,
+          "name": "unk0413",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 266,
+          "msvc_slot": 265,
+          "name": "unk0414",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 267,
+          "msvc_slot": 266,
+          "name": "unk0415",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntityIONode) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 267,
+        "own_entries": 15
+      },
+      "primary_base": "CMapNode",
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapGameDataNode",
+      "header": "public/mapdoclib/mapentity.h",
+      "methods": [
+        {
+          "cxx_signature": "const char *(const char *, void *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 268,
+          "msvc_slot": 267,
+          "name": "unk051",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode, arg0: *const ::core::ffi::c_char, arg1: *mut ::core::ffi::c_void) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (void *, bool, bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 269,
+          "msvc_slot": 268,
+          "name": "unk052",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode, arg0: *mut ::core::ffi::c_void, arg1: bool, arg2: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 270,
+          "msvc_slot": 269,
+          "name": "unk053",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 271,
+          "msvc_slot": 270,
+          "name": "unk054",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode)"
+        },
+        {
+          "cxx_signature": "bool (void *, void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 272,
+          "msvc_slot": 271,
+          "name": "unk055",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 273,
+          "msvc_slot": 272,
+          "name": "unk056",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapGameDataNode, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 273,
+        "own_entries": 6
+      },
+      "primary_base": "CMapEntityIONode",
+      "secondary_bases": [
+        {
+          "msvc_offset": 1320,
+          "name": "IVDataLookupListener",
+          "offset": 1320
+        },
+        {
+          "msvc_offset": 1328,
+          "name": "IToolsResourceListener",
+          "offset": 1328
+        }
+      ]
+    },
+    {
+      "class": "IHammerMeshChangeListener",
+      "header": "public/mapdoclib/mapmesh.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHammerMeshChangeListener)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHammerMeshChangeListener, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IHammerMeshChangeListener)"
+        }
+      ],
+      "msvc": {
+        "length": 3,
+        "own_entries": 3
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapMeshBase",
+      "header": "public/mapdoclib/mapmesh.h",
+      "methods": [
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 253,
+          "msvc_slot": 252,
+          "name": "unk041",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase, arg0: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 254,
+          "msvc_slot": 253,
+          "name": "unk042",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 255,
+          "msvc_slot": 254,
+          "name": "unk043",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase) -> bool"
+        },
+        {
+          "cxx_signature": "MapNodeUnk8_t ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 256,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase, ret: *mut MapNodeUnk8_t) -> *mut MapNodeUnk8_t",
+          "msvc_slot": 255,
+          "name": "unk044",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase) -> MapNodeUnk8_t"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 257,
+          "msvc_slot": 256,
+          "name": "unk045",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMeshBase) -> i32"
+        }
+      ],
+      "msvc": {
+        "length": 257,
+        "own_entries": 5
+      },
+      "primary_base": "CMapNode",
+      "secondary_bases": []
+    },
+    {
+      "class": "CMapMesh",
+      "header": "public/mapdoclib/mapmesh.h",
+      "methods": [
+        {
+          "cxx_signature": "void (void *, bool, void *, void *, void *, void *, void *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 258,
+          "msvc_slot": 257,
+          "name": "unk051",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh, arg0: *mut ::core::ffi::c_void, arg1: bool, arg2: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void, arg4: *mut ::core::ffi::c_void, arg5: *mut ::core::ffi::c_void, arg6: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 259,
+          "msvc_slot": 258,
+          "name": "unk052",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh) -> i32"
+        },
+        {
+          "cxx_signature": "bool (void *, int, bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 260,
+          "msvc_slot": 259,
+          "name": "unk053",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh, arg0: *mut ::core::ffi::c_void, arg1: i32, arg2: bool) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, bool, int)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 261,
+          "msvc_slot": 260,
+          "name": "unk054",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh, arg0: *mut ::core::ffi::c_void, arg1: bool, arg2: i32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 262,
+          "msvc_slot": 261,
+          "name": "unk055",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 263,
+          "msvc_slot": 262,
+          "name": "unk056",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapMesh)"
+        }
+      ],
+      "msvc": {
+        "length": 263,
+        "own_entries": 6
+      },
+      "primary_base": "CMapMeshBase",
+      "secondary_bases": [
+        {
+          "msvc_offset": 15264,
+          "name": "IHammerMeshChangeListener",
+          "offset": 15264
+        }
+      ]
+    },
+    {
+      "class": "CMapEntity",
+      "header": "public/mapdoclib/mapentity.h",
+      "methods": [
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 274,
+          "msvc_slot": 273,
+          "name": "unk061",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CMapEntity) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 274,
+        "own_entries": 1
+      },
+      "primary_base": "CMapGameDataNode",
+      "secondary_bases": []
+    },
+    {
+      "class": "IMapFileReference",
+      "header": "public/mapdoclib/mapdoc.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IMapFileReference",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference, arg0: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "unk104",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference, arg0: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 6,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMapFileReference, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 7,
+        "own_entries": 7
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IUndoDoc",
+      "header": "public/mapdoclib/mapdoc.h",
+      "methods": [
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoDoc, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void (int, void *, int)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoDoc, arg0: i32, arg1: *mut ::core::ffi::c_void, arg2: i32)"
+        },
+        {
+          "cxx_signature": "void (IUndoable *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoDoc, pUndoable: *mut IUndoable)"
+        }
+      ],
+      "msvc": {
+        "length": 3,
+        "own_entries": 3
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

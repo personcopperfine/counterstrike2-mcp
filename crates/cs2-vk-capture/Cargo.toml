@@ -1,0 +1,39 @@
+[package]
+name = "cs2-vk-capture"
+version = "0.0.1"
+description = "Vulkan layer VK_LAYER_CS2MCP_capture: copies the presented swapchain image to disk on request (client-mcp screenshots)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "cs2_vk_capture"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "vk_present_harness"
+path = "src/bin/vk_present_harness.rs"
+
+[dependencies]
+ash = "0.38"
+png.workspace = true
+serde_json.workspace = true
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+# the capture dir's owner check (winsec.rs); the workspace's resolved 0.61
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_System_Threading",
+] }
+
+[dev-dependencies]
+cs2-mcp-common = { path = "../cs2-mcp-common" }
+tokio.workspace = true
+
+[features]
+# Enables test-only behaviour in release builds: CS2MCP_CAPTURE_FENCE_TIMEOUT_MS (0 = never wait).
+# Debug builds always have it.
+test-knobs = []

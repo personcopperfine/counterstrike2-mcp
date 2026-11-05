@@ -1,0 +1,1302 @@
+{
+  "enums": [],
+  "platforms": [
+    "windows"
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nType",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<IAsset *>",
+          "name": "m_Assets",
+          "offset": 8,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "void *",
+          "name": "m_pAssetContext",
+          "offset": 32,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<CUtlString>",
+          "name": "m_Files",
+          "offset": 40,
+          "rust_type": null,
+          "size": 24
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolframework2/itoolframework2.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nType",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Assets",
+            "offset": 8,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAssetContext",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Files",
+            "offset": 40,
+            "size": 24
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 64
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nType",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Assets",
+            "offset": 8,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAssetContext",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Files",
+            "offset": 40,
+            "size": 24
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 64
+      },
+      "name": "ToolActivationRequest_t",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 64
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "IAsset *",
+          "name": "m_pAsset",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "void *",
+          "name": "m_pContext",
+          "offset": 8,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk101",
+          "offset": 16,
+          "rust_type": "u64",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolframework2/itoolframework2.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAsset",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pContext",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 16,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 24
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAsset",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pContext",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 16,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 24
+      },
+      "name": "ToolOpenAssetEntry_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 24
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_vecTranslation",
+          "offset": 0,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_vecRotation",
+          "offset": 12,
+          "rust_type": "Vector",
+          "size": 12
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolframework2/itoolframework2.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecTranslation",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecRotation",
+            "offset": 12,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 24
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecTranslation",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecRotation",
+            "offset": 12,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 24
+      },
+      "name": "MultiAxisControllerInput_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 24
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IToolFramework2",
+      "header": "public/toolframework2/itoolframework2.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "StartStallMonitor",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<CEngineToolInfo *> *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "GetAvailableEngineTools",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pTools: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "LaunchEngineTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "QueueToolUnload",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "bool (uint8)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "IsToolLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> bool"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "QueueToolLaunch",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "Tools_RunFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "UnloadQueuedTools",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "RequestToolsQuit",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> i32"
+        },
+        {
+          "cxx_signature": "void (IToolFrameListener *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "AddToolFrameListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut IToolFrameListener)"
+        },
+        {
+          "cxx_signature": "void (IToolFrameListener *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "RemoveToolFrameListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut IToolFrameListener)"
+        },
+        {
+          "cxx_signature": "uint8 *(uint8 *, const char *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "FindTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pResult: *mut u8, pName: *const ::core::ffi::c_char) -> *mut u8"
+        },
+        {
+          "cxx_signature": "const char *(uint8)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetToolName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "IToolSystem2 *(uint8)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "LoadTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> *mut IToolSystem2"
+        },
+        {
+          "cxx_signature": "CEngineToolInfo *(uint8)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "GetEngineToolInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CExternalToolInfo *(uint8)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "GetExternalToolInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nExternalToolIndex: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const CUtlVector<ToolOpenAssetEntry_t> *, uint8)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 31,
+          "name": "OpenAssetsInTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pEntries: *mut ::core::ffi::c_void, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 30,
+          "name": "OpenAssetsInTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pAssetSource: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const CUtlVector<IAsset *> *, uint8)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "OpenAssetsInTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pAssets: *mut ::core::ffi::c_void, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void (const ToolOpenAssetEntry_t *, uint8)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 28,
+          "name": "OpenAssetsInTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pEntry: *const ToolOpenAssetEntry_t, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void (IAsset *, uint8)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 27,
+          "name": "OpenAssetsInTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pAsset: *mut ::core::ffi::c_void, nToolIndex: u8)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "ExecuteCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pCommand: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "IsMSAAEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "SetMSAAEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bEnabled: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "SetSplashScreenMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pMessage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "IToolFrameworkTabletInfo *()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "GetTabletInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CEnvironmentBlock *()",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "GetEnvironmentBlock",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *, Color)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "AddSplashScreenLabel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pText: *const ::core::ffi::c_char, color: Color)"
+        },
+        {
+          "cxx_signature": "bool (MultiAxisControllerInput_t *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "GetMultiAxisControllerInput",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pInput: *mut MultiAxisControllerInput_t) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "ReloadTabbedStyle",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void (bool, bool)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, arg0: bool, bActive: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "MarkSettingsDirty",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "IsMSAASupported",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "bool (uint8)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "IsMultisampleModeSupported",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nMultisampleMode: u8) -> bool"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "GetDeveloperHelpURL",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "ShowAboutDialog",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "OpenFolderInExplorer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pFullPath: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "OpenFile",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pPath: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *, int)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "OpenFileAtLine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pPath: *const ::core::ffi::c_char, nLine: i32)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "SetAllowFlyMode2",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bAllow: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "GetAllowFlyMode2",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "SetHideCursorDuringCameraManipulation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bHide: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "GetHideCursorDuringCameraManipulation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "IsNotRunningOnCustomerMachine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 55,
+          "name": "MakeVConsoleForeground",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pReturnToWindow: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "LaunchBuildWatch",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "GetAlwaysRenderAllWindows",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "SetAlwaysRenderAllWindows",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bAlways: bool)"
+        },
+        {
+          "cxx_signature": "CQInputBindManager *()",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "GetInputBindManager",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (QWidget *)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "ActivateEngineWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pToolWindow: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "ReactivateToolWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void (const char *, CUtlBuffer &, bool)",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 62,
+          "name": "LoadSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pName: *const ::core::ffi::c_char, buf: *mut ::core::ffi::c_void, bUnknown: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *, CUtlBuffer &, bool)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 63,
+          "name": "SaveSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pName: *const ::core::ffi::c_char, buf: *mut ::core::ffi::c_void, bUnknown: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *, CBufferString *, bool)",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 64,
+          "name": "GetSettingsPath",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pName: *const ::core::ffi::c_char, pPath: *mut CBufferString, bUnknown: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 65,
+          "name": "BackupSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "uint8 *(uint8 *, IAsset *)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 66,
+          "name": "FindEngineToolForAsset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pResult: *mut u8, pAsset: *mut ::core::ffi::c_void) -> *mut u8"
+        },
+        {
+          "cxx_signature": "uint8 *(uint8 *, IAsset *)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 67,
+          "name": "FindExternalToolForAsset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pResult: *mut u8, pAsset: *mut ::core::ffi::c_void) -> *mut u8"
+        },
+        {
+          "cxx_signature": "uint8 *(uint8 *, IAssetType *)",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 68,
+          "name": "FindEngineToolForAssetType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pResult: *mut u8, pAssetType: *mut ::core::ffi::c_void) -> *mut u8"
+        },
+        {
+          "cxx_signature": "void (IAsset *, CUtlVector<uint8> *)",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 69,
+          "name": "GetEngineToolsForAsset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pAsset: *mut ::core::ffi::c_void, pTools: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IAsset *, CUtlVector<uint8> *)",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 70,
+          "name": "GetExternalToolsForAsset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pAsset: *mut ::core::ffi::c_void, pExternalTools: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 71,
+          "name": "SetAutoMuteGameWhenToolsHaveFocus",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bMute: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 72,
+          "name": "GetAutoMuteGameWhenToolsHaveFocus",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 73,
+          "name": "SetToolsAudioMuted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bMuted: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 74,
+          "name": "GetToolsAudioMuted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> bool"
+        },
+        {
+          "cxx_signature": "bool (bool *, bool *)",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 75,
+          "name": "GetAudioMuteState",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pbMuteGame: *mut bool, pbMuteTools: *mut bool) -> bool"
+        },
+        {
+          "cxx_signature": "void (IToolFrameworkAudioSettingsListener *)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 76,
+          "name": "AddAudioSettingsListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IToolFrameworkAudioSettingsListener *)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 77,
+          "name": "RemoveAudioSettingsListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 78,
+          "name": "PushToolsAudioUnmute",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bPush: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *, KeyValues3 *)",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 79,
+          "name": "SendToolRequest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pToolName: *const ::core::ffi::c_char, pRequest: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *, KeyValues3 *)",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 80,
+          "name": "QueueToolRequest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pToolName: *const ::core::ffi::c_char, pRequest: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "KeyValues3 *(uint8)",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 81,
+          "name": "GetToolSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (uint8, KeyValues3 *)",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 82,
+          "name": "SetToolSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8, pSettings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (const char *, KeyValues3 *, bool)",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 83,
+          "name": "LoadSettingsKV3",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pName: *const ::core::ffi::c_char, pSettings: *mut ::core::ffi::c_void, bUnknown: bool) -> bool"
+        },
+        {
+          "cxx_signature": "void (const char *, KeyValues3 *, bool)",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 84,
+          "name": "SaveSettingsKV3",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pName: *const ::core::ffi::c_char, pSettings: *mut ::core::ffi::c_void, bUnknown: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 85,
+          "name": "ShowImportWizard",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pFileList: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 86,
+          "name": "RegisterResponseListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 87,
+          "name": "UnregisterResponseListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint32, uint8, void *, void *, void *, void *)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 88,
+          "name": "NotifyResponseListeners",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nUnk1: u32, nUnk2: u8, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, pUnk5: *mut ::core::ffi::c_void, pUnk6: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (uint8)",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 89,
+          "name": "CanToolHighlightSubassets",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, nToolIndex: u8) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 90,
+          "name": "Quit",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2)"
+        },
+        {
+          "cxx_signature": "void (IFGDFromAssetListener *)",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 91,
+          "name": "AddFGDFromAssetListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IFGDFromAssetListener *)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 92,
+          "name": "RemoveFGDFromAssetListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 93,
+          "name": "GetFGDFromAssetClasses",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(const CBufferString &, int)",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 94,
+          "name": "FindOrCreateFGDFromAssetClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, sAssetPath: *const CBufferString, nUnknown: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 95,
+          "name": "IsFGDFromAssetClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pClass: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "const char *(void *)",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 96,
+          "name": "GetFGDFromAssetClassAssetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, pClass: *mut ::core::ffi::c_void) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 97,
+          "name": "PushSuppressShortcuts",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFramework2, bPush: bool)"
+        }
+      ],
+      "msvc": {
+        "length": 98,
+        "own_entries": 87
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolSystem2",
+      "header": "public/toolframework2/itoolframework2.h",
+      "methods": [
+        {
+          "cxx_signature": "bool (CreateInterfaceFn, uint8)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "InitToolSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2, factory: *const ::core::ffi::c_void, nToolIndex: u8) -> bool"
+        },
+        {
+          "cxx_signature": "void (const ToolActivationRequest_t &)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "ActivateTool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2, request: *const ToolActivationRequest_t)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "RunFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "RequestQuit",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2) -> i32"
+        },
+        {
+          "cxx_signature": "void (bool, bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2, arg0: bool, bActive: bool)"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "HandleToolRequest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolSystem2, pRequest: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 17,
+        "own_entries": 6
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolFrameListener",
+      "header": "public/toolframework2/itoolframework2.h",
+      "methods": [
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "RunFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFrameListener) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "PreFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFrameListener)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "PostFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolFrameListener)"
+        }
+      ],
+      "msvc": {
+        "length": 3,
+        "own_entries": 3
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:10:57 -0500
+Subject: [PATCH 37/47] Add CDmElement
+
+Member names follow Source SDK 2013 public/datamodel/dmelement.h. Verified
+against CS2 2000930 (win64).
+---
+ public/datamodel/dmelement.h | 76 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 public/datamodel/dmelement.h
+
+diff --git a/public/datamodel/dmelement.h b/public/datamodel/dmelement.h
+new file mode 100644
+index 00000000..b7776126
+--- /dev/null
++++ b/public/datamodel/dmelement.h
+@@ -0,0 +1,76 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Base class of the elements of the datamodel
++//
++//===========================================================================//
++
++#ifndef DMELEMENT_H
++#define DMELEMENT_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "datamodel/idatamodel.h"
++#include "datamodel/dmattributetypes.h"
++#include "tier0/utlsymbollarge.h"
++#include "tier0/platform.h"
++
++class CDmAttribute;
++
++// AMNOTE: A node of the list of attributes that reference an element; IDataModel's DmAttributeReferenceIterator_t points at one
++struct DmAttributeList_t
++{
++	DmAttributeHandle_t m_hAttribute;
++	DmAttributeList_t *m_pNext;
++};
++
++struct DmElementReference_t
++{
++	DmElementHandle_t m_hElement;
++	// AMNOTE: Three 10-bit reference counts (bits 0-9, 10-19, 20-29)
++	uint32 m_unk101;
++	// AMNOTE: Bit 0 is a flag
++	uint8 m_unk102[8];
++	DmAttributeList_t m_attributes;
++};
++
++class CDmElement
++{
++public:
++	virtual void OnAttributeChanged( CDmAttribute *pAttribute ) = 0;
++	virtual void OnAttributeArrayElementAdded( CDmAttribute *pAttribute, int nFirstElem, int nLastElem ) = 0;
++	virtual void OnAttributeArrayElementRemoved( CDmAttribute *pAttribute, int nFirstElem, int nLastElem ) = 0;
++	virtual void Resolve() = 0;
++	virtual bool IsA( const CUtlSymbolLarge &typeSymbol ) const = 0;
++	virtual int GetInheritanceDepth( const CUtlSymbolLarge &typeSymbol ) const = 0;
++	virtual void OnElementUnserialized() = 0;
++	virtual void OnElementSerialized() = 0;
++	virtual int AllocatedSize() const = 0;
++
++protected:
++	virtual ~CDmElement() = 0;
++	virtual void PerformConstruction() = 0;
++	virtual void PerformDestruction() = 0;
++	virtual void OnAdoptedFromUndo() = 0;
++	virtual void OnOrphanedToUndo() = 0;
++	virtual void unk101() = 0;
++
++public:
++	DmObjectId_t m_Id;
++	// AMNOTE: The "name" attribute: the string (IDataModel::GetElementName returns it), then its CDmAttribute *
++	uint8 m_unk101[16];
++	DmElementReference_t m_ref;
++	// AMNOTE: First attribute, linked through CDmAttribute::m_pNext
++	CDmAttribute *m_pAttributes;
++	CUtlSymbolLarge m_Type;
++	DmFileId_t m_fileId;
++	uint16 m_unk201;
++	// AMNOTE: Bit flags (5 bits used)
++	uint16 m_unk202;
++	// AMNOTE: A 4-bit field
++	uint32 m_unk203;
++	// AMNOTE: Six list heads
++	void *m_unk204[6];
++};
++
++#endif // DMELEMENT_H

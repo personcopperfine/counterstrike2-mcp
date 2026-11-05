@@ -1,0 +1,504 @@
+{
+  "enums": [],
+  "platforms": [
+    "windows"
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "tools/modeldoc_editor/modeldoc_editor_app.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IAssetFingerprintListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/tier0/errorlistener.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IErrorListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IErrorListener",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[144]",
+          "name": "m_unk001",
+          "offset": 8,
+          "rust_type": "[u8; 144]",
+          "size": 144
+        }
+      ],
+      "has_vptr": false,
+      "header": "tools/modeldoc_editor/modeldoc_editor_app.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 144
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 152
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 144
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 152
+      },
+      "name": "CModelDocAnalysis",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 152
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CSimpleBaseEditorSession",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IBindTarget",
+          "offset": 104,
+          "virtual": false
+        },
+        {
+          "name": "IAssetFingerprintListener",
+          "offset": 120,
+          "virtual": false
+        },
+        {
+          "name": "IToolsResourceListener",
+          "offset": 128,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[136]",
+          "name": "m_unk021",
+          "offset": 136,
+          "rust_type": "[u8; 136]",
+          "size": 136
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CQModelDocEditorWnd *",
+          "name": "m_pMainWnd",
+          "offset": 272,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CModelDoc *",
+          "name": "m_pDoc",
+          "offset": 280,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[2776]",
+          "name": "m_unk121",
+          "offset": 288,
+          "rust_type": "[u8; 2776]",
+          "size": 2776
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "void *",
+          "name": "m_pAsset",
+          "offset": 3064,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[920]",
+          "name": "m_unk221",
+          "offset": 3072,
+          "rust_type": "[u8; 920]",
+          "size": 920
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CModelDocAnalysis",
+          "name": "m_Analysis",
+          "offset": 3992,
+          "rust_type": "CModelDocAnalysis",
+          "size": 152
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[88]",
+          "name": "m_unk321",
+          "offset": 4144,
+          "rust_type": "[u8; 88]",
+          "size": 88
+        }
+      ],
+      "has_vptr": false,
+      "header": "tools/modeldoc_editor/modeldoc_editor_app.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 136,
+            "size": 136
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMainWnd",
+            "offset": 272,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 280,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk121",
+            "offset": 288,
+            "size": 2776
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAsset",
+            "offset": 3064,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk221",
+            "offset": 3072,
+            "size": 920
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Analysis",
+            "offset": 3992,
+            "size": 152
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk321",
+            "offset": 4144,
+            "size": 88
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 4232
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 136,
+            "size": 136
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMainWnd",
+            "offset": 272,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 280,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk121",
+            "offset": 288,
+            "size": 2776
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pAsset",
+            "offset": 3064,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk221",
+            "offset": 3072,
+            "size": 920
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Analysis",
+            "offset": 3992,
+            "size": 152
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk321",
+            "offset": 4144,
+            "size": 88
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 4232
+      },
+      "name": "CModelDocEditorSession",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 4232
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseEditorSeparateWindowApp",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[560]",
+          "name": "m_unk021",
+          "offset": 480,
+          "rust_type": "[u8; 560]",
+          "size": 560
+        }
+      ],
+      "has_vptr": false,
+      "header": "tools/modeldoc_editor/modeldoc_editor_app.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 480,
+            "size": 560
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1040
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 488,
+            "size": 560
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1048
+      },
+      "name": "CModelDocEditorApp",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1040
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IAssetFingerprintListener",
+      "header": "tools/modeldoc_editor/modeldoc_editor_app.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAssetFingerprintListener)"
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IErrorListener",
+      "header": "public/tier0/errorlistener.h",
+      "methods": [
+        {
+          "cxx_signature": "void (const ErrorListenerMessage_t &)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "ReportMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IErrorListener, message: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (const ErrorListenerMessage_t &, CBufferString &, const char *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "FormatMessageLocation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IErrorListener, message: *mut ::core::ffi::c_void, sOutLocation: *mut CBufferString, pszSuffix: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "const char *(int *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "GetSourceName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IErrorListener, pLineAndColumn: *mut i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (CBufferString &)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "AppendContextPath",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IErrorListener, sOutContextPath: *mut CBufferString) -> bool"
+        },
+        {
+          "cxx_signature": "ErrorContextHandle_t (const char *, ...)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "PushContext",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "PopContext",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IErrorListener, nContextLength: i32)"
+        }
+      ],
+      "msvc": {
+        "length": 6,
+        "own_entries": 6
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

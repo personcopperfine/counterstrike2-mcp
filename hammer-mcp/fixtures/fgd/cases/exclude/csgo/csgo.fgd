@@ -1,0 +1,25 @@
+// Fixture: `@exclude Name` hides the definitions seen so far; a later definition brings the class
+// back (Valve's "exclude and redefine" idiom) and is not a duplicate. Only a name that stays
+// excluded is invisible.
+@BaseClass = ExcludedBase
+[
+	base_key(integer) : "Base key" : 0
+]
+
+@PointClass base(ExcludedBase) = dropped : "Stays excluded."
+[
+	stale(integer) : "Stale" : 0
+]
+
+@PointClass base(ExcludedBase) = revived : "Excluded then redefined."
+[
+	old_key(integer) : "Old" : 0
+]
+
+@exclude dropped
+@exclude revived
+
+@PointClass base(ExcludedBase) = revived : "Redefined after the exclude."
+[
+	new_key(integer) : "New" : 0
+]

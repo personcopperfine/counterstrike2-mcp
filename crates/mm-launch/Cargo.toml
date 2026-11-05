@@ -1,0 +1,49 @@
+[package]
+name = "mm-launch"
+version = "0.0.1"
+description = "Gameinfo-free Metamod loading: the cs2mcp_launch.exe launcher, the injected cs2mcp_mmload loader DLL (Wine) and the libcs2mcp_mmload.so dlopen interposer (Linux)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+# The artefact names are fixed by the cross-lane contract (target/CONTRACT.md): the game loads
+# `cs2mcp_mmload.dll` and `LD_PRELOAD`s `libcs2mcp_mmload.so`, both from the lib's name.
+#
+# `cdylib` only, exactly as the contract says: the loader is never linked as a Rust library. That
+# is also why the launcher bin reaches the pure helpers through `#[path]` (see
+# `src/bin/cs2mcp_launch.rs`) instead of `use cs2mcp_mmload::...`, and why doctests are off - a
+# cdylib-only lib has no rlib for a doctest binary to link.
+[lib]
+name = "cs2mcp_mmload"
+crate-type = ["cdylib"]
+doctest = false
+
+[[bin]]
+name = "cs2mcp_launch"
+path = "src/bin/cs2mcp_launch.rs"
+
+# Same version and the same target-specific style as `crates/cs2-bridge/Cargo.toml` (the
+# workspace's resolved 0.61). The features are the ones the PE walk, the IAT patch, the remote
+# `LoadLibraryW` and the job object need; nothing pulls in a larger module set.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Console",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_Environment",
+    "Win32_System_IO",
+    "Win32_System_JobObjects",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Memory",
+    "Win32_System_SystemInformation",
+    "Win32_System_SystemServices",
+    "Win32_System_Threading",
+    "Win32_System_WindowsProgramming",
+] }
+
+# The Linux half is the `dlopen` interposer: `dlsym(RTLD_NEXT, ...)` and `write(2)` for its log.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

@@ -1,0 +1,849 @@
+{
+ "module": "schemasystem.dll",
+ "image_base": 6442450944,
+ "builds": {
+  "2000921": {
+   "sha256": "f362c13aada09ee0",
+   "timestamp": 1790794518
+  },
+  "2000930": {
+   "sha256": "f362c13aada09ee0",
+   "timestamp": 1790794518
+  },
+  "2000933": {
+   "sha256": "d2a9b5164cb68953",
+   "timestamp": 1792003096
+  },
+  "2000940": {
+   "sha256": "d94cc30d01521e0a",
+   "timestamp": 1793662325
+  }
+ },
+ "entries": {
+  "sub_180001050": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28"
+   },
+   "via": "schemasystem!0x180001050 (sub_180001050)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4176,
+    "2000930": 4176,
+    "2000933": 4176,
+    "2000940": 4176
+   },
+   "status": "verified"
+  },
+  "sub_180001070": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x180001070 (sub_180001070)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4208,
+    "2000930": 4208,
+    "2000933": 4208,
+    "2000940": 4208
+   },
+   "status": "verified"
+  },
+  "sub_180001090": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 38 8B 05 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x180001090 (sub_180001090)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4240,
+    "2000930": 4240,
+    "2000933": 4240,
+    "2000940": 4240
+   },
+   "status": "verified"
+  },
+  "sub_1800010D0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 45 33 C0 48 8D 15 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x1800010D0 (sub_1800010D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4304,
+    "2000930": 4304,
+    "2000933": 4304,
+    "2000940": 4304
+   },
+   "status": "verified"
+  },
+  "CSchemaSystem__PrintDetailedClassLayout_r": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 44 88 48 20 44 89 40 18"
+   },
+   "via": "schemasystem!0x18000A470 (CSchemaSystem__PrintDetailedClassLayout_r)",
+   "tag": "V",
+   "expect": {
+    "2000921": 42096,
+    "2000930": 42096,
+    "2000933": 42096,
+    "2000940": 42096
+   },
+   "status": "verified"
+  },
+  "sub_18000B940": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 6C 24 20 48 89 4C 24 08 56 57 41 56 48 83 EC 60 48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8B EA"
+   },
+   "via": "schemasystem!0x18000B940 (sub_18000B940)",
+   "tag": "V",
+   "expect": {
+    "2000921": 47424,
+    "2000930": 47424,
+    "2000933": 47424,
+    "2000940": 47424
+   },
+   "status": "verified"
+  },
+  "sub_18000D950": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x180001077 (sub_180001070 references sub_18000D950 (prologue not unique): lea     rdx, sub_18000D950)",
+   "tag": "V",
+   "expect": {
+    "2000921": 55632,
+    "2000930": 55632,
+    "2000933": 55632,
+    "2000940": 55632
+   },
+   "status": "verified"
+  },
+  "CSchemaSystem::CSchemaSystem": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 4C 89 74 24 20 55"
+   },
+   "via": "schemasystem!0x18000D960 (sub_18000D960)",
+   "tag": "V",
+   "expect": {
+    "2000921": 55648,
+    "2000930": 55648,
+    "2000933": 55648,
+    "2000940": 55648
+   },
+   "status": "verified"
+  },
+  "sub_18000D960_site_4E9": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 35 ?? ?? ?? ?? 89 35 ?? ?? ?? ?? 48 89 35 ?? ?? ?? ?? 40 88 35 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x18000DE49 (mov     cs:qword_180076990, rsi)",
+   "tag": "V",
+   "expect": {
+    "2000921": 56905,
+    "2000930": 56905,
+    "2000933": 56905,
+    "2000940": 56905
+   },
+   "status": "verified"
+  },
+  "sub_18000DEB0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8D 05 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x18000DEB0 (sub_18000DEB0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 57008,
+    "2000930": 57008,
+    "2000933": 57008,
+    "2000940": 57008
+   },
+   "status": "verified"
+  },
+  "CSchemaSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaSystem"
+   },
+   "via": "schemasystem!0x180058598 (??_7CSchemaSystem@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 361880,
+    "2000930": 361880,
+    "2000933": 361880,
+    "2000940": 361880
+   },
+   "status": "verified"
+  },
+  "sub_18000E160": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 0
+   },
+   "via": "schemasystem!0x18000E160 (CSchemaSystem slot 0 -> sub_18000E160)",
+   "tag": "V",
+   "expect": {
+    "2000921": 57696,
+    "2000930": 57696,
+    "2000933": 57696,
+    "2000940": 57696
+   },
+   "status": "verified"
+  },
+  "LoadSchemaDataForModules": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 21
+   },
+   "via": "schemasystem!0x1800107D0 (CSchemaSystem slot 21 -> sub_1800107D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 67536,
+    "2000930": 67536,
+    "2000933": 67536,
+    "2000940": 67536
+   },
+   "status": "verified"
+  },
+  "ISchemaSystem::GlobalTypeScope": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 11
+   },
+   "via": "schemasystem!0x180011340 (CSchemaSystem slot 11 -> sub_180011340)",
+   "tag": "V",
+   "expect": {
+    "2000921": 70464,
+    "2000930": 70464,
+    "2000933": 70464,
+    "2000940": 70464
+   },
+   "status": "verified"
+  },
+  "ISchemaSystem::FindTypeScopeForModule": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 13
+   },
+   "via": "schemasystem!0x180011350 (CSchemaSystem slot 13 -> CSchemaSystem__FindTypeScopeForModule)",
+   "tag": "V",
+   "expect": {
+    "2000921": 70480,
+    "2000930": 70480,
+    "2000933": 70480,
+    "2000940": 70480
+   },
+   "status": "verified"
+  },
+  "ISchemaSystem::FindOrCreateTypeScopeForModule": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 12
+   },
+   "via": "schemasystem!0x180011420 (CSchemaSystem slot 12 -> CSchemaSystem__FindOrCreateTypeScopeForModule)",
+   "tag": "V",
+   "expect": {
+    "2000921": 70688,
+    "2000930": 70688,
+    "2000933": 70688,
+    "2000940": 70688
+   },
+   "status": "verified"
+  },
+  "ISchemaSystem::GetTypeScopeForBinding": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 14
+   },
+   "via": "schemasystem!0x180011510 (CSchemaSystem slot 14 -> sub_180011510)",
+   "tag": "V",
+   "expect": {
+    "2000921": 70928,
+    "2000930": 70928,
+    "2000933": 70928,
+    "2000940": 70928
+   },
+   "status": "verified"
+  },
+  "sub_180011550": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 16
+   },
+   "via": "schemasystem!0x180011550 (CSchemaSystem slot 16 -> sub_180011550)",
+   "tag": "V",
+   "expect": {
+    "2000921": 70992,
+    "2000930": 70992,
+    "2000933": 70992,
+    "2000940": 70992
+   },
+   "status": "verified"
+  },
+  "CSchemaSystem__ScopedNameForClass": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystem",
+    "slot": 17
+   },
+   "via": "schemasystem!0x1800115E0 (CSchemaSystem slot 17 -> CSchemaSystem__ScopedNameForClass)",
+   "tag": "V",
+   "expect": {
+    "2000921": 71136,
+    "2000930": 71136,
+    "2000933": 71136,
+    "2000940": 71136
+   },
+   "status": "verified"
+  },
+  "CSchemaSystemTypeScope::CSchemaSystemTypeScope": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 48 89 7C 24 20 41 54 41 56 41 57 48 83 EC 40"
+   },
+   "via": "schemasystem!0x180011930 (sub_180011930)",
+   "tag": "V",
+   "expect": {
+    "2000921": 71984,
+    "2000930": 71984,
+    "2000933": 71984,
+    "2000940": 71984
+   },
+   "status": "verified"
+  },
+  "sub_180011DF0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 56 41 57 48 83 EC 20 48 8D 05 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x180011DF0 (sub_180011DF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 73200,
+    "2000930": 73200,
+    "2000933": 73200,
+    "2000940": 73200
+   },
+   "status": "verified"
+  },
+  "CSchemaSystemTypeScope": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaSystemTypeScope"
+   },
+   "via": "schemasystem!0x1800586F0 (??_7CSchemaSystemTypeScope@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 362224,
+    "2000930": 362224,
+    "2000933": 362224,
+    "2000940": 362224
+   },
+   "status": "verified"
+  },
+  "CSchemaSystemTypeScope__ResolveClassInfoThreadsafe": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSchemaSystemTypeScope",
+    "slot": 34
+   },
+   "via": "schemasystem!0x180016B00 (CSchemaSystemTypeScope slot 34 -> CSchemaSystemTypeScope__ResolveClassInfoThreadsafe)",
+   "tag": "V",
+   "expect": {
+    "2000921": 92928,
+    "2000930": 92928,
+    "2000933": 92928,
+    "2000940": 92928
+   },
+   "status": "verified"
+  },
+  "InterfaceReg::InterfaceReg": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "schemasystem!0x180037540 (mov     [rcx+8], r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 226624,
+    "2000930": 226624,
+    "2000933": 226624,
+    "2000940": 226624
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "schemasystem!0x180037560 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 226656,
+    "2000930": 226656,
+    "2000933": 226656,
+    "2000940": 226656
+   },
+   "status": "verified"
+  },
+  "sub_180038C60": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 54 41 56 41 57 48 83 EC 40"
+   },
+   "via": "schemasystem!0x180038C60 (sub_180038C60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 232544,
+    "2000930": 232544,
+    "2000933": 232544,
+    "2000940": 232544
+   },
+   "status": "verified"
+  },
+  "InstallSchemaBindings": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "InstallSchemaBindings"
+   },
+   "via": "schemasystem!0x180038DE0 (export InstallSchemaBindings)",
+   "tag": "V",
+   "expect": {
+    "2000921": 232928,
+    "2000930": 232928,
+    "2000933": 232928,
+    "2000940": 232928
+   },
+   "status": "verified"
+  },
+  "sub_180049170": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x180001059 (sub_180001050 references sub_180049170 (prologue not unique): lea     rcx, sub_180049170; void (__cdecl *)())",
+   "tag": "V",
+   "expect": {
+    "2000921": 299376,
+    "2000930": 299376,
+    "2000933": 299376,
+    "2000940": 299376
+   },
+   "status": "verified"
+  },
+  "off_18004C1B0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 2D ?? ?? ?? ?? 33 ED",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x180036F65 (sub_180036F10 reads off_18004C1B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 311728,
+    "2000930": 311728,
+    "2000933": 311728,
+    "2000940": 311728
+   },
+   "status": "verified"
+  },
+  "str_SchemaSystem_001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "SchemaSystem_001"
+   },
+   "via": "schemasystem!0x180056CB0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 355504,
+    "2000930": 355504,
+    "2000933": 355504,
+    "2000940": 355504
+   },
+   "status": "verified"
+  },
+  "CSchemaType": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaType"
+   },
+   "via": "schemasystem!0x180058930 (??_7CSchemaType@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 362800,
+    "2000930": 362800,
+    "2000933": 362800,
+    "2000940": 362800
+   },
+   "status": "verified"
+  },
+  "___R3CSchemaSystem__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSchemaSystem",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     }
+    ]
+   },
+   "via": "schemasystem!0x18005BBC0 (??_R3CSchemaSystem@@8 via CSchemaSystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 375744,
+    "2000930": 375744,
+    "2000933": 375744,
+    "2000940": 375744
+   },
+   "status": "verified"
+  },
+  "g_pSchemaSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 39 35 ?? ?? ?? ?? 74 ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x18000DDE9 (sub_18000D960 reads qword_1800715E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 464352,
+    "2000930": 464352,
+    "2000933": 464352,
+    "2000940": 464352
+   },
+   "status": "verified"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x180037547 (sub_180001070 reads qword_180072030)",
+   "tag": "V",
+   "expect": {
+    "2000921": 466992,
+    "2000930": 466992,
+    "2000933": 466992,
+    "2000940": 466992
+   },
+   "status": "verified"
+  },
+  "g_SchemaSystemTypeScope_Global": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x1800010DE (sub_1800010D0 reads qword_1800730D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 471248,
+    "2000930": 471248,
+    "2000933": 471248,
+    "2000940": 471248
+   },
+   "status": "verified"
+  },
+  "g_SchemaSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x18000C147 (sub_18000C140 reads qword_180076710)",
+   "tag": "V",
+   "expect": {
+    "2000921": 485136,
+    "2000930": 485136,
+    "2000933": 485136,
+    "2000940": 485136
+   },
+   "status": "verified"
+  },
+  "dword_180076738": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "89 05 ?? ?? ?? ?? 4C 8D 45 E0",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "schemasystem!0x18000D9A2 (sub_18000D960 reads dword_180076738)",
+   "tag": "V",
+   "expect": {
+    "2000921": 485176,
+    "2000930": 485176,
+    "2000933": 485176,
+    "2000940": 485176
+   },
+   "status": "verified"
+  },
+  "unk_1800769A8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x18000107E (sub_180001070 reads unk_1800769A8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 485800,
+    "2000930": 485800,
+    "2000933": 485800,
+    "2000940": 485800
+   },
+   "status": "verified"
+  },
+  "dword_1800769C0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "89 05 ?? ?? ?? ?? 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC CC",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "schemasystem!0x1800010B6 (sub_180001090 reads dword_1800769C0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 485824,
+    "2000930": 485824,
+    "2000933": 485824,
+    "2000940": 485824
+   },
+   "status": "verified"
+  },
+  "unk_1800769C8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "schemasystem!0x18000E150 (sub_18000E150 reads unk_1800769C8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 485832,
+    "2000930": 485832,
+    "2000933": 485832,
+    "2000940": 485832
+   },
+   "status": "verified"
+  },
+  "SSV_SCHEMASYSTEM_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaSystem"
+   },
+   "via": "schemasystem!0x180058598 (??_7CSchemaSystem@@6B@, 40 slots; = signatures/schemasystem.json CSchemaSystem)",
+   "tag": "RTTI",
+   "bridge": "SSV_SCHEMASYSTEM_VT",
+   "expect": {
+    "2000930": 361880,
+    "2000933": 361880,
+    "2000940": 361880
+   }
+  },
+  "SSVS_FIND_TYPE_SCOPE": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SSV_SCHEMASYSTEM_VT",
+    "slot": 13
+   },
+   "via": "schemasystem!0x180011350 (ISchemaSystem slot 13 FindTypeScopeForModule(name, bindingName*) ; returns the global scope on a miss)",
+   "tag": "V",
+   "bridge": "SSVS_FIND_TYPE_SCOPE",
+   "sdk": "S2_SLOT_ISchemaSystem_FindTypeScopeForModule",
+   "notes": "ISchemaSystem::FindTypeScopeForModule",
+   "expect": {
+    "2000930": 70480,
+    "2000933": 70480,
+    "2000940": 70480
+   }
+  },
+  "SSV_TYPESCOPE_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSchemaSystemTypeScope"
+   },
+   "via": "schemasystem!0x1800586F0 (??_7CSchemaSystemTypeScope@@6B@, 35 slots)",
+   "tag": "RTTI",
+   "bridge": "SSV_TYPESCOPE_VT",
+   "expect": {
+    "2000930": 362224,
+    "2000933": 362224,
+    "2000940": 362224
+   }
+  },
+  "SSVS_TS_FIND_RAW_CLASS": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SSV_TYPESCOPE_VT",
+    "slot": 25
+   },
+   "via": "schemasystem!0x180010380 (scope slot 25 FindRawClassBinding(const char*) -> CSchemaClassInfo*; hash-only match, verify +0x08 name)",
+   "tag": "V",
+   "bridge": "SSVS_TS_FIND_RAW_CLASS",
+   "sdk": "S2_SLOT_ISchemaSystemTypeScope_FindRawClassBinding",
+   "notes": "CSchemaSystemTypeScope::FindRawClassBinding(name)",
+   "expect": {
+    "2000930": 66432,
+    "2000933": 66432,
+    "2000940": 66432
+   }
+  },
+  "SSVS_TS_IS_GLOBAL_SCOPE": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SSV_TYPESCOPE_VT",
+    "slot": 29
+   },
+   "via": "schemasystem!0x180012280 (scope slot 29 IsGlobalScope; detects a module miss after slot 13)",
+   "tag": "V",
+   "bridge": "SSVS_TS_IS_GLOBAL_SCOPE",
+   "sdk": "S2_SLOT_ISchemaSystemTypeScope_IsGlobalScope",
+   "notes": "CSchemaSystemTypeScope::IsGlobalScope",
+   "expect": {
+    "2000930": 74368,
+    "2000933": 74368,
+    "2000940": 74368
+   }
+  },
+  "SSVS_TS_GET_SCOPE_NAME": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "SSV_TYPESCOPE_VT",
+    "slot": 28
+   },
+   "via": "schemasystem!0x1800115E0 ScopedNameForClass formats \"%s%c%s\" with scope slot 28 GetScopeName (ISchemaSystem.md slot 17 row)",
+   "tag": "V",
+   "bridge": "SSVS_TS_GET_SCOPE_NAME",
+   "sdk": "S2_SLOT_ISchemaSystemTypeScope_GetScopeName",
+   "notes": "CSchemaSystemTypeScope::GetScopeName (m_szScopeName)",
+   "expect": {
+    "2000930": 74352,
+    "2000933": 74352,
+    "2000940": 74352
+   }
+  }
+ }
+}

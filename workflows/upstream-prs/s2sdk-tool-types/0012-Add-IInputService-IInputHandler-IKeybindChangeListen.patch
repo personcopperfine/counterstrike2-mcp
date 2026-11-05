@@ -1,0 +1,116 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 03:12:45 -0500
+Subject: [PATCH 12/47] Add IInputService, IInputHandler &
+ IKeybindChangeListener
+
+Ported from Wend4r/sourcesdk s2/restore-engine
+public/engine2/iinputservice.h, verified against CS2 2000930 (win64 and
+linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/engine2/iinputservice.h | 94 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 public/engine2/iinputservice.h
+
+diff --git a/public/engine2/iinputservice.h b/public/engine2/iinputservice.h
+new file mode 100644
+index 00000000..7f58de8a
+--- /dev/null
++++ b/public/engine2/iinputservice.h
+@@ -0,0 +1,94 @@
++//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
++//
++// Purpose:
++//
++//=============================================================================//
++
++#ifndef IINPUTSERVICE_H
++#define IINPUTSERVICE_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "engine2/iengineservicemgr.h"
++#include "inputsystem/analogcode.h"
++#include "inputsystem/buttoncode.h"
++#include "inputsystem/inputenums.h"
++#include "tier0/utldelegate.h"
++#include "tier0/utlstring.h"
++
++class CInputValueBase;
++class CUtlBuffer;
++
++// AMNOTE: Installed with IInputService::InstallInputHandler. Handlers see each event in priority order until one returns IHR_INPUT_CONSUMED
++abstract_class IInputHandler
++{
++public:
++	virtual InputHandlerResult_t HandleInputEvent( const InputEvent_t &event, CSplitScreenSlot nSplitScreenPlayerSlot ) = 0;
++};
++
++// AMNOTE: Added with IInputService::AddBindingListener; called with a button whose binding changed
++abstract_class IKeybindChangeListener
++{
++public:
++	virtual void unk001( ButtonCode_t code ) = 0;
++};
++
++abstract_class IInputService : public IEngineService
++{
++public:
++	// AMNOTE: Handlers are kept sorted by descending nPriority
++	virtual void InstallInputHandler( const char *pszName, int nPriority, IInputHandler *pHandler ) = 0;
++	virtual void RemoveInputHandler( IInputHandler *pHandler ) = 0;
++	virtual void AddCommandText( int nTarget, const char *pszText, int nSource ) = 0;
++	virtual bool IsAppActive() = 0;
++	virtual bool ReadKeyBindings( CSplitScreenSlot nSlot ) = 0;
++	virtual void WriteKeyBindings( CSplitScreenSlot nSlot ) = 0;
++	virtual void SetBinding( ButtonCode_t code, CSplitScreenSlot nSlot, const char *pszBinding, bool bIsDefaultBinding, int nChord ) = 0;
++	virtual const char *GetBinding( ButtonCode_t code, CSplitScreenSlot nSlot, int nChord ) = 0;
++	virtual void SetBinding( AnalogCode_t code, CSplitScreenSlot nSlot, const char *pszBinding, bool bIsDefaultBinding, int nChord ) = 0;
++	virtual const char *GetBinding( AnalogCode_t code, CSplitScreenSlot nSlot, int nChord ) = 0;
++	virtual const char *NameForBinding( const char *pszBinding, CSplitScreenSlot nSlot, int nStartCount, int nAllowJoystick ) = 0;
++	virtual bool IsToggleConsoleButton( ButtonCode_t code, int nModifiers ) = 0;
++	virtual bool IsEscapeButton( ButtonCode_t code, int nModifiers ) = 0;
++	virtual bool HasMouseFocus() = 0;
++	virtual void RegisterInputValue( CInputValueBase *pInputValue ) = 0;
++	virtual void UnregisterInputValue( CInputValueBase *pInputValue ) = 0;
++	// AMNOTE: Stops when the callback returns false
++	virtual void ForEachInputValue( const CUtlDelegate< bool ( CInputValueBase * ) > &callback ) = 0;
++	virtual void EnableKeyBindingSystem( bool bEnable ) = 0;
++	virtual void unk101( bool ) = 0;
++	virtual int GetFrameCount() = 0;
++	// AMNOTE: Counted lock of all command buffers
++	virtual void LockCommandBuffers( bool bLock ) = 0;
++	virtual void LoadCheatCodes( CUtlBuffer &buf ) = 0;
++	virtual void ClearCheatCodes() = 0;
++	// AMNOTE: nSlot < 0 clears every slot
++	virtual void UnbindAllKeys( int nSlot ) = 0;
++	virtual void AddBindingListener( IKeybindChangeListener *pListener ) = 0;
++	virtual void RemoveBindingListener( IKeybindChangeListener *pListener ) = 0;
++	// Same methods as IInputSystem
++	virtual bool unk201( ButtonCode_t code ) = 0;
++	virtual bool unk202( ButtonCode_t code ) = 0;
++	virtual bool unk203( ButtonCode_t code ) = 0;
++	virtual bool IsButtonDown( ButtonCode_t code ) = 0;
++
++	// AMNOTE: Same as IsButtonDown unless a remapping flag is set
++	virtual bool unk301( ButtonCode_t code ) = 0;
++	// AMNOTE: Forward to IInputSystem with the engine window
++	virtual void GetCursorPosition( float *pX, float *pY ) = 0;
++	virtual void SetCursorPosition( float x, float y ) = 0;
++	virtual CUtlString GetUserSettingsFileName( const char *pszName, bool *pbExists, bool bNoCfgDir ) = 0;
++	virtual void AppendChordModifiers( CUtlString &sName, int nChord ) = 0;
++	virtual void unk401( bool ) = 0;
++	// AMNOTE: Does nothing
++	virtual void unk402() = 0;
++	// AMNOTE: Does nothing
++	virtual void unk403() = 0;
++	// AMNOTE: 8 with Engine2/AllowKeyChordBindings, 1 otherwise
++	virtual int GetNumChords() = 0;
++	// AMNOTE: Stores both pointers in two parallel lists
++	virtual void unk501( int *, void * ) = 0;
++};
++
++#endif // IINPUTSERVICE_H

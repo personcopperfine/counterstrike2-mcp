@@ -1,0 +1,181 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 01:53:06 -0500
+Subject: [PATCH 03/47] Fix CFrustum & Camera_t layout
+
+Ported from Wend4r/sourcesdk s2/restore-scenesystem public/mathlib/camera.h,
+verified against CS2 2000930 (win64 and linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+---
+ public/mathlib/camera.h | 64 +++++++++++++++++++++++++++++------------
+ 1 file changed, 46 insertions(+), 18 deletions(-)
+
+diff --git a/public/mathlib/camera.h b/public/mathlib/camera.h
+index 57680610..f814d93c 100644
+--- a/public/mathlib/camera.h
++++ b/public/mathlib/camera.h
+@@ -36,9 +36,13 @@ struct Camera_t
+ {
+ 	Vector m_origin;
+ 	QAngle m_angles;
++	// AMNOTE: -1 likely makes the camera orthographic, using m_flWidth and m_flHeight.
+ 	float m_flFOVX;		// FOV for X/width
++	float m_flAspect;
+ 	float m_flZNear;
+ 	float m_flZFar;
++	float m_flWidth;
++	float m_flHeight;
+ };
+ 
+ 
+@@ -62,6 +66,7 @@ void ComputeScreenSpacePosition( Vector2D *pScreenPosition, const Vector &vecWor
+ class CFrustum
+ {
+ public:
++	// AMNOTE: Leaves every member uninitialized; the engine fills in defaults for the clip space rectangle, the axes and the matrices.
+ 	CFrustum()
+ 	{
+ 	}
+@@ -74,21 +79,21 @@ public:
+ 	{
+ 		Vector vMins = box.m_vMinBounds - m_camera.m_origin;
+ 		Vector vMaxs = box.m_vMaxBounds - m_camera.m_origin;
+-		return !m_frustum.CullBox( vMins, vMaxs );
++		return !m_frustumStruct.CullBox( vMins, vMaxs );
+ 	}
+ 
+ 	bool BoundingVolumeIntersectsFrustum( Vector const &mins, Vector const &maxes ) const
+ 	{
+ 		Vector vMins = mins - m_camera.m_origin;
+ 		Vector vMaxs = maxes - m_camera.m_origin;
+-		return !m_frustum.CullBox( vMins, vMaxs );
++		return !m_frustumStruct.CullBox( vMins, vMaxs );
+ 	}
+ 
+ 	bool BoundingVolumeIntersectsFrustum( AABB_t const &box, Vector &vOriginShift ) const
+ 	{
+ 		Vector vMins = box.m_vMinBounds - m_camera.m_origin - vOriginShift;
+ 		Vector vMaxs = box.m_vMaxBounds - m_camera.m_origin - vOriginShift;
+-		return !m_frustum.CullBox( vMins, vMaxs );
++		return !m_frustumStruct.CullBox( vMins, vMaxs );
+ 	}
+ 
+ 	FORCEINLINE bool CheckBoxInline( const VectorAligned &mins, const VectorAligned &maxs )
+@@ -108,12 +113,12 @@ public:
+ 		// dotBack0 = DotProduct( normal, normals.x < 0 ? mins.x : maxs.x );
+ 		for ( int i = 0; i < 2; i++ )
+ 		{
+-			fltx4 xTotalBack = MulSIMD( m_frustum.planes[i].nX, MaskedAssign( m_frustum.planes[i].xSign, minx, maxx ) );
+-			fltx4 yTotalBack = MulSIMD( m_frustum.planes[i].nY, MaskedAssign( m_frustum.planes[i].ySign, miny, maxy ) );
+-			fltx4 zTotalBack = MulSIMD( m_frustum.planes[i].nZ, MaskedAssign( m_frustum.planes[i].zSign, minz, maxz ) );
++			fltx4 xTotalBack = MulSIMD( m_frustumStruct.planes[i].nX, MaskedAssign( m_frustumStruct.planes[i].xSign, minx, maxx ) );
++			fltx4 yTotalBack = MulSIMD( m_frustumStruct.planes[i].nY, MaskedAssign( m_frustumStruct.planes[i].ySign, miny, maxy ) );
++			fltx4 zTotalBack = MulSIMD( m_frustumStruct.planes[i].nZ, MaskedAssign( m_frustumStruct.planes[i].zSign, minz, maxz ) );
+ 			fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+ 			// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+-			fltx4 isOut = CmpLtSIMD( dotBack, m_frustum.planes[i].dist );
++			fltx4 isOut = CmpLtSIMD( dotBack, m_frustumStruct.planes[i].dist );
+ 			if ( IsAnyNegative(isOut) )
+ 				return false;
+ 		}
+@@ -151,10 +156,11 @@ public:
+ 		*pFar = flFar;
+ 	}
+ 
++	// AMNOTE: Only fills the view, projection and view projection matrices, the axes and the planes. The inverse matrices, the clip space rectangle and the members after m_invViewProj are left as they are.
+ 	void UpdateFrustumFromCamera()
+ 	{
+ 		ComputeViewMatrix( &m_worldToView, &m_cameraToWorld, m_camera );
+-		ComputeProjectionMatrix( &m_projection, m_camera.m_flZNear, m_camera.m_flZFar, m_camera.m_flFOVX, m_flAspect );
++		ComputeProjectionMatrix( &m_projection, m_camera.m_flZNear, m_camera.m_flZFar, m_camera.m_flFOVX, m_camera.m_flAspect );
+ 
+ 		m_viewProj = (m_projection * VMatrix(m_worldToView)).Transpose();
+ 		MatrixGetColumn( m_cameraToWorld, 0, m_forward );
+@@ -165,7 +171,7 @@ public:
+ 		// and the plane constants retain precision over large world coordinate spaces
+ 		// Also the voxel renderer needs the camera information anyway to compute LOD so this is
+ 		// convenient
+-		GeneratePerspectiveFrustum( vec3_origin, m_camera.m_angles, m_camera.m_flZNear, m_camera.m_flZFar, m_camera.m_flFOVX, m_flAspect, m_frustum );
++		GeneratePerspectiveFrustum( vec3_origin, m_camera.m_angles, m_camera.m_flZNear, m_camera.m_flZFar, m_camera.m_flFOVX, m_camera.m_flAspect, m_frustumStruct );
+ 	}
+ 
+ 
+@@ -211,12 +217,12 @@ public:
+ 	void SetView( VMatrix &mView ) { m_worldToView = mView.As3x4(); }
+ 	void SetProj( VMatrix &mProj ) { m_projection = mProj; }
+ 	void CalcViewProj( ) { m_viewProj = (m_projection * VMatrix(m_worldToView)).Transpose(); }
+-	void SetFrustum( const Frustum_t &frustum ) { m_frustum = frustum; }
++	void SetFrustum( const Frustum_t &frustum ) { m_frustumStruct = frustum; }
+ 	void SetForward( Vector &forward ) { m_forward = forward; }
+ 	void SetNearFarPlanes( float flNear, float flFar ) { m_camera.m_flZNear = flNear; m_camera.m_flZFar = flFar; }
+ 	void SetCameraPosition( const Vector &origin ) { m_camera.m_origin = origin; }
+ 	void SetCameraAngles( const QAngle &angles ) { m_camera.m_angles = angles; }
+-	void SetAspect( float flAspect ) { m_flAspect = flAspect; }
++	void SetAspect( float flAspect ) { m_camera.m_flAspect = flAspect; }
+ 	void SetFOV( float flFOV ) { m_camera.m_flFOVX = flFOV; }
+ 
+ 	const Vector &GetCameraPosition() const { return m_camera.m_origin; }
+@@ -224,11 +230,12 @@ public:
+ 	const matrix3x4_t &GetView() const { return m_worldToView; }
+ 	const VMatrix &GetProj() const { return m_projection; }
+ 	const VMatrix &GetViewProj() const { return m_viewProj; }
+-	float GetAspect() const { return m_flAspect; }
++	float GetAspect() const { return m_camera.m_flAspect; }
+ 	float GetNearPlane() const { return m_camera.m_flZNear; }
+ 	float GetFarPlane() const { return m_camera.m_flZFar; }
+ 	float GetFOV() const { return m_camera.m_flFOVX; }
+ 
++	// AMNOTE: Leaves m_flWidth and m_flHeight as they are.
+ 	void InitCamera( const Vector &origin, const QAngle &angles, float flNear, float flFar, float flFOV, float flAspect )
+ 	{
+ 		m_camera.m_origin = origin;
+@@ -236,22 +243,43 @@ public:
+ 		m_camera.m_flZNear = flNear;
+ 		m_camera.m_flZFar = flFar;
+ 		m_camera.m_flFOVX = flFOV;
+-		m_flAspect = flAspect;
++		m_camera.m_flAspect = flAspect;
+ 	}
+ 
+ protected:
+-	ALIGN16 Frustum_t	m_frustum;
+ 	ALIGN16 Camera_t	m_camera;
+-	float		m_flAspect;
++	ALIGN16 Frustum_t	m_frustumStruct;
++
++	float		m_flClipSpaceBottomLeftX;
++	float		m_flClipSpaceBottomLeftY;
++	float		m_flClipSpaceTopRightX;
++	float		m_flClipSpaceTopRightY;
++
++	bool		m_unk101;
++	bool		m_unk102;
++
+ 	Vector		m_forward;
+ 	Vector		m_left;
+ 	Vector		m_up;
+ 
+ 	matrix3x4_t	m_cameraToWorld;
+ 	matrix3x4_t	m_worldToView;
+-	VMatrix	m_viewToWorld;
+-	VMatrix m_projection;
+-	VMatrix m_viewProj;
++
++	VMatrix		m_projection;
++	VMatrix		m_invProjection;
++	VMatrix		m_viewProj;
++	VMatrix		m_invViewProj;
++
++	VMatrix		m_unk201;
++	VMatrix		m_unk202;
++	VMatrix		m_unk203;
++	VMatrix		m_unk204;
++
++	float		m_unk205;
++	float		m_unk206;
++	float		m_unk207;
++	float		m_unk208;
++	float		m_unk209;
+ };
+ 
+ #endif // CAMERA_H

@@ -1,0 +1,90 @@
+{
+ "_doc": [
+  "particles.dll entries for the s2sdk header ties (sdkcheck.py): the vtables of the two concrete classes that",
+  "implement IParticleSystemMgr and IParticleFunctionDefinition (s2sdk-types RE7). Nothing here has a `bridge` macro:",
+  "the bridge reaches IParticleSystemMgr through pet.dll's ParticleSystemMgr003 pointer (pet.json PETG_PARTICLE_MGR)",
+  "and its function definitions through the manager's slots (PETOFF_PMGR_FUNC_*, PETOFF_FACTORY_*)."
+ ],
+ "module": "particles.dll",
+ "image_base": 6442450944,
+ "builds": {
+  "2000930": {
+   "sha256": "9dc34a2de4311ec8",
+   "timestamp": 1791492060
+  },
+  "2000933": {
+   "sha256": "04579a505614df99",
+   "timestamp": 1792003399
+  },
+  "2000940": {
+   "sha256": "1a81a66f33c860a8",
+   "timestamp": 1793662627
+  }
+ },
+ "entries": {
+  "CParticleSystemMgr": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CParticleSystemMgr"
+   },
+   "via": "particles.dll RTTI .?AVCParticleSystemMgr@@ primary vtable (the ParticleSystemMgr003 singleton's table, complete-object locator offset 0)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "IParticleSystemMgr implementation (CParticleSystemMgr : IParticleSystemMgr, ISceneObjectListener, IToolsResourceListener); the primary table is exactly the interface's 61 slots (MSVC gives its overrides of the two secondary bases no slot of their own)",
+   "expect": {
+    "2000930": 5078976,
+    "2000933": 5078976,
+    "2000940": 5079008
+   }
+  },
+  "VTLEN_CParticleSystemMgr": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CParticleSystemMgr"
+   },
+   "via": "particles.dll CParticleSystemMgr primary vtable: 61 code pointers up to the next table's locator (RE7 section 4)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "compared by sdkcheck.py with the generated IParticleSystemMgr length (61): IAppSystem's 11 slots + 50 own, no added virtual",
+   "expect": {
+    "2000930": 61,
+    "2000933": 61,
+    "2000940": 61
+   }
+  },
+  "CParticleFunctionDefinitionTyped<C_OP_ConstrainDistance>": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": ".?AV?$CParticleFunctionDefinitionTyped@VC_OP_ConstrainDistance@@@@"
+   },
+   "via": "particles.dll RTTI .?AV?$CParticleFunctionDefinitionTyped@VC_OP_ConstrainDistance@@@@ primary vtable (CParticleFunctionDefinitionTyped<T> : CParticleFunctionDefinition : IParticleFunctionDefinition)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "one concrete IParticleFunctionDefinition table (any registered function class has the same shape): GetName, GetId, GetSchemaBinding",
+   "expect": {
+    "2000930": 5132552,
+    "2000933": 5132552,
+    "2000940": 5132584
+   }
+  },
+  "VTLEN_CParticleFunctionDefinitionTyped_C_OP_ConstrainDistance": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CParticleFunctionDefinitionTyped<C_OP_ConstrainDistance>"
+   },
+   "via": "particles.dll CParticleFunctionDefinitionTyped<C_OP_ConstrainDistance> primary vtable: 3 code pointers up to the next table's locator (RE7 section 3.2)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "compared by sdkcheck.py with the generated IParticleFunctionDefinition length (3): the concrete class adds no virtual",
+   "expect": {
+    "2000930": 3,
+    "2000933": 3,
+    "2000940": 3
+   }
+  }
+ }
+}

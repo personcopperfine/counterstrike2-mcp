@@ -1,0 +1,34 @@
+[package]
+name = "client-mcp"
+version = "0.0.1"
+description = "MCP server (stdio) for the CS2 game client: tests, multiplayer, scripting, demo video, AI playtest"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "client_mcp"
+path = "src/lib.rs"
+
+[[bin]]
+name = "client-mcp"
+path = "src/main.rs"
+
+[dependencies]
+cs2-mcp-common.workspace = true
+s2sdk-sys.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+clap.workspace = true
+regex.workspace = true
+
+[dev-dependencies]
+cs2-mcp-common = { path = "../crates/cs2-mcp-common", features = ["mock"] }
+
+[features]
+default = []
+# Live tests against a real bridge/runtime (opt-in; also needs CS2_MCP_LIVE=1).
+live = []

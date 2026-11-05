@@ -1,0 +1,18 @@
+// movie_demo: render a SourceTV demo to video with the engine's own movie recorder (no screenshot bursts).
+// Needs DEMO=<file.dem> (run_vtest.sh stages it as csgo/vtest_src.dem).
+// playdemo ... --startmovie <name> <startmovie opts>: the demo player starts the movie once playback has ticks
+// and ends it on "Demo finished" (see worknotes/movie-scratch.md). While recording, the host timestep is locked to
+// the movie framerate, so the output is frame-exact regardless of real FPS.
+// no_unique_dir: write csgo/vtest_movie.webm instead of csgo/movie/<timestamp>/vtest_movie.webm.
+testscript_debug 1
+r_always_render_all_windows 1
+Test_Run mark VTEST_BEGIN
+playdemo vtest_src --startmovie vtest_movie webm framerate 30 no_unique_dir
+Test_WaitForCheckPoint DemoPlaybackFinished
+Test_Run mark VTEST_DEMO_DONE
+// let the encoder drain and the muxer finalize
+Test_Wait 5
+Test_Run mark VTEST_DONE
+quit
+Test_Wait 30
+Test_ExitProcess 3

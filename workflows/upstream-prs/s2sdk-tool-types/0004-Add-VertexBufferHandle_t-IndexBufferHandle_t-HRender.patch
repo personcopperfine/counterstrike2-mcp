@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 01:53:16 -0500
+Subject: [PATCH 04/47] Add VertexBufferHandle_t, IndexBufferHandle_t &
+ HRenderTexture
+
+---
+ public/rendersystem/rendersystemtypes.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/public/rendersystem/rendersystemtypes.h b/public/rendersystem/rendersystemtypes.h
+index c4c3354b..5d8e46e3 100644
+--- a/public/rendersystem/rendersystemtypes.h
++++ b/public/rendersystem/rendersystemtypes.h
+@@ -29,6 +29,15 @@ enum RenderMultisampleType_t : uint8
+ };
+ 
+ DECLARE_POINTER_HANDLE(SwapChainHandle_t);
++DECLARE_POINTER_HANDLE(VertexBufferHandle_t);
++DECLARE_POINTER_HANDLE(IndexBufferHandle_t);
++
++// AMNOTE: Weak handle to a resource binding; must stay trivially copyable.
++class HRenderTexture
++{
++public:
++	const void *m_pBinding;
++};
+ 
+ struct RenderViewport_t
+ {

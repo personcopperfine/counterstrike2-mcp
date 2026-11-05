@@ -1,0 +1,4991 @@
+{
+  "enums": [],
+  "records": [
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_origin",
+          "offset": 0,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "QAngle",
+          "name": "m_angles",
+          "offset": 12,
+          "rust_type": "QAngle",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flFOVX",
+          "offset": 24,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flAspect",
+          "offset": 28,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flZNear",
+          "offset": 32,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flZFar",
+          "offset": 36,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flWidth",
+          "offset": 40,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flHeight",
+          "offset": 44,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/camera.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_origin",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_angles",
+            "offset": 12,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flFOVX",
+            "offset": 24,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flAspect",
+            "offset": 28,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flZNear",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flZFar",
+            "offset": 36,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flWidth",
+            "offset": 40,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flHeight",
+            "offset": 44,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 48
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_origin",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_angles",
+            "offset": 12,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flFOVX",
+            "offset": 24,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flAspect",
+            "offset": 28,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flZNear",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flZFar",
+            "offset": 36,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flWidth",
+            "offset": 40,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flHeight",
+            "offset": 44,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 48
+      },
+      "name": "Camera_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 48
+    },
+    {
+      "align": 16,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Camera_t",
+          "name": "m_camera",
+          "offset": 0,
+          "rust_type": "Camera_t",
+          "size": 48
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Frustum_t",
+          "name": "m_frustumStruct",
+          "offset": 48,
+          "rust_type": null,
+          "size": 320
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flClipSpaceBottomLeftX",
+          "offset": 368,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flClipSpaceBottomLeftY",
+          "offset": 372,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flClipSpaceTopRightX",
+          "offset": 376,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flClipSpaceTopRightY",
+          "offset": 380,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_unk101",
+          "offset": 384,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_unk102",
+          "offset": 385,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_forward",
+          "offset": 388,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_left",
+          "offset": 400,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_up",
+          "offset": 412,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "matrix3x4_t",
+          "name": "m_cameraToWorld",
+          "offset": 424,
+          "rust_type": null,
+          "size": 48
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "matrix3x4_t",
+          "name": "m_worldToView",
+          "offset": 472,
+          "rust_type": null,
+          "size": 48
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_projection",
+          "offset": 520,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_invProjection",
+          "offset": 584,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_viewProj",
+          "offset": 648,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_invViewProj",
+          "offset": 712,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_unk201",
+          "offset": 776,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_unk202",
+          "offset": 840,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_unk203",
+          "offset": 904,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VMatrix",
+          "name": "m_unk204",
+          "offset": 968,
+          "rust_type": null,
+          "size": 64
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk205",
+          "offset": 1032,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk206",
+          "offset": 1036,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk207",
+          "offset": 1040,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk208",
+          "offset": 1044,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk209",
+          "offset": 1048,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/camera.h",
+      "itanium": {
+        "align": 16,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_camera",
+            "offset": 0,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_frustumStruct",
+            "offset": 48,
+            "size": 320
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceBottomLeftX",
+            "offset": 368,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceBottomLeftY",
+            "offset": 372,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceTopRightX",
+            "offset": 376,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceTopRightY",
+            "offset": 380,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 384,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 385,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_forward",
+            "offset": 388,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_left",
+            "offset": 400,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_up",
+            "offset": 412,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_cameraToWorld",
+            "offset": 424,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_worldToView",
+            "offset": 472,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_projection",
+            "offset": 520,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_invProjection",
+            "offset": 584,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_viewProj",
+            "offset": 648,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_invViewProj",
+            "offset": 712,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 776,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk202",
+            "offset": 840,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk203",
+            "offset": 904,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk204",
+            "offset": 968,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk205",
+            "offset": 1032,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk206",
+            "offset": 1036,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk207",
+            "offset": 1040,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk208",
+            "offset": 1044,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk209",
+            "offset": 1048,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1056
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 16,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_camera",
+            "offset": 0,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_frustumStruct",
+            "offset": 48,
+            "size": 320
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceBottomLeftX",
+            "offset": 368,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceBottomLeftY",
+            "offset": 372,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceTopRightX",
+            "offset": 376,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flClipSpaceTopRightY",
+            "offset": 380,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 384,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 385,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_forward",
+            "offset": 388,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_left",
+            "offset": 400,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_up",
+            "offset": 412,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_cameraToWorld",
+            "offset": 424,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_worldToView",
+            "offset": 472,
+            "size": 48
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_projection",
+            "offset": 520,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_invProjection",
+            "offset": 584,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_viewProj",
+            "offset": 648,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_invViewProj",
+            "offset": 712,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 776,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk202",
+            "offset": 840,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk203",
+            "offset": 904,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk204",
+            "offset": 968,
+            "size": 64
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk205",
+            "offset": 1032,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk206",
+            "offset": 1036,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk207",
+            "offset": 1040,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk208",
+            "offset": 1044,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk209",
+            "offset": 1048,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1056
+      },
+      "name": "CFrustum",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1056
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk002",
+          "offset": 8,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/scenesystem/iscenesystem.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "CViewId",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 1,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[928]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 928]",
+          "size": 928
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/scenesystem/iscenesystem.h",
+      "itanium": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 928
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 928
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 928
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 928
+      },
+      "name": "CRenderAttributes",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 928
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const void *",
+          "name": "m_pBinding",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/scenesystem/iscenesystem.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "HMaterialWeak",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk002",
+          "offset": 8,
+          "rust_type": "u64",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/scenesystem/iscenesystem.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "SceneViewUnk16_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "u32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/scenesystem/iscenesystem.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "SceneViewUnk4_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "ISceneSystem",
+      "header": "public/scenesystem/iscenesystem.h",
+      "methods": [
+        {
+          "cxx_signature": "CSceneObject *(ISceneObjectDesc *, uint64, uint64, ISceneWorld *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "CreateSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pDesc: *mut ::core::ffi::c_void, nTypeFlags: u64, nFlags: u64, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(ISceneWorld *, VertexBufferHandle_t, IndexBufferHandle_t, HMaterialWeak, int, int, const Vector &, const Vector &, int, const char *, bool, uint64)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 13,
+          "name": "CreateSceneObjectFromBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void, hVertexBuffer: *mut ::core::ffi::c_void, hIndexBuffer: *mut ::core::ffi::c_void, hMaterial: HMaterialWeak, nVertices: i32, nIndices: i32, vecBoundsMin: *const Vector, vecBoundsMax: *const Vector, nPrimitiveType: i32, pszDescName: *const ::core::ffi::c_char, bOwnVBAndIB: bool, nFlags: u64) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(uint64, uint64, ISceneWorld *, VertexBufferHandle_t, IndexBufferHandle_t, HMaterialWeak, int, int, const Vector &, const Vector &, int, int16, const char *, bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 12,
+          "name": "CreateSceneObjectFromBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nFlags: u64, nTypeFlags: u64, pWorld: *mut ::core::ffi::c_void, hVertexBuffer: *mut ::core::ffi::c_void, hIndexBuffer: *mut ::core::ffi::c_void, hMaterial: HMaterialWeak, nVertices: i32, nIndices: i32, vecBoundsMin: *const Vector, vecBoundsMax: *const Vector, nPrimitiveType: i32, nDrawPrimitiveFlags: i16, pszDescName: *const ::core::ffi::c_char, bOwnVBAndIB: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(uint64, uint64, ISceneWorld *, const MeshBuilderBuffers_t &, HMaterialWeak, bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "CreateSceneObjectFromStaticBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nFlags: u64, nTypeFlags: u64, pWorld: *mut ::core::ffi::c_void, buffers: *mut ::core::ffi::c_void, hMaterial: HMaterialWeak, bDeleteAtFrameEnd: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneAnimatableObject *(ISceneWorld *, HMaterialWeak, SceneObjectBuffers_t &, uint64, uint64, bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "CreateAnimatableSceneObjectFromBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void, hMaterial: HMaterialWeak, data: *mut ::core::ffi::c_void, nFlags: u64, nTypeFlags: u64, bOwnVBAndIB: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "DeleteSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneObjectDesc *(const char *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "FindRenderableType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *, ISceneObjectDesc *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "AddRenderableType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char, pDesc: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "RemoveRenderableType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (IRenderDevice *, bool)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "BeginRenderingViews",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pRenderDevice: *mut IRenderDevice, bUpdateStats: bool)"
+        },
+        {
+          "cxx_signature": "ISceneView *(const char *, const CViewId &, const CFrustum &, SwapChainHandle_t, ISceneWorld *, const RenderViewport_t &, const vis_info_t *, int)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "AddView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszViewName: *const ::core::ffi::c_char, viewId: *const CViewId, frustum: *const CFrustum, hSwapChain: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void, viewport: *const RenderViewport_t, pVis: *mut ::core::ffi::c_void, nPriority: i32) -> *mut ISceneView"
+        },
+        {
+          "cxx_signature": "ISceneView *(const char *, const ISceneView *, const CFrustum &, SwapChainHandle_t, ISceneWorld *, const RenderViewport_t &, const vis_info_t *, int, int)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "AddDynamicView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszViewName: *const ::core::ffi::c_char, pParentView: *const ISceneView, frustum: *const CFrustum, hSwapChain: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void, viewport: *const RenderViewport_t, pVis: *mut ::core::ffi::c_void, nPriority: i32, nViewProducerIndex: i32) -> *mut ISceneView"
+        },
+        {
+          "cxx_signature": "void (ISceneView *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "BeginRenderingDynamicView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pView: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "IRenderContext *(ISceneView *, ISceneLayer *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "RenderEmbeddedView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pView: *mut ISceneView, pLayer: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "FinishRenderingViews",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, flTime: f32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "WaitForRenderingToComplete",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "IsRenderingBusy",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const Vector &, const Vector &)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "SetSceneObjectBounds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, vecMins: *const Vector, vecMaxs: *const Vector)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "SetObjectBoundsInfinite",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, Vector *, Vector *)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "GetSceneObjectBounds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pMins: *mut Vector, pMaxs: *mut Vector)"
+        },
+        {
+          "cxx_signature": "int (CSceneObject *, ISceneView *, uint8 *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "GetShadowLODIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pView: *mut ISceneView, pLODMask: *mut u8) -> i32"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const uint32 *, int)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "SetPVSFromClusterMembership",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pClusters: *const u32, nClusterCount: i32)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const AABB_t &, bool)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 34,
+          "name": "RecomputePVSFromBounds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, bounds: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const OBB_t &, bool)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "RecomputePVSFromBounds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, bounds: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "ForceVisibleEverywhere",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CSceneDebugTextObject *(Vector2D *, ISceneWorld *, const CTextLayoutInfo *, bool, const Vector &)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "CreateTextObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pEndPos: *mut Vector2D, pWorld: *mut ::core::ffi::c_void, pTextInfo: *mut ::core::ffi::c_void, bPositionIn3DWorldSpace: bool, vLocal3DPosition: *const Vector) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneLightObject *(const LightDesc_t &, ISceneWorld *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 38,
+          "name": "CreateLight",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, desc: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneBarnLightObject *(const void *, ISceneWorld *)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 37,
+          "name": "CreateLight",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pBarnLightDesc: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(HMaterialWeak, ISceneWorld *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "CreateSkyBox",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hMaterial: HMaterialWeak, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneLightProbeVolumeObject *(ISceneWorld *)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "CreateLightProbeVolume",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (ISceneView *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pView: *mut ISceneView) -> bool"
+        },
+        {
+          "cxx_signature": "void (CSceneLightProbeVolumeObject *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "MarkLightProbeVolumeObjectUpdated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pLightProbe: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CEnvMapSceneObject *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "MarkEnvironmentMapObjectUpdated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pEnvMap: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneWorld *(const char *)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "CreateWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ISceneWorld *)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "DestroyWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "VertexBufferHandle_t (int)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "GetWellKnownVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nBuffer: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IndexBufferHandle_t (int)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "GetWellKnownIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nBuffer: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(int, uint8)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "GetWellKnownInputLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nLayout: i32, nVariation: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderInputLayoutField_t *(int, int *)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "GetWellKnownInputLayoutFields",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nLayout: i32, pFieldCount: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "HRenderTexture (int)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HRenderTexture, nTexture: i32) -> *mut HRenderTexture",
+          "msvc_slot": 51,
+          "name": "GetWellKnownTexture",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nTexture: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "IMaterial2 *(int)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "GetWellKnownMaterial",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nMaterial: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "HMaterialWeak (int)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HMaterialWeak, nMaterial: i32) -> *mut HMaterialWeak",
+          "msvc_slot": 53,
+          "name": "GetWellKnownMaterialHandle",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nMaterial: i32) -> HMaterialWeak"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "GetWellKnownShape",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nShape: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "HRenderTexture (int, int)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HRenderTexture, nRenderTarget: i32, nSize: i32) -> *mut HRenderTexture",
+          "msvc_slot": 56,
+          "name": "GetWellKnownRenderTarget",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nRenderTarget: i32, nSize: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "HRenderTexture (int, int, int)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HRenderTexture, nRenderTarget: i32, nWidth: i32, nHeight: i32) -> *mut HRenderTexture",
+          "msvc_slot": 55,
+          "name": "GetWellKnownRenderTarget",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nRenderTarget: i32, nWidth: i32, nHeight: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "void (int, int *, int *)",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "GetRenderTargetSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nSize: i32, pWidth: *mut i32, pHeight: *mut i32)"
+        },
+        {
+          "cxx_signature": "int (int, int)",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "BestRenderTargetSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nWidth: i32, nHeight: i32) -> i32"
+        },
+        {
+          "cxx_signature": "void (int, int)",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "SetMinimumFrameBufferRenderTargetSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nWidth: i32, nHeight: i32)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, int)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "AddTextureToSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hTexture: HRenderTexture, nSet: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture, int)",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "RemoveTextureFromSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hTexture: HRenderTexture, nSet: i32)"
+        },
+        {
+          "cxx_signature": "HRenderTexture (int, int)",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HRenderTexture, nIndex: i32, nSet: i32) -> *mut HRenderTexture",
+          "msvc_slot": 62,
+          "name": "GetTextureInSet",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32, nSet: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "int (HRenderTexture, int)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 63,
+          "name": "FindTextureInSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hTexture: HRenderTexture, nSet: i32) -> i32"
+        },
+        {
+          "cxx_signature": "int (int, int)",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 64,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nValue: i32, nSet: i32) -> i32"
+        },
+        {
+          "cxx_signature": "HRenderTexture (int)",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut HRenderTexture, nSet: i32) -> *mut HRenderTexture",
+          "msvc_slot": 65,
+          "name": "unk302",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nSet: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "uint16 (int)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 66,
+          "name": "unk303",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nSet: i32) -> u16"
+        },
+        {
+          "cxx_signature": "ISceneViewDebugOverlays *(int, const char *)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 67,
+          "name": "CreateSceneViewDebugOverlayList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nTimingType: i32, pszName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ISceneViewDebugOverlays *)",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 68,
+          "name": "DestroySceneViewDebugOverlayList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOverlays: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneViewDebugOverlays *()",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 69,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ISceneViewDebugOverlays *)",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 70,
+          "name": "unk402",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOverlays: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 71,
+          "name": "unk403",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, uint64, uint64, ISceneWorld *)",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 72,
+          "name": "InitObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, nTypeFlags: u64, nFlags: u64, pWorld: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, ISceneWorld *)",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 73,
+          "name": "MoveObjectToWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 74,
+          "name": "FrameUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (int, int, const void *)",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 75,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nUnk1: i32, nCount: i32, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, bool, PipelineRenderTargetInfo_t *)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 77,
+          "name": "ComputePipelineRenderTargetInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hSwapChain: *mut ::core::ffi::c_void, bUnk: bool, pInfo: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int, int, RenderMultisampleType_t, bool, PipelineRenderTargetInfo_t *)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 76,
+          "name": "ComputePipelineRenderTargetInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nWidth: i32, nHeight: i32, nMultisampleType: u8, bUnk: bool, pInfo: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 78,
+          "name": "SetMainSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 79,
+          "name": "SetCanAllocateScratchRenderTargetsOnDemand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, bCanAllocate: bool)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 80,
+          "name": "GetSceneSystemStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 81,
+          "name": "GetSceneSystemStatsMutex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CBufferString *)",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 82,
+          "name": "GetStatsSummaryString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOut: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "void (CBufferString *, const char *)",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 83,
+          "name": "PrintPerFrameStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOut: *mut CBufferString, pszHeader: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "SceneSystemPerFrameStats_t &()",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 84,
+          "name": "GetPerFrameStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "uint32 () const",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 85,
+          "name": "GetFinishRenderingViewsCounter",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> u32"
+        },
+        {
+          "cxx_signature": "uint32 () const",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 86,
+          "name": "GetFrameUpdateCounter",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> u32"
+        },
+        {
+          "cxx_signature": "void (IRenderContext *, int, int, bool)",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 87,
+          "name": "BindTransformTextureAndInstanceIDBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pRenderContext: *mut ::core::ffi::c_void, nVBSlot: i32, nTransformSlotIndex: i32, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (IRenderContext *, int)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 88,
+          "name": "BindTransformBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pRenderContext: *mut ::core::ffi::c_void, nVBSlot: i32)"
+        },
+        {
+          "cxx_signature": "void (int, int *, void **)",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 90,
+          "name": "AllocateFrameScopedTransforms",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nCount: i32, pFirstIndex: *mut i32, ppTransforms: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int, int, int *, void **)",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 89,
+          "name": "AllocateFrameScopedTransforms",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nUnk: i32, nCount: i32, pFirstIndex: *mut i32, ppTransforms: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(int, int *)",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 91,
+          "name": "unk601",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nCount: i32, pFirstIndex: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(int, int *)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 92,
+          "name": "unk602",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nCount: i32, pFirstIndex: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int (const uint32 *)",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 93,
+          "name": "unk603",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pKey: *const u32) -> i32"
+        },
+        {
+          "cxx_signature": "ISceneView *(const char *, ISceneWorld *, const uint32 *)",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 94,
+          "name": "CreateTemplateView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char, pWorld: *mut ::core::ffi::c_void, pUnk: *const u32) -> *mut ISceneView"
+        },
+        {
+          "cxx_signature": "CViewId (int)",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, ret: *mut CViewId, nPlayer: i32) -> *mut CViewId",
+          "msvc_slot": 95,
+          "name": "CreateViewId",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 16,
+              "sret": false
+            },
+            "msvc": {
+              "size": 16,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nPlayer: i32) -> CViewId"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 96,
+          "name": "DeleteSceneObjectAtFrameEnd",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<ISceneWorld *> &)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 97,
+          "name": "GetAllActiveSceneWorlds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, worlds: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint8 (const char *)",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_slot": 98,
+          "name": "FindOrCreateSceneObjectClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char) -> u8"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, uint8)",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_slot": 99,
+          "name": "SetObjectClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, nClass: u8)"
+        },
+        {
+          "cxx_signature": "void (uint8, char *, int)",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 100,
+          "name": "GetObjectClassName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nClass: u8, pszBuffer: *mut ::core::ffi::c_char, nBufferSize: i32)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 101,
+          "name": "ConstructSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 102,
+          "name": "DestructSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject **, int, const FourVectors *, const fltx4 *, const FourVectors *, const fltx4 *, const fltx4 *, const fltx4 *, float, const fltx4 *, const fltx4 *, const fltx4 *)",
+          "decl_index": 92,
+          "is_dtor": false,
+          "itanium_slot": 103,
+          "msvc_slot": 103,
+          "name": "SetSceneObjectTransformsFast",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObjectList: *mut *mut ::core::ffi::c_void, nNumObjects: i32, pXYZOrigins: *mut ::core::ffi::c_void, pRadii: *mut ::core::ffi::c_void, pTints: *mut ::core::ffi::c_void, pRotations: *mut ::core::ffi::c_void, pYaws: *mut ::core::ffi::c_void, pPitches: *mut ::core::ffi::c_void, flRadiusScale: f32, pXAxisScale: *mut ::core::ffi::c_void, pYAxisScale: *mut ::core::ffi::c_void, pZAxisScale: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneView *(const char *, const char *, const ISceneView *, const CFrustum &, SwapChainHandle_t, ISceneWorld *, const RenderViewport_t &, const vis_info_t *, const CRenderAttributes *)",
+          "decl_index": 93,
+          "is_dtor": false,
+          "itanium_slot": 104,
+          "msvc_slot": 104,
+          "name": "AddViewFromTemplate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszViewTemplateName: *const ::core::ffi::c_char, pszViewName: *const ::core::ffi::c_char, pParentView: *const ISceneView, frustum: *const CFrustum, hSwapChain: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void, viewport: *const RenderViewport_t, pVis: *mut ::core::ffi::c_void, pAttributes: *const CRenderAttributes) -> *mut ISceneView"
+        },
+        {
+          "cxx_signature": "void (const char *, void *)",
+          "decl_index": 94,
+          "is_dtor": false,
+          "itanium_slot": 105,
+          "msvc_slot": 105,
+          "name": "InstallTemplateViewFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char, pFactory: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 95,
+          "is_dtor": false,
+          "itanium_slot": 106,
+          "msvc_slot": 106,
+          "name": "RemoveTemplateViewFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (std::function<void ()> &&)",
+          "decl_index": 96,
+          "is_dtor": false,
+          "itanium_slot": 107,
+          "msvc_slot": 107,
+          "name": "QueueSceneObjectUpdateJob",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, job: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 97,
+          "is_dtor": false,
+          "itanium_slot": 108,
+          "msvc_slot": 108,
+          "name": "ExecuteQueuedSceneObjectUpdateJobs",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "void (const std::function<void (CSceneObject *)> &)",
+          "decl_index": 98,
+          "is_dtor": false,
+          "itanium_slot": 109,
+          "msvc_slot": 109,
+          "name": "InstallMaterialDependentSceneObjectUpdater",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, updater: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 99,
+          "is_dtor": false,
+          "itanium_slot": 110,
+          "msvc_slot": 110,
+          "name": "unk701",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 100,
+          "is_dtor": false,
+          "itanium_slot": 111,
+          "msvc_slot": 111,
+          "name": "unk702",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 101,
+          "is_dtor": false,
+          "itanium_slot": 112,
+          "msvc_slot": 112,
+          "name": "SetIgnoreAlphaFade",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, bIgnoreAlphaFade: bool)"
+        },
+        {
+          "cxx_signature": "void (CRenderAttributes &, CSceneObject *, const ISceneLayer *, uint32)",
+          "decl_index": 102,
+          "is_dtor": false,
+          "itanium_slot": 113,
+          "msvc_slot": 113,
+          "name": "SetupPerObjectLighting",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, renderAttributes: *mut CRenderAttributes, pSceneObject: *mut ::core::ffi::c_void, pSceneLayerInterface: *mut ::core::ffi::c_void, nFlags: u32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 103,
+          "is_dtor": false,
+          "itanium_slot": 114,
+          "msvc_slot": 114,
+          "name": "ReloadSparseShadowTrees",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nCount: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 104,
+          "is_dtor": false,
+          "itanium_slot": 115,
+          "msvc_slot": 115,
+          "name": "DestroyAllSparseShadowTrees",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 105,
+          "is_dtor": false,
+          "itanium_slot": 116,
+          "msvc_slot": 116,
+          "name": "LoadSparseShadowTreeManifest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 106,
+          "is_dtor": false,
+          "itanium_slot": 117,
+          "msvc_slot": 117,
+          "name": "UnloadSparseShadowTreeManifest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "ISparseShadowTree *(int, bool)",
+          "decl_index": 107,
+          "is_dtor": false,
+          "itanium_slot": 118,
+          "msvc_slot": 118,
+          "name": "GetSparseShadowTree",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32, bOnlyIfEnabled: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 108,
+          "is_dtor": false,
+          "itanium_slot": 119,
+          "msvc_slot": 119,
+          "name": "CreateSparseShadowTree",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void, nIndex: i32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 109,
+          "is_dtor": false,
+          "itanium_slot": 120,
+          "msvc_slot": 120,
+          "name": "DestroySparseShadowTree",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32)"
+        },
+        {
+          "cxx_signature": "CSceneObject *(ISceneView *, CSceneObject *)",
+          "decl_index": 110,
+          "is_dtor": false,
+          "itanium_slot": 121,
+          "msvc_slot": 121,
+          "name": "unk801",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pView: *mut ISceneView, pObject: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (uint8, uint8)",
+          "decl_index": 111,
+          "is_dtor": false,
+          "itanium_slot": 122,
+          "msvc_slot": 122,
+          "name": "SetObjectClassSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nClass: u8, nSettings: u8)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 112,
+          "is_dtor": false,
+          "itanium_slot": 123,
+          "msvc_slot": 123,
+          "name": "SceneObject_ScheduleDirtyUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 113,
+          "is_dtor": false,
+          "itanium_slot": 124,
+          "msvc_slot": 124,
+          "name": "SceneObject_UnscheduleDirtyUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 114,
+          "is_dtor": false,
+          "itanium_slot": 125,
+          "msvc_slot": 125,
+          "name": "SceneObject_AttachExtraData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 115,
+          "is_dtor": false,
+          "itanium_slot": 126,
+          "msvc_slot": 126,
+          "name": "SceneObject_AttachLightingCache",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 116,
+          "is_dtor": false,
+          "itanium_slot": 127,
+          "msvc_slot": 127,
+          "name": "SceneObject_UpdateFlagsBasedOnMaterial",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const void *)",
+          "decl_index": 117,
+          "is_dtor": false,
+          "itanium_slot": 128,
+          "msvc_slot": 128,
+          "name": "unk901",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pData: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(CSceneObject *, void *, uint64)",
+          "decl_index": 118,
+          "is_dtor": false,
+          "itanium_slot": 129,
+          "msvc_slot": 129,
+          "name": "unk902",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pOut: *mut ::core::ffi::c_void, nUnk: u64) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, HMaterialWeak)",
+          "decl_index": 119,
+          "is_dtor": false,
+          "itanium_slot": 130,
+          "msvc_slot": 130,
+          "name": "SceneObject_SetMaterialOverride",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObj: *mut ::core::ffi::c_void, hOverride: HMaterialWeak)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, int, bool, bool)",
+          "decl_index": 120,
+          "is_dtor": false,
+          "itanium_slot": 131,
+          "msvc_slot": 131,
+          "name": "SceneObject_SetVisibilityToPlayerIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, nPlayerIndex: i32, bUnk: bool, bVisible: bool)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, uint32)",
+          "decl_index": 121,
+          "is_dtor": false,
+          "itanium_slot": 132,
+          "msvc_slot": 132,
+          "name": "SceneObject_SetSplitScreenMask",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, nMask: u32)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, CUtlStringToken, CSceneObject *, uint32)",
+          "decl_index": 122,
+          "is_dtor": false,
+          "itanium_slot": 133,
+          "msvc_slot": 133,
+          "name": "SceneObject_AddChild",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pParent: *mut ::core::ffi::c_void, token: CUtlStringToken, pChild: *mut ::core::ffi::c_void, nFlags: u32)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, CSceneObject *)",
+          "decl_index": 123,
+          "is_dtor": false,
+          "itanium_slot": 134,
+          "msvc_slot": 134,
+          "name": "SceneObject_RemoveChild",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pParent: *mut ::core::ffi::c_void, pChild: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CSceneObject *(const CSceneObject *, CUtlStringToken)",
+          "decl_index": 124,
+          "is_dtor": false,
+          "itanium_slot": 135,
+          "msvc_slot": 135,
+          "name": "SceneObject_FindChild",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pParent: *mut ::core::ffi::c_void, token: CUtlStringToken) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const CSceneObject *)",
+          "decl_index": 125,
+          "is_dtor": false,
+          "itanium_slot": 136,
+          "msvc_slot": 136,
+          "name": "SceneObject_MirrorTransformToChildSceneObjects",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const CSceneObject *)",
+          "decl_index": 126,
+          "is_dtor": false,
+          "itanium_slot": 137,
+          "msvc_slot": 137,
+          "name": "SceneObject_MirrorVisibilityToChildSceneObjects",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, CUtlStringToken)",
+          "decl_index": 127,
+          "is_dtor": false,
+          "itanium_slot": 138,
+          "msvc_slot": 138,
+          "name": "SceneObject_SetForceLayerID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, layerId: CUtlStringToken)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *)",
+          "decl_index": 128,
+          "is_dtor": false,
+          "itanium_slot": 139,
+          "msvc_slot": 139,
+          "name": "SceneObject_PostFlagsUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (const char *)",
+          "decl_index": 129,
+          "is_dtor": false,
+          "itanium_slot": 140,
+          "msvc_slot": 140,
+          "name": "RegisterExtraDataAllocation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char) -> i32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 130,
+          "is_dtor": false,
+          "itanium_slot": 141,
+          "msvc_slot": 141,
+          "name": "GetCurrentRenderTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> f32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 131,
+          "is_dtor": false,
+          "itanium_slot": 142,
+          "msvc_slot": 142,
+          "name": "AdvanceNonRenderedFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "uint8 (const CSceneObject *) const",
+          "decl_index": 132,
+          "is_dtor": false,
+          "itanium_slot": 143,
+          "msvc_slot": 143,
+          "name": "GetObjectSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void) -> u8"
+        },
+        {
+          "cxx_signature": "VMatrix (const void *, Vector *)",
+          "decl_index": 133,
+          "is_dtor": false,
+          "itanium_slot": 144,
+          "msvc_slot": 144,
+          "name": "unk1001",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "VMatrix (const void *)",
+          "decl_index": 134,
+          "is_dtor": false,
+          "itanium_slot": 145,
+          "msvc_slot": 145,
+          "name": "unk1002",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (void *, const CFrustum &, void *, void *, void *, float, float, float, const void *, void *)",
+          "decl_index": 135,
+          "is_dtor": false,
+          "itanium_slot": 146,
+          "msvc_slot": 146,
+          "name": "unk1003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOut: *mut ::core::ffi::c_void, frustum: *const CFrustum, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, flUnk1: f32, flUnk2: f32, flUnk3: f32, pUnk4: *mut ::core::ffi::c_void, pUnk5: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 136,
+          "is_dtor": false,
+          "itanium_slot": 147,
+          "msvc_slot": 147,
+          "name": "VolumetricFogEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 137,
+          "is_dtor": false,
+          "itanium_slot": 148,
+          "msvc_slot": 148,
+          "name": "IsWindEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 138,
+          "is_dtor": false,
+          "itanium_slot": 149,
+          "msvc_slot": 149,
+          "name": "NonTexturedGradientFogEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 139,
+          "is_dtor": false,
+          "itanium_slot": 150,
+          "msvc_slot": 150,
+          "name": "CubemapFogEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 140,
+          "is_dtor": false,
+          "itanium_slot": 151,
+          "msvc_slot": 151,
+          "name": "IsCharacterDecalRenderingEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 141,
+          "is_dtor": false,
+          "itanium_slot": 152,
+          "msvc_slot": 152,
+          "name": "unk1101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 142,
+          "is_dtor": false,
+          "itanium_slot": 153,
+          "msvc_slot": 153,
+          "name": "unk1102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneView *(const char *)",
+          "decl_index": 143,
+          "is_dtor": false,
+          "itanium_slot": 154,
+          "msvc_slot": 154,
+          "name": "FindView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszName: *const ::core::ffi::c_char) -> *mut ISceneView"
+        },
+        {
+          "cxx_signature": "ImageFormat ()",
+          "decl_index": 144,
+          "is_dtor": false,
+          "itanium_slot": 155,
+          "msvc_slot": 155,
+          "name": "GetPrimaryRenderTargetFormat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> ImageFormat"
+        },
+        {
+          "cxx_signature": "ImageFormat ()",
+          "decl_index": 145,
+          "is_dtor": false,
+          "itanium_slot": 156,
+          "msvc_slot": 156,
+          "name": "GetBackBufferFormat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> ImageFormat"
+        },
+        {
+          "cxx_signature": "CSceneObject *(uint64, uint64, ISceneWorld *)",
+          "decl_index": 146,
+          "is_dtor": false,
+          "itanium_slot": 157,
+          "msvc_slot": 157,
+          "name": "CreateAOProxySceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nFlags: u64, nTypeFlags: u64, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (const void *, int *, int *, uint32 *)",
+          "decl_index": 147,
+          "is_dtor": false,
+          "itanium_slot": 158,
+          "msvc_slot": 158,
+          "name": "LoadAOProxies",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pData: *mut ::core::ffi::c_void, pCapsuleCount: *mut i32, pBoxCount: *mut i32, pUnk: *mut u32) -> bool"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const void *, int *, void *, int *, const void *, void *)",
+          "decl_index": 148,
+          "is_dtor": false,
+          "itanium_slot": 159,
+          "msvc_slot": 159,
+          "name": "UpdateAOProxySceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut i32, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut i32, pUnk5: *mut ::core::ffi::c_void, pUnk6: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 (ISceneWorld *, int, const Vector &, const QAngle &, Vector)",
+          "decl_index": 149,
+          "is_dtor": false,
+          "itanium_slot": 160,
+          "msvc_slot": 160,
+          "name": "AddCullingBox",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void, nCullMode: i32, vOrigin: *const Vector, vAngles: *const QAngle, vExtents: Vector) -> u32"
+        },
+        {
+          "cxx_signature": "void (ISceneWorld *, uint32)",
+          "decl_index": 150,
+          "is_dtor": false,
+          "itanium_slot": 161,
+          "msvc_slot": 161,
+          "name": "RemoveCullingBox",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void, nBoxId: u32)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, CUtlVectorFixedGrowable<HMaterialWeak, 2> &, CUtlVectorFixedGrowable<int16, 2> &)",
+          "decl_index": 151,
+          "is_dtor": false,
+          "itanium_slot": 162,
+          "msvc_slot": 162,
+          "name": "SceneObject_GetMaterialsForObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pObject: *mut ::core::ffi::c_void, materials: *mut ::core::ffi::c_void, drawFlags: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISceneLightListener *)",
+          "decl_index": 152,
+          "is_dtor": false,
+          "itanium_slot": 163,
+          "msvc_slot": 163,
+          "name": "RegisterSceneLightListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISceneLightListener *)",
+          "decl_index": 153,
+          "is_dtor": false,
+          "itanium_slot": 164,
+          "msvc_slot": 164,
+          "name": "UnregisterSceneLightListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISceneObjectListener *)",
+          "decl_index": 154,
+          "is_dtor": false,
+          "itanium_slot": 165,
+          "msvc_slot": 165,
+          "name": "RegisterSceneObjectListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISceneObjectListener *)",
+          "decl_index": 155,
+          "is_dtor": false,
+          "itanium_slot": 166,
+          "msvc_slot": 166,
+          "name": "UnregisterSceneObjectListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CUtlStringToken, uint32)",
+          "decl_index": 156,
+          "is_dtor": false,
+          "itanium_slot": 167,
+          "msvc_slot": 167,
+          "name": "SetGPUProfilerMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, requester: CUtlStringToken, nGPUProfilerMode: u32)"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 157,
+          "is_dtor": false,
+          "itanium_slot": 168,
+          "msvc_slot": 168,
+          "name": "GetGPUProfilerMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> u32"
+        },
+        {
+          "cxx_signature": "void (CUtlStringToken, bool)",
+          "decl_index": 158,
+          "is_dtor": false,
+          "itanium_slot": 169,
+          "msvc_slot": 169,
+          "name": "unk1201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, requester: CUtlStringToken, bEnable: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 159,
+          "is_dtor": false,
+          "itanium_slot": 170,
+          "msvc_slot": 170,
+          "name": "unk1202",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, CUtlVector<SceneSystemTimestampFrameData_t> &, int)",
+          "decl_index": 160,
+          "is_dtor": false,
+          "itanium_slot": 171,
+          "msvc_slot": 171,
+          "name": "GetMostRecentTimestampFrameSummary",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, hSwapChain: *mut ::core::ffi::c_void, timestampFrameSummaryOut: *mut ::core::ffi::c_void, nUnk: i32)"
+        },
+        {
+          "cxx_signature": "int (int *)",
+          "decl_index": 161,
+          "is_dtor": false,
+          "itanium_slot": 172,
+          "msvc_slot": 172,
+          "name": "unk1301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pOut: *mut i32) -> i32"
+        },
+        {
+          "cxx_signature": "IRayTraceSceneWorld *(const char *, int, bool)",
+          "decl_index": 162,
+          "is_dtor": false,
+          "itanium_slot": 173,
+          "msvc_slot": 173,
+          "name": "CreateRayTraceWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pszDebugName: *const ::core::ffi::c_char, nMaxRayTypes: i32, bUnk: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IRayTraceSceneWorld *)",
+          "decl_index": 163,
+          "is_dtor": false,
+          "itanium_slot": 174,
+          "msvc_slot": 174,
+          "name": "DestroyRayTraceWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pWorld: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const void *)",
+          "decl_index": 164,
+          "is_dtor": false,
+          "itanium_slot": 175,
+          "msvc_slot": 175,
+          "name": "unk1401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 165,
+          "is_dtor": false,
+          "itanium_slot": 176,
+          "msvc_slot": 176,
+          "name": "unk1402",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const void *)",
+          "decl_index": 166,
+          "is_dtor": false,
+          "itanium_slot": 177,
+          "msvc_slot": 177,
+          "name": "unk1403",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (void *)",
+          "decl_index": 167,
+          "is_dtor": false,
+          "itanium_slot": 178,
+          "msvc_slot": 178,
+          "name": "unk1404",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 168,
+          "is_dtor": false,
+          "itanium_slot": 179,
+          "msvc_slot": 179,
+          "name": "unk1405",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 169,
+          "is_dtor": false,
+          "itanium_slot": 180,
+          "msvc_slot": 180,
+          "name": "unk1406",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (int)",
+          "decl_index": 170,
+          "is_dtor": false,
+          "itanium_slot": 181,
+          "msvc_slot": 181,
+          "name": "unk1407",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32) -> i32"
+        },
+        {
+          "cxx_signature": "void (int, int *, int *)",
+          "decl_index": 171,
+          "is_dtor": false,
+          "itanium_slot": 182,
+          "msvc_slot": 182,
+          "name": "unk1408",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32, pOut1: *mut i32, pOut2: *mut i32)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 172,
+          "is_dtor": false,
+          "itanium_slot": 183,
+          "msvc_slot": 183,
+          "name": "unk1409",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 173,
+          "is_dtor": false,
+          "itanium_slot": 184,
+          "msvc_slot": 184,
+          "name": "unk14010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32) -> bool"
+        },
+        {
+          "cxx_signature": "int (uint64, int, CUtlVector<int> &)",
+          "decl_index": 174,
+          "is_dtor": false,
+          "itanium_slot": 185,
+          "msvc_slot": 185,
+          "name": "unk14011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nKey: u64, nUnk: i32, out: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "CSceneObject *(uint64, uint64, ISceneWorld *)",
+          "decl_index": 175,
+          "is_dtor": false,
+          "itanium_slot": 186,
+          "msvc_slot": 186,
+          "name": "CreateDistanceFieldInstanceSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nFlags: u64, nTypeFlags: u64, pWorld: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 176,
+          "is_dtor": false,
+          "itanium_slot": 187,
+          "msvc_slot": 187,
+          "name": "GetDistanceFieldScene",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 177,
+          "is_dtor": false,
+          "itanium_slot": 188,
+          "msvc_slot": 188,
+          "name": "ResizeHairBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nCount: i32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 178,
+          "is_dtor": false,
+          "itanium_slot": 189,
+          "msvc_slot": 189,
+          "name": "unk1501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pUnk: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 179,
+          "is_dtor": false,
+          "itanium_slot": 190,
+          "msvc_slot": 190,
+          "name": "unk1502",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nIndex: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 180,
+          "is_dtor": false,
+          "itanium_slot": 191,
+          "msvc_slot": 191,
+          "name": "AcquireImGuiLock",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 181,
+          "is_dtor": false,
+          "itanium_slot": 192,
+          "msvc_slot": 192,
+          "name": "ReleaseImGuiLock",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 182,
+          "is_dtor": false,
+          "itanium_slot": 193,
+          "msvc_slot": 193,
+          "name": "IsImGuiLocked",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 183,
+          "is_dtor": false,
+          "itanium_slot": 194,
+          "msvc_slot": 194,
+          "name": "IsImGuiLockedByCurrentThread",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> bool"
+        },
+        {
+          "cxx_signature": "void (std::function<void ()> &&)",
+          "decl_index": 184,
+          "is_dtor": false,
+          "itanium_slot": 195,
+          "msvc_slot": 195,
+          "name": "QueueRenderingCompleteJob",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, fn_: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 185,
+          "is_dtor": false,
+          "itanium_slot": 196,
+          "msvc_slot": 196,
+          "name": "unk1601",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem) -> i32"
+        },
+        {
+          "cxx_signature": "void (ISceneView *)",
+          "decl_index": 186,
+          "is_dtor": false,
+          "itanium_slot": 197,
+          "msvc_slot": 197,
+          "name": "unk1602",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, pView: *mut ISceneView)"
+        }
+      ],
+      "msvc": {
+        "length": 198,
+        "own_entries": 187
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "ISceneView",
+      "header": "public/scenesystem/iscenesystem.h",
+      "methods": [
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "GetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, uint8)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, int)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void (const char *, void *, uint8)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk104",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pszUnk1: *const ::core::ffi::c_char, pUnk1: *mut ::core::ffi::c_void, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk107",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint32, void *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "unk108",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u32, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk109",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint8, void *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "unk1010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, uint8)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk1011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, uint8)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "unk1012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, int, int, void *, void *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "unk1013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: i32, pUnk5: *mut ::core::ffi::c_void, pUnk6: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, int, int, int, void *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "unk1014",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: i32, nUnk3: i32, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, int, int, void *)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "unk1015",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: i32, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISceneWorld *, const vis_info_t *, bool)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "AddWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pWorld: *mut ::core::ffi::c_void, pVis: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "SwapChainHandle_t ()",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "GetSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 19,
+          "is_dtor": true,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "~ISceneView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, int)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 20,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 21,
+          "name": "BeginLayerGroup",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pszName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 22,
+          "name": "EndLayerGroup",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint32)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "AddFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nFlags: u32)"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "GetFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u32"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 27,
+          "name": "unk502",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "unk503",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 29,
+          "name": "unk504",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 30,
+          "name": "unk505",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 31,
+          "name": "unk506",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 32,
+          "name": "unk507",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "unk508",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 34,
+          "name": "unk509",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 35,
+          "name": "unk5010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 36,
+          "name": "unk5011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 37,
+          "name": "unk5012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 38,
+          "name": "unk5013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SceneViewUnk16_t ()",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, ret: *mut SceneViewUnk16_t) -> *mut SceneViewUnk16_t",
+          "msvc_slot": 39,
+          "name": "unk5014",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 16,
+              "sret": false
+            },
+            "msvc": {
+              "size": 16,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> SceneViewUnk16_t"
+        },
+        {
+          "cxx_signature": "void (SceneViewUnk16_t)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 40,
+          "name": "unk5015",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, value: SceneViewUnk16_t)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 41,
+          "name": "unk5016",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 42,
+          "name": "unk5017",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, void *, void *, void *, uint8, void *, void *)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 43,
+          "name": "unk5018",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, pUnk5: *mut ::core::ffi::c_void, pUnk6: *mut ::core::ffi::c_void, nUnk1: u8, pUnk7: *mut ::core::ffi::c_void, pUnk8: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (HSceneViewRenderTarget)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 44,
+          "name": "MarkRenderTargetForReadback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, hTarget: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "HRenderTexture (HSceneViewRenderTarget)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, ret: *mut HRenderTexture, hTarget: *mut ::core::ffi::c_void) -> *mut HRenderTexture",
+          "msvc_slot": 45,
+          "name": "GetRenderTargetTexture",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, hTarget: *mut ::core::ffi::c_void) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "void (int, void *)",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 46,
+          "name": "unk601",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 47,
+          "name": "unk602",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 48,
+          "name": "unk603",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 49,
+          "name": "unk604",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 50,
+          "name": "unk605",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneViewDebugOverlays *()",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 51,
+          "name": "unk606",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 52,
+          "name": "unk607",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 53,
+          "name": "unk608",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 54,
+          "name": "unk609",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (int, void *)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 55,
+          "name": "unk6010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 56,
+          "name": "unk6011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 57,
+          "name": "unk6012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 58,
+          "name": "unk6013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CViewId ()",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, ret: *mut CViewId) -> *mut CViewId",
+          "msvc_slot": 59,
+          "name": "GetViewId",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 16,
+              "sret": false
+            },
+            "msvc": {
+              "size": 16,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> CViewId"
+        },
+        {
+          "cxx_signature": "int16 ()",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 60,
+          "name": "unk701",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> i16"
+        },
+        {
+          "cxx_signature": "int16 ()",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 61,
+          "name": "unk702",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> i16"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 62,
+          "name": "unk703",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (float, float)",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 63,
+          "name": "unk704",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, flUnk1: f32, flUnk2: f32)"
+        },
+        {
+          "cxx_signature": "void (float, float)",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 64,
+          "name": "unk705",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, flUnk1: f32, flUnk2: f32)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 65,
+          "name": "unk706",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, flUnk1: f32)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 66,
+          "name": "unk707",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> f32"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 67,
+          "name": "unk708",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, flUnk1: f32)"
+        },
+        {
+          "cxx_signature": "void (uint32)",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 68,
+          "name": "unk709",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u32)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 69,
+          "name": "GetPriority",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> i32"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 70,
+          "name": "SetPriority",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nPriority: i32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 71,
+          "name": "unk801",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 72,
+          "name": "unk802",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, void *, uint8)",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 73,
+          "name": "unk803",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 74,
+          "name": "unk804",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 75,
+          "name": "unk805",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 76,
+          "name": "unk806",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 77,
+          "name": "unk807",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "int8 ()",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 78,
+          "name": "unk808",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> i8"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 79,
+          "name": "unk809",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 80,
+          "name": "unk8010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 81,
+          "name": "unk8011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 82,
+          "name": "unk8012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 83,
+          "name": "unk8013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 84,
+          "name": "unk8014",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, uint32)",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 85,
+          "name": "unk8015",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, nUnk1: u32)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 86,
+          "name": "unk8016",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 87,
+          "name": "unk8017",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void (int, const char **, const int *, const uint32 *, HSceneViewRenderTarget **, uint32, uint32, RenderMultisampleType_t, uint32)",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 88,
+          "name": "CreateScratchTargets",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nCount: i32, ppNames: *mut *const ::core::ffi::c_char, pFormats: *const i32, pBindFlags: *const u32, ppOutTargets: *mut *mut *mut ::core::ffi::c_void, nWidth: u32, nHeight: u32, nMultisampleType: u8, nFlags: u32)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 89,
+          "name": "unk901",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 90,
+          "name": "unk902",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, const char *, void *)",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 91,
+          "name": "unk903",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pszUnk1: *const ::core::ffi::c_char, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 92,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 92,
+          "name": "unk904",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 93,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 93,
+          "name": "unk905",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 94,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 94,
+          "name": "unk906",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 95,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 95,
+          "name": "unk907",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 96,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 96,
+          "name": "unk908",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 97,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_slot": 97,
+          "name": "unk909",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 98,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_slot": 98,
+          "name": "unk9010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const std::shared_ptr<void> &)",
+          "decl_index": 99,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 99,
+          "name": "unk9011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, p: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const std::shared_ptr<void> &)",
+          "decl_index": 100,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 100,
+          "name": "unk9012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, p: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "std::shared_ptr<void> ()",
+          "decl_index": 101,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 101,
+          "name": "unk9013",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 102,
+          "is_dtor": false,
+          "itanium_slot": 103,
+          "msvc_slot": 102,
+          "name": "unk9014",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 103,
+          "is_dtor": false,
+          "itanium_slot": 104,
+          "msvc_slot": 103,
+          "name": "unk9015",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 104,
+          "is_dtor": false,
+          "itanium_slot": 105,
+          "msvc_slot": 104,
+          "name": "unk9016",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 105,
+          "is_dtor": false,
+          "itanium_slot": 106,
+          "msvc_slot": 105,
+          "name": "unk9017",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> bool"
+        },
+        {
+          "cxx_signature": "void (SceneViewUnk4_t)",
+          "decl_index": 106,
+          "is_dtor": false,
+          "itanium_slot": 107,
+          "msvc_slot": 106,
+          "name": "unk9018",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, value: SceneViewUnk4_t)"
+        },
+        {
+          "cxx_signature": "SceneViewUnk4_t ()",
+          "decl_index": 107,
+          "is_dtor": false,
+          "itanium_slot": 108,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, ret: *mut SceneViewUnk4_t) -> *mut SceneViewUnk4_t",
+          "msvc_slot": 107,
+          "name": "unk9019",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> SceneViewUnk4_t"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 108,
+          "is_dtor": false,
+          "itanium_slot": 109,
+          "msvc_slot": 108,
+          "name": "unk9020",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 109,
+          "is_dtor": false,
+          "itanium_slot": 110,
+          "msvc_slot": 109,
+          "name": "unk9021",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        },
+        {
+          "cxx_signature": "void (uint8)",
+          "decl_index": 110,
+          "is_dtor": false,
+          "itanium_slot": 111,
+          "msvc_slot": 110,
+          "name": "unk9022",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nUnk1: u8)"
+        },
+        {
+          "cxx_signature": "uint8 ()",
+          "decl_index": 111,
+          "is_dtor": false,
+          "itanium_slot": 112,
+          "msvc_slot": 111,
+          "name": "unk9023",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView) -> u8"
+        }
+      ],
+      "msvc": {
+        "length": 112,
+        "own_entries": 112
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IRenderingPipeline",
+      "header": "public/scenesystem/iscenesystem.h",
+      "methods": [
+        {
+          "cxx_signature": "void (ISceneView *, const RenderViewport_t &, const void *, CRenderAttributes *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "AddLayersToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline, pView: *mut ISceneView, viewport: *const RenderViewport_t, pRenderTargets: *mut ::core::ffi::c_void, pAttributes: *mut CRenderAttributes)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline)"
+        },
+        {
+          "cxx_signature": "void (void *, const void *, void *, int, int)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: i32)"
+        },
+        {
+          "cxx_signature": "void (CUtlStringToken, const RenderViewport_t &, RenderViewport_t *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline, layerToken: CUtlStringToken, in_: *const RenderViewport_t, pOut: *mut RenderViewport_t)"
+        },
+        {
+          "cxx_signature": "CUtlStringToken ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline, ret: *mut CUtlStringToken) -> *mut CUtlStringToken",
+          "msvc_slot": 4,
+          "name": "unk104",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> CUtlStringToken"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (int8)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline, nUnk: i8) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk107",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> bool"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "unk108",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> u32"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk109",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> u32"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "unk1010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> u32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk1011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "unk1012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "unk1013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderingPipeline) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 14,
+        "own_entries": 14
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ISceneUtils",
+      "header": "public/scenesystem/isceneutils.h",
+      "methods": [
+        {
+          "cxx_signature": "void (ISceneView *, HRenderTexture, void *, bool)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 12,
+          "name": "Add2xDownsampleLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, hTexture: HRenderTexture, pUnk: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, HRenderTexture, void *, bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 14,
+          "name": "Add4xDownsampleLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, hTexture: HRenderTexture, pUnk: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, uint64, void *, bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 11,
+          "name": "Add2xDownsampleLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, nTextureIndex: u64, pUnk: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, uint64, void *, bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "Add4xDownsampleLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, nTextureIndex: u64, pUnk: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "ISceneLayer *(ISceneView *, const char *, const RenderViewport_t &, const CUtlStringToken &, uint64, uint64, const SceneLayerOutputs_t &)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "AddSimpleLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pszLayerName: *const ::core::ffi::c_char, viewport: *const RenderViewport_t, token: *const CUtlStringToken, nFlags: u64, nUnk: u64, outputs: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, const void *, const void *, const void *, void *, bool)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "AddTranslucentScreenspaceLayerToView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut ::core::ffi::c_void, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (IRenderContext *, Vector *, const char *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "RenderScreenQuad",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pRenderContext: *mut ::core::ffi::c_void, pUnk: *mut Vector, pszUnk: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "ISceneLayer *(ISceneView *, const char *, int, const HRenderTexture *, int, const HSceneViewRenderTarget *, const void *, const void *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "AddTextureBarrierLayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pszDebugName: *const ::core::ffi::c_char, nTextureCount: i32, pTextures: *const HRenderTexture, nRenderTargetCount: i32, pRenderTargets: *const *mut ::core::ffi::c_void, pMSAAModes: *mut ::core::ffi::c_void, pImageLayouts: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "std::shared_ptr<ITonemapSystem> ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "CreateTonemapSystem",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "IVolumetricFog *()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "CreateVolumetricFog",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IVolumetricFog *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "DestroyVolumetricFog",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pVolumetricFog: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CWindController *()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "CreateWindController",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CWindController *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "DestroyWindController",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pWindController: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IRenderingPipeline *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "RegisterRenderingPipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pPipeline: *mut IRenderingPipeline)"
+        },
+        {
+          "cxx_signature": "void (IRenderingPipeline *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "UnregisterRenderingPipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pPipeline: *mut IRenderingPipeline)"
+        },
+        {
+          "cxx_signature": "IRenderingPipeline *(CUtlStringToken)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "FindRenderingPipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, token: CUtlStringToken) -> *mut IRenderingPipeline"
+        },
+        {
+          "cxx_signature": "void (const char *, CUtlStringToken)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "AliasRenderingPipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pszAlias: *const ::core::ffi::c_char, token: CUtlStringToken)"
+        },
+        {
+          "cxx_signature": "ISceneLayer *(ISceneView *, const char *, const SceneLayerOutputs_t &, const RenderViewport_t &, HSceneViewRenderTarget, int, bool)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 29,
+          "name": "AddTextureDebugLayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pDebugName: *const ::core::ffi::c_char, outputs: *mut ::core::ffi::c_void, viewport: *const RenderViewport_t, hTexture: *mut ::core::ffi::c_void, nDebugShowTextureMode: i32, bTextureIsSrgb: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "ISceneLayer *(ISceneView *, const char *, const SceneLayerOutputs_t &, const RenderViewport_t &, HRenderTexture, int, bool)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "AddTextureDebugLayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pDebugName: *const ::core::ffi::c_char, outputs: *mut ::core::ffi::c_void, viewport: *const RenderViewport_t, hTexture: HRenderTexture, nDebugShowTextureMode: i32, bTextureIsSrgb: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CViewId (CViewId, int)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, ret: *mut CViewId, viewId: CViewId, nViewProducer: i32) -> *mut CViewId",
+          "msvc_slot": 30,
+          "name": "AppendViewProducerToViewId",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 16,
+              "sret": false
+            },
+            "msvc": {
+              "size": 16,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, viewId: CViewId, nViewProducer: i32) -> CViewId"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "AllocateViewProducerIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> i32"
+        },
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "PixelVisibility_IsAvailable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> bool"
+        },
+        {
+          "cxx_signature": "float (const pixelvis_queryparams_t &, int *, const CViewId &)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "PixelVisibility_FractionVisible",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, params: *mut ::core::ffi::c_void, pQueryHandle: *mut i32, viewId: *const CViewId) -> f32"
+        },
+        {
+          "cxx_signature": "void (const pixelvis_queryparams_t &, int *, IRenderContext *, const CFrustum &, const CViewId &)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "PixelVisibility_IssueQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, params: *mut ::core::ffi::c_void, pQueryHandle: *mut i32, pRenderContext: *mut ::core::ffi::c_void, frustum: *const CFrustum, viewId: *const CViewId)"
+        },
+        {
+          "cxx_signature": "void (int, int)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "PixelVisibility_AppendViewProducerToViewIdsForPlayerQueries",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, nUnk1: i32, nUnk2: i32)"
+        },
+        {
+          "cxx_signature": "void (const RenderViewport_t &, int, int, int, int, float, float, float, float, int, int, ScreenSpaceVertex_t *)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "ComputeScreenSpaceVertices",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, viewport: *const RenderViewport_t, nDestX: i32, nDestY: i32, nDestWidth: i32, nDestHeight: i32, flSrcTextureX0: f32, flSrcTextureY0: f32, flSrcTextureX1: f32, flSrcTextureY1: f32, nSrcTextureWidth: i32, nSrcTextureHeight: i32, pVertices: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "IProceduralLayerRenderer *(HMaterialWeak, const Color &)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "CreateFullscreenQuadRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, hMaterial: HMaterialWeak, modulationColor: *const Color) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IProceduralLayerRenderer *(void *, RenderMultisampleType_t, float, float, float, bool, int)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "CreateScalableAORenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk: *mut ::core::ffi::c_void, nMultisampleType: u8, flRadius: f32, flBias: f32, flStrength: f32, bBlur: bool, nUnk: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IProceduralLayerRenderer *(const char *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "CreateSignalSemaphoreRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pszName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (int, int, const void *, float *, bool)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, nUnk1: i32, nUnk2: i32, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut f32, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, uint64, uint32, uint32, void *, int *, int *, bool, void *, const void *, bool, int *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "FilterTexture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: u64, nUnk2: u32, nUnk3: u32, pUnk3: *mut ::core::ffi::c_void, pUnk4: *mut i32, pUnk5: *mut i32, bUnk1: bool, pUnk6: *mut ::core::ffi::c_void, pUnk7: *mut ::core::ffi::c_void, bUnk2: bool, pUnk8: *mut i32)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, int, const void *, int, int, void *, const void *, const void *, void *, const void *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "CreateFilterLayerRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, nUnk1: i32, pUnk3: *mut ::core::ffi::c_void, nUnk2: i32, nUnk3: i32, pUnk4: *mut ::core::ffi::c_void, pUnk5: *mut ::core::ffi::c_void, pUnk6: *mut ::core::ffi::c_void, pUnk7: *mut ::core::ffi::c_void, pUnk8: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "CreateMDL",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(ISceneWorld *, HMaterialWeak *, CUtlStringToken)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "Create6FaceSkybox",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pWorld: *mut ::core::ffi::c_void, pMaterials: *mut HMaterialWeak, token: CUtlStringToken) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CCharacterDecalRenderer *()",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "CreateCharacterDecalRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CCharacterDecalRenderer *)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "DestroyCharacterDecalRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pRenderer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const CFrustum &, const Vector &, const QAngle &, const Vector &, float, CFrustum *)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "Compute3DSkyboxFrustum",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, inFrustum: *const CFrustum, vSkyboxOrigin: *const Vector, vSkyboxAngles: *const QAngle, vSkyboxCameraOrigin: *const Vector, flSkyboxScale: f32, pOutSkyboxFrustum: *mut CFrustum)"
+        },
+        {
+          "cxx_signature": "void (void *, int, uint8, uint8)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: u8, nUnk3: u8)"
+        },
+        {
+          "cxx_signature": "bool (const CSceneObject *, const ISceneView *, Vector4D &)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "FindClipSpaceRectForObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pObject: *mut ::core::ffi::c_void, pView: *const ISceneView, vRect: *mut Vector4D) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, uint8, float *, void *)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, nUnk1: u8, pUnk2: *mut f32, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CSceneObject *, const void *)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "unk302",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pObject: *mut ::core::ffi::c_void, pUnk1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, int)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "unk303",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, nUnk1: i32)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *, uint32, void *, uint32, uint32)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "GPUSort",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, nUnk1: u32, pUnk4: *mut ::core::ffi::c_void, nUnk2: u32, nUnk3: u32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils)"
+        },
+        {
+          "cxx_signature": "std::shared_ptr<CRenderGraphBuilder> (void *)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 55,
+          "name": "CreateRenderGraphBuilder",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "IProceduralLayerRenderer *(const void *, bool)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "CreateSimplePostProcessingLayerRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk: *mut ::core::ffi::c_void, bUnk: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IProceduralLayerRenderer *(HMaterialWeak, const Color &, const RenderViewport_t &)",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "CreateQuadRenderer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, hMaterial: HMaterialWeak, modulationColor: *const Color, viewport: *const RenderViewport_t) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, const void *, char *)",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, void *, const char *, bool)",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "unk502",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pszName: *const ::core::ffi::c_char, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (ISceneView *, void *, const char *, bool)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "unk503",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pView: *mut ISceneView, pUnk1: *mut ::core::ffi::c_void, pszName: *const ::core::ffi::c_char, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (void *, const void *, void *, int, int)",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "unk504",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, nUnk1: i32, nUnk2: i32)"
+        }
+      ],
+      "msvc": {
+        "length": 62,
+        "own_entries": 51
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    }
+  ]
+}

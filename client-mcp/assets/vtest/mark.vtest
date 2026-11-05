@@ -1,0 +1,5 @@
+// mark.vtest <name>: barrier + log marker. The checkpoint is queued behind every earlier command and
+// the script blocks until it runs, so (a) all earlier commands have executed, (b) it is logged as
+// "TESTSCRIPT: CheckPoint -> '<name>'". A bare Test_Checkpoint is DROPPED if it lands during Test_Wait.
+Test_Checkpoint $1
+Test_WaitForCheckPoint $1

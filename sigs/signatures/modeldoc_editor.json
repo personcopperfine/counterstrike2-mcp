@@ -1,0 +1,734 @@
+{
+ "module": "modeldoc_editor.dll",
+ "image_base": 6442450944,
+ "_doc": "ModelDoc editor (tools/modeldoc_editor.dll): first-pass live lifecycle for the bridge (modeldoc.active/open/reload/save/compile). RE: idabins docs/flows/modeldoc-edit.md, re-checked in the IDB 2026-10-12 (build 2000930).",
+ "builds": {
+  "2000930": {
+   "sha256": "1744c2c553a7ede9",
+   "timestamp": 1791492156
+  },
+  "2000933": {
+   "sha256": "e2754b9b62bf1216",
+   "timestamp": 1792003435
+  },
+  "2000940": {
+   "sha256": "b61dd3468e9782b6",
+   "timestamp": 1793662703
+  }
+ },
+ "entries": {
+  "MDV_APP_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocEditorApp"
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocEditorApp@@ primary vtable",
+   "tag": "RTTI",
+   "bridge": "MDV_APP_VT",
+   "status": "proposed",
+   "ident_slot": 0,
+   "expect": {
+    "2000930": 20887544,
+    "2000933": 20887544,
+    "2000940": 20886528
+   }
+  },
+  "MDV_SESSION_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocEditorSession"
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocEditorSession@@ primary vtable",
+   "tag": "RTTI",
+   "bridge": "MDV_SESSION_VT",
+   "status": "proposed",
+   "ident_slot": 0,
+   "expect": {
+    "2000930": 20900184,
+    "2000933": 20900184,
+    "2000940": 20901144
+   }
+  },
+  "MDV_DOC_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDoc"
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDoc@@ primary vtable",
+   "tag": "RTTI",
+   "bridge": "MDV_DOC_VT",
+   "status": "proposed",
+   "ident_slot": 0,
+   "expect": {
+    "2000930": 17117632,
+    "2000933": 17117632,
+    "2000940": 17117632
+   }
+  },
+  "MDG_APP_OBJ": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 1D ?? ?? ?? ?? 65 48 8B 04 25 ?? ?? ?? ?? BA 38 02 00 00 48 8B 04 C8 8B 04 02 39 05 ?? ?? ?? ?? 7F ?? 48 89 1D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x1801FF2AC (CModelDocEditorApp::CreateFn reads g_CModelDocEditorApp)",
+   "tag": "V",
+   "bridge": "MDG_APP_OBJ",
+   "notes": "g_CModelDocEditorApp (identity of the ToolSystem2_ModelDoc singleton)",
+   "status": "proposed",
+   "expect": {
+    "2000930": 30513408,
+    "2000933": 30513408,
+    "2000940": 30513280
+   }
+  },
+  "MDVS_APP_OPENFILE": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_APP_VT",
+    "slot": 18
+   },
+   "via": "MDV_APP_VT slot 18 -> CModelDocEditorApp::OpenFile(app, const char *path, u32 flags) -> session or 0; flags 1 = add to recent files",
+   "tag": "V",
+   "bridge": "MDVS_APP_OPENFILE",
+   "sdk": "S2_SLOT_CBaseEditorApp_OpenFile",
+   "notes": "CModelDocEditorApp::OpenFile(app, const char *path, u32 flags) -> session or 0; flags 1 = add to recent files",
+   "status": "proposed",
+   "expect": {
+    "2000930": 12189888,
+    "2000933": 12189888,
+    "2000940": 12190432
+   }
+  },
+  "MDVS_SESSION_RELOAD": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_SESSION_VT",
+    "slot": 7
+   },
+   "via": "MDV_SESSION_VT slot 7 -> CModelDocEditorSession::ReloadDocument(session): new CModelDoc from the file on disk; history reset, no prompt",
+   "tag": "V",
+   "bridge": "MDVS_SESSION_RELOAD",
+   "sdk": "S2_SLOT_CBaseEditorSession_ReloadDocument",
+   "notes": "CModelDocEditorSession::ReloadDocument(session): new CModelDoc from the file on disk; history reset, no prompt",
+   "status": "proposed",
+   "expect": {
+    "2000930": 2252816,
+    "2000933": 2252816,
+    "2000940": 2252400
+   }
+  },
+  "MDVS_SESSION_ISDIRTY": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_SESSION_VT",
+    "slot": 11
+   },
+   "via": "MDV_SESSION_VT slot 11 -> CModelDocEditorSession::IsModified(session) -> u8 (doc+0x3BC)",
+   "tag": "V",
+   "bridge": "MDVS_SESSION_ISDIRTY",
+   "sdk": "S2_SLOT_CBaseEditorSession_IsModified",
+   "notes": "CModelDocEditorSession::IsModified(session) -> u8 (doc+0x3BC)",
+   "status": "proposed",
+   "expect": {
+    "2000930": 2259376,
+    "2000933": 2259376,
+    "2000940": 2258960
+   }
+  },
+  "MDVS_SESSION_SETMODIFIED": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_SESSION_VT",
+    "slot": 12
+   },
+   "via": "MDV_SESSION_VT slot 12 -> CModelDocEditorSession::SetModified(session, u8); FileSave calls it with 0 after a successful save",
+   "tag": "V",
+   "bridge": "MDVS_SESSION_SETMODIFIED",
+   "sdk": "S2_SLOT_CBaseEditorSession_SetModified",
+   "notes": "CModelDocEditorSession::SetModified(session, u8); FileSave calls it with 0 after a successful save",
+   "status": "proposed",
+   "expect": {
+    "2000930": 2259408,
+    "2000933": 2259408,
+    "2000940": 2258992
+   }
+  },
+  "MDVS_SESSION_GETPATH": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_SESSION_VT",
+    "slot": 13
+   },
+   "via": "MDV_SESSION_VT slot 13 -> CModelDocEditorSession::GetPath(session) -> const char * (session+0x58, \"\" when unset)",
+   "tag": "V",
+   "bridge": "MDVS_SESSION_GETPATH",
+   "sdk": "S2_SLOT_CBaseEditorSession_GetPath",
+   "notes": "CModelDocEditorSession::GetPath(session) -> const char * (session+0x58, \"\" when unset)",
+   "status": "proposed",
+   "expect": {
+    "2000930": 12073792,
+    "2000933": 12073792,
+    "2000940": 12074336
+   }
+  },
+  "MDVS_SESSION_SAVE": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "MDV_SESSION_VT",
+    "slot": 18
+   },
+   "via": "MDV_SESSION_VT slot 18 -> CModelDocEditorSession::SaveAndNotify(session, oldPath, newPath, u8 a4, u8 a5) -> u8; FileSave passes (path, path, 0, 0)",
+   "tag": "V",
+   "bridge": "MDVS_SESSION_SAVE",
+   "sdk": "S2_SLOT_CBaseEditorSession_Save",
+   "notes": "CModelDocEditorSession::SaveAndNotify(session, oldPath, newPath, u8 a4, u8 a5) -> u8; FileSave passes (path, path, 0, 0)",
+   "status": "proposed",
+   "expect": {
+    "2000930": 2254688,
+    "2000933": 2254688,
+    "2000940": 2254272
+   }
+  },
+  "MDFN_SESSION_COMPILE": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "89 54 24 10 53 48 83 EC 60"
+   },
+   "via": "modeldoc_editor!0x180226AA0 (CModelDocEditorSession::Compile)",
+   "tag": "V",
+   "bridge": "MDFN_SESSION_COMPILE",
+   "notes": "CModelDocEditorSession::Compile(session, int mode): saves first when modified, then asset slot 17 with compiler_hints; synchronous, no modal; needs session+0xBF8",
+   "status": "proposed",
+   "expect": {
+    "2000930": 2255520,
+    "2000933": 2255520,
+    "2000940": 2255104
+   }
+  },
+  "MDOFF_APP_SESSION": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 77 50 45 85 F6 75 ??",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180BA231E (CBaseEditorApp::SetActiveEditorSession: mov [rdi+50h], rsi)",
+   "tag": "V",
+   "bridge": "MDOFF_APP_SESSION",
+   "sdk": "S2_OFF_CBaseEditorApp_m_pActiveSession",
+   "expect": {
+    "2000930": 80,
+    "2000933": 80,
+    "2000940": 80
+   },
+   "status": "proposed",
+   "struct": "CModelDocEditorApp",
+   "field": "activeSession",
+   "ctype": "CModelDocEditorSession *"
+  },
+  "MDOFF_SESSION_DOC": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 89 18 01 00 00 E9 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC CC 48 83 B9 20 01 00 00 00",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x18022FD6A (CModelDocEditorSession UndoCommand: mov rcx, [rcx+118h])",
+   "tag": "V",
+   "bridge": "MDOFF_SESSION_DOC",
+   "sdk": "S2_OFF_CModelDocEditorSession_m_pDoc",
+   "expect": {
+    "2000930": 280,
+    "2000933": 280,
+    "2000940": 280
+   },
+   "status": "proposed",
+   "struct": "CModelDocEditorSession",
+   "field": "doc",
+   "ctype": "CModelDoc *"
+  },
+  "MDOFF_SESSION_ASSET": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 BB F8 0B 00 00 00",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180226AD0 (CModelDocEditorSession::Compile: cmp qword ptr [rbx+0BF8h], 0)",
+   "tag": "V",
+   "bridge": "MDOFF_SESSION_ASSET",
+   "sdk": "S2_OFF_CModelDocEditorSession_m_pAsset",
+   "expect": {
+    "2000930": 3064,
+    "2000933": 3064,
+    "2000940": 3064
+   },
+   "status": "proposed",
+   "struct": "CModelDocEditorSession",
+   "field": "asset",
+   "ctype": "void * (AssetSystem001 asset; Compile is a no-op while null)"
+  },
+  "MDOFF_SESSION_COMPILE_STATUS": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D AB 98 0F 00 00 83 E8 01",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180226B86 (CModelDocEditorSession::Compile: lea rbp, [rbx+0F98h])",
+   "tag": "V",
+   "bridge": "MDOFF_SESSION_COMPILE_STATUS",
+   "sdk": "S2_OFF_CModelDocEditorSession_m_Analysis",
+   "expect": {
+    "2000930": 3992,
+    "2000933": 3992,
+    "2000940": 3992
+   },
+   "status": "proposed",
+   "struct": "CModelDocEditorSession",
+   "field": "compileStatus",
+   "ctype": "CModelDocAnalysis (embedded, 0x98 B, IErrorListener base; the field is its vptr. Compile passes this+0xF98 as the error listener and calls its slot 0 with \"Compile Failed\")"
+  },
+  "MDOFF_SESSION_ISNEW": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "80 7F 19 00 0F B6 D8 0F 85 ?? ?? ?? ?? 48 8B 17 48 8B CF FF 92 88 00 00 00 84 C0 74 ?? 48 8B CF E8 ?? ?? ?? ?? 48 8B 44 24 58",
+    "steps": [
+     {
+      "disp": 2,
+      "size": 1
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180BA1ECC (CBaseEditorApp FileSave: cmp byte ptr [rdi+19h], 0 -> Save As dialog)",
+   "tag": "V",
+   "bridge": "MDOFF_SESSION_ISNEW",
+   "sdk": "S2_OFF_CBaseEditorSession_m_bIsNew",
+   "expect": {
+    "2000930": 25,
+    "2000933": 25,
+    "2000940": 25
+   },
+   "status": "proposed",
+   "struct": "CModelDocEditorSession",
+   "field": "isNewFile",
+   "ctype": "u8"
+  },
+  "MDG_NODETYPE_COUNT": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 05 ?? ?? ?? ?? 33 F6 89 B5 00 01 00 00",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x1800E0E55 (sub_1800DF690 reads dword_181952EA8); CreateOneOfEveryNode 0x180238460 iterates the same table",
+   "tag": "V",
+   "bridge": "MDG_NODETYPE_COUNT",
+   "notes": "int: number of registered ModelDoc node types",
+   "status": "proposed",
+   "expect": {
+    "2000930": 26554024,
+    "2000933": 26554024,
+    "2000940": 26553832
+   }
+  },
+  "MDG_NODETYPE_ARRAY": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 4A 8B 34 E8",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x1800E0E8A (sub_1800DF690 reads qword_181952EB0)",
+   "tag": "V",
+   "bridge": "MDG_NODETYPE_ARRAY",
+   "notes": "NodeTypeDesc **: array of MDG_NODETYPE_COUNT descriptors {u32 typeId; const char *className}",
+   "status": "proposed",
+   "expect": {
+    "2000930": 26554032,
+    "2000933": 26554032,
+    "2000940": 26553840
+   }
+  },
+  "MDOFF_NODETYPE_NAME": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B 47 08 48 8D 15 ?? ?? ?? ?? 48 8D 4D 90",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x1802385DE (CreateOneOfEveryNode: mov r8, [rdi+8] -> \"Test_%s\")",
+   "tag": "V",
+   "bridge": "MDOFF_NODETYPE_NAME",
+   "sdk": "S2_OFF_CToolNodeTypeName_m_pszName",
+   "status": "proposed",
+   "struct": "ModelDocNodeTypeDesc",
+   "field": "className",
+   "ctype": "const char *",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   }
+  },
+  "MDOFF_SESSION_MAINWND": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 BE 10 01 00 00 E8 ?? ?? ?? ??",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180224797 (sub_180224360: mov     [rsi+110h], rdi)",
+   "tag": "V",
+   "expect": {
+    "2000930": 272,
+    "2000933": 272,
+    "2000940": 272
+   },
+   "bridge": "MDOFF_SESSION_MAINWND",
+   "sdk": "S2_OFF_CModelDocEditorSession_m_pMainWnd",
+   "status": "verified",
+   "struct": "CModelDocEditorSession",
+   "field": "mainWnd",
+   "ctype": "CQModelDocEditorWnd *",
+   "notes": "set in session init sub_180224360 right before the main window init call sub_180127920 [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDOFF_MAINWND_SCENEWIDGET": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 B7 E0 01 00 00 48 89 86 80 00 00 00",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180128015 (sub_180127F40: mov     [rdi+1E0h], rsi)",
+   "tag": "V",
+   "expect": {
+    "2000930": 480,
+    "2000933": 480,
+    "2000940": 480
+   },
+   "bridge": "MDOFF_MAINWND_SCENEWIDGET",
+   "status": "verified",
+   "struct": "CQModelDocEditorWnd",
+   "field": "sceneWidget",
+   "ctype": "CQModelDocEditorSceneWidget *",
+   "notes": "the central viewport widget, set in sub_180127F40 [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDOFF_SCENEWIDGET_TOOLWIDGET": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 B5 90 00 00 00 48 8B 08",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 4
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180102F32 (sub_180102D10: mov     [rbp+90h], rsi)",
+   "tag": "V",
+   "expect": {
+    "2000930": 144,
+    "2000933": 144,
+    "2000940": 144
+   },
+   "bridge": "MDOFF_SCENEWIDGET_TOOLWIDGET",
+   "status": "verified",
+   "struct": "CQModelDocEditorSceneWidget",
+   "field": "toolSceneWidget",
+   "ctype": "CQModelDocToolSceneWidget *",
+   "notes": "set in sub_180102D10; CQModelDocToolSceneWidget derives CQModelDocToolSceneWidgetBase -> CQToolSceneWidget [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDOFF_TOOLWIDGET_SCENE": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 4F 50 C7 44 24 30 02 00 00 00",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180B49786 (sub_180B491F0: mov     rcx, [rdi+50h])",
+   "tag": "V",
+   "expect": {
+    "2000930": 80,
+    "2000933": 80,
+    "2000940": 80
+   },
+   "bridge": "MDOFF_TOOLWIDGET_SCENE",
+   "status": "verified",
+   "struct": "CQToolSceneWidget",
+   "field": "scene",
+   "ctype": "CToolScene *",
+   "notes": "statically linked CQToolSceneWidget paint sub_180B491F0; same sig as PETOFF_SCENEWIDGET_SCENE [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDOFF_TOOLWIDGET_CAMERA": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 57 58 4D 8B CE 48 8B 4F 50",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "modeldoc_editor!0x180B4977F (sub_180B491F0: mov     rdx, [rdi+58h])",
+   "tag": "V",
+   "expect": {
+    "2000930": 88,
+    "2000933": 88,
+    "2000940": 88
+   },
+   "bridge": "MDOFF_TOOLWIDGET_CAMERA",
+   "status": "verified",
+   "struct": "CQToolSceneWidget",
+   "field": "camera",
+   "ctype": "CToolSceneCamera *",
+   "notes": "the viewport camera passed to CToolScene::Render; same sig as PETOFF_SCENEWIDGET_CAMERA [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDFN_TOOLSCENE_RENDER": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B DC 4D 89 4B 20 55"
+   },
+   "via": "modeldoc_editor!0x180B53770 (sub_180B53770)",
+   "tag": "V",
+   "expect": {
+    "2000930": 11876208,
+    "2000933": 11876208,
+    "2000940": 11876752
+   },
+   "bridge": "MDFN_TOOLSCENE_RENDER",
+   "status": "verified",
+   "notes": "void CToolScene::Render(scene, camera, IToolSceneWindow *wnd|0, swapchain|0, const RenderViewport_t *vp, u8 *pixels|0, int imageFormat): statically linked tools-lib copy, same body/sig as PETFN_TOOLSCENE_RENDER (pet.json). Format 0 = RGBA8888. [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDV_EDITORWND_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CQModelDocEditorWnd"
+   },
+   "via": "modeldoc_editor!0x181393CE0 (??_7CQModelDocEditorWnd@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 20528352,
+    "2000933": 20528352,
+    "2000940": 20528456
+   },
+   "bridge": "MDV_EDITORWND_VT",
+   "status": "verified",
+   "ident_slot": 0,
+   "notes": "identity check of session+MDOFF_SESSION_MAINWND [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDV_SCENEWIDGET_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CQModelDocEditorSceneWidget"
+   },
+   "via": "modeldoc_editor!0x18138C370 (??_7CQModelDocEditorSceneWidget@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 20497264,
+    "2000933": 20497264,
+    "2000940": 20497224
+   },
+   "bridge": "MDV_SCENEWIDGET_VT",
+   "status": "verified",
+   "ident_slot": 0,
+   "notes": "identity check of mainwnd+MDOFF_MAINWND_SCENEWIDGET [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDV_TOOLWIDGET_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CQModelDocToolSceneWidget"
+   },
+   "via": "modeldoc_editor!0x18138BDD8 (??_7CQModelDocToolSceneWidget@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 20495832,
+    "2000933": 20495832,
+    "2000940": 20495792
+   },
+   "bridge": "MDV_TOOLWIDGET_VT",
+   "status": "verified",
+   "ident_slot": 0,
+   "notes": "identity check of scenewidget+MDOFF_SCENEWIDGET_TOOLWIDGET [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDV_TOOLSCENE_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CToolScene"
+   },
+   "via": "modeldoc_editor!0x181257B88 (??_7CToolScene@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 19233672,
+    "2000933": 19233672,
+    "2000940": 19233672
+   },
+   "bridge": "MDV_TOOLSCENE_VT",
+   "status": "verified",
+   "ident_slot": 0,
+   "notes": "identity check of toolwidget+MDOFF_TOOLWIDGET_SCENE [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "MDV_SCENECAMERA_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CToolSceneCamera"
+   },
+   "via": "modeldoc_editor!0x181257A88 (??_7CToolSceneCamera@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 19233416,
+    "2000933": 19233416,
+    "2000940": 19233416
+   },
+   "bridge": "MDV_SCENECAMERA_VT",
+   "status": "verified",
+   "ident_slot": 0,
+   "notes": "identity check of toolwidget+MDOFF_TOOLWIDGET_CAMERA (pet live-verified the same class there) [V live 2026-10-13: modeldoc.render chain passed every identity check and rendered glass_probe, bridge m2.14]"
+  },
+  "CModelDocEditorSession::IBindTarget": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocEditorSession",
+    "col_offset": 104
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocEditorSession@@ IBindTarget subobject table (modeldoc_editor!0x1813EE908, mdisp +0x68)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "nine-slot secondary table (s2sdk-types RE10 section 3.5)",
+   "expect": {
+    "2000930": 20900104,
+    "2000933": 20900104,
+    "2000940": 20901064
+   }
+  },
+  "CModelDocAnalysis": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocAnalysis",
+    "col_offset": 0
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocAnalysis@@ table (modeldoc_editor!0x1813EAEB0; the CModelDocEditorSession ctor stores it at session+0xF98)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "CModelDocAnalysis : IErrorListener, six entries = IErrorListener's six, no own virtual (WP7, target/orch/dehardcode/wp7-re.md item 4)",
+   "expect": {
+    "2000930": 20885168,
+    "2000933": 20885168,
+    "2000940": 20885152
+   }
+  },
+  "CModelDocEditorSession::IAssetFingerprintListener": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocEditorSession",
+    "col_offset": 120
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocEditorSession@@ IAssetFingerprintListener subobject table (modeldoc_editor!0x1813EE8F8, mdisp +0x78)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "one-slot secondary table (s2sdk-types RE10 section 3.3)",
+   "expect": {
+    "2000930": 20900088,
+    "2000933": 20900088,
+    "2000940": 20901048
+   }
+  },
+  "CModelDocEditorSession::IToolsResourceListener": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CModelDocEditorSession",
+    "col_offset": 128
+   },
+   "via": "modeldoc_editor RTTI .?AVCModelDocEditorSession@@ IToolsResourceListener subobject table (modeldoc_editor!0x1813EEA30, mdisp +0x80)",
+   "tag": "RTTI",
+   "status": "verified",
+   "notes": "two-slot secondary table (s2sdk-types RE10 section 3.4)",
+   "expect": {
+    "2000930": 20900400,
+    "2000933": 20900400,
+    "2000940": 20901360
+   }
+  }
+ }
+}

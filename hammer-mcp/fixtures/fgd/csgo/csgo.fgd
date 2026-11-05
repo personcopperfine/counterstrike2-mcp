@@ -1,0 +1,90 @@
+// Hand-written mini FGD fixture for the hammer-mcp FGD tests (WP-F).
+// Layout mirrors the real tree: <root>/csgo/csgo.fgd includes core/base_mini.fgd (resolved in
+// the including file's directory `csgo/` first, then `core/`). Covers every construct the real
+// files use: @include, a @BaseClass chain (GameEntity -> Targetname), choices, flags, an
+// input/output pair, a `" +` string continuation, a `{ ... }` metadata block after a key, a
+// `[ group="..." ]` attribute list, comments, skipped directives and a duplicate class.
+
+@include "base_mini.fgd"
+
+// ---- directives the database skips ---------------------------------------------------------
+@EntityGroup "Player" { start_expanded = true }
+@VisGroupFilter { filter_type = "toolsMaterial" material = "toolsclip.vmat" group = "Tool Brushes/Clip" }
+@mapsize(-16384, 16384)
+@MaterialExclusion
+[
+	"materials/dev/measure_generic.vmat"
+]
+
+// ---- an @OverrideClass: merges into the class defined by the same name ---------------------
+// `directlight` overrides the base definition in place; `clientSideEntity` is appended.
+@OverrideClass
+	metadata
+	{
+		entity_tool_name = "Env Light"
+		entity_tool_group = "Lighting"
+	}
+= light_environment
+[
+	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "3" : "Overridden: Stationary and Dynamic supported." =
+	[
+		"0" : "None"
+		"1" : "Static"
+		"3" : "Stationary"
+		"2" : "Dynamic"
+	]
+]
+
+// ---- the acceptance class: info_target-like ------------------------------------------------
+@PointClass base(Targetname, Parentname) tags( Info ) editormodel("models/editor/info_target", nobounds) = info_target :
+	"An entity that does nothing. " +
+	"Very useful as a positioning entity for other entities to refer to."
+[
+	spawnflags(Flags) =
+	[
+		1 : "Transmit to client (respect PVS)" : 0
+		2 : "Always transmit to client (ignore PVS)" : 0
+	]
+]
+
+@SolidClass base( Targetname ) = func_buyzone :
+	"A trigger used to define a buyzone."
+[
+	TeamNum(integer) [ group="Buyzone" ] : "Team Num" : : "Team number associated with this buyzone."
+	BuyzoneType(choices) : "Buyzone Type" : 0 : =
+	[
+		0 : "Ground" : 1
+		1 : "Air" : 0 : "The elevated one"
+	]
+	fadefactor(float) : "Fade Factor" : "1.0" :
+	BuyzoneRadius(float) : "Radius" : "64"
+	input Enable(void) : ""
+	input Disable(void) : ""
+	output BuyzoneEntered(void) : "Fires when a player enters the zone."
+]
+
+// ---- a base chain of its own (WeaponMini -> WeaponCore) ------------------------------------
+@BaseClass color(0 0 200) base(WeaponCore) = WeaponMini
+[
+	spawnflags(Flags) =
+	[
+		1 : "Start constrained" : 0
+	]
+	CanBePickedUp(boolean) : "Is this weapon allowed to be picked up?" : 1
+
+	input ToggleCanBePickedUp(void) : "Toggle CanBePickedUp"
+	output OnPlayerPickup(void) : "Fires when the player picks up this weapon"
+]
+
+@PointClass base(WeaponMini) studio("weapons/models/ak47/weapon_rif_ak47.vmdl") = weapon_ak47 : "AK-47" []
+
+// ---- a duplicate definition: the later one wins, with a warning ----------------------------
+@PointClass base(Targetname, Parentname) = info_mini : "Second definition wins."
+[
+	second_wave(boolean) : "Second wave key" : 0
+]

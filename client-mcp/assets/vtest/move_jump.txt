@@ -1,0 +1,46 @@
+// vtest POC suite: load a map, spawn, move forward, jump, screenshots + demo, exit 0.
+// Driven by tier0 CTestScriptMgr (see docs/interfaces/ITestScriptMgr.md "Script language").
+// Rules: ';' always splits; plain commands are queued (async), only Test_* lines block.
+// Markers go through mark.vtest (checkpoint + wait = barrier): with testscript_debug 1 they are logged as
+// "TESTSCRIPT: CheckPoint -> 'VTEST_*'" (echo output does not reach console.log in -tools).
+// Ends with quit (flushes console.log); Test_ExitProcess 3 only if quit hangs.
+// The host (run_vtest.sh + check_move_jump.py) judges the run from console.log + files.
+testscript_debug 1
+sv_cheats 1
+r_always_render_all_windows 1
+// SourceTV must be on before the map loads; tv_record writes the demo server-side
+tv_enable 1
+tv_delay 0
+Test_Run mark VTEST_BEGIN
+map de_dust2
+Test_WaitForCheckPoint FinishedMapLoad once
+Test_Run mark VTEST_MAP_LOADED
+Test_Run setup_player
+Test_Run pos spawn
+Test_Run snap spawn
+// Not the client `record`: it asks for a full update and freezes client prediction (input ignored) until
+// the server sends one, which early in a map it does not (see worknotes/vtest-scratch.md).
+tv_record vtest_move_jump
+Test_Wait 1
+// walk forward for 2 s
++forward
+Test_Wait 2
+-forward
+Test_Wait 0.5
+Test_Run pos moved
+Test_Run snap moved
+// jump: sample mid-air, then after landing
++jump
+Test_Wait 0.3
+Test_Run pos midjump
+Test_Run snap midjump
+-jump
+Test_Wait 1.5
+Test_Run pos landed
+Test_Wait 1
+tv_stoprecord
+Test_Wait 3
+Test_Run mark VTEST_DONE
+quit
+Test_Wait 30
+Test_ExitProcess 3

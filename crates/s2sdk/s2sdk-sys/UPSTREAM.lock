@@ -1,0 +1,8 @@
+# Pinned s2sdk revision the generated bindings come from: the personcopperfine/s2sdk fork of
+# alliedmodders/s2sdk (branch cs2mcp/main = upstream cs2 plus the commits pending upstream PRs,
+# workflows/upstream-prs/). Same URL and branch as .gitmodules.
+# Bump: update the checkout, edit this file, run gen/gen.py, review the diff.
+repo = "https://github.com/personcopperfine/s2sdk.git"
+branch = "cs2mcp/main"
+commit = "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+date = "2026-11-03"

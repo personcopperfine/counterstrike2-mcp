@@ -1,0 +1,18 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	_class = "Escapes"
+	empty = ""
+	quote = "say \"hi\""
+	backslash = "C:\\Program Files\\Game"
+	backslash_at_end = "trailing\\"
+	tab_and_newline = "col1\tcol2\nrow2\r\nrow3"
+	mixed = "\\\"x\\\" and \t\n"
+	unicode = "ünïcode ✓ 日本語"
+	"key with spaces" = "v"
+	"key\"with\"quotes" = "v"
+	"key\twith\ttab" = "v"
+	dotted.bare.key = "v"
+	_leading_underscore = "v"
+	trailing_dot. = "v"
+	"1_numeric_lead" = "v"
+}

@@ -1,0 +1,2849 @@
+{
+ "module": "toolframework2.dll",
+ "image_base": 6442450944,
+ "_doc": "toolframework2.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "builds": {
+  "2000921": {
+   "sha256": "28fc0cb55e4bc926",
+   "timestamp": 1790794687
+  },
+  "2000930": {
+   "sha256": "bc06cf546e076867",
+   "timestamp": 1791492050
+  },
+  "2000933": {
+   "sha256": "56c674c1b10c59f7",
+   "timestamp": 1792003239
+  },
+  "2000940": {
+   "sha256": "a68bb2509fba7dbc",
+   "timestamp": 1793662551
+  }
+ },
+ "entries": {
+  "TFV_FRAMEWORK_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CToolFramework2"
+   },
+   "via": "pins.py VTABLES: .?AVCToolFramework2@@ primary vtable",
+   "tag": "RTTI",
+   "bridge": "TFV_FRAMEWORK_VT",
+   "expect": {
+    "2000921": 10040400,
+    "2000930": 10047664,
+    "2000933": 10047664,
+    "2000940": 10051728
+   },
+   "status": "verified"
+  },
+  "TFVS_GET_TOOL_INDEX_BY_NAME": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 22
+   },
+   "via": "pins.py VSLOTS: CToolFramework2::GetToolIndexByName",
+   "tag": "V",
+   "bridge": "TFVS_GET_TOOL_INDEX_BY_NAME",
+   "sdk": "S2_SLOT_IToolFramework2_FindTool",
+   "expect": {
+    "2000921": 292256,
+    "2000930": 292320,
+    "2000933": 292320,
+    "2000940": 292320
+   },
+   "notes": "CToolFramework2::GetToolIndexByName",
+   "status": "verified"
+  },
+  "TFVS_GET_TOOL_ENTRY_BY_INDEX": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 81
+   },
+   "via": "pins.py VSLOTS: CToolFramework2::GetToolEntryByIndex",
+   "tag": "V",
+   "bridge": "TFVS_GET_TOOL_ENTRY_BY_INDEX",
+   "sdk": "S2_SLOT_IToolFramework2_GetToolSettings",
+   "expect": {
+    "2000921": 304656,
+    "2000930": 304720,
+    "2000933": 304720,
+    "2000940": 304720
+   },
+   "notes": "CToolFramework2::GetToolEntryByIndex",
+   "status": "verified"
+  },
+  "CToolFramework2::Connect": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 0
+   },
+   "via": "toolframework2!0x180044FE0 (CToolFramework2 vtable slot 0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 282592,
+    "2000930": 282656,
+    "2000933": 282656,
+    "2000940": 282656
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Disconnect": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 1
+   },
+   "via": "toolframework2!0x180046E60 (CToolFramework2 vtable slot 1)",
+   "tag": "V",
+   "expect": {
+    "2000921": 290400,
+    "2000930": 290464,
+    "2000933": 290464,
+    "2000940": 290464
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::QueryInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 2
+   },
+   "via": "toolframework2!0x1800147E0 (CToolFramework2 vtable slot 2)",
+   "tag": "V",
+   "expect": {
+    "2000921": 83936,
+    "2000930": 84000,
+    "2000933": 84000,
+    "2000940": 84000
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 3
+   },
+   "via": "toolframework2!0x180045830 (CToolFramework2 vtable slot 3)",
+   "tag": "V",
+   "expect": {
+    "2000921": 284720,
+    "2000930": 284784,
+    "2000933": 284784,
+    "2000940": 284784
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Shutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 4
+   },
+   "via": "toolframework2!0x180046A70 (CToolFramework2 vtable slot 4)",
+   "tag": "V",
+   "expect": {
+    "2000921": 289392,
+    "2000930": 289456,
+    "2000933": 289456,
+    "2000940": 289456
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::PreShutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 5
+   },
+   "via": "toolframework2!0x180049EB0 (CToolFramework2 vtable slot 5)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302768,
+    "2000930": 302832,
+    "2000933": 302832,
+    "2000940": 302832
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::GetDependencies": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CToolFramework2",
+    "slot": 6
+   },
+   "via": "toolframework2!0x180044FD0 (CToolFramework2 slot 6)",
+   "tag": "V",
+   "expect": {
+    "2000921": 282576,
+    "2000930": 282640,
+    "2000933": 282640,
+    "2000940": 282640
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::FactoryPassthrough": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 57 48 83 EC 20 48 8B DA 48 8B F9 48 85 D2"
+   },
+   "via": "toolframework2!0x180044EB0 (CToolFramework2::FactoryPassthrough)",
+   "tag": "V",
+   "expect": {
+    "2000921": 282288,
+    "2000930": 282352,
+    "2000933": 282352,
+    "2000940": 282352
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::LoadToolSystem": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 24
+   },
+   "via": "toolframework2!0x18004A320 (TFV_FRAMEWORK_VT slot 24, CToolFramework2::LoadToolSystem; called by ProcessToolRequest 0x18004D390)",
+   "tag": "V",
+   "expect": {
+    "2000921": 303840,
+    "2000930": 303904,
+    "2000933": 303904,
+    "2000940": 303904
+   },
+   "status": "verified",
+   "bridge": "TFVS_LOAD_TOOL_SYSTEM",
+   "sdk": "S2_SLOT_IToolFramework2_LoadTool",
+   "notes": "IToolSystem2 *LoadToolSystem(fw, u8 toolIndex): loads the tool DLL once (cached per index, never retried), calls tool slot 11; failure opens a 'Failed to load/initialize tool system' modal. ProcessToolRequest (slot 79) = GetToolIndexByName (slot 22, u8 out) + this + tool slot 16"
+  },
+  "BinaryProperties_GetValue": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "BinaryProperties_GetValue"
+   },
+   "via": "toolframework2!0x18004F510 (export BinaryProperties_GetValue)",
+   "tag": "V",
+   "expect": {
+    "2000921": 324880,
+    "2000930": 324944,
+    "2000933": 324944,
+    "2000940": 324944
+   },
+   "status": "verified"
+  },
+  "ExtractModuleMetadata": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "ExtractModuleMetadata"
+   },
+   "via": "toolframework2!0x18004FA70 (export ExtractModuleMetadata)",
+   "tag": "V",
+   "expect": {
+    "2000921": 326256,
+    "2000930": 326320,
+    "2000933": 326320,
+    "2000940": 326320
+   },
+   "status": "verified"
+  },
+  "InterfaceReg::InterfaceReg": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "toolframework2!0x18058DA50 (InterfaceReg::InterfaceReg)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5823056,
+    "2000930": 5829088,
+    "2000933": 5829088,
+    "2000940": 5830032
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "toolframework2!0x18058DA70 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5823088,
+    "2000930": 5829120,
+    "2000933": 5829120,
+    "2000940": 5830064
+   },
+   "status": "verified"
+  },
+  "GetResourceManifests": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "GetResourceManifests"
+   },
+   "via": "toolframework2!0x180596430 (export GetResourceManifests)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5858352,
+    "2000930": 5864384,
+    "2000933": 5864384,
+    "2000940": 5865328
+   },
+   "status": "verified"
+  },
+  "InstallSchemaBindings": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "InstallSchemaBindings"
+   },
+   "via": "toolframework2!0x180596680 (export InstallSchemaBindings)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5858944,
+    "2000930": 5864976,
+    "2000933": 5864976,
+    "2000940": 5865920
+   },
+   "status": "verified"
+  },
+  "manifest loader": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 B8 80 12 00 00"
+   },
+   "via": "toolframework2!0x1805A5DA0 (CToolFramework2::sub_5A5DA0_LoadEngineToolsManifest)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5922208,
+    "2000930": 5928240,
+    "2000933": 5928240,
+    "2000940": 5929184
+   },
+   "status": "verified"
+  },
+  "DllEntryPoint": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 49 8B F8 8B DA"
+   },
+   "via": "toolframework2!0x1805E3AE4 (DllEntryPoint)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6175460,
+    "2000930": 6181492,
+    "2000933": 6181492,
+    "2000940": 6182436
+   },
+   "status": "verified"
+  },
+  "TlsCallback_0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "83 FA 02 75 ?? 48 89 5C 24 08"
+   },
+   "via": "toolframework2!0x1805E40EC (TlsCallback_0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6177004,
+    "2000930": 6183036,
+    "2000933": 6183036,
+    "2000940": 6183980
+   },
+   "status": "verified"
+  },
+  "TlsCallback_1": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 56 48 83 EC 20 83 FA 03"
+   },
+   "via": "toolframework2!0x1806D9D14 (TlsCallback_1)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7183636,
+    "2000930": 7188884,
+    "2000933": 7188884,
+    "2000940": 7189828
+   },
+   "status": "verified"
+  },
+  "IToolFrameListener": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CQInputBindManager",
+    "col_offset": 16
+   },
+   "via": "toolframework2!0x18091E978 (??_7CQInputBindManager@@6B@_0; with col_offset=16)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 9562488,
+    "2000930": 9569768,
+    "2000933": 9569768,
+    "2000940": 9573832
+   },
+   "notes": "secondary vtable of CQInputBindManager implementing IToolFrameListener (OnPreFrame/OnPostFrame slot group); col_offset=16 selects the IToolFrameListener base-vtable, not the QObject primary",
+   "status": "verified"
+  },
+  "CToolFrameworkTabletInfo": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CToolFrameworkTabletInfo"
+   },
+   "via": "toolframework2!0x180995090 (??_7CToolFrameworkTabletInfo@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 10047632,
+    "2000930": 10054896,
+    "2000933": 10054896,
+    "2000940": 10058936
+   },
+   "status": "verified"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18058DA57 (InterfaceReg::InterfaceReg reads s_pInterfaceRegs)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14915840,
+    "2000930": 14926032,
+    "2000933": 14926032,
+    "2000940": 14930192
+   },
+   "status": "verified"
+  },
+  "g_CToolFramework2": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180044F10 (CToolFramework2::CreateFn reads g_CToolFramework2)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15273024,
+    "2000930": 15283200,
+    "2000933": 15283200,
+    "2000940": 15287360
+   },
+   "status": "verified"
+  },
+  "g_CToolFramework2_IToolsServices_m_pToolsConfig": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180044F20 (ToolServices_002::createFn reads g_CToolFramework2_IToolServices_m_pToolsConfig)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15273064,
+    "2000930": 15283240,
+    "2000933": 15283240,
+    "2000940": 15287400
+   },
+   "status": "verified"
+  },
+  "CToolFramework2": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CToolFramework2"
+   },
+   "via": "toolframework2!0x180993450 (??_7CToolFramework2@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 10040400,
+    "2000930": 10047664,
+    "2000933": 10047664,
+    "2000940": 10051728
+   },
+   "notes": "doc target was the ??_R4 COL data at 0x180AA2740; the RTTI vtable locator supersedes it",
+   "status": "verified"
+  },
+  "CToolFramework2 dependency table": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CToolFramework2::GetDependencies",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "CToolFramework2::GetDependencies lea rax,[CToolFramework2__s_Dependencies]",
+   "tag": "V",
+   "expect": {
+    "2000921": 12050160,
+    "2000930": 12058352,
+    "2000933": 12058352,
+    "2000940": 12062464
+   },
+   "notes": "CToolFramework2::s_Dependencies (12x {module,version}) read through the exported GetDependencies stub",
+   "status": "verified"
+  },
+  "ToolFramework2_002 InterfaceReg": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001EAE (sub_180001EA0 reads unk_180E90C10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15272976,
+    "2000930": 15283152,
+    "2000933": 15283152,
+    "2000940": 15287312
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::CreateFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001EA7 (sub_180001EA0 references CToolFramework2::CreateFn (prologue not unique): lea     rdx, CToolFramework2__CreateFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 282384,
+    "2000930": 282448,
+    "2000933": 282448,
+    "2000940": 282448
+   },
+   "status": "verified"
+  },
+  "ToolServices_002 InterfaceReg": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001ECE (ToolServices_002_RegInit reads ToolServices_002_InterfaceReg)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15273000,
+    "2000930": 15283176,
+    "2000933": 15283176,
+    "2000940": 15287336
+   },
+   "status": "verified"
+  },
+  "ToolServices_002::createFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001EC7 (ToolServices_002_RegInit references ToolServices_002::createFn (prologue not unique): lea     rdx, ToolServices_002__createFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 282400,
+    "2000930": 282464,
+    "2000933": 282464,
+    "2000940": 282464
+   },
+   "status": "verified"
+  },
+  "GetResourceManifestCount": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "GetResourceManifestCount"
+   },
+   "via": "toolframework2!0x180596420 (export GetResourceManifestCount)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5858336,
+    "2000930": 5864368,
+    "2000933": 5864368,
+    "2000940": 5865312
+   },
+   "status": "verified"
+  },
+  "TD_CToolFramework2": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVCToolFramework2@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C44010 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12861456,
+    "2000930": 12870528,
+    "2000933": 12870528,
+    "2000940": 12874640
+   },
+   "status": "verified"
+  },
+  "TD_CToolFrameworkTabletInfo": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVCToolFrameworkTabletInfo@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C44068 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12861544,
+    "2000930": 12870616,
+    "2000933": 12870616,
+    "2000940": 12874728
+   },
+   "status": "verified"
+  },
+  "TD_IToolFramework2": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIToolFramework2@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C43D98 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12860824,
+    "2000930": 12869896,
+    "2000933": 12869896,
+    "2000940": 12874008
+   },
+   "status": "verified"
+  },
+  "TD_IToolServices": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIToolServices@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C43DE8 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12860904,
+    "2000930": 12869976,
+    "2000933": 12869976,
+    "2000940": 12874088
+   },
+   "status": "verified"
+  },
+  "TD_IToolFrameworkTabletInfo": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIToolFrameworkTabletInfo@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C44038 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12861496,
+    "2000930": 12870568,
+    "2000933": 12870568,
+    "2000940": 12874680
+   },
+   "status": "verified"
+  },
+  "TD_IToolFrameListener": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIToolFrameListener@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C3F838 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12843064,
+    "2000930": 12852136,
+    "2000933": 12852136,
+    "2000940": 12856248
+   },
+   "status": "verified"
+  },
+  "TD_IToolsResourceListener": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIToolsResourceListener@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C43E88 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12861064,
+    "2000930": 12870136,
+    "2000933": 12870136,
+    "2000940": 12874248
+   },
+   "status": "verified"
+  },
+  "TD_CQInputBindManager": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": ".?AVCQInputBindManager@@",
+    "section": ".data",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180C3F808 (RTTI TypeDescriptor: name string at +0x10)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 12843016,
+    "2000930": 12852088,
+    "2000933": 12852088,
+    "2000940": 12856200
+   },
+   "status": "verified"
+  },
+  "str_ToolSystem2_001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "ToolSystem2_001"
+   },
+   "via": "toolframework2!0x1809949E0 (default ToolSystem2_001 version string)",
+   "tag": "V",
+   "expect": {
+    "2000921": 10045920,
+    "2000930": 10053184,
+    "2000933": 10053184,
+    "2000940": 10057088
+   },
+   "status": "verified"
+  },
+  "AssetSystem_slot23_callsite": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 4C 8B 80 B8 00 00 00 8B 44 24 44"
+   },
+   "via": "toolframework2!0x18002ACFD (mov     rcx, cs:qword_180E38E58)",
+   "tag": "V",
+   "expect": {
+    "2000921": 175357,
+    "2000930": 175421,
+    "2000933": 175421,
+    "2000940": 175421
+   },
+   "status": "verified"
+  },
+  "CToolFramework2_Init_manifestRead_site": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 84 C0 75 ?? 48 8D 4D B0"
+   },
+   "via": "toolframework2!0x18004612F (call    CToolFramework2__sub_180049FE0_LoadToolsConfig)",
+   "tag": "V",
+   "expect": {
+    "2000921": 287023,
+    "2000930": 287087,
+    "2000933": 287087,
+    "2000940": 287087
+   },
+   "status": "verified"
+  },
+  "CToolFramework2_LoadToolsConfig": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "49 89 47 28 48 85 C0 75 ??"
+   },
+   "via": "toolframework2!0x18004A000 (mov     [r15+28h], rax)",
+   "tag": "V",
+   "expect": {
+    "2000921": 303104,
+    "2000930": 303168,
+    "2000933": 303168,
+    "2000940": 303168
+   },
+   "status": "verified"
+  },
+  "tf2_ConnectInterfaces": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 57 48 83 EC 40 8B 05 ?? ?? ?? ??"
+   },
+   "via": "toolframework2!0x180576470 (tf2_ConnectInterfaces)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5727344,
+    "2000930": 5733376,
+    "2000933": 5733376,
+    "2000940": 5734320
+   },
+   "status": "verified"
+  },
+  "InstallSchemaBindings_registerClasses": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 54 41 56 41 57 48 83 EC 40 45 33 E4 C7 40 DC 08 00 00 C0"
+   },
+   "via": "toolframework2!0x180596500 (sub_180596500)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5858560,
+    "2000930": 5864592,
+    "2000933": 5864592,
+    "2000940": 5865536
+   },
+   "status": "verified"
+  },
+  "SchemaSystem_factory_lookup": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 2B D1 F6 C1 07 74 ??"
+   },
+   "via": "toolframework2!0x1805FAA40 (sub_1805FAA40)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6269504,
+    "2000930": 6275536,
+    "2000933": 6275536,
+    "2000940": 6276480
+   },
+   "status": "verified"
+  },
+  "COL_TD_range_start": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 3B C2",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x1805E9610 (sub_1805E9610 reads __guard_check_icall_fptr)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7358808,
+    "2000930": 7362904,
+    "2000933": 7362904,
+    "2000940": 7367000
+   },
+   "status": "verified"
+  },
+  "g_AssetSystem_cache": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 4C 8B 80 B8 00 00 00 8B 44 24 44",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18002ACFD (sub_18002A400 reads qword_180E38E58)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14913112,
+    "2000930": 14923304,
+    "2000933": 14923304,
+    "2000940": 14927464
+   },
+   "status": "verified"
+  },
+  "g_AssetBrowserSystem_cache": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 E8 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18002E84A (sub_18002D1F0 reads qword_180E38E38)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14913080,
+    "2000930": 14923272,
+    "2000933": 14923272,
+    "2000940": 14927432
+   },
+   "status": "verified"
+  },
+  "g_HelpSystem_wiring_cell": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 49 8B D4",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18018DEA5 (sub_18018DCB0 reads qword_180E38DC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14912960,
+    "2000930": 14923152,
+    "2000933": 14923152,
+    "2000940": 14927312
+   },
+   "status": "verified"
+  },
+  "g_SchemaRegistry": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B 08 48 8B 59 60 E8 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 45 33 C0 48 8B D0 FF D3 45 33 C0 48 8D 55 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18048599D (sub_180485990 reads qword_180E38E70)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14913136,
+    "2000930": 14923328,
+    "2000933": 14923328,
+    "2000940": 14927488
+   },
+   "status": "verified"
+  },
+  "g_ToolFramework2_factory": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? FF D0 48 85 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180044ECB (CToolFramework2::FactoryPassthrough reads CToolFramework2::s_Factory)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15273752,
+    "2000930": 15283928,
+    "2000933": 15283928,
+    "2000940": 15288088
+   },
+   "status": "verified"
+  },
+  "ToolFramework2_002_RegInit_stub": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??"
+   },
+   "via": "toolframework2!0x180001EA0 (lea     r8, aToolframework2_3; \"ToolFramework2_002\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 7840,
+    "2000930": 7840,
+    "2000933": 7840,
+    "2000940": 7840
+   },
+   "notes": "InterfaceReg stub; body alone matches sibling stubs, pattern extends across the end into sub_180001EC0 padding",
+   "status": "verified"
+  },
+  "ToolServices_002_RegInit_stub": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28"
+   },
+   "via": "toolframework2!0x180001EC0 (lea     r8, aToolservices00; \"ToolServices_002\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 7872,
+    "2000930": 7872,
+    "2000933": 7872,
+    "2000940": 7872
+   },
+   "notes": "InterfaceReg stub; body alone matches sibling stubs, pattern extends across the end into sub_180001EE0 padding",
+   "status": "verified"
+  },
+  "g_AssetBrowser_dep_table": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 18",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 16
+     }
+    ]
+   },
+   "via": "CToolFramework2::GetDependencies lea rax,[s_Dependencies 0x180B7DEF0] + 0x10 (row {assetbrowser, AssetBrowserSystem_001})",
+   "tag": "V",
+   "expect": {
+    "2000921": 12050176,
+    "2000930": 12058368,
+    "2000933": 12058368,
+    "2000940": 12062480
+   },
+   "notes": "dependency-table row {assetbrowser, AssetBrowserSystem_001}; base+rip chain from the GetDependencies lea (no direct code reader of the row)",
+   "status": "verified"
+  },
+  "sub_180001FA0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E9 ?? ?? ?? ?? CC CC 48 83 EC 58 80 64 24 38 F8",
+    "steps": [
+     {
+      "add": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001FA0 (sub_180001FA0 anchored on the preceding code, +0x7 (no unique own bytes))",
+   "tag": "V",
+   "expect": {
+    "2000921": 8096,
+    "2000930": 8096,
+    "2000933": 8096,
+    "2000940": 8096
+   },
+   "status": "verified"
+  },
+  "sub_1800145F0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "IToolFrameListener",
+    "slot": 0
+   },
+   "via": "toolframework2!0x1800145F0 (IToolFrameListener slot 0 -> sub_1800145F0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 83440,
+    "2000930": 83504,
+    "2000933": 83504,
+    "2000940": 83504
+   },
+   "status": "verified"
+  },
+  "ImportSocketListenerThread": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 55 53 48 8D 6C 24 B1"
+   },
+   "via": "toolframework2!0x180022920 (sub_180022920)",
+   "tag": "V",
+   "expect": {
+    "2000921": 141600,
+    "2000930": 141664,
+    "2000933": 141664,
+    "2000940": 141664
+   },
+   "status": "verified"
+  },
+  "sub_18002D1F0_site_1664": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 E8 00 00 00 48 8B 45 88"
+   },
+   "via": "toolframework2!0x18002E854 (call    qword ptr [rax+0E8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 190548,
+    "2000930": 190612,
+    "2000933": 190612,
+    "2000940": 190612
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Connect_site_A0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 70 48 8B 5C 24 40"
+   },
+   "via": "toolframework2!0x180045080 (call    qword ptr [rax+70h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 282752,
+    "2000930": 282816,
+    "2000933": 282816,
+    "2000940": 282816
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Init_site_2A2": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 8B 18 02 00 00 4C 89 AC 24 B8 02 00 00"
+   },
+   "via": "toolframework2!0x180045AD2 (lea     rcx, [rbx+218h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 285394,
+    "2000930": 285458,
+    "2000933": 285458,
+    "2000940": 285458
+   },
+   "status": "verified"
+  },
+  "sub_1800469C0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 11
+   },
+   "via": "toolframework2!0x1800469C0 (TFV_FRAMEWORK_VT slot 11 -> sub_1800469C0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 289216,
+    "2000930": 289280,
+    "2000933": 289280,
+    "2000940": 289280
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::g_static_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 33 DB C6 05 ?? ?? ?? ?? FF"
+   },
+   "via": "toolframework2!0x180046EE0 (CToolFramework2::g_static_init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 290528,
+    "2000930": 290592,
+    "2000933": 290592,
+    "2000940": 290592
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1800479C0_CollectToolRecords": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 12
+   },
+   "via": "toolframework2!0x1800479C0 (TFV_FRAMEWORK_VT slot 12 -> CToolFramework2::sub_1800479C0_CollectToolRecords)",
+   "tag": "V",
+   "expect": {
+    "2000921": 293312,
+    "2000930": 293376,
+    "2000933": 293376,
+    "2000940": 293376
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180047B10_LoadToolByIndex": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 13
+   },
+   "via": "toolframework2!0x180047B10 (TFV_FRAMEWORK_VT slot 13 -> CToolFramework2::sub_180047B10_LoadToolByIndex)",
+   "tag": "V",
+   "expect": {
+    "2000921": 293648,
+    "2000930": 293712,
+    "2000933": 293712,
+    "2000940": 293712
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180047B10_LoadToolByIndex_site_52": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF D0 8B 45 E8 48 8B 55 F0"
+   },
+   "via": "toolframework2!0x180047B62 (call    r8; IToolSystem2 slot 12 (vfn+0x60) right after load; framework-owned request struct; return ignored)",
+   "tag": "V",
+   "expect": {
+    "2000921": 293730,
+    "2000930": 293794,
+    "2000933": 293794,
+    "2000940": 293794
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180047C60_QueueToolIndex": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 14
+   },
+   "via": "toolframework2!0x180047C60 (TFV_FRAMEWORK_VT slot 14 -> CToolFramework2::sub_180047C60_QueueToolIndex)",
+   "tag": "V",
+   "expect": {
+    "2000921": 293984,
+    "2000930": 294048,
+    "2000933": 294048,
+    "2000940": 294048
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180047CB0_IsToolIndexQueued": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 15
+   },
+   "via": "toolframework2!0x180047CB0 (TFV_FRAMEWORK_VT slot 15 -> CToolFramework2::sub_180047CB0_IsToolIndexQueued)",
+   "tag": "V",
+   "expect": {
+    "2000921": 294064,
+    "2000930": 294128,
+    "2000933": 294128,
+    "2000940": 294128
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180047D10_SetPendingToolLoadId": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 16
+   },
+   "via": "toolframework2!0x180047D10 (TFV_FRAMEWORK_VT slot 16 -> CToolFramework2::sub_180047D10_SetPendingToolLoadId)",
+   "tag": "V",
+   "expect": {
+    "2000921": 294160,
+    "2000930": 294224,
+    "2000933": 294224,
+    "2000940": 294224
+   },
+   "status": "verified"
+  },
+  "sub_180047D20": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 30
+   },
+   "via": "toolframework2!0x180047D20 (TFV_FRAMEWORK_VT slot 30 -> sub_180047D20)",
+   "tag": "V",
+   "expect": {
+    "2000921": 294176,
+    "2000930": 294240,
+    "2000933": 294240,
+    "2000940": 294240
+   },
+   "status": "verified"
+  },
+  "sub_1800483B0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 48 89 50 10 48 89 48 08 55 48 8D A8 68 FF FF FF"
+   },
+   "via": "toolframework2!0x1800483B0 (sub_1800483B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 295856,
+    "2000930": 295920,
+    "2000933": 295920,
+    "2000940": 295920
+   },
+   "status": "verified"
+  },
+  "sub_1800483B0_site_4B9": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF 50 60 8B 45 98 48 8B 55 A0"
+   },
+   "via": "toolframework2!0x180048869 (call    qword ptr [r8+60h]; IToolSystem2 slot 12 (vfn+0x60) in asset->tool routing (mode 3))",
+   "tag": "V",
+   "expect": {
+    "2000921": 297065,
+    "2000930": 297129,
+    "2000933": 297129,
+    "2000940": 297129
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180048DC0_FwdToolService_vfn23": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 32
+   },
+   "via": "toolframework2!0x180048DC0 (TFV_FRAMEWORK_VT slot 32 -> CToolFramework2::sub_180048DC0_FwdToolService_vfn23)",
+   "tag": "V",
+   "expect": {
+    "2000921": 298432,
+    "2000930": 298496,
+    "2000933": 298496,
+    "2000940": 298496
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1800491A0_BroadcastToolSlot15_site_44": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 78 48 83 C3 20 48 3B DF"
+   },
+   "via": "toolframework2!0x1800491E4 (call    qword ptr [rax+78h]; IToolSystem2 slot 15 (vfn+0x78): broadcast (a2,a3) to every loaded tool)",
+   "tag": "V",
+   "expect": {
+    "2000921": 299492,
+    "2000930": 299556,
+    "2000933": 299556,
+    "2000940": 299556
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 17
+   },
+   "via": "toolframework2!0x180049210 (TFV_FRAMEWORK_VT slot 17 -> CToolFramework2::Tools_RunFrame)",
+   "tag": "V",
+   "expect": {
+    "2000921": 299536,
+    "2000930": 299600,
+    "2000933": 299600,
+    "2000940": 299600
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame_site_B1": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 66 C7 86 87 00 00 00 00 FF"
+   },
+   "via": "toolframework2!0x1800492C1 (call    qword ptr [rax+68h]; pending tool load: framework slot 13(this, idx at this+136) -> LoadToolSystem + tool slot 12)",
+   "tag": "V",
+   "expect": {
+    "2000921": 299713,
+    "2000930": 299777,
+    "2000933": 299777,
+    "2000940": 299777
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame_site_34D": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 C7 44 24 38 88 13 00 00 48 8D 4C 24 30 48 89 44 24 30 44 88 6C 24 40 FF 15 ?? ?? ?? ?? 4D 63 F6"
+   },
+   "via": "toolframework2!0x18004955D (lea     rax, aToolFrameListe; \"Tool Frame Listeners - PreFrame\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 300381,
+    "2000930": 300445,
+    "2000933": 300445,
+    "2000940": 300445
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame_site_430": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 4F 10 48 85 C9 74 ?? 48 8B 01"
+   },
+   "via": "toolframework2!0x180049640 (mov     rcx, [rdi+10h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 300608,
+    "2000930": 300672,
+    "2000933": 300672,
+    "2000940": 300672
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame_site_43C": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 48 83 C7 20 49 3B FF"
+   },
+   "via": "toolframework2!0x18004964C (call    qword ptr [rax+68h]; IToolSystem2 slot 13 (vfn+0x68): per-frame update of every loaded tool (Tools_RunFrame))",
+   "tag": "V",
+   "expect": {
+    "2000921": 300620,
+    "2000930": 300684,
+    "2000933": 300684,
+    "2000940": 300684
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::Tools_RunFrame_site_855": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 44 38 6D 67"
+   },
+   "via": "toolframework2!0x180049A65 (call    sub_18058D120)",
+   "tag": "V",
+   "expect": {
+    "2000921": 301669,
+    "2000930": 301733,
+    "2000933": 301733,
+    "2000940": 301733
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049C20_DrainToolUnloadQueue": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 18
+   },
+   "via": "toolframework2!0x180049C20 (TFV_FRAMEWORK_VT slot 18 -> CToolFramework2::sub_180049C20_DrainToolUnloadQueue)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302112,
+    "2000930": 302176,
+    "2000933": 302176,
+    "2000940": 302176
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049C20_DrainToolUnloadQueue_site_54": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 78 48 89 6F 10 40 88 6F 18"
+   },
+   "via": "toolframework2!0x180049C74 (call    qword ptr [rax+78h]; engine unload request: VApplication001 vfn+120 (slot 15)(tool); then entry+16/+24 cleared)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302196,
+    "2000930": 302260,
+    "2000933": 302260,
+    "2000940": 302260
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049CC0_RegisterToolFrameListener": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 20
+   },
+   "via": "toolframework2!0x180049CC0 (TFV_FRAMEWORK_VT slot 20 -> CToolFramework2::sub_180049CC0_RegisterToolFrameListener)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302272,
+    "2000930": 302336,
+    "2000933": 302336,
+    "2000940": 302336
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049DF0_UnregisterToolFrameListener": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 21
+   },
+   "via": "toolframework2!0x180049DF0 (TFV_FRAMEWORK_VT slot 21 -> CToolFramework2::sub_180049DF0_UnregisterToolFrameListener)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302576,
+    "2000930": 302640,
+    "2000933": 302640,
+    "2000940": 302640
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049E60_FindToolWithSlot14Nonzero_site_2C": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 70 85 C0 75 ?? 48 83 C3 20"
+   },
+   "via": "toolframework2!0x180049E8C (call    qword ptr [rax+70h]; IToolSystem2 slot 14 (vfn+0x70): first nonzero result is returned by framework slot 19)",
+   "tag": "V",
+   "expect": {
+    "2000921": 302732,
+    "2000930": 302796,
+    "2000933": 302796,
+    "2000940": 302796
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_180049FE0_LoadToolsConfig": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 55 41 54 41 57 48 8B EC"
+   },
+   "via": "toolframework2!0x180049FE0 (CToolFramework2::sub_180049FE0_LoadToolsConfig)",
+   "tag": "V",
+   "expect": {
+    "2000921": 303072,
+    "2000930": 303136,
+    "2000933": 303136,
+    "2000940": 303136
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004A270_GetToolRecordByIndex": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 25
+   },
+   "via": "toolframework2!0x18004A270 (TFV_FRAMEWORK_VT slot 25 -> CToolFramework2::sub_18004A270_GetToolRecordByIndex)",
+   "tag": "V",
+   "expect": {
+    "2000921": 303728,
+    "2000930": 303792,
+    "2000933": 303792,
+    "2000940": 303792
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004A2A0_GetToolNameByIndex": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 23
+   },
+   "via": "toolframework2!0x18004A2A0 (TFV_FRAMEWORK_VT slot 23 -> CToolFramework2::sub_18004A2A0_GetToolNameByIndex)",
+   "tag": "V",
+   "expect": {
+    "2000921": 303776,
+    "2000930": 303840,
+    "2000933": 303840,
+    "2000940": 303840
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::LoadToolSystem_site_DB": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "45 33 C9 48 8B D5 49 8B CA"
+   },
+   "via": "toolframework2!0x18004A3BB (xor     r9d, r9d)",
+   "tag": "V",
+   "expect": {
+    "2000921": 304059,
+    "2000930": 304123,
+    "2000933": 304123,
+    "2000940": 304123
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::LoadToolSystem_site_1FB": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 58 84 C0 0F 85 ?? ?? ?? ?? 33 F6"
+   },
+   "via": "toolframework2!0x18004A4DB (call    qword ptr [rax+58h]; IToolSystem2 slot 11 (vfn+0x58): (this, FactoryPassthrough, toolIdx); nonzero required, else tool dropped)",
+   "tag": "V",
+   "expect": {
+    "2000921": 304347,
+    "2000930": 304411,
+    "2000933": 304411,
+    "2000940": 304411
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004A6E0_LoadToolSettingsKV3": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6C 24 A0"
+   },
+   "via": "toolframework2!0x18004A6E0 (CToolFramework2::sub_18004A6E0_LoadToolSettingsKV3)",
+   "tag": "V",
+   "expect": {
+    "2000921": 304864,
+    "2000930": 304928,
+    "2000933": 304928,
+    "2000940": 304928
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004AF90_GetRecordFromSubTable": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 26
+   },
+   "via": "toolframework2!0x18004AF90 (TFV_FRAMEWORK_VT slot 26 -> CToolFramework2::sub_18004AF90_GetRecordFromSubTable)",
+   "tag": "V",
+   "expect": {
+    "2000921": 307088,
+    "2000930": 307152,
+    "2000933": 307152,
+    "2000940": 307152
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004B370_RegisterSystemExternalTool": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 55 57 41 54 41 55 48 8D AC 24 78 FE FF FF"
+   },
+   "via": "toolframework2!0x18004B370 (CToolFramework2::sub_18004B370_RegisterSystemExternalTool)",
+   "tag": "V",
+   "expect": {
+    "2000921": 308080,
+    "2000930": 308144,
+    "2000933": 308144,
+    "2000940": 308144
+   },
+   "status": "verified"
+  },
+  "tf2_ConCommand_ToolRequest": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 57 48 83 EC 40 83 BA 38 04 00 00 02"
+   },
+   "via": "toolframework2!0x18004BAC0 (tf2_ConCommand_ToolRequest)",
+   "tag": "V",
+   "expect": {
+    "2000921": 309952,
+    "2000930": 310016,
+    "2000933": 310016,
+    "2000940": 310016
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004C0E0_BuildToolSettingsPath": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 81 EC 90 00 00 00 45 33 D2"
+   },
+   "via": "toolframework2!0x18004C0E0 (CToolFramework2::sub_18004C0E0_BuildToolSettingsPath)",
+   "tag": "V",
+   "expect": {
+    "2000921": 311520,
+    "2000930": 311584,
+    "2000933": 311584,
+    "2000940": 311584
+   },
+   "status": "verified"
+  },
+  "sub_18004C430": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 55
+   },
+   "via": "toolframework2!0x18004C430 (TFV_FRAMEWORK_VT slot 55 -> sub_18004C430)",
+   "tag": "V",
+   "expect": {
+    "2000921": 312368,
+    "2000930": 312432,
+    "2000933": 312432,
+    "2000940": 312432
+   },
+   "status": "verified"
+  },
+  "sub_18004C5B0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 66
+   },
+   "via": "toolframework2!0x18004C5B0 (TFV_FRAMEWORK_VT slot 66 -> sub_18004C5B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 312752,
+    "2000930": 312816,
+    "2000933": 312816,
+    "2000940": 312816
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D000_QueueToolRequest": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 80
+   },
+   "via": "toolframework2!0x18004D000 (TFV_FRAMEWORK_VT slot 80 -> CToolFramework2::sub_18004D000_QueueToolRequest)",
+   "tag": "V",
+   "expect": {
+    "2000921": 315392,
+    "2000930": 315456,
+    "2000933": 315456,
+    "2000940": 315456
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D1D0_DispatchQueuedToolRequests": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 56 41 57 48 83 EC 40 45 33 FF"
+   },
+   "via": "toolframework2!0x18004D1D0 (CToolFramework2::sub_18004D1D0_DispatchQueuedToolRequests)",
+   "tag": "V",
+   "expect": {
+    "2000921": 315856,
+    "2000930": 315920,
+    "2000933": 315920,
+    "2000940": 315920
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D350_ProcessToolRequest": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 79
+   },
+   "via": "toolframework2!0x18004D350 (TFV_FRAMEWORK_VT slot 79 -> CToolFramework2::sub_18004D350_ProcessToolRequest)",
+   "tag": "V",
+   "expect": {
+    "2000921": 316240,
+    "2000930": 316304,
+    "2000933": 316304,
+    "2000940": 316304
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D350_ProcessToolRequest_site_B1": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 80 00 00 00 48 8B 5C 24 38"
+   },
+   "via": "toolframework2!0x18004D401 (call    qword ptr [rax+80h]; IToolSystem2 slot 16 (vfn+0x80): tool_request payload ('_data'); result passed back through framework slot 79)",
+   "tag": "V",
+   "expect": {
+    "2000921": 316417,
+    "2000930": 316481,
+    "2000933": 316481,
+    "2000940": 316481
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D420_CanHighlightSubassets": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 89
+   },
+   "via": "toolframework2!0x18004D420 (TFV_FRAMEWORK_VT slot 89 -> CToolFramework2::sub_18004D420_CanHighlightSubassets)",
+   "tag": "V",
+   "expect": {
+    "2000921": 316448,
+    "2000930": 316512,
+    "2000933": 316512,
+    "2000940": 316512
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_18004D730_HandleVToolMessage": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 55 48 8D 68 A1 48 81 EC 90 00 00 00 48 89 70 F0"
+   },
+   "via": "toolframework2!0x18004D730 (CToolFramework2::sub_18004D730_HandleVToolMessage)",
+   "tag": "V",
+   "expect": {
+    "2000921": 317232,
+    "2000930": 317296,
+    "2000933": 317296,
+    "2000940": 317296
+   },
+   "status": "verified"
+  },
+  "sub_18004DBE0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 86
+   },
+   "via": "toolframework2!0x18004DBE0 (TFV_FRAMEWORK_VT slot 86 -> sub_18004DBE0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 318432,
+    "2000930": 318496,
+    "2000933": 318496,
+    "2000940": 318496
+   },
+   "status": "verified"
+  },
+  "sub_18004DD60": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 87
+   },
+   "via": "toolframework2!0x18004DD60 (TFV_FRAMEWORK_VT slot 87 -> sub_18004DD60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 318816,
+    "2000930": 318880,
+    "2000933": 318880,
+    "2000940": 318880
+   },
+   "status": "verified"
+  },
+  "sub_18004DE10": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 88
+   },
+   "via": "toolframework2!0x18004DE10 (TFV_FRAMEWORK_VT slot 88 -> sub_18004DE10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 318992,
+    "2000930": 319056,
+    "2000933": 319056,
+    "2000940": 319056
+   },
+   "status": "verified"
+  },
+  "sub_18004E180": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "TFV_FRAMEWORK_VT",
+    "slot": 8
+   },
+   "via": "toolframework2!0x18004E180 (TFV_FRAMEWORK_VT slot 8 -> sub_18004E180)",
+   "tag": "V",
+   "expect": {
+    "2000921": 319872,
+    "2000930": 319936,
+    "2000933": 319936,
+    "2000940": 319936
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::CQInputBindManager": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 74 24 18 57 48 83 EC 20 33 D2 48 8B F9"
+   },
+   "via": "toolframework2!0x18052B900 (CQInputBindManager::CQInputBindManager)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5421312,
+    "2000930": 5427344,
+    "2000933": 5427344,
+    "2000940": 5428304
+   },
+   "status": "verified"
+  },
+  "sub_18052E220": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 38 48 8B 0D ?? ?? ?? ??"
+   },
+   "via": "toolframework2!0x18052E220 (sub_18052E220)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5431840,
+    "2000930": 5437872,
+    "2000933": 5437872,
+    "2000940": 5438832
+   },
+   "status": "verified"
+  },
+  "sub_18052E220_site_E5": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 48 8D 15 ?? ?? ?? ?? FF 90 A0 00 00 00"
+   },
+   "via": "toolframework2!0x18052E305 (mov     rcx, cs:qword_180E38FD8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5432069,
+    "2000930": 5438101,
+    "2000933": 5438101,
+    "2000940": 5439061
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::sub_18052F110_Init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 57 48 83 EC 30 48 8B D9"
+   },
+   "via": "toolframework2!0x18052F110 (CQInputBindManager::sub_18052F110_Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5435664,
+    "2000930": 5441696,
+    "2000933": 5441696,
+    "2000940": 5442656
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::sub_18052F110_Init_site_3C": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 15 ?? ?? ?? ?? 48 8D 4C 24 40 FF 15 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 48 8D 53 10"
+   },
+   "via": "toolframework2!0x18052F14C (call    cs:?connect@QObject@@SA?AVConnection@QMetaObject@@PEBV1@PEBD01W4ConnectionType@Qt@@@Z; Qt5Core)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5435724,
+    "2000930": 5441756,
+    "2000933": 5441756,
+    "2000940": 5442716
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::sub_18052F110_Init_site_4D": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 48 8D 53 10 48 85 DB"
+   },
+   "via": "toolframework2!0x18052F15D (mov     rcx, cs:qword_180E38FD8; CQInputBindManager registration: IToolFramework2 slot 20 (+0xA0) with the IToolFrameListener subobject at obj+0x10.)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5435741,
+    "2000930": 5441773,
+    "2000933": 5441773,
+    "2000940": 5442733
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::sub_1805301A0_OnPostFrame": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "IToolFrameListener",
+    "slot": 2
+   },
+   "via": "toolframework2!0x1805301A0 (IToolFrameListener slot 2 -> CQInputBindManager::sub_1805301A0_OnPostFrame)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5439904,
+    "2000930": 5445936,
+    "2000933": 5445936,
+    "2000940": 5446896
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager::sub_1805304B0_OnPreFrame": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "IToolFrameListener",
+    "slot": 1
+   },
+   "via": "toolframework2!0x1805304B0 (IToolFrameListener slot 1 -> CQInputBindManager::sub_1805304B0_OnPreFrame)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5440688,
+    "2000930": 5446720,
+    "2000933": 5446720,
+    "2000940": 5447680
+   },
+   "status": "verified"
+  },
+  "sub_180589B80": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 F6 81 30 11 00 00 04"
+   },
+   "via": "toolframework2!0x180589B80 (sub_180589B80)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5806976,
+    "2000930": 5813008,
+    "2000933": 5813008,
+    "2000940": 5813952
+   },
+   "status": "verified"
+  },
+  "sub_18058C930": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 B8 00 00 00 00 00 00 00 40"
+   },
+   "via": "toolframework2!0x18058C930 (sub_18058C930)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5818672,
+    "2000930": 5824704,
+    "2000933": 5824704,
+    "2000940": 5825648
+   },
+   "status": "verified"
+  },
+  "sub_18058CAA0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 56 48 81 EC 50 02 00 00"
+   },
+   "via": "toolframework2!0x18058CAA0 (sub_18058CAA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5819040,
+    "2000930": 5825072,
+    "2000933": 5825072,
+    "2000940": 5826016
+   },
+   "status": "verified"
+  },
+  "sub_18058CD10": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 18 48 89 6C 24 20 41 56 48 81 EC 50 02 00 00"
+   },
+   "via": "toolframework2!0x18058CD10 (sub_18058CD10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5819664,
+    "2000930": 5825696,
+    "2000933": 5825696,
+    "2000940": 5826640
+   },
+   "status": "verified"
+  },
+  "sub_18058D040": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 18 48 89 6C 24 20 57 48 83 EC 20 49 8B D9"
+   },
+   "via": "toolframework2!0x18058D040 (sub_18058D040)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5820480,
+    "2000930": 5826512,
+    "2000933": 5826512,
+    "2000940": 5827456
+   },
+   "status": "verified"
+  },
+  "sub_18058D120": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 55 48 8D A8 38 FF FF FF"
+   },
+   "via": "toolframework2!0x18058D120 (sub_18058D120)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5820704,
+    "2000930": 5826736,
+    "2000933": 5826736,
+    "2000940": 5827680
+   },
+   "status": "verified"
+  },
+  "sub_18058D4A0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 41 56 41 57 48 83 EC 30 49 8B D9"
+   },
+   "via": "toolframework2!0x18058D4A0 (sub_18058D4A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5821600,
+    "2000930": 5827632,
+    "2000933": 5827632,
+    "2000940": 5828576
+   },
+   "status": "verified"
+  },
+  "sub_18058D7F0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 53 48 81 EC 90 00 00 00 48 89 78 18"
+   },
+   "via": "toolframework2!0x18058D7F0 (sub_18058D7F0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5822448,
+    "2000930": 5828480,
+    "2000933": 5828480,
+    "2000940": 5829424
+   },
+   "status": "verified"
+  },
+  "sub_180593960": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 55 56 57 41 56 41 57 48 83 EC 40 48 8B F2"
+   },
+   "via": "toolframework2!0x180593960 (sub_180593960)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5847392,
+    "2000930": 5853424,
+    "2000933": 5853424,
+    "2000940": 5854368
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1805A3340_ExternalToolExtMatch": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 49 8B F8"
+   },
+   "via": "toolframework2!0x1805A3340 (CToolFramework2::sub_1805A3340_ExternalToolExtMatch)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5911360,
+    "2000930": 5917392,
+    "2000933": 5917392,
+    "2000940": 5918336
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1805A3C50_ToolVisibilityFilter": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 55 53 56 57 41 56 48 8B EC 48 83 EC 30 4C 8B F1"
+   },
+   "via": "toolframework2!0x1805A3C50 (CToolFramework2::sub_1805A3C50_ToolVisibilityFilter)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5913680,
+    "2000930": 5919712,
+    "2000933": 5919712,
+    "2000940": 5920656
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1805A3EF0_AddSystemExternalTool": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8B DA 49 8B E9 48 8D 15 ?? ?? ?? ??"
+   },
+   "via": "toolframework2!0x1805A3EF0 (CToolFramework2::sub_1805A3EF0_AddSystemExternalTool)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5914352,
+    "2000930": 5920384,
+    "2000933": 5920384,
+    "2000940": 5921328
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_1805A52F0_QuerySystemFileAssociation": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 4C 89 74 24 20 55 48 8D AC 24 B0 D8 FF FF"
+   },
+   "via": "toolframework2!0x1805A52F0 (CToolFramework2::sub_1805A52F0_QuerySystemFileAssociation)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5919472,
+    "2000930": 5925504,
+    "2000933": 5925504,
+    "2000940": 5926448
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805A5990_LoadKV3Object_CToolsConfig": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 81 EC 10 02 00 00"
+   },
+   "via": "toolframework2!0x1805A5990 (ToolUtils2::sub_1805A5990_LoadKV3Object_CToolsConfig)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5921168,
+    "2000930": 5927200,
+    "2000933": 5927200,
+    "2000940": 5928144
+   },
+   "status": "verified"
+  },
+  "CToolFramework2::sub_5A5DA0_LoadEngineToolsManifest_site_118": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8B D8 48 8D 8C 24 80 00 00 00"
+   },
+   "via": "toolframework2!0x1805A5EB8 (call    ToolUtils2__sub_1805A5990_LoadKV3Object_CToolsConfig)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5922488,
+    "2000930": 5928520,
+    "2000933": 5928520,
+    "2000940": 5929464
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BCF20_LoadEngineToolsArray": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 56 57 41 54 41 56 48 83 EC 20 0F B6 02 33 DB C0 E8 02 49 8B F0 24 0F 4C 8B E2 48 8B F9 3C 08 75 ?? 48 8B CA E8 ?? ?? ?? ?? 44 8B F0 EB ?? 44 8B F3 48 89 6C 24 58 4C 89 7C 24 68 48 39 9F 20 01 00 00 74 ?? 45 8B C6 BA 88 00 00 00"
+   },
+   "via": "toolframework2!0x1805BCF20 (ToolUtils2::sub_1805BCF20_LoadEngineToolsArray)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6016800,
+    "2000930": 6022832,
+    "2000933": 6022832,
+    "2000940": 6023776
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BD100_LoadExternalToolsArray": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 56 57 41 54 41 56 48 83 EC 20 0F B6 02 33 DB C0 E8 02 49 8B F0 24 0F 4C 8B E2 48 8B F9 3C 08 75 ?? 48 8B CA E8 ?? ?? ?? ?? 44 8B F0 EB ?? 44 8B F3 48 89 6C 24 58 4C 89 7C 24 68 48 39 9F 20 01 00 00 74 ?? 45 8B C6 BA 80 00 00 00"
+   },
+   "via": "toolframework2!0x1805BD100 (ToolUtils2::sub_1805BD100_LoadExternalToolsArray)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6017280,
+    "2000930": 6023312,
+    "2000933": 6023312,
+    "2000940": 6024256
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BE700_CreateSchemaClassInstance": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8B F8 48 85 C0 75 ?? 41 B9 FF FF FF FF",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "toolframework2!0x1805A59D8 (ToolUtils2::sub_1805A5990_LoadKV3Object_CToolsConfig references ToolUtils2::sub_1805BE700_CreateSchemaClassInstance (prologue not unique): call    ToolUtils2__sub_1805BE700_CreateSchemaClassInstance)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6022912,
+    "2000930": 6028944,
+    "2000933": 6028944,
+    "2000940": 6029888
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BE830_LoadCBaseToolInfoFields": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 45 33 F6 44 89 75 28 4C 39 B3 40 01 00 00 74 ?? 33 D2 48 8B CB E8 ?? ?? ?? ?? 84 C0 0F 84 ?? ?? ?? ??",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "toolframework2!0x1805BEA9B (ToolUtils2::sub_1805BEA30_LoadCEngineToolInfoFields references ToolUtils2::sub_1805BE830_LoadCBaseToolInfoFields (prologue not unique): call    ToolUtils2__sub_1805BE830_LoadCBaseToolInfoFields)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6023216,
+    "2000930": 6029248,
+    "2000933": 6029248,
+    "2000940": 6030192
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BEA30_LoadCEngineToolInfoFields": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 20 55 56 57 48 8B EC 48 83 EC 50 48 8D 05 ?? ?? ?? ?? 4C 89 74 24 70 49 8B F8 48 8B DA 48 8B F1 4C 3B C0 75 ?? 48 83 BA 40 01 00 00 00 75 ?? 44 8B 05 ?? ?? ?? ?? 65 48 8B 04 25 ?? ?? ?? ?? B9 38 00 00 00 4A 8B 04 C0 8B 04 01 39 05 ?? ?? ?? ?? 0F 8F ?? ?? ?? ?? 48 8B 3D ?? ?? ?? ?? 4C 8B C7"
+   },
+   "via": "toolframework2!0x1805BEA30 (ToolUtils2::sub_1805BEA30_LoadCEngineToolInfoFields)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6023728,
+    "2000930": 6029760,
+    "2000933": 6029760,
+    "2000940": 6030704
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BEF10_LoadCExternalToolInfoFields": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? EB ?? 48 8D 15 ?? ?? ?? ?? 48 8B CF E8 ?? ?? ?? ?? 48 8B CF E8 ?? ?? ?? ?? 48 8B CF FF C3 E8 ?? ?? ?? ?? EB ?? 4C 8B 6C 24 60 4C 8B 7C 24 68 48 8B 6C 24 58 48 83 C4 20 41 5E 41 5C 5F 5E 5B C3 CC CC CC 48 89 5C 24 10",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "toolframework2!0x1805BD288 (ToolUtils2::sub_1805BD100_LoadExternalToolsArray references ToolUtils2::sub_1805BEF10_LoadCExternalToolInfoFields (prologue not unique): call    ToolUtils2__sub_1805BEF10_LoadCExternalToolInfoFields)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6024976,
+    "2000930": 6031008,
+    "2000933": 6031008,
+    "2000940": 6031952
+   },
+   "status": "verified"
+  },
+  "ToolUtils2::sub_1805BF240_LoadCToolsConfigFields": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 55 53 56 41 56 48 8B EC 48 83 EC 58"
+   },
+   "via": "toolframework2!0x1805BF240 (ToolUtils2::sub_1805BF240_LoadCToolsConfigFields)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6025792,
+    "2000930": 6031824,
+    "2000933": 6031824,
+    "2000940": 6032768
+   },
+   "status": "verified"
+  },
+  "off_18092B398": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 84 C0 75 ?? 32 DB",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18058D83A (sub_18058D7F0 reads off_18092B398)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9614232,
+    "2000930": 9621512,
+    "2000933": 9621512,
+    "2000940": 9625576
+   },
+   "status": "verified"
+  },
+  "str_ToolsEnvironment_RestrictWorkshopItemTools": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "ToolsEnvironment/RestrictWorkshopItemTools"
+   },
+   "via": "toolframework2!0x18092C8F0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 9619696,
+    "2000930": 9626976,
+    "2000933": 9626976,
+    "2000940": 9631040
+   },
+   "status": "verified"
+  },
+  "KV3ID_generic": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 0D ?? ?? ?? ?? 89 74 24 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x1805A5E76 (CToolFramework2::sub_5A5DA0_LoadEngineToolsManifest reads off_18092CD88)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9620872,
+    "2000930": 9628152,
+    "2000933": 9628152,
+    "2000940": 9632216
+   },
+   "status": "verified"
+  },
+  "str_m_EngineTools": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "m_EngineTools"
+   },
+   "via": "toolframework2!0x18092E7E0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 9627616,
+    "2000930": 9634896,
+    "2000933": 9634896,
+    "2000940": 9638960
+   },
+   "status": "verified"
+  },
+  "str_m_ExternalTools": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "m_ExternalTools"
+   },
+   "via": "toolframework2!0x18092E7F0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 9627632,
+    "2000930": 9634912,
+    "2000933": 9634912,
+    "2000940": 9638976
+   },
+   "status": "verified"
+  },
+  "str_m_EngineModulesThatReferenceAssets": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "m_EngineModulesThatReferenceAssets"
+   },
+   "via": "toolframework2!0x18092E800 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 9627648,
+    "2000930": 9634928,
+    "2000933": 9634928,
+    "2000940": 9638992
+   },
+   "status": "verified"
+  },
+  "str_CToolsConfig": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "CToolsConfig"
+   },
+   "via": "toolframework2!0x18092E860 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 9627744,
+    "2000930": 9635024,
+    "2000933": 9635024,
+    "2000940": 9639088
+   },
+   "status": "verified"
+  },
+  "str_ToolServices_002": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "ToolServices_002"
+   },
+   "via": "toolframework2!0x180993D90 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 10042768,
+    "2000930": 10050032,
+    "2000933": 10050032,
+    "2000940": 10054072
+   },
+   "status": "verified"
+  },
+  "str_Usage_tool_request_tool_name_request_kv3_data": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "Usage: tool_request <tool_name> { request_kv3_data }"
+   },
+   "via": "toolframework2!0x180994D30 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 10046768,
+    "2000930": 10054032,
+    "2000933": 10054032,
+    "2000940": 10058016
+   },
+   "status": "verified"
+  },
+  "CQInputBindManager": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CQInputBindManager"
+   },
+   "via": "toolframework2!0x18091E918 (??_7CQInputBindManager@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 9562392,
+    "2000930": 9569672,
+    "2000933": 9569672,
+    "2000940": 9573736
+   },
+   "status": "verified"
+  },
+  "___R4CQInputBindManager__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CQInputBindManager",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "toolframework2!0x180A990D0 (??_R4CQInputBindManager@@6B@ via CQInputBindManager)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 11112656,
+    "2000930": 11121296,
+    "2000933": 11121296,
+    "2000940": 11125264
+   },
+   "status": "verified"
+  },
+  "___R3CToolFramework2__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "TFV_FRAMEWORK_VT",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     }
+    ]
+   },
+   "via": "toolframework2!0x180AA2520 (??_R3CToolFramework2@@8 via TFV_FRAMEWORK_VT)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 11150624,
+    "2000930": 11159264,
+    "2000933": 11159264,
+    "2000940": 11163232
+   },
+   "status": "verified"
+  },
+  "CToolFramework2_180AA2740": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "TFV_FRAMEWORK_VT",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "toolframework2!0x180AA2740 (??_R4CToolFramework2@@6B@ via TFV_FRAMEWORK_VT)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 11151168,
+    "2000930": 11159808,
+    "2000933": 11159808,
+    "2000940": 11163776
+   },
+   "status": "verified"
+  },
+  "CToolFrameworkTabletInfo_180AA2DC8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CToolFrameworkTabletInfo",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "toolframework2!0x180AA2DC8 (??_R4CToolFrameworkTabletInfo@@6B@ via CToolFrameworkTabletInfo)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 11152840,
+    "2000930": 11161480,
+    "2000933": 11161480,
+    "2000940": 11165448
+   },
+   "status": "verified"
+  },
+  "g_pVApplication001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 66 44 0F 6E 9C 24 80 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180017348 (sub_1800172E0 reads g_pVApplication001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14912928,
+    "2000930": 14923120,
+    "2000933": 14923120,
+    "2000940": 14927280
+   },
+   "status": "verified"
+  },
+  "qword_180E38FD8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 55 80 41 B0 FF",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x18002E807 (sub_18002D1F0 reads qword_180E38FD8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14913496,
+    "2000930": 14923688,
+    "2000933": 14923688,
+    "2000940": 14927848
+   },
+   "status": "verified"
+  },
+  "g_pToolService_001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 48 FF A0 B8 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x180048DC0 (CToolFramework2::sub_180048DC0_FwdToolService_vfn23 reads g_pToolService_001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 14913728,
+    "2000930": 14923920,
+    "2000933": 14923920,
+    "2000940": 14928080
+   },
+   "status": "verified"
+  },
+  "dword_180E90BFC": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "89 05 ?? ?? ?? ?? 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC 48 83 EC 28 E8 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "toolframework2!0x180001E6C (sub_180001E40 reads dword_180E90BFC)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15272956,
+    "2000930": 15283132,
+    "2000933": 15283132,
+    "2000940": 15287292
+   },
+   "status": "verified"
+  },
+  "unk_180E90EF0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "toolframework2!0x1806F0420 (sub_1806F0420 reads unk_180E90EF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 15273712,
+    "2000930": 15283888,
+    "2000933": 15283888,
+    "2000940": 15288048
+   },
+   "status": "verified"
+  }
+ }
+}

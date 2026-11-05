@@ -1,0 +1,526 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://cs2-mcp/sigs/signatures/SCHEMA.json",
+ "title": "CS2 signature database: one file per module (signatures/<module>.json)",
+ "description": "Build-independent locators for every address the bridge relies on. Human reference: sigs/README.md. Validator/resolver: sigs/scripts/sigcheck.py. Generator (IDA): sigs/ida/ida_sigs.py.",
+ "type": "object",
+ "required": [
+  "module",
+  "image_base",
+  "entries"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "_doc": {
+   "type": [
+    "string",
+    "array"
+   ],
+   "description": "free text for humans; ignored by tools"
+  },
+  "module": {
+   "type": "string",
+   "pattern": "^[a-z0-9_]+\\.(dll|exe|so)$",
+   "description": "binary file name, e.g. hammer.dll (windows) or libclient.so (linux)"
+  },
+  "platform": {
+   "type": "string",
+   "enum": [
+    "windows",
+    "linux"
+   ],
+   "description": "which game build this file belongs to; default: by `module` suffix (.dll/.exe = windows, .so = linux). Windows files are PE (MSVC RTTI locators, image base 0x180000000) and are the ones the bridge gate covers; linux files are the ELF modules of the *other* build (steam.inf ClientVersion, e.g. 2000908) with image base 0 and itanium_vtable locators"
+  },
+  "image_base": {
+   "type": "integer",
+   "description": "0x180000000 for a windows PE (IDA's default base, every doc address uses it); 0 for a Linux .so (its vaddrs are already RVAs)"
+  },
+  "builds": {
+   "type": "object",
+   "description": "builds this file has been resolved against; key = CS2 ClientVersion from steam.inf (e.g. 2000921)",
+   "additionalProperties": {
+    "type": "object",
+    "required": [
+     "sha256"
+    ],
+    "properties": {
+     "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$",
+      "description": "first 16 hex of the whole-file SHA-256"
+     },
+     "timestamp": {
+      "type": "integer",
+      "description": "PE TimeDateStamp"
+     }
+    }
+   }
+  },
+  "entries": {
+   "type": "object",
+   "description": "keyed by name. Use the IDB/doc name (Class::Method, g_pFoo, Class for vtables, Class::m_field for offsets) or the bridge macro name for imported bridge anchors.",
+   "propertyNames": {
+    "pattern": "^[A-Za-z_][A-Za-z0-9_:<>,~ *&]*$"
+   },
+   "additionalProperties": {
+    "$ref": "#/$defs/entry"
+   }
+  }
+ },
+ "$defs": {
+  "entry": {
+   "type": "object",
+   "required": [
+    "kind",
+    "via",
+    "tag"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "kind": {
+     "enum": [
+      "function",
+      "vtable",
+      "global",
+      "offset",
+      "string",
+      "const"
+     ],
+     "description": "what the resolved value is: function/vtable/global/string resolve to an RVA; offset and const resolve to an integer value (from the locator, or literally from `value` when no locator is given)"
+    },
+    "platform": {
+     "type": "string",
+     "enum": [
+      "windows",
+      "linux"
+     ],
+     "description": "override for the file's platform; it must equal it, because a file holds the entries of one binary (a linux entry lives in the lib<name>.so file, never in the .dll file of the same subsystem)"
+    },
+    "value": {
+     "type": "integer",
+     "description": "literal resolved integer for kind=const/offset entries without a locator: a layout number the game depends on that no binary locator derives (e.g. a vtable length known from RTTI, a subobject offset). Sourced only from bridge code verified live; `via` states file:line. sigcheck resolve returns it as-is and checks it against expect[build]. Not a binary check: with no locator, resolve cannot fail on it - the expect re-check is self-consistency only (see sigs/README.md)."
+    },
+    "ident_slot": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "kind=vtable only: slot whose function pointer the bridge checks for identity (contents compared, not called - catches a patched/proxied vtable). Read by bridge/pins.py when it emits the identity rows; never hand-entered there."
+    },
+    "struct": {
+     "type": "string",
+     "description": "kind=offset only: C struct/class this field belongs to (bridge type name, e.g. CMapDoc). Grouping metadata for a future struct emitter; the offset itself is still resolved."
+    },
+    "field": {
+     "type": "string",
+     "description": "kind=offset only: field name inside `struct` (e.g. root). Embedded subobjects are marked \"(embedded)\" in `ctype`."
+    },
+    "ctype": {
+     "type": "string",
+     "description": "kind=offset only: C type of the field (e.g. \"CMapRootElement *\", \"float\", \"u32\", \"char [128]\")."
+    },
+    "structs": {
+     "type": "boolean",
+     "description": "Retired: bridge/bridge_structs.h no longer exists (de-hardcode WP1b), so this flag changes nothing; an entry without a `bridge` macro or `sdk` is a measurement that is emitted nowhere. Kept so existing entries still validate."
+    },
+    "locator": {
+     "$ref": "#/$defs/locator"
+    },
+    "via": {
+     "type": "string",
+     "description": "where the site was chosen, as a human can re-find it in a disassembler on a new build: 'module!0x1800xxxxx (Class::Method, what the site does)'. Mandatory; this is the re-derivation hint when the locator stops matching."
+    },
+    "tag": {
+     "enum": [
+      "V",
+      "I",
+      "RTTI",
+      "S",
+      "D",
+      "?"
+     ],
+     "description": "evidence tag for the *meaning* of the name (not for the locator, which is mechanical): V verified in disassembly, I inferred, RTTI from the RTTI name, S from the SDK headers, D from GameTracking dumps, ? unknown"
+    },
+    "expect": {
+     "type": "object",
+     "description": "resolved value per build key (see builds). RVA for address kinds, integer value for offset/const. Written by `sigcheck.py resolve --record BUILD`; a hand-written value is a claim sigcheck will check.",
+     "additionalProperties": {
+      "type": "integer"
+     }
+    },
+    "bridge": {
+     "type": "string",
+     "description": "the name the bridge binds this symbol by: emitted as a C macro in bridge/bridge_pins.h unless the entry carries `sdk`. Either way the entry is gated, fingerprinted and pinned (bridge/pins.py), and a vslot entry's runtime proof rows are named by it."
+    },
+    "sdk": {
+     "type": "string",
+     "pattern": "^(S2_[A-Za-z0-9_]+(\\*8)?|[0-9]+)(\\+(S2_[A-Za-z0-9_]+(\\*8)?|[0-9]+))*$",
+     "description": "the generated SDK expression that owns this number (bridge/s2sdk_gen.h, gen.py's tie syntax: a sum of S2_* macros, `S2_SLOT_<...>*8` for a slot the game calls as a vtable byte displacement, and decimal addends). The bridge compiles that macro; the entry is the binary-side measurement: bridge/pins.py does not emit it as a #define (bridge_pins.h) and refuses to write when the expression differs from the measurement (a vslot locator's slot index, else the resolved value), and sigs/scripts/sdkcheck.py reports an `sdk:` row for it. Windows entries of kind=function with a vslot locator (exactly one bare S2_SLOT_ macro), kind=offset or kind=const. Written by sigs/scripts/sdkadopt.py PIN=S2_EXPR (it checks the macro exists and equals the measurement), never typed."
+    },
+    "status": {
+     "enum": [
+      "proposed",
+      "verified",
+      "stale"
+     ],
+     "description": "proposed = generated, not yet resolved by sigcheck; verified = sigcheck expect matches; stale = failed on the newest build"
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "allOf": [
+    {
+     "if": {
+      "properties": { "kind": { "enum": ["function", "vtable", "global", "string"] } },
+      "required": ["kind"]
+     },
+     "then": { "required": ["locator"] }
+    },
+    {
+     "if": {
+      "properties": { "kind": { "enum": ["offset", "const"] } },
+      "required": ["kind"]
+     },
+     "then": { "anyOf": [ { "required": ["locator"] }, { "required": ["value"] } ] }
+    },
+    {
+     "if": { "required": ["ident_slot"] },
+     "then": { "properties": { "kind": { "enum": ["vtable"] } } }
+    },
+    {
+     "if": { "required": ["struct"] },
+     "then": { "properties": { "kind": { "enum": ["offset"] } } }
+    },
+    {
+     "if": { "required": ["field"] },
+     "then": { "properties": { "kind": { "enum": ["offset"] } } }
+    },
+    {
+     "if": { "required": ["ctype"] },
+     "then": { "properties": { "kind": { "enum": ["offset"] } } }
+    },
+    {
+     "description": "value and locator are mutually exclusive: when a locator is present its result is used and a `value` would be silently ignored (validator rejects)",
+     "if": { "required": ["locator"] },
+     "then": { "not": { "required": ["value"] } }
+    },
+    {
+     "description": "a literal `value` is only allowed on kinds that resolve to an integer (offset, const); function/vtable/global/string resolve to an RVA",
+     "if": { "required": ["value"] },
+     "then": { "properties": { "kind": { "enum": ["offset", "const"] } } }
+    }
+   ]
+  },
+  "locator": {
+   "type": "object",
+   "required": [
+    "type"
+   ],
+   "properties": {
+    "type": {
+     "enum": [
+      "sig",
+      "rtti",
+      "itanium_vtable",
+      "vslot",
+      "export",
+      "string",
+      "base",
+      "vtlen"
+     ]
+    },
+    "symbol": {
+     "type": "string",
+     "description": "itanium_vtable only: the exact `_ZTV…` mangled symbol of the vtable's class (e.g. _ZTV13CSchemaSystem). Use this when the class name alone is ambiguous; otherwise `class` is mangled for you"
+    },
+    "class": {
+     "type": "string",
+     "description": "rtti: the MSVC class name (`CSchemaSystem`, or a full `.?AU…@@` name for a struct). itanium_vtable: the Itanium class name (`CSchemaSystem`, `A::B`), mangled to `_ZTV…`"
+    },
+    "measure": {
+     "enum": [
+      "symbol",
+      "scan"
+     ],
+     "description": "itanium_vtable only: resolve the vtable's slot count instead of its address (kind must be const). symbol = the exact length the linker records in the `_ZTV` symbol (st_size/8 - 2, the two header words); scan = the code-pointer run (the same scan as the vtlen locator, which under-counts a table whose last slot is a null)"
+    },
+    "steps": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/step"
+     },
+     "description": "applied in order after the locator yields a start RVA"
+    }
+   },
+   "oneOf": [
+    {
+     "description": "sig: masked byte pattern, hex bytes or ?? separated by spaces, must match exactly once in `section` (default .text). Must start with a literal byte, be >= 8 bytes, and not be all wildcards.",
+     "properties": {
+      "type": {
+       "const": "sig"
+      },
+      "sig": {
+       "type": "string",
+       "pattern": "^([0-9A-Fa-f]{2}|\\?\\?)( ([0-9A-Fa-f]{2}|\\?\\?))*$"
+      },
+      "section": {
+       "type": "string",
+       "default": ".text",
+       "description": ".text, .rdata, .data or any"
+      },
+      "refs": {
+       "type": "array",
+       "description": "extra filters: the RIP-relative operand at +at (next instruction at +next) must point at this C string. Disambiguates short patterns.",
+       "items": {
+        "type": "object",
+        "required": [
+         "at",
+         "next",
+         "string"
+        ],
+        "properties": {
+         "at": {
+          "type": "integer"
+         },
+         "next": {
+          "type": "integer"
+         },
+         "string": {
+          "type": "string"
+         }
+        }
+       }
+      }
+     },
+     "required": [
+      "sig"
+     ]
+    },
+    {
+     "description": "rtti: vtable of an MSVC class via its complete-object locator. class is the name inside `.?AV<class>@@`, or a full TypeDescriptor name starting with `.?A` (structs: `.?AU<name>@@`). col_offset selects a secondary vtable (offset of that base inside the object); default 0 = primary.",
+     "properties": {
+      "type": {
+       "const": "rtti"
+      },
+      "class": {
+       "type": "string"
+      },
+      "col_offset": {
+       "type": "integer",
+       "default": 0
+      }
+     },
+     "required": [
+      "class"
+     ]
+    },
+    {
+     "description": "itanium_vtable: the address point (first virtual function) of an Itanium vtable, found by its `_ZTV…` symbol: `symbol` (exact mangled name) or `class` (mangled for you), + 16 to skip the two-word header (offset-to-top, typeinfo). With `measure` the entry instead resolves to the table's slot count (kind=const): `symbol` = the length the ELF symbol records (st_size/8 - 2, exact), `scan` = the code-pointer run (under-counts a table that ends on a null slot).",
+     "properties": {
+      "type": {
+       "const": "itanium_vtable"
+      },
+      "symbol": {
+       "type": "string"
+      },
+      "class": {
+       "type": "string"
+      },
+      "measure": {
+       "enum": [
+        "symbol",
+        "scan"
+       ]
+      }
+     },
+     "anyOf": [
+      {
+       "required": [
+        "symbol"
+       ]
+      },
+      {
+       "required": [
+        "class"
+       ]
+      }
+     ]
+    },
+    {
+     "description": "vslot: function pointer stored in slot N of a kind=vtable entry in the same file (slot 0 = first pointer after the RTTI locator).",
+     "properties": {
+      "type": {
+       "const": "vslot"
+      },
+      "vtable": {
+       "type": "string"
+      },
+      "slot": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "required": [
+      "vtable",
+      "slot"
+     ]
+    },
+    {
+     "description": "export: named PE export.",
+     "properties": {
+      "type": {
+       "const": "export"
+      },
+      "name": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "name"
+     ]
+    },
+    {
+     "description": "string: RVA of a NUL-terminated C string that occurs exactly once in `section` (default .rdata).",
+     "properties": {
+      "type": {
+       "const": "string"
+      },
+      "string": {
+       "type": "string"
+      },
+      "section": {
+       "type": "string",
+       "default": ".rdata"
+      }
+     },
+     "required": [
+      "string"
+     ]
+    },
+    {
+     "description": "base: start from another entry of this file (already resolved), then apply steps.",
+     "properties": {
+      "type": {
+       "const": "base"
+      },
+      "base": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "base"
+     ]
+    },
+    {
+     "description": "vtlen: length (in slots) of a kind=vtable entry of the same file: the number of leading .text-pointing 8-byte entries from the first slot after the RTTI locator to the first entry that is not a code pointer. Integer result, so the entry is kind=const.",
+     "properties": {
+      "type": {
+       "const": "vtlen"
+      },
+      "vtable": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "vtable"
+     ]
+    }
+   ]
+  },
+  "step": {
+   "type": "object",
+   "description": "exactly one of: call (follow E8 rel32 at +k), rip (follow RIP-relative disp32 at +rip; next = offset of the following instruction), deref (read the 8-byte image pointer at +k and continue there), rva (read the 4-byte image-relative offset at +k and continue there; MSVC RTTI COL/CHD/BCA fields), check (pattern must match at the current position), disp (read a signed displacement/immediate of `size` bytes at +disp -> value), add (value += n, or position += n when no value yet).",
+   "oneOf": [
+    {
+     "required": [
+      "call"
+     ],
+     "properties": {
+      "call": {
+       "type": "integer"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "rip",
+      "next"
+     ],
+     "properties": {
+      "rip": {
+       "type": "integer"
+      },
+      "next": {
+       "type": "integer"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "deref"
+     ],
+     "properties": {
+      "deref": {
+       "type": "integer"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "rva"
+     ],
+     "properties": {
+      "rva": {
+       "type": "integer"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "check"
+     ],
+     "properties": {
+      "check": {
+       "type": "string"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "disp",
+      "size"
+     ],
+     "properties": {
+      "disp": {
+       "type": "integer"
+      },
+      "size": {
+       "enum": [
+        1,
+        2,
+        4,
+        8
+       ]
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "required": [
+      "add"
+     ],
+     "properties": {
+      "add": {
+       "type": "integer"
+      }
+     },
+     "additionalProperties": false
+    }
+   ]
+  }
+ }
+}

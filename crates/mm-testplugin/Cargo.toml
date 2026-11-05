@@ -1,0 +1,26 @@
+[package]
+name = "mm-testplugin"
+version = "0.0.1"
+description = "Coexistence fixture Metamod plugin: one virtual KHook on ISource2ServerConfig::AllowSaveRestore in three modes (passive / supersede0 / supersede1)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+# The game (Linux dedicated server / Wine tools) loads the cdylib; the rlib half is what the
+# host tests link against (`cargo test -p mm-testplugin` on Linux) - the same split as
+# `crates/cs2-bridge`.
+[lib]
+name = "mm_testplugin"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Every vtable slot, vtable length and ABI constant comes from here; nothing in this crate is
+# hand-computed.
+s2sdk-sys = { workspace = true }
+# `s2sdk::khook_vtable` (the IKHook adapter), `s2sdk::hook` (the KHook wrapper and thunks) and
+# `s2sdk::module` (finding the server module). Same path dependency as `cs2-bridge`, but
+# without its default `proto` feature: this plugin needs `hook` only, and that feature compiles
+# the upstream `.proto` set into the image (a build-time `protoc` and ~80 messages nothing here
+# uses).
+s2sdk = { path = "../s2sdk/s2sdk", default-features = false }

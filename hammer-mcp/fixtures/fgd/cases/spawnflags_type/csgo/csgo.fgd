@@ -1,0 +1,42 @@
+// Hand-written fixture (FIX-V, review-rust.md B4): `spawnflags` declared with a type OTHER than
+// `flags`, and trigger markers on classes that cannot be brush volumes.
+//
+// A few Valve classes declare `spawnflags(integer)` — a plain integer keyvalue, no flag list. The
+// flag decoders must answer "this class has no flags" for those, never an empty flag list with
+// every bit reported as unknown (`spawnflags_def` -> None).
+//
+// `is_trigger_class` must also refuse the `@BaseClass` `TriggerOnce` itself and a `@PointClass`
+// with `tags( Trigger )`, even though their chain carries the trigger marker: only a `@SolidClass`
+// is placed as a `CMapEntity` with mesh children, i.e. can be a brush volume.
+
+@BaseClass = GameEntity
+[
+	input Kill(void) : "Removes this entity from the world."
+]
+
+@BaseClass base(GameEntity) = Targetname
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// `spawnflags` with the integer type: an integer keyvalue, not a flag list.
+@SolidClass base(Targetname) = func_int_spawnflags_mini : "Spawnflags is an integer, not a flag list."
+[
+	spawnflags(integer) : "Spawnflags (an integer, not a flag list)" : 0
+]
+
+// The trigger tag on a Point class: the marker is there, but a point entity is never a volume.
+@PointClass base(Targetname) tags( Trigger ) = trigger_point_mini : "A PointClass carrying the trigger tag."
+[
+]
+
+// The trigger tag on a Solid class: that is a trigger (the tag path of `is_trigger_class`).
+@SolidClass base(Targetname) tags( Trigger ) = trigger_tagged_solid_mini : "A SolidClass carrying the trigger tag."
+[
+]
+
+// The base class the real tree's triggers derive from: it carries the name AND the tag, but it is
+// a `@BaseClass` and can never be placed as a brush entity.
+@BaseClass base(Targetname) tags( Trigger ) = TriggerOnce
+[
+]

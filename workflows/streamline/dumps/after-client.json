@@ -1,0 +1,1863 @@
+{
+ "initialize": {
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+   "tools": {}
+  },
+  "serverInfo": {
+   "name": "client-mcp",
+   "version": "0.0.1"
+  },
+  "instructions": "Purpose: drives a CS2 game client for play and tests: console, input, game state, screenshots, test scripts, servers, demos. It is not the map editor (that is the Hammer server).\n\nFirst call: session_status. It names the flavour and the available tool groups. WineTools (Windows build with the bridge) has input, console_exec, game_state, game_rules, entity_find, checkpoints and render_world. LinuxClient (native, headless) has no bridge, so only bridge-free tools (console_tail/console_wait, screenshot, observe, server_up/client_connect). Nothing running: launch_session first.\n\nIntent: if the user asks a question, answer it with read-only tools (annotations carry readOnlyHint) and change nothing. Launch, input and console tools only when asked to act.\n\nTraps:\n- console_exec never accepts quit, exit, disconnect, Test_ExitProcess or crash; end a session with stop_session.\n- Sessions are capped (GPU memory): TooManySessions and KindBusy name the container to reuse or stop.\n- Waits return pending:true with `next` when the budget ends: call again, do not loop on a short timeout. BridgeBusy: another call holds the bridge; wait for it.\n- Do not send console commands during a level load.\n- Judge a test on console.log lines, game_state values or screenshots.\n- Errors: read next, useInstead, didYouMean, retrySafe (false = it may have run: check state before repeating). Switch on the error type, not the code. NotImplemented with data.missing: nothing was sent.\n\nNever step outside the tools: if a task needs something no tool does, tell the user and stop.\n\nDone means: the session is the right flavour and map, the action ran, the result is read back (game_state, entity_find, console_tail or a screenshot) and reported as evidence, and a session you launched is stopped with stop_session."
+ },
+ "tools": [
+  {
+   "name": "session_status",
+   "description": "Runtime + flavour + bridge + build + liveness + tool-group availability; never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "launch_session",
+   "description": "Start a CS2 container: linux-client (headless), wine-tools (host X, -tools, bridge) or wine-client (Windows client, no -tools). Not for: dedicated servers (server_up). map stages a harness and parks the player (wine-tools). Check mapVerified (false + mapNote: map not confirmed); reused:true = an identical running session. wine-client: bridge tools only once a map runs.",
+   "inputSchema": {
+    "properties": {
+     "addon": {
+      "description": "wine-tools only",
+      "type": "string"
+     },
+     "args": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "bridge": {
+      "default": true,
+      "description": "wine-tools: false stops the wait at MenuReached",
+      "type": "boolean"
+     },
+     "capture": {
+      "default": true,
+      "type": "boolean"
+     },
+     "connect": {
+      "description": "host:port. linux-client: not working; wine-tools: use client_connect",
+      "type": "string"
+     },
+     "gpus": {
+      "type": "boolean"
+     },
+     "headless": {
+      "description": "linux-client: true; wine kinds: false",
+      "type": "boolean"
+     },
+     "kind": {
+      "enum": [
+       "linux-client",
+       "wine-tools",
+       "wine-client"
+      ],
+      "type": "string"
+     },
+     "map": {
+      "description": "wine-tools: e.g. de_dust2, editor/zoo/smartprop_zoo; MapLoadFailed if not in game on it in ~10 s",
+      "type": "string"
+     },
+     "testscript": {
+      "description": "wine-tools: existing suite <app>/vtest/<name>.txt; not with map",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "description": "default: MenuReached; BridgeHello for wine-tools; Parked with testscript",
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "wait_session",
+   "description": "Wait for a launched session's readiness stage.",
+   "inputSchema": {
+    "properties": {
+     "container": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "stop_session",
+   "description": "Stop and remove a session container (cs2mcp-* only). pending: true when the stop outlasts the budget (call again).",
+   "inputSchema": {
+    "properties": {
+     "container": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "console_tail",
+   "description": "Last N lines of a console.log, optional regex filter. File: --console-log, else session, else the one running cs2mcp-* session.",
+   "inputSchema": {
+    "properties": {
+     "grep": {
+      "type": "string"
+     },
+     "lines": {
+      "default": 50,
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "session": {
+      "description": "cs2mcp-* container; required when several run",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "console_wait",
+   "description": "Wait for a new console.log line matching a regex (lines after the call starts, unless fromStart).",
+   "inputSchema": {
+    "properties": {
+     "fromStart": {
+      "default": false,
+      "description": "also search the existing file; not with since",
+      "type": "boolean"
+     },
+     "regex": {
+      "type": "string"
+     },
+     "session": {
+      "type": "string"
+     },
+     "since": {
+      "description": "cursor from console_tail or an earlier observe (console.cursor); not with fromStart",
+      "properties": {
+       "inode": {
+        "type": "integer"
+       },
+       "offset": {
+        "type": "integer"
+       },
+       "path": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "inode",
+       "offset"
+      ],
+      "type": "object"
+     },
+     "timeoutMs": {
+      "default": 10000,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "regex"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "console_exec",
+   "description": "Queue a console command through the bridge (-testscript or -tools sessions; not during a level load). Not for: cvar reads (cvar_get); dedicated servers (server_console_exec). Refuses quit/exit/disconnect/crash/maps. confirm: true waits until the engine processed it and returns warnings (its 'Unknown command:' lines: a typo shows up there). A timeout is not retry-safe.",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "type": "string"
+     },
+     "confirm": {
+      "default": false,
+      "type": "boolean"
+     },
+     "confirmTimeoutMs": {
+      "default": 5000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "session": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_tick",
+   "description": "Current server tick and input-hook frame count.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "cvar_get",
+   "description": "Read console variables (found, value, type, default, flags). Not for setting: console_exec `<name> <value>`.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "names": {
+      "items": {
+       "maxLength": 128,
+       "minLength": 1,
+       "type": "string"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "names"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "checkpoint",
+   "description": "Fire a test-script checkpoint. Checkpoints arriving during Test_Wait are dropped; use Test_WaitForCheckPoint barriers.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "maxLength": 127,
+      "minLength": 1,
+      "pattern": "^[^\\s;]+$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_set",
+   "description": "Press/release/tap virtual buttons and set the view-angle override. Not for: teleporting (setpos); timed multi-step input (input_sequence). While an angles override is set, console setang is ignored.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch, yaw, roll] override; null clears it, absent leaves it",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "frames": {
+      "default": 1,
+      "description": "hold length for tap, with tap only",
+      "maximum": 640,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "press": {
+      "description": "buttons held until released (forward, back, jump, duck, attack, use, reload, ...)",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "release": {
+      "description": "buttons to release",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "tap": {
+      "description": "buttons held for `frames` input frames",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "turn": {
+      "additionalProperties": false,
+      "description": "relative to the active override; not with angles",
+      "properties": {
+       "dpitch": {
+        "description": "degrees",
+        "type": "number"
+       },
+       "dyaw": {
+        "description": "degrees",
+        "type": "number"
+       }
+      },
+      "type": "object"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_clear",
+   "description": "Release every virtual button and disable the angle override.",
+   "inputSchema": {
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "run_testscript",
+   "description": "Stage a CTestScriptMgr suite (library name or inline script) and launch a wine-tools session with -testscript. Returns {runId, ...} at once; poll test_wait. Not for: in-game assertions (game_test). suite and inline are exclusive.",
+   "inputSchema": {
+    "properties": {
+     "demo": {
+      "default": false,
+      "type": "boolean"
+     },
+     "inline": {
+      "description": "script text; ';' splits lines, `mark <name>` is a checkpoint barrier",
+      "type": "string"
+     },
+     "judge": {
+      "enum": [
+       "move_jump"
+      ],
+      "type": "string"
+     },
+     "suite": {
+      "enum": [
+       "move_jump",
+       "sandbox",
+       "harness"
+      ],
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 300000,
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "test_status",
+   "description": "State of a run_testscript run: running|passed|failed|error, checkpoint timeline, artifacts once finished.",
+   "inputSchema": {
+    "properties": {
+     "runId": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "runId"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "test_wait",
+   "description": "Wait for a run to finish, then return test_status; pending: true when still running.",
+   "inputSchema": {
+    "properties": {
+     "runId": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 60000,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "runId"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "demo_record_start",
+   "description": "Start a SourceTV recording. tv_enable 1 must be set BEFORE the map loads; this does not reload the map.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "session": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "demo_record_stop",
+   "description": "Stop a SourceTV recording; returns the host .dem path and bytes.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "session": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "demo_to_video",
+   "description": "Turn a demo in csgo/ into a video with the engine encoder (a wine-tools run_testscript; poll test_wait).",
+   "inputSchema": {
+    "properties": {
+     "bitrate": {
+      "maximum": 500,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "countFrames": {
+      "default": false,
+      "type": "boolean"
+     },
+     "demo": {
+      "description": "stem or host path of a demo directly in csgo/",
+      "type": "string"
+     },
+     "format": {
+      "default": "webm",
+      "enum": [
+       "webm",
+       "png",
+       "tga",
+       "jpg"
+      ],
+      "type": "string"
+     },
+     "framerate": {
+      "default": 30,
+      "maximum": 240,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "height": {
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "description": "output is csgo/<name>.webm",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 300000,
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "width": {
+      "description": "with height; default: render target",
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "demo",
+     "name"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "server_up",
+   "description": "Launch a headless Linux dedicated server (RCON, host network) on map (default de_dust2) and port (default 27015; PortInUse when bound). Not for: clients (launch_session). Returns rconPassword (random if absent).",
+   "inputSchema": {
+    "properties": {
+     "args": {
+      "description": "appended last. Not accepted: +rcon_password, +hostport, -port, +con_logfile",
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "bots": {
+      "properties": {
+       "ct": {
+        "default": 0,
+        "maximum": 10,
+        "minimum": 0,
+        "type": "integer"
+       },
+       "t": {
+        "default": 0,
+        "maximum": 10,
+        "minimum": 0,
+        "type": "integer"
+       }
+      },
+      "type": "object"
+     },
+     "hibernate": {
+      "default": false,
+      "description": "false: the server keeps ticking when empty (the bridge needs it)",
+      "type": "boolean"
+     },
+     "map": {
+      "type": "string"
+     },
+     "port": {
+      "default": 27015,
+      "maximum": 65535,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "rconPassword": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "client_connect",
+   "description": "Send `connect <address>` to a client session. wine-tools only; on linux-client use launch_session {connect}.",
+   "inputSchema": {
+    "properties": {
+     "address": {
+      "type": "string"
+     },
+     "container": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "server_console_exec",
+   "description": "Run one console command on a dedicated server over RCON. Not for: client commands (console_exec). Refuses quit/exit/disconnect/sv_shutdown (use stop_session).",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "type": "string"
+     },
+     "container": {
+      "type": "string"
+     },
+     "port": {
+      "maximum": 65535,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "rconPassword": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "script_run",
+   "description": "Run the scripts of a compiled addon map: launch or reuse the session, fire entry, match the expect regexes in order over the [cs_script] console lines. passed false is a result, not an error; passed null = budget cut (pending). Only kind cs_script, needs addon (source/path: NotImplementedYet). Passes when every expect matched in order and no script error line.",
+   "inputSchema": {
+    "properties": {
+     "addon": {
+      "description": "required for cs_script",
+      "type": "string"
+     },
+     "anyLine": {
+      "default": false,
+      "type": "boolean"
+     },
+     "entry": {
+      "description": "fired after load: {target, input} (RunScriptInput) or {command}",
+      "properties": {
+       "command": {
+        "type": "string"
+       },
+       "input": {
+        "type": "string"
+       },
+       "target": {
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "expect": {
+      "description": "regexes in order over whole lines (`MM/DD HH:MM:SS [cs_script] text`)",
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 16,
+      "minItems": 1,
+      "type": "array"
+     },
+     "kind": {
+      "enum": [
+       "cs_script",
+       "vscript"
+      ],
+      "type": "string"
+     },
+     "map": {
+      "description": "default: the addon name",
+      "type": "string"
+     },
+     "path": {
+      "type": "string"
+     },
+     "source": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "kind",
+     "expect"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_test",
+   "description": "Declarative in-game test. The session must be on spec.map (else launched); setup, steps, spec expect, teardown (always runs). Step {tool, args?, label?, expect?}; tool: round_start, setpos, game_snapshot/restore, input_sequence, fire_weapon, look_at, use_entity, ent_fire, console_exec/wait, game_wait, game_state, weapons, sounds_drain, demo_record_start/stop, checkpoint. Assertion {path (e.g. totals.distance), op: eq|ne|lt|le|gt|ge|approx|contains|matches, value (or {\"$ref\": \"label.path\"} into an earlier step), tolerance?, from?: result|game_state|weapons}. Stops at the first failing step unless continueOnFailure; a step result with pending: true or passed: false fails unless asserted on.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "spec": {
+      "description": "see the tool description",
+      "properties": {
+       "addon": {
+        "type": "string"
+       },
+       "continueOnFailure": {
+        "default": false,
+        "type": "boolean"
+       },
+       "demo": {
+        "default": false,
+        "type": "boolean"
+       },
+       "expect": {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "map": {
+        "type": "string"
+       },
+       "name": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$",
+        "type": "string"
+       },
+       "setup": {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "steps": {
+        "items": {
+         "type": "object"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "teardown": {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "timeoutMs": {
+        "default": 120000,
+        "maximum": 600000,
+        "minimum": 1,
+        "type": "integer"
+       },
+       "verbose": {
+        "default": true,
+        "description": "false: passing steps carry no result",
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "name",
+       "steps"
+      ],
+      "type": "object"
+     }
+    },
+    "required": [
+     "spec"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_test_results",
+   "description": "Stored results of this process's game_test runs: all or one by name. format junit returns {xml}.",
+   "inputSchema": {
+    "properties": {
+     "format": {
+      "default": "json",
+      "enum": [
+       "json",
+       "junit"
+      ],
+      "type": "string"
+     },
+     "name": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "render_world",
+   "description": "Offscreen freecam render of the loaded map (wine-tools bridge). Not for: the player's view (screenshot).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "fov": {
+      "default": 90,
+      "description": "horizontal degrees, (1,179)",
+      "type": "number"
+     },
+     "height": {
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "name": {
+      "type": "string"
+     },
+     "origin": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "srgb": {
+      "type": "boolean"
+     },
+     "width": {
+      "description": "default 1920; width*height <= 33554432",
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "zfar": {
+      "type": "number"
+     },
+     "znear": {
+      "type": "number"
+     }
+    },
+    "required": [
+     "origin",
+     "angles"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_state",
+   "description": "Local player: map, tick, view angles, origin/eye/velocity, health, flags, active weapon.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "weapons",
+   "description": "Local inventory: active weapon and every held weapon (entindex, name, defIndex, clip1/clip2/reserve).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "radar",
+   "description": "Players (team, alive, health, origin, eye yaw, spotted), bomb and hostages, projected onto the map overview.",
+   "inputSchema": {
+    "properties": {
+     "map": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_rules",
+   "description": "Round and warmup state: warmup, freeze, team intro, restart, game phase, rounds played, round times and win status, bomb planted. A null field did not resolve (see schemaMissing).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "entity_find",
+   "description": "Find entities in the RUNNING game by class (designer name) and/or name (targetname). Not for: the Hammer document (hammer-mcp). Returns entindex, class, name, origin, angles, health, toggleState; truncated:true when more matched. Needs class or name; max 1..256.",
+   "inputSchema": {
+    "properties": {
+     "class": {
+      "pattern": "^[A-Za-z0-9_]{1,64}$",
+      "type": "string"
+     },
+     "max": {
+      "default": 64,
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "maxLength": 127,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "select_weapon",
+   "description": "Select a weapon without keypresses. One of: slot 0..13 (slot1 primary, slot2 pistol, slot3 knife, slot4 grenades, slot5 C4), command, weapon (designer name; weapon_knife matches any knife), defIndex or handle (from weapons).",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "enum": [
+       "invnext",
+       "invprev",
+       "invnextselect",
+       "invprevselect",
+       "lastinv"
+      ],
+      "type": "string"
+     },
+     "defIndex": {
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "handle": {
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "slot": {
+      "maximum": 13,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "weapon": {
+      "pattern": "^weapon_[a-z0-9_]+$",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "sounds_drain",
+   "description": "Drain recorded game sound events (name, source entindex, origin). Empties the ring (256; dropped counts overflow); installs the hook on first use.",
+   "inputSchema": {
+    "properties": {
+     "max": {
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "resolve": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "sounds_status",
+   "description": "Install the sound-event sink (idempotent) and report ring counters. mode: wrap (default), listener, both.",
+   "inputSchema": {
+    "properties": {
+     "mode": {
+      "enum": [
+       "wrap",
+       "listener",
+       "both"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_wait",
+   "description": "Wait until a predicate over the local player holds. until: tick (ticks past the baseline), moved (distance from the baseline origin), stopped (speed < 1), weapon (activeWeapon name or defIndex), at (origin within tolerance 2 xy / zTolerance 4, optionally view angles; speed < 1), roundLive (no warmup, freeze, team intro, restart or winner; player alive), roundRestarted (a new round began, then roundLive), ammo (clip1 moved by clip1Delta on the baseline weapon). A timeout (default 5000 ms) is WaitTimeout, retry-safe.",
+   "inputSchema": {
+    "properties": {
+     "angleTolerance": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "angles": {
+      "description": "until at: [pitch, yaw, roll]; roll ignored",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "clip1": {
+      "description": "until ammo: baseline clip count (with entindex)",
+      "maximum": 1000,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "clip1Delta": {
+      "description": "until ammo: change from baseline; negative = at most (default -1)",
+      "maximum": 30,
+      "minimum": -30,
+      "type": "integer"
+     },
+     "defIndex": {
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "entindex": {
+      "maximum": 32767,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "from": {
+      "properties": {
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "tick": {
+        "minimum": 0,
+        "type": "integer"
+       }
+      },
+      "required": [
+       "tick",
+       "origin"
+      ],
+      "type": "object"
+     },
+     "minDistance": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "origin": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pollMs": {
+      "maximum": 1000,
+      "minimum": 50,
+      "type": "integer"
+     },
+     "requireStopped": {
+      "type": "boolean"
+     },
+     "roundStartTime": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "roundsPlayed": {
+      "minimum": 0,
+      "type": "integer"
+     },
+     "ticks": {
+      "maximum": 1000000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tolerance": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "until": {
+      "enum": [
+       "tick",
+       "moved",
+       "stopped",
+       "weapon",
+       "at",
+       "roundLive",
+       "roundRestarted",
+       "ammo"
+      ],
+      "type": "string"
+     },
+     "weapon": {
+      "pattern": "^weapon_[a-z0-9_]+$",
+      "type": "string"
+     },
+     "zTolerance": {
+      "minimum": 0,
+      "type": "number"
+     }
+    },
+    "required": [
+     "until"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "fire_weapon",
+   "description": "Shoot: per shot, release then tap attack until clip1 drops by one, then check the shot sounds. Refused before sending (PrerequisiteFailed): wrong weapon, no clip (knife), clip1 below shots. A timeout is not retry-safe (shotsFired says how far it got).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "frames": {
+      "default": 2,
+      "maximum": 64,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "shots": {
+      "default": 1,
+      "maximum": 30,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "default": 3000,
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "weapon": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "look_at",
+   "description": "Aim the view at a point or an entity (entindex) and wait until it is within 1 degree. hold false (default) then clears the override and reads the view back (snappedBack: true if it moved over 1 degree).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "eye": {
+      "default": true,
+      "type": "boolean"
+     },
+     "hold": {
+      "default": false,
+      "type": "boolean"
+     },
+     "target": {
+      "description": "[x, y, z] point, or an entindex (1..16383)",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "maximum": 16383,
+        "minimum": 1,
+        "type": "integer"
+       }
+      ]
+     },
+     "timeoutMs": {
+      "default": 2000,
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "target"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "use_entity",
+   "description": "Use an entity: aim, press use, wait 32 ticks, re-read it. Refused (PrerequisiteFailed) when farther than maxDistance (64) from the eye: setpos near it first. ok is true only with evidence: use sounds, an origin/angles change, or the slot emptying.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "maxDistance": {
+      "default": 64.0,
+      "exclusiveMinimum": 0,
+      "maximum": 4096.0,
+      "type": "number"
+     },
+     "target": {
+      "description": "[x, y, z] point, or an entindex (1..16383)",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "maximum": 16383,
+        "minimum": 1,
+        "type": "integer"
+       }
+      ]
+     },
+     "timeoutMs": {
+      "default": 2000,
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "target"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ent_fire",
+   "description": "Send `ent_fire <target> <input> [value] [delay]` through console.exec and confirm the engine ran it; the effect is NOT verified (read it back). target * is refused; Kill/KillHierarchy on a wildcard or classname target needs allowDestructive.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowDestructive": {
+      "default": false,
+      "description": "for Kill/KillHierarchy on a wildcard or classname",
+      "type": "boolean"
+     },
+     "delay": {
+      "maximum": 60.0,
+      "minimum": 0,
+      "type": "number"
+     },
+     "input": {
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_]{1,64}$",
+      "type": "string"
+     },
+     "target": {
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_!*.\\-]{1,64}$",
+      "type": "string"
+     },
+     "value": {
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.\\- ]{0,128}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "target",
+     "input"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "setpos",
+   "description": "Teleport the local player (setpos_exact/setang_exact), then wait until it is at origin and stopped. floor true: origin.z is only an upper bound (FellOutOfMap past 512 u or below minZ). Refused while an input.set angle override is active (input_clear first). Once sent, errors are not retry-safe.",
+   "inputSchema": {
+    "properties": {
+     "angleTolerance": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "angles": {
+      "description": "[pitch, yaw, roll]: pitch +-89, roll +-180; roll not compared",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "exact": {
+      "default": true,
+      "type": "boolean"
+     },
+     "floor": {
+      "default": false,
+      "description": "z is only an upper bound: the player may fall",
+      "type": "boolean"
+     },
+     "minZ": {
+      "description": "with floor: a lower landing is FellOutOfMap",
+      "maximum": 32768,
+      "minimum": -32768,
+      "type": "number"
+     },
+     "origin": {
+      "items": {
+       "maximum": 32768.0,
+       "minimum": -32768.0,
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "timeoutMs": {
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tolerance": {
+      "minimum": 0,
+      "type": "number"
+     },
+     "zTolerance": {
+      "minimum": 0,
+      "type": "number"
+     }
+    },
+    "required": [
+     "origin"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_sequence",
+   "description": "Run up to 32 input.set steps in order. Each step takes the input_set fields and holds holdTicks game ticks (default 1, max 640). Presses persist across steps until released; tap frames are client frames. Not for: a single press (input_set). input.clear is sent at the end and on error. ToolBudgetExceeded (retry-safe) when the steps cannot fit the call budget. An error after the first input.set is not retry-safe.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "steps": {
+      "description": "run in order; each takes the input_set fields",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "[pitch, yaw, roll] override; null clears it, absent leaves it",
+         "oneOf": [
+          {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "frames": {
+         "default": 1,
+         "description": "hold length for tap, with tap only",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "holdTicks": {
+         "default": 1,
+         "description": "ticks the step lasts",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "label": {
+         "description": "echoed in the result",
+         "maxLength": 64,
+         "type": "string"
+        },
+        "press": {
+         "description": "buttons held until released (forward, back, jump, duck, attack, use, reload, ...)",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "release": {
+         "description": "buttons to release",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "tap": {
+         "description": "buttons held for `frames` input frames",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "turn": {
+         "additionalProperties": false,
+         "description": "relative to the active override; not with angles",
+         "properties": {
+          "dpitch": {
+           "description": "degrees",
+           "type": "number"
+          },
+          "dyaw": {
+           "description": "degrees",
+           "type": "number"
+          }
+         },
+         "type": "object"
+        }
+       },
+       "type": "object"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "steps"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_snapshot",
+   "description": "Save the local player (pose, velocity, health, armor, money, team, weapons) and the round summary under name (32 at most, in this process). export: true also writes artifacts/snapshots/<name>.json.",
+   "inputSchema": {
+    "properties": {
+     "export": {
+      "default": false,
+      "type": "boolean"
+     },
+     "name": {
+      "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_restore",
+   "description": "Restore a snapshot on the same map: pose, health, armor, missing weapons, then the active weapon. Returns restored, comparison, notRestored; armor/helmet removal and extra weapon copies cannot be fixed. Refused: another map or team. Once sent, errors are not retry-safe.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "exactly one of name or snapshot",
+      "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+      "type": "string"
+     },
+     "parts": {
+      "items": {
+       "enum": [
+        "pose",
+        "health",
+        "armor",
+        "weapons"
+       ],
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "snapshot": {
+      "description": "inline snapshot in the game_snapshot form",
+      "type": "object"
+     },
+     "timeoutMs": {
+      "default": 6000,
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "round_start",
+   "description": "Put the round in a known state (idempotent). mode ensure (default): no-op on a live round; a dead player, no team or a round winner restarts; in warmup it ends the warmup; else waits for roundLive. mode restart: mp_restartgame 1. Refused cvars (map changes, exec/alias/bind, mp_restartgame, mp_warmup_*, host_*, quit) are InvalidParams. Once queued, errors are not retry-safe.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cvars": {
+      "additionalProperties": {
+       "type": [
+        "number",
+        "string"
+       ]
+      },
+      "description": "extra cvar -> value, sent before the warmup end or restart",
+      "maxProperties": 16,
+      "type": "object"
+     },
+     "freezetime": {
+      "description": "seconds (mp_freezetime)",
+      "maximum": 60,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "mode": {
+      "default": "ensure",
+      "enum": [
+       "ensure",
+       "restart"
+      ],
+      "type": "string"
+     },
+     "respawn": {
+      "description": "mp_respawn_on_death_ct/_t 1|0",
+      "type": "boolean"
+     },
+     "roundtime": {
+      "description": "minutes (mp_roundtime)",
+      "maximum": 60,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "default": 8000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "ocr",
+   "description": "Extract text from the last capture (last: true) or a host PNG with tesseract.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "crop": {
+      "description": "[x, y, w, h] pixels",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+     },
+     "last": {
+      "type": "boolean"
+     },
+     "png": {
+      "type": "string"
+     },
+     "psm": {
+      "default": 6,
+      "enum": [
+       6,
+       11
+      ],
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "screenshot",
+   "description": "Capture the game view: the next frame the session presents, from its Vulkan swapchain via the capture layer. Returns the host PNG path (full size) and an inline image. Needs a session launched with capture (the default). Not for: a render without the player (render_world).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "maxWidth": {
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "ocr": {
+      "default": false,
+      "type": "boolean"
+     },
+     "session": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 5000,
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "observe",
+   "description": "One playtest observation: screenshot, console.log tail or lines since a cursor, checkpoint events, game.tick, a screen guess (dialog|loading|unknown). Each part fails independently into errors[].",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "capture": {
+      "default": true,
+      "type": "boolean"
+     },
+     "consoleLines": {
+      "default": 20,
+      "maximum": 500,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "image": {
+      "default": "small",
+      "description": "inline | small (<= 640 px) | none; the file is full size",
+      "enum": [
+       "inline",
+       "small",
+       "none"
+      ],
+      "type": "string"
+     },
+     "ocr": {
+      "default": false,
+      "type": "boolean"
+     },
+     "session": {
+      "type": "string"
+     },
+     "since": {
+      "properties": {
+       "inode": {
+        "type": "integer"
+       },
+       "offset": {
+        "type": "integer"
+       },
+       "path": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "inode",
+       "offset"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

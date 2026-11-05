@@ -1,0 +1,1115 @@
+{
+  "enums": [
+    {
+      "fixed_underlying": false,
+      "header": "core/IPluginManager.h",
+      "itanium": {
+        "fixed": false,
+        "size": 4,
+        "underlying": "int"
+      },
+      "msvc": {
+        "size": 4,
+        "underlying": "int"
+      },
+      "name": "Pl_Status",
+      "rust_repr": "i32",
+      "underlying": "int",
+      "values": [
+        {
+          "name": "Pl_NotFound",
+          "value": -4
+        },
+        {
+          "name": "Pl_Error",
+          "value": -3
+        },
+        {
+          "name": "Pl_Refused",
+          "value": -2
+        },
+        {
+          "name": "Pl_Paused",
+          "value": -1
+        },
+        {
+          "name": "Pl_Running",
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "core/ISmmPlugin.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "ISmmPlugin",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "core/ISmmPlugin.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IMetamodListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "core/ISmmAPI.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "ISmmAPI",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "core/IPluginManager.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "ISmmPluginManager",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "third_party/khook/include/khook.hpp",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IKHook",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "170058a2f0dbd58106b7c76bfe88a94672295356",
+    "khook_commit": "0ca2b01363aff9fa11ad73b1b08dfdc2a195fb3a"
+  },
+  "vtables": [
+    {
+      "class": "ISmmPlugin",
+      "header": "core/ISmmPlugin.h",
+      "methods": [
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "GetApiVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> i32"
+        },
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 1,
+          "is_dtor": true,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "~ISmmPlugin",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin)"
+        },
+        {
+          "cxx_signature": "bool (PluginId, ISmmAPI *, char *, size_t, bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "Load",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin, id: i32, ismm: *mut ISmmAPI, error: *mut ::core::ffi::c_char, maxlength: usize, late: bool) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "AllPluginsLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin)"
+        },
+        {
+          "cxx_signature": "bool (char *, size_t)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "QueryRunning",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (char *, size_t)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "Unload",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (char *, size_t)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 6,
+          "name": "Pause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (char *, size_t)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 7,
+          "name": "Unpause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 8,
+          "name": "GetAuthor",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 9,
+          "name": "GetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 10,
+          "name": "GetDescription",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 11,
+          "name": "GetURL",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 12,
+          "name": "GetLicense",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "GetVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 14,
+          "name": "GetDate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 15,
+          "name": "GetLogTag",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPlugin) -> *const ::core::ffi::c_char"
+        }
+      ],
+      "msvc": {
+        "length": 16,
+        "own_entries": 16
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IMetamodListener",
+      "header": "core/ISmmPlugin.h",
+      "methods": [
+        {
+          "cxx_signature": "void (PluginId)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "OnPluginLoad",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32)"
+        },
+        {
+          "cxx_signature": "void (PluginId)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "OnPluginUnload",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32)"
+        },
+        {
+          "cxx_signature": "void (PluginId)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "OnPluginPause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32)"
+        },
+        {
+          "cxx_signature": "void (PluginId)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "OnPluginUnpause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *, const char *, const char *, bool, bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "OnLevelInit",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, pMapName: *const ::core::ffi::c_char, pMapEntities: *const ::core::ffi::c_char, pOldLevel: *const ::core::ffi::c_char, pLandmarkName: *const ::core::ffi::c_char, loadGame: bool, background: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "OnLevelShutdown",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener)"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "OnEngineQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *const ::core::ffi::c_char, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "OnPhysicsQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *const ::core::ffi::c_char, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "OnFileSystemQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *const ::core::ffi::c_char, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "OnGameDLLQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *const ::core::ffi::c_char, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "OnMetamodQuery",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *const ::core::ffi::c_char, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IServerPluginCallbacks *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "OnVSPListening",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, iface: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (PluginId, ConCommandBase *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "OnUnlinkConCommandBase",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32, pCommand: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (PluginId, ProviderConCommand *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "OnUnlinkConCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32, pCommand: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (PluginId, ProviderConVar *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "OnUnlinkConVar",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IMetamodListener, id: i32, pVar: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 15,
+        "own_entries": 15
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ISmmAPI",
+      "header": "core/ISmmAPI.h",
+      "methods": [
+        {
+          "cxx_signature": "void (ISmmPlugin *, const char *, ...)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "LogMsg",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "CreateInterfaceFn (bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "GetEngineFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, syn: bool) -> *const ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CreateInterfaceFn (bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "GetPhysicsFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, syn: bool) -> *const ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CreateInterfaceFn (bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "GetFileSystemFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, syn: bool) -> *const ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CreateInterfaceFn (bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "GetServerFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, syn: bool) -> *const ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CGlobalVars *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "GetCGlobals",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (ISmmPlugin *, ConCommandBase *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "RegisterConCommandBase",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCommand: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (ISmmPlugin *, ConCommandBase *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "UnregisterConCommandBase",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCommand: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "ConPrint",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, str: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *, ...)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "ConPrintf",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (int &, int &, int &, int &)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "GetApiVersions",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, major: *mut i32, minor: *mut i32, plvers: *mut i32, plmin: *mut i32)"
+        },
+        {
+          "cxx_signature": "void (ISmmPlugin *, IMetamodListener *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "AddListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pListener: *mut IMetamodListener)"
+        },
+        {
+          "cxx_signature": "void *(const char *, int *, PluginId *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "MetaFactory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, iface: *const ::core::ffi::c_char, ret: *mut i32, id: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int (char *, size_t)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "FormatIface",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, iface: *mut ::core::ffi::c_char, maxlength: usize) -> i32"
+        },
+        {
+          "cxx_signature": "void *(CreateInterfaceFn, const char *, int, int *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "InterfaceSearch",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, fn_: *const ::core::ffi::c_void, iface: *const ::core::ffi::c_char, max: i32, ret: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "GetBaseDir",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "size_t (char *, size_t, const char *, ...)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "PathFormat",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (MMSPlayer_t, const char *, ...)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "ClientConPrintf",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void *(CreateInterfaceFn, const char *, int)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "VInterfaceMatch",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, fn_: *const ::core::ffi::c_void, iface: *const ::core::ffi::c_char, min: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "EnableVSPListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "GetGameDLLVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "GetUserMessageCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> i32"
+        },
+        {
+          "cxx_signature": "int (const char *, int *)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "FindUserMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, name: *const ::core::ffi::c_char, size: *mut i32) -> i32"
+        },
+        {
+          "cxx_signature": "const char *(int, int *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetUserMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, index: i32, size: *mut i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetVSPVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "GetSourceEngineBuild",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI) -> i32"
+        },
+        {
+          "cxx_signature": "IServerPluginCallbacks *(int *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "GetVSPInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, pVersion: *mut i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "size_t (char *, size_t, const char *, ...)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "Format",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "size_t (char *, size_t, const char *, __va_list_tag *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "FormatArgs",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, buffer: *mut ::core::ffi::c_char, maxlength: usize, format: *const ::core::ffi::c_char, ap: *mut ::core::ffi::c_void) -> usize"
+        },
+        {
+          "cxx_signature": "bool (ISmmPlugin *, ProviderConCommand *)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "RegisterConCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCommand: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (ISmmPlugin *, ProviderConVar *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "RegisterConVar",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCvar: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (ISmmPlugin *, ProviderConCommand *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "UnregisterConCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCommand: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ISmmPlugin *, ProviderConVar *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "UnregisterConVar",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, plugin: *mut ISmmPlugin, pCvar: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(PluginId)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "GetDetourInterface",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmAPI, id: i32) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 34,
+        "own_entries": 34
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ISmmPluginManager",
+      "header": "core/IPluginManager.h",
+      "methods": [
+        {
+          "cxx_signature": "PluginId (const char *, PluginId, bool &, char *, size_t)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "Load",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, file: *const ::core::ffi::c_char, source: i32, already: *mut bool, error: *mut ::core::ffi::c_char, maxlen: usize) -> i32"
+        },
+        {
+          "cxx_signature": "bool (PluginId, bool, char *, size_t)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "Unload",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, force: bool, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PluginId, char *, size_t)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "Pause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PluginId, char *, size_t)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "Unpause",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, error: *mut ::core::ffi::c_char, maxlen: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "UnloadAll",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PluginId, const char **, Pl_Status *, PluginId *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "Query",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, file: *mut *const ::core::ffi::c_char, status: *mut Pl_Status, source: *mut i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PluginId, char *, size_t)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "QueryRunning",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, error: *mut ::core::ffi::c_char, maxlength: usize) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PluginId, void **)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "QueryHandle",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISmmPluginManager, id: i32, handle: *mut *mut ::core::ffi::c_void) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 8,
+        "own_entries": 8
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IKHook",
+      "header": "third_party/khook/include/khook.hpp",
+      "methods": [
+        {
+          "cxx_signature": "HookID_t (void *, void *, void *, void *, void *, void *, void *, unsigned int, bool)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "SetupHook",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, function: *mut ::core::ffi::c_void, context: *mut ::core::ffi::c_void, removed_function: *mut ::core::ffi::c_void, pre: *mut ::core::ffi::c_void, post: *mut ::core::ffi::c_void, make_return: *mut ::core::ffi::c_void, make_call_original: *mut ::core::ffi::c_void, stack_size: u32, async_: bool) -> u32"
+        },
+        {
+          "cxx_signature": "HookID_t (void **, int, void *, void *, void *, void *, void *, void *, unsigned int, bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "SetupVirtualHook",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, vtable: *mut *mut ::core::ffi::c_void, index: i32, context: *mut ::core::ffi::c_void, removed_function: *mut ::core::ffi::c_void, pre: *mut ::core::ffi::c_void, post: *mut ::core::ffi::c_void, make_return: *mut ::core::ffi::c_void, make_call_original: *mut ::core::ffi::c_void, stack_size: u32, async_: bool) -> u32"
+        },
+        {
+          "cxx_signature": "void (HookID_t, bool, void (*)(HookID_t, void *), void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "RemoveHook",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, id: u32, async_: bool, hook_removal_fn: *const ::core::ffi::c_void, context: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "GetContextPtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "GetOriginalFunction",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "GetOriginalValuePtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "GetOverrideValuePtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(bool)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "GetCurrentValuePtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, pop: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "DestroyReturnValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook)"
+        },
+        {
+          "cxx_signature": "void *(void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "FindOriginal",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, function: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(void **, int)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "FindOriginalVirtual",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, vtable: *mut *mut ::core::ffi::c_void, index: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(KHook::Action, void *, std::size_t, void *, void *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "DoRecall",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, action: u8, ptr_to_return: *mut ::core::ffi::c_void, return_size: usize, init_op: *mut ::core::ffi::c_void, deinit_op: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (KHook::Action, void *, std::size_t, void *, void *, bool)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "SaveReturnValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, action: u8, ptr_to_return: *mut ::core::ffi::c_void, return_size: usize, init_op: *mut ::core::ffi::c_void, deinit_op: *mut ::core::ffi::c_void, original: bool)"
+        },
+        {
+          "cxx_signature": "void *(void *, std::size_t, const char *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "LookupSignature",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook, start: *mut ::core::ffi::c_void, size: usize, signature: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "WasOriginalFunctionSkipped",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IKHook) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 15,
+        "own_entries": 15
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

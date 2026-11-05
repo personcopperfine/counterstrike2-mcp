@@ -1,0 +1,4211 @@
+{
+  "enums": [],
+  "records": [
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_Data",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/playerslot.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Data",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Data",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "CPlayerSlot",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nVersion",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nTopLeftX",
+          "offset": 4,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nTopLeftY",
+          "offset": 8,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nWidth",
+          "offset": 12,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nHeight",
+          "offset": 16,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flMinZ",
+          "offset": 20,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_flMaxZ",
+          "offset": 24,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/rendersystem/rendersystemtypes.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nVersion",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nTopLeftX",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nTopLeftY",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nWidth",
+            "offset": 12,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHeight",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flMinZ",
+            "offset": 20,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flMaxZ",
+            "offset": 24,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 28
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nVersion",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nTopLeftX",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nTopLeftY",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nWidth",
+            "offset": 12,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHeight",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flMinZ",
+            "offset": 20,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_flMaxZ",
+            "offset": 24,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 28
+      },
+      "name": "RenderViewport_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 28
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk002",
+          "offset": 8,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk003",
+          "offset": 16,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk004",
+          "offset": 24,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk005",
+          "offset": 32,
+          "rust_type": "u64",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/engine2/ivengineclient2.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk005",
+            "offset": 32,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 40
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk005",
+            "offset": 32,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "name": "EngineClientUnk40_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 40
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/engine2/iinputservice.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IInputHandler",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/engine2/iinputservice.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IKeybindChangeListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "ISource2ServerConfig",
+      "header": "public/engine2/isource2serverconfig.h",
+      "methods": [
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "GetGameDescription",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "GetNetworkVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> i32"
+        },
+        {
+          "cxx_signature": "void (int &, int &, int &, bool &) const",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "GetPlayerLimits",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig, minplayers: *mut i32, maxplayers: *mut i32, defaultMaxPlayers: *mut i32, bIsMultiplayer: *mut bool)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "GetMaxSplitscreenPlayers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "GetMaxHumanPlayers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "ShouldNotifyLocalClientConnectionStateChanges",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "void (CPlayerSlot)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "OnClientFullyConnect",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig, slot: CPlayerSlot)"
+        },
+        {
+          "cxx_signature": "void (HostStateLoopModeType_t, CUtlString &, KeyValues **)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "GetHostStateLoopModeInfo",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (EUniverse) const",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "AllowDedicatedServers",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (CUtlString &) const",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "GetConVarPrefixesToResetToDefaults",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig, sSemicolonDelimitedPrefixList: *mut CUtlString)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "AllowSaveRestore",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "ShouldSendSerializedEntities",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "IsCommandQueueEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetCommandQueueDilationPercentage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> f32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "ShouldMapCommandChangeLevel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "ShouldAllocateNewClients",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "Uses64TickInterval",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CreateInterfaceFn)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "InitGameEvents",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2ServerConfig, factory: *const ::core::ffi::c_void) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 29,
+        "own_entries": 18
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IEngineService",
+      "header": "public/engine2/iengineservicemgr.h",
+      "methods": [
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "GetServiceDependencies",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *() const",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "GetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "EngineServiceActivateType_t (const char *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "ShouldActivate",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (const EngineLoopState_t &, CEventDispatcher<CEventIDManager_Default> *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "OnLoopActivate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, loopState: *mut ::core::ffi::c_void, pEventDispatcher: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const EngineLoopState_t &, CEventDispatcher<CEventIDManager_Default> *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "OnLoopDeactivate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, loopState: *mut ::core::ffi::c_void, pEventDispatcher: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "IsActive",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "SetActive",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, arg0: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "SetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, pszName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (CEventDispatcher<CEventIDManager_Default> *, EventMapRegistrationType_t)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "RegisterEventMap",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, pEventDispatcher: *mut ::core::ffi::c_void, nRegistrationType: i32)"
+        },
+        {
+          "cxx_signature": "uint16 ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "GetServiceIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService) -> u16"
+        },
+        {
+          "cxx_signature": "void (uint16)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "SetServiceIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService, index: u16)"
+        },
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 11,
+          "is_dtor": true,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "~IEngineService",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IEngineService)"
+        }
+      ],
+      "msvc": {
+        "length": 23,
+        "own_entries": 12
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IRenderService",
+      "header": "public/engine2/irenderservice.h",
+      "methods": [
+        {
+          "cxx_signature": "void (const char *, int, IRenderHandler *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "InstallRenderHandler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, pszName: *const ::core::ffi::c_char, nPriority: i32, pHandler: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IRenderHandler *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "RemoveRenderHandler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, pHandler: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderDeviceInfo_t &)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "ChangeVideoMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, info: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CUtlStringToken ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, ret: *mut CUtlStringToken) -> *mut CUtlStringToken",
+          "msvc_slot": 26,
+          "name": "GetRenderingPipeline",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> CUtlStringToken"
+        },
+        {
+          "cxx_signature": "RenderMultisampleType_t ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 27,
+          "name": "GetMultisampleType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> u8"
+        },
+        {
+          "cxx_signature": "void (const RenderViewport_t &, CSplitScreenSlot, RenderViewport_t *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "GetSplitScreenViewport",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, viewport: *const RenderViewport_t, nSlot: CSplitScreenSlot, pOutViewport: *mut RenderViewport_t)"
+        },
+        {
+          "cxx_signature": "ISceneWorld *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 29,
+          "name": "GetSceneWorld",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (WorldGroupId_t, CSplitScreenSlot)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 30,
+          "name": "IsFullyLoadedForPlayer",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void *(const char *, const char *, void *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 31,
+          "name": "FindOrCreateWorldSession",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, pszWorldName: *const ::core::ffi::c_char, arg1: *const ::core::ffi::c_char, arg2: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const EventClientPreOutput_t &, bool)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 32,
+          "name": "LaunchAsyncBeginRenderingViewsJob",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, event: *mut ::core::ffi::c_void, bAddViews: bool)"
+        },
+        {
+          "cxx_signature": "bool (bool *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "FinishAsyncBeginRenderingViewsJob",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService, pbAddedViews: *mut bool) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 34,
+          "name": "ShouldRenderAllWindows",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 35,
+          "name": "RequestAllWindowsRenderNextFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 36,
+          "name": "ForceRenderForNextFrames",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 37,
+          "name": "ShouldRender",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 38,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 39,
+        "own_entries": 16
+      },
+      "primary_base": "IEngineService",
+      "secondary_bases": []
+    },
+    {
+      "class": "IInputService",
+      "header": "public/engine2/iinputservice.h",
+      "methods": [
+        {
+          "cxx_signature": "void (const char *, int, IInputHandler *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "InstallInputHandler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pszName: *const ::core::ffi::c_char, nPriority: i32, pHandler: *mut IInputHandler)"
+        },
+        {
+          "cxx_signature": "void (IInputHandler *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "RemoveInputHandler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pHandler: *mut IInputHandler)"
+        },
+        {
+          "cxx_signature": "void (int, const char *, int)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "AddCommandText",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, nTarget: i32, pszText: *const ::core::ffi::c_char, nSource: i32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "IsAppActive",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CSplitScreenSlot)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 27,
+          "name": "ReadKeyBindings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, nSlot: CSplitScreenSlot) -> bool"
+        },
+        {
+          "cxx_signature": "void (CSplitScreenSlot)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "WriteKeyBindings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, nSlot: CSplitScreenSlot)"
+        },
+        {
+          "cxx_signature": "void (ButtonCode_t, CSplitScreenSlot, const char *, bool, int)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "SetBinding",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "const char *(ButtonCode_t, CSplitScreenSlot, int)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 32,
+          "name": "GetBinding",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (AnalogCode_t, CSplitScreenSlot, const char *, bool, int)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 29,
+          "name": "SetBinding",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "const char *(AnalogCode_t, CSplitScreenSlot, int)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 31,
+          "name": "GetBinding",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "const char *(const char *, CSplitScreenSlot, int, int)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "NameForBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pszBinding: *const ::core::ffi::c_char, nSlot: CSplitScreenSlot, nStartCount: i32, nAllowJoystick: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t, int)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 34,
+          "name": "IsToggleConsoleButton",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t, int)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 35,
+          "name": "IsEscapeButton",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 36,
+          "name": "HasMouseFocus",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService) -> bool"
+        },
+        {
+          "cxx_signature": "void (CInputValueBase *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 37,
+          "name": "RegisterInputValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pInputValue: *mut CInputValueBase)"
+        },
+        {
+          "cxx_signature": "void (CInputValueBase *)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 38,
+          "name": "UnregisterInputValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pInputValue: *mut CInputValueBase)"
+        },
+        {
+          "cxx_signature": "void (const CUtlDelegate<bool (CInputValueBase *)> &)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 39,
+          "name": "ForEachInputValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, callback: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 40,
+          "name": "EnableKeyBindingSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, bEnable: bool)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 41,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, arg0: bool)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 42,
+          "name": "GetFrameCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService) -> i32"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 43,
+          "name": "LockCommandBuffers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, bLock: bool)"
+        },
+        {
+          "cxx_signature": "void (CUtlBuffer &)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 44,
+          "name": "LoadCheatCodes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, buf: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 45,
+          "name": "ClearCheatCodes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 46,
+          "name": "UnbindAllKeys",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, nSlot: i32)"
+        },
+        {
+          "cxx_signature": "void (IKeybindChangeListener *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 47,
+          "name": "AddBindingListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pListener: *mut IKeybindChangeListener)"
+        },
+        {
+          "cxx_signature": "void (IKeybindChangeListener *)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 48,
+          "name": "RemoveBindingListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pListener: *mut IKeybindChangeListener)"
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 49,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 50,
+          "name": "unk202",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 51,
+          "name": "unk203",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 52,
+          "name": "IsButtonDown",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (ButtonCode_t)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 53,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (float *, float *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 54,
+          "name": "GetCursorPosition",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, pX: *mut f32, pY: *mut f32)"
+        },
+        {
+          "cxx_signature": "void (float, float)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 55,
+          "name": "SetCursorPosition",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, x: f32, y: f32)"
+        },
+        {
+          "cxx_signature": "CUtlString (const char *, bool *, bool)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, ret: *mut CUtlString, pszName: *const ::core::ffi::c_char, pbExists: *mut bool, bNoCfgDir: bool) -> *mut CUtlString",
+          "msvc_slot": 56,
+          "name": "GetUserSettingsFileName",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "memory",
+              "size": 8,
+              "sret": true
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (CUtlString &, int)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 57,
+          "name": "AppendChordModifiers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, sName: *mut CUtlString, nChord: i32)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 58,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, arg0: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 59,
+          "name": "unk402",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 60,
+          "name": "unk403",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 61,
+          "name": "GetNumChords",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService) -> i32"
+        },
+        {
+          "cxx_signature": "void (int *, void *)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 62,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputService, arg0: *mut i32, arg1: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 63,
+        "own_entries": 40
+      },
+      "primary_base": "IEngineService",
+      "secondary_bases": []
+    },
+    {
+      "class": "IInputHandler",
+      "header": "public/engine2/iinputservice.h",
+      "methods": [
+        {
+          "cxx_signature": "InputHandlerResult_t (const InputEvent_t &, CSplitScreenSlot)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "HandleInputEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IInputHandler, event: *mut ::core::ffi::c_void, nSplitScreenPlayerSlot: CSplitScreenSlot) -> i32"
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IKeybindChangeListener",
+      "header": "public/engine2/iinputservice.h",
+      "methods": [
+        {
+          "cxx_signature": "void (ButtonCode_t)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": null
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ISource2Engine",
+      "header": "public/engine2/isource2engine.h",
+      "methods": [
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "IsPaused",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine) -> bool"
+        },
+        {
+          "cxx_signature": "float () const",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "GetTimescale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine) -> f32"
+        },
+        {
+          "cxx_signature": "void *(const char *, const char *, void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "FindOrCreateWorldSession",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine, pszWorldName: *const ::core::ffi::c_char, arg1: *const ::core::ffi::c_char, arg2: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CEntityLump *(const char *, bool, const char *, const char *, bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "GetEntityLumpForTemplate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine, arg0: *const ::core::ffi::c_char, arg1: bool, arg2: *const ::core::ffi::c_char, arg3: *const ::core::ffi::c_char, arg4: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "uint32 () const",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "GetStatsAppID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine) -> u32"
+        },
+        {
+          "cxx_signature": "void (const char *, int, int, int, bool)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "WriteJpegScreenshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine, pszFilename: *const ::core::ffi::c_char, nQuality: i32, nWidth: i32, nHeight: i32, bAsyncWrite: bool)"
+        },
+        {
+          "cxx_signature": "void (IScreenshotCallback *, void *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "RequestScreenshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Engine, pCallback: *mut ::core::ffi::c_void, pContext: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 18,
+        "own_entries": 7
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IVEngineClient2",
+      "header": "public/engine2/ivengineclient2.h",
+      "methods": [
+        {
+          "cxx_signature": "EUniverse () const",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "GetSteamUniverse",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "WorldGroupId_t (const char *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "FindWorldGroupByName",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "const char *(WorldGroupId_t)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "GetWorldGroupName",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "WorldGroupId_t (bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "GetFirstWorldGroupId",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "WorldGroupId_t (bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "MaxWorldGroupId",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (WorldGroupId_t)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "IsWorldGroupValid",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "float *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetMainLoopTimes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut f32"
+        },
+        {
+          "cxx_signature": "void (const char *, int, float)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "SetFrameTimeAmnesty",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, amnesty: *const ::core::ffi::c_char, arg1: i32, frametime: f32)"
+        },
+        {
+          "cxx_signature": "const char *(bool)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "GetFrameTimeAmnesty",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, check_cvar: bool) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (const char *, int, int, float)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "SetFramePerformanceTag",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszTag: *const ::core::ffi::c_char, nValue: i32, arg2: i32, flDuration: f32)"
+        },
+        {
+          "cxx_signature": "void (void *, bool, LoggingChannelID_t)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "ShowFrameTimeReport",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: *mut ::core::ffi::c_void, arg1: bool, channel: i32)"
+        },
+        {
+          "cxx_signature": "void (void *, void (*)(const char *))",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "DumpNetStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: *mut ::core::ffi::c_void, pfnPrint: *const ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "ShouldForceMaxFrametimeToTickInterval",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "GetLongFrameCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> u32"
+        },
+        {
+          "cxx_signature": "bool (int, CMsgPlayerInfo *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "GetPlayerInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nPlayerIndex: i32, pInfo: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "CPlayerUserId (int)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "GetPlayerUserId",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "CPlayerSlot (CSplitScreenSlot)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CPlayerSlot, nSlot: CSplitScreenSlot) -> *mut CPlayerSlot",
+          "msvc_slot": 34,
+          "name": "GetLocalPlayer",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> CPlayerSlot"
+        },
+        {
+          "cxx_signature": "CSplitScreenSlot (CPlayerSlot)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CSplitScreenSlot, nPlayerSlot: CPlayerSlot) -> *mut CSplitScreenSlot",
+          "msvc_slot": 35,
+          "name": "GetSplitScreenSlotForPlayer",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nPlayerSlot: CPlayerSlot) -> CSplitScreenSlot"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "GetLastTimeStamp",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "GetLastServerTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "GetMaxClients",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "IsInGame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "IsConnected",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "INetChannel *(CSplitScreenSlot)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "GetNetChannel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "IsPlayingDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "GetDemoFilePath",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "GetDemoHostName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "IsRecordingDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "IsPlayingTimeDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "IsPlayingBroadcast",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "IBroadcastPlayer *()",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "GetBroadcastPlayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CSplitScreenSlot, const char *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "ServerCmd",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot, pszCmd: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (CSplitScreenSlot, const char *, bool, double, uint64)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "ClientCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot, pszCmd: *const ::core::ffi::c_char, bUnrestricted: bool, flInputTime: f64, nInputTimestamp: u64)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "SetRestrictServerCommands",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, bRestrict: bool)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "SetRestrictClientCommands",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, bRestrict: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "IsLowViolence",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "CPlayerSlot (CSplitScreenSlot)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CPlayerSlot, nSlot: CSplitScreenSlot) -> *mut CPlayerSlot",
+          "msvc_slot": 55,
+          "name": "GetSplitScreenPlayer",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> CPlayerSlot"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "IsSplitScreenActive",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CSplitScreenSlot)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "IsValidSplitScreenSlot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> bool"
+        },
+        {
+          "cxx_signature": "CSplitScreenSlot ()",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CSplitScreenSlot) -> *mut CSplitScreenSlot",
+          "msvc_slot": 58,
+          "name": "FirstValidSplitScreenSlot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> CSplitScreenSlot"
+        },
+        {
+          "cxx_signature": "CSplitScreenSlot (CSplitScreenSlot)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CSplitScreenSlot, nPreviousSlot: CSplitScreenSlot) -> *mut CSplitScreenSlot",
+          "msvc_slot": 59,
+          "name": "NextValidSplitScreenSlot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nPreviousSlot: CSplitScreenSlot) -> CSplitScreenSlot"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "GetAvailableAsyncThread",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "void (int &, int &)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "GetScreenSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nWidth: *mut i32, nHeight: *mut i32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 62,
+          "name": "IsLoadingLevel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 63,
+          "name": "OnEngineLevelLoadingFinished",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 64,
+          "name": "GetLevelName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 65,
+          "name": "GetLevelNameShort",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "IVoiceTweak *()",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 66,
+          "name": "GetVoiceTweakAPI",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 67,
+          "name": "CheckPoint",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "CMovieRecorder *()",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 68,
+          "name": "GetMovieRecorder",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IDemoPlayer *()",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 69,
+          "name": "GetDemoPlayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IDemoRecorder *()",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 70,
+          "name": "GetDemoRecorder",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 71,
+          "name": "IsDemoPlaybackPaused",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 72,
+          "name": "IsSkippingPlayback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 73,
+          "name": "GetDemoRecordingTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 74,
+          "name": "GetDemoPlaybackTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 75,
+          "name": "GetDemoPlaybackStartTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 76,
+          "name": "GetDemoPlaybackTimeScale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 77,
+          "name": "GetDemoPlaybackTotalTicks",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 78,
+          "name": "GetDemoPlaybackFileName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 79,
+          "name": "PlayDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszFilename: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 80,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 81,
+          "name": "unk202",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 82,
+          "name": "PauseDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 83,
+          "name": "ResumeDemo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 84,
+          "name": "SkipToDemoTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nTick: i32)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 85,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 86,
+          "name": "IsHLTV",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (CBufferString &)",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 87,
+          "name": "GetUILanguage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, sLanguage: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "float (int, int)",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 88,
+          "name": "GetScreenAspectRatio",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nViewportWidth: i32, nViewportHeight: i32) -> f32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 89,
+          "name": "GetPatchVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int () const",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 90,
+          "name": "GetBuildVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 91,
+          "name": "GetVersionDateString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 92,
+          "name": "GetVersionTimeString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 93,
+          "name": "GetConnectedServerNetworkVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 94,
+          "name": "GetAppID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> u32"
+        },
+        {
+          "cxx_signature": "bool (CSplitScreenSlot)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 95,
+          "name": "ReadKeyBindings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> bool"
+        },
+        {
+          "cxx_signature": "void (IAchievementMgr *)",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 96,
+          "name": "SetAchievementMgr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pAchievementMgr: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "IAchievementMgr *()",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 97,
+          "name": "GetAchievementMgr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSplitScreenSlot ()",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CSplitScreenSlot) -> *mut CSplitScreenSlot",
+          "msvc_slot": 98,
+          "name": "GetActiveSplitScreenPlayerSlot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> CSplitScreenSlot"
+        },
+        {
+          "cxx_signature": "CSplitScreenSlot (CSplitScreenSlot)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut CSplitScreenSlot, nSlot: CSplitScreenSlot) -> *mut CSplitScreenSlot",
+          "msvc_slot": 99,
+          "name": "SetActiveSplitScreenPlayerSlot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nSlot: CSplitScreenSlot) -> CSplitScreenSlot"
+        },
+        {
+          "cxx_signature": "bool (const char *, int, bool)",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 100,
+          "name": "SetLocalPlayerIsResolvable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszContext: *const ::core::ffi::c_char, nLine: i32, bResolvable: bool) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 101,
+          "name": "IsLocalPlayerResolvable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (const CUtlSymbolLarge &, void (*)(uint8 *, size_t))",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 102,
+          "name": "RegisterDemoCustomDataCallback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, szCallbackSaveID: *const CUtlSymbolLarge, pfnCallback: *const ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void (*)(uint8 *, size_t), const void *, size_t)",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 103,
+          "msvc_slot": 103,
+          "name": "RecordDemoCustomData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pfnCallback: *const ::core::ffi::c_void, pData: *mut ::core::ffi::c_void, nDataLength: usize)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 104,
+          "msvc_slot": 104,
+          "name": "SetPitchScale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, flPitchScale: f32)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 105,
+          "msvc_slot": 105,
+          "name": "GetPitchScale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f32"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *, float)",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 106,
+          "msvc_slot": 106,
+          "name": "SetMixGroupOfCurrentMixer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszGroupName: *const ::core::ffi::c_char, pszParam: *const ::core::ffi::c_char, flValue: f32)"
+        },
+        {
+          "cxx_signature": "int (const char *)",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 107,
+          "msvc_slot": 107,
+          "name": "GetMixLayerIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszMixLayerName: *const ::core::ffi::c_char) -> i32"
+        },
+        {
+          "cxx_signature": "void (int, float)",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 108,
+          "msvc_slot": 108,
+          "name": "SetMixLayerLevel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nIndex: i32, flLevel: f32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 109,
+          "msvc_slot": 109,
+          "name": "IsVoiceRecording",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 92,
+          "is_dtor": false,
+          "itanium_slot": 110,
+          "msvc_slot": 110,
+          "name": "SetTimescale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, flTimescale: f32)"
+        },
+        {
+          "cxx_signature": "void (CGamestatsData *)",
+          "decl_index": 93,
+          "is_dtor": false,
+          "itanium_slot": 111,
+          "msvc_slot": 111,
+          "name": "SetGamestatsData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pGamestatsData: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CGamestatsData *()",
+          "decl_index": 94,
+          "is_dtor": false,
+          "itanium_slot": 112,
+          "msvc_slot": 112,
+          "name": "GetGamestatsData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 95,
+          "is_dtor": false,
+          "itanium_slot": 113,
+          "msvc_slot": 113,
+          "name": "GetBugSubmissionCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 96,
+          "is_dtor": false,
+          "itanium_slot": 114,
+          "msvc_slot": 114,
+          "name": "ClearBugSubmissionCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 97,
+          "is_dtor": false,
+          "itanium_slot": 115,
+          "msvc_slot": 115,
+          "name": "GetServerSimulationFrameTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f32"
+        },
+        {
+          "cxx_signature": "uint64 (uint64, void *)",
+          "decl_index": 98,
+          "is_dtor": false,
+          "itanium_slot": 116,
+          "msvc_slot": 116,
+          "name": "GetServerTickTimes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nFirstFrame: u64, pTickTimes: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 99,
+          "is_dtor": false,
+          "itanium_slot": 117,
+          "msvc_slot": 117,
+          "name": "IsInLevelLoadLoop",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 100,
+          "is_dtor": false,
+          "itanium_slot": 118,
+          "msvc_slot": 118,
+          "name": "SetConnectionPassword",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszPassword: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (KeyValues *)",
+          "decl_index": 101,
+          "is_dtor": false,
+          "itanium_slot": 119,
+          "msvc_slot": 119,
+          "name": "ServerCmdKeyValues",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pKeyValues: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 102,
+          "is_dtor": false,
+          "itanium_slot": 120,
+          "msvc_slot": 120,
+          "name": "TickProgressBar",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "PlatWindow_t ()",
+          "decl_index": 103,
+          "is_dtor": false,
+          "itanium_slot": 121,
+          "msvc_slot": 121,
+          "name": "GetEngineWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (SpawnGroupHandle_t)",
+          "decl_index": 104,
+          "is_dtor": false,
+          "itanium_slot": 122,
+          "msvc_slot": 122,
+          "name": "ChangePVSSpawnGroupHandle",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 105,
+          "is_dtor": false,
+          "itanium_slot": 123,
+          "msvc_slot": 123,
+          "name": "SkipDemoToTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, flTime: f32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 106,
+          "is_dtor": false,
+          "itanium_slot": 124,
+          "msvc_slot": 124,
+          "name": "FlashWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *)",
+          "decl_index": 107,
+          "is_dtor": false,
+          "itanium_slot": 125,
+          "msvc_slot": 125,
+          "name": "DesktopNotify",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszTitle: *const ::core::ffi::c_char, pszMessage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *)",
+          "decl_index": 108,
+          "is_dtor": false,
+          "itanium_slot": 126,
+          "msvc_slot": 126,
+          "name": "AlertUser",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszTitle: *const ::core::ffi::c_char, pszMessage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool (CGameInfo *)",
+          "decl_index": 109,
+          "is_dtor": false,
+          "itanium_slot": 127,
+          "msvc_slot": 127,
+          "name": "GetDemoGameInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pGameInfo: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, CGameInfo *)",
+          "decl_index": 110,
+          "is_dtor": false,
+          "itanium_slot": 128,
+          "msvc_slot": 128,
+          "name": "GetDemoFileGameInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszFileName: *const ::core::ffi::c_char, pGameInfo: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *, float)",
+          "decl_index": 111,
+          "is_dtor": false,
+          "itanium_slot": 129,
+          "msvc_slot": 129,
+          "name": "SOSSetOpvarFloat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszStackName: *const ::core::ffi::c_char, pszOpvarName: *const ::core::ffi::c_char, flValue: f32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *, float *)",
+          "decl_index": 112,
+          "is_dtor": false,
+          "itanium_slot": 130,
+          "msvc_slot": 130,
+          "name": "SOSGetOpvarFloat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszStackName: *const ::core::ffi::c_char, pszOpvarName: *const ::core::ffi::c_char, pflOut: *mut f32) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 113,
+          "is_dtor": false,
+          "itanium_slot": 131,
+          "msvc_slot": 131,
+          "name": "MapLoadFailed",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 114,
+          "is_dtor": false,
+          "itanium_slot": 132,
+          "msvc_slot": 132,
+          "name": "SetMapLoadFailed",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, bState: bool)"
+        },
+        {
+          "cxx_signature": "SpawnGroupHandle_t (const SpawnGroupDesc_t &)",
+          "decl_index": 115,
+          "is_dtor": false,
+          "itanium_slot": 133,
+          "msvc_slot": 133,
+          "name": "LoadSpawnGroup",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, desc: *mut ::core::ffi::c_void) -> u32"
+        },
+        {
+          "cxx_signature": "void (SpawnGroupHandle_t, int)",
+          "decl_index": 116,
+          "is_dtor": false,
+          "itanium_slot": 134,
+          "msvc_slot": 134,
+          "name": "UnloadSpawnGroup",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32, nOption: i32)"
+        },
+        {
+          "cxx_signature": "void (SpawnGroupHandle_t, const char *)",
+          "decl_index": 117,
+          "is_dtor": false,
+          "itanium_slot": 135,
+          "msvc_slot": 135,
+          "name": "SetSpawnGroupDescription",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32, pszDescription: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool (SpawnGroupHandle_t)",
+          "decl_index": 118,
+          "is_dtor": false,
+          "itanium_slot": 136,
+          "msvc_slot": 136,
+          "name": "IsSpawnGroupLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (SpawnGroupHandle_t)",
+          "decl_index": 119,
+          "is_dtor": false,
+          "itanium_slot": 137,
+          "msvc_slot": 137,
+          "name": "IsSpawnGroupLoading",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32) -> bool"
+        },
+        {
+          "cxx_signature": "SpawnGroupHandle_t (const char *)",
+          "decl_index": 120,
+          "is_dtor": false,
+          "itanium_slot": 138,
+          "msvc_slot": 138,
+          "name": "FindSpawnGroupByName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszName: *const ::core::ffi::c_char) -> u32"
+        },
+        {
+          "cxx_signature": "void (SpawnGroupHandle_t)",
+          "decl_index": 121,
+          "is_dtor": false,
+          "itanium_slot": 139,
+          "msvc_slot": 139,
+          "name": "SynchronouslySpawnGroup",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32)"
+        },
+        {
+          "cxx_signature": "void (SpawnGroupHandle_t)",
+          "decl_index": 122,
+          "is_dtor": false,
+          "itanium_slot": 140,
+          "msvc_slot": 140,
+          "name": "SynchronizeAndBlockUntilLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, hSpawnGroup: u32)"
+        },
+        {
+          "cxx_signature": "bool (int, CDemoSaveGame *)",
+          "decl_index": 123,
+          "is_dtor": false,
+          "itanium_slot": 141,
+          "msvc_slot": 141,
+          "name": "GetDemoSaveGameForTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nTick: i32, pSaveGame: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 124,
+          "is_dtor": false,
+          "itanium_slot": 142,
+          "msvc_slot": 142,
+          "name": "GetInstantReplayOldestTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 125,
+          "is_dtor": false,
+          "itanium_slot": 143,
+          "msvc_slot": 143,
+          "name": "GetInstantReplayLiveTick",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 126,
+          "is_dtor": false,
+          "itanium_slot": 144,
+          "msvc_slot": 144,
+          "name": "GetInstantReplayTicksBehindLive",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 127,
+          "is_dtor": false,
+          "itanium_slot": 145,
+          "msvc_slot": 145,
+          "name": "IsInstantReplayPaused",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 128,
+          "is_dtor": false,
+          "itanium_slot": 146,
+          "msvc_slot": 146,
+          "name": "GetInstantReplayTimescale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 129,
+          "is_dtor": false,
+          "itanium_slot": 147,
+          "msvc_slot": 147,
+          "name": "IsClientLocalToActiveServer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "uint64 ()",
+          "decl_index": 130,
+          "is_dtor": false,
+          "itanium_slot": 148,
+          "msvc_slot": 148,
+          "name": "GetGameServerSteamID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> u64"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 131,
+          "is_dtor": false,
+          "itanium_slot": 149,
+          "msvc_slot": 149,
+          "name": "GetDefaultRenderSystemOption",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 132,
+          "is_dtor": false,
+          "itanium_slot": 150,
+          "msvc_slot": 150,
+          "name": "SetDefaultRenderSystemOption",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszOption: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 133,
+          "is_dtor": false,
+          "itanium_slot": 151,
+          "msvc_slot": 151,
+          "name": "IsRenderSystemOptionFromCommandLine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "uint64 ()",
+          "decl_index": 134,
+          "is_dtor": false,
+          "itanium_slot": 152,
+          "msvc_slot": 152,
+          "name": "GetRenderSystemOptionFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> u64"
+        },
+        {
+          "cxx_signature": "void (uint32, uint32)",
+          "decl_index": 135,
+          "is_dtor": false,
+          "itanium_slot": 153,
+          "msvc_slot": 153,
+          "name": "SetRenderSystemOptionFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nValue: u32, nMask: u32)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 136,
+          "is_dtor": false,
+          "itanium_slot": 154,
+          "msvc_slot": 154,
+          "name": "IsRenderSystemOptionRecommendationStale",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 137,
+          "is_dtor": false,
+          "itanium_slot": 155,
+          "msvc_slot": 155,
+          "name": "MarkRenderSystemOptionRecommended",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 138,
+          "is_dtor": false,
+          "itanium_slot": 156,
+          "msvc_slot": 156,
+          "name": "SaveBootConfig",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void (const EngineLoopState_t &)",
+          "decl_index": 139,
+          "is_dtor": false,
+          "itanium_slot": 157,
+          "msvc_slot": 157,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, loopState: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 140,
+          "is_dtor": false,
+          "itanium_slot": 158,
+          "msvc_slot": 158,
+          "name": "RunPanoramaAnimUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 141,
+          "is_dtor": false,
+          "itanium_slot": 159,
+          "msvc_slot": 159,
+          "name": "WaitForPanoramaAnimUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 142,
+          "is_dtor": false,
+          "itanium_slot": 160,
+          "msvc_slot": 160,
+          "name": "GetLanguage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (int, const char *)",
+          "decl_index": 143,
+          "is_dtor": false,
+          "itanium_slot": 161,
+          "msvc_slot": 161,
+          "name": "SetLanguage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32, pszLanguage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 144,
+          "is_dtor": false,
+          "itanium_slot": 162,
+          "msvc_slot": 162,
+          "name": "IsLanguageSetOnCommandLine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32) -> bool"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 145,
+          "is_dtor": false,
+          "itanium_slot": 163,
+          "msvc_slot": 163,
+          "name": "GetSubLanguage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (int, const char *)",
+          "decl_index": 146,
+          "is_dtor": false,
+          "itanium_slot": 164,
+          "msvc_slot": 164,
+          "name": "SetSubLanguage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32, pszSubLanguage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 147,
+          "is_dtor": false,
+          "itanium_slot": 165,
+          "msvc_slot": 165,
+          "name": "IsSubLanguageSetOnCommandLine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nType: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (CUtlBuffer *)",
+          "decl_index": 148,
+          "is_dtor": false,
+          "itanium_slot": 166,
+          "msvc_slot": 166,
+          "name": "WriteMinidumpSystemInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 149,
+          "is_dtor": false,
+          "itanium_slot": 167,
+          "msvc_slot": 167,
+          "name": "GetLowViolence",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 150,
+          "is_dtor": false,
+          "itanium_slot": 168,
+          "msvc_slot": 168,
+          "name": "SetLowViolence",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, bLowViolence: bool)"
+        },
+        {
+          "cxx_signature": "float (int)",
+          "decl_index": 151,
+          "is_dtor": false,
+          "itanium_slot": 169,
+          "msvc_slot": 169,
+          "name": "DemoTicksToTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nTicks: i32) -> f32"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 152,
+          "is_dtor": false,
+          "itanium_slot": 170,
+          "msvc_slot": 170,
+          "name": "GetDemoRecordingFileName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "double ()",
+          "decl_index": 153,
+          "is_dtor": false,
+          "itanium_slot": 171,
+          "msvc_slot": 171,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> f64"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 154,
+          "is_dtor": false,
+          "itanium_slot": 172,
+          "msvc_slot": 172,
+          "name": "unk502",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "EngineClientUnk40_t ()",
+          "decl_index": 155,
+          "is_dtor": false,
+          "itanium_slot": 173,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, ret: *mut EngineClientUnk40_t) -> *mut EngineClientUnk40_t",
+          "msvc_slot": 173,
+          "name": "unk503",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "memory",
+              "size": 40,
+              "sret": true
+            },
+            "msvc": {
+              "size": 40,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> EngineClientUnk40_t"
+        },
+        {
+          "cxx_signature": "bool (const CEngineGotvSyncPacket *)",
+          "decl_index": 156,
+          "is_dtor": false,
+          "itanium_slot": 174,
+          "msvc_slot": 174,
+          "name": "unk504",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pSyncPacket: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 157,
+          "is_dtor": false,
+          "itanium_slot": 175,
+          "msvc_slot": 175,
+          "name": "unk505",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: f32)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 158,
+          "is_dtor": false,
+          "itanium_slot": 176,
+          "msvc_slot": 176,
+          "name": "unk506",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: i32)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 159,
+          "is_dtor": false,
+          "itanium_slot": 177,
+          "msvc_slot": 177,
+          "name": "unk507",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, arg0: f32)"
+        },
+        {
+          "cxx_signature": "void (const char *, bool)",
+          "decl_index": 160,
+          "is_dtor": false,
+          "itanium_slot": 178,
+          "msvc_slot": 178,
+          "name": "unk508",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pszCommand: *const ::core::ffi::c_char, bEnable: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 161,
+          "is_dtor": false,
+          "itanium_slot": 179,
+          "msvc_slot": 179,
+          "name": "DisallowSecureServers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 162,
+          "is_dtor": false,
+          "itanium_slot": 180,
+          "msvc_slot": 180,
+          "name": "SendVProfLiteReportToServer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, pReport: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 163,
+          "is_dtor": false,
+          "itanium_slot": 181,
+          "msvc_slot": 181,
+          "name": "GetGlobalThreadPoolMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2) -> i32"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 164,
+          "is_dtor": false,
+          "itanium_slot": 182,
+          "msvc_slot": 182,
+          "name": "SetGlobalThreadPoolMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2, nMode: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 165,
+          "is_dtor": false,
+          "itanium_slot": 183,
+          "msvc_slot": 183,
+          "name": "ResetGlobalThreadPoolMode",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 166,
+          "is_dtor": false,
+          "itanium_slot": 184,
+          "msvc_slot": 184,
+          "name": "PrintNetworkSummaryReport",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IVEngineClient2)"
+        }
+      ],
+      "msvc": {
+        "length": 185,
+        "own_entries": 167
+      },
+      "primary_base": "ISource2Engine",
+      "secondary_bases": []
+    },
+    {
+      "class": "ISource2Server",
+      "header": "public/engine2/isource2server.h",
+      "methods": [
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "IsValveDS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> bool"
+        },
+        {
+          "cxx_signature": "CGlobalVars *(CGlobalVars *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "SetGlobals",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pGlobals: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "GameCreateNetworkStringTables",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void (const bf_write &)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "WriteSignonMessages",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, buf: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "PreWorldUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, simulating: bool)"
+        },
+        {
+          "cxx_signature": "CUtlOrderedMap<int, Entity2Networkable_t, CDefLess<int>, unsigned short> *() const",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "GetEntity2Networkables",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (CEntityIndex, Entity2Networkable_t *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "GetEntity2Networkable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nIndex: CEntityIndex, pOut: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (KeyValues *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "ApplyGameSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pKV: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool, bool, bool)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "GameFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, simulating: bool, bFirstTick: bool, bLastTick: bool)"
+        },
+        {
+          "cxx_signature": "bool (bool)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "ShouldHideFromMasterServer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, bServerHasPassword: bool) -> bool"
+        },
+        {
+          "cxx_signature": "void (CBufferString &)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "GetMatchmakingTags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, buf: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "ServerHibernationUpdate",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, bHibernating: bool)"
+        },
+        {
+          "cxx_signature": "IServerGCLobby *()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetServerGCLobby",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CBufferString &)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetMatchmakingGameData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, buf: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "bool (int, float)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "ShouldTimeoutClient",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nUserID: i32, flTimeSinceLastReceived: f32) -> bool"
+        },
+        {
+          "cxx_signature": "void (CEntityIndex, CBufferString &)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "PrintStatus",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nPlayerEntityIndex: CEntityIndex, output: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "int () const",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "GetServerGameDLLFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> i32"
+        },
+        {
+          "cxx_signature": "void (KeyValues *)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "GetTaggedConVarList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pCvarTagList: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CUtlVector<ServerClass *> *()",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "GetAllServerClasses",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *() const",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "GetActiveWorldName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "IsPaused",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CNavData *)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "GetNavMeshData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pNavMeshData: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (const CNavData *)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "SetNavMeshData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, navMeshData: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (INavListener *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "RegisterNavListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pNavListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (INavListener *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "UnregisterNavListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pNavListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (int, CUtlBuffer &, CUtlString &, CUtlString &)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "GetBugReportAttachment",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nIndex: i32, buf: *mut ::core::ffi::c_void, sName: *mut CUtlString, sDescription: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "IToolGameSimulationAPI *()",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "GetToolGameSimulationAPI",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<CUtlString> &)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "GetAnimationActivityList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, activityList: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<CUtlString> &)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "GetAnimationEventList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, eventList: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int *, int *, int *)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "FilterPlayerCounts",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pInOutHumans: *mut i32, pInOutHumansSlots: *mut i32, pInOutBots: *mut i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "GameServerSteamAPIActivated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "GameServerSteamAPIDeactivated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "OnHostNameChanged",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pHostname: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void () const",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "PreFatalShutdown",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "UpdateWhenNotInGame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, flFrameTime: f32)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "GetEconItemSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "ServerConVarChanged",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pVarName: *const ::core::ffi::c_char, pValue: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<int> &, CUtlVector<CUtlString> &)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "GetHitGroupInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, groupIDs: *mut ::core::ffi::c_void, groupNames: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "WriteStatusJson",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pServer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (const char *, CUtlString &)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "SaveGame_CalcFileName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszSaveName: *const ::core::ffi::c_char, fileName: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, CUtlString &)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "GetRequiredAddonsFromSaveFile",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszSaveName: *const ::core::ffi::c_char, requiredAddons: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "void (const char *, CUtlVector<CCreateGameServerLoadInfo> &, bool, int, CUtlString *)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "GetLevelsFromSaveFile",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszSaveName: *const ::core::ffi::c_char, levels: *mut ::core::ffi::c_void, bWipeAndExtract: bool, saveFileLevelsType: i32, pComment: *mut CUtlString)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "ClearSaveDirectory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "PreSaveGameLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszSaveName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (HGameResourceManifest, ILoadingSpawnGroup *, SpawnGroupHandle_t, const void *)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 55,
+          "name": "AppendSaveGameResources",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, hManifest: *mut ::core::ffi::c_void, pLoadingSpawnGroup: *mut ::core::ffi::c_void, hSpawnGroup: u32, arg3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (HGameResourceManifest, ILoadingSpawnGroup *, SpawnGroupHandle_t, const void *)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "AppendTransitionResources",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, hManifest: *mut ::core::ffi::c_void, pLoadingSpawnGroup: *mut ::core::ffi::c_void, hSpawnGroup: u32, arg3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (const SaveGameParams_t &)",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "SaveGame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, params: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "IsAsyncSaveInProgress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "ProcessPendingSaveRequest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "HasPendingSaveRequest",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "FinishAsyncSave",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "const char *(CEntityIndex)",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 62,
+          "name": "GetEntityUniqueHammerID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nEntityIndex: CEntityIndex) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *(const char *, const char *)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 63,
+          "name": "GetVDataClassName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszName: *const ::core::ffi::c_char, pszScopeFile: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *(const char *, const char *)",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 64,
+          "name": "GetVDataClassNameByDataType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszName: *const ::core::ffi::c_char, pszGenericDataType: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const CUtlVector<CUtlString> &(const char *)",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 65,
+          "name": "GetSubclassNamesInScope",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszScopeFile: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const CUtlVector<CUtlString> &(const char *)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 66,
+          "name": "GetSubclassNamesInScopeByDataType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszGenericDataType: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<CUtlString> &)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 67,
+          "name": "GetAllSubclassNames",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, names: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "const char *(const char *)",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 68,
+          "name": "GetSubclassDesignerName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszSubclassName: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (bool, bool)",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 69,
+          "name": "UpdateGCInformation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, arg0: bool, arg1: bool)"
+        },
+        {
+          "cxx_signature": "const CUtlVector<CUtlString> &(const char *)",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 70,
+          "name": "GetDesignerNamesForClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszClassName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 71,
+          "name": "unk_101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (int32, uint32 *, int)",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 72,
+          "name": "ReportGCQueuedMatchStart",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, iReservationStage: i32, puiConfirmedAccounts: *mut u32, numConfirmedAccounts: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 73,
+          "name": "unk_201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "ISceneViewDebugOverlays *()",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 74,
+          "name": "GetDebugOverlays",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *(const char *)",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 75,
+          "name": "GetNativeClassForScriptClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszScriptClassName: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "CEntityClass *(const char *)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 76,
+          "name": "GetScriptClassForDesignerName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszDesignerName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 77,
+          "name": "IsScriptClassDerivedFrom",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszDesignerName: *const ::core::ffi::c_char, pszBaseName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool (float)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 78,
+          "name": "ShouldHoldGameServerReservation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, flTimeElapsedWithoutClients: f32) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 79,
+          "name": "OnBroadcastRelayRequestSucceeded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 80,
+          "name": "SendServerFrameTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, flFrameTime: f32)"
+        },
+        {
+          "cxx_signature": "void (CPlayerSlot, int)",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 81,
+          "name": "OnClientHltvReplayStart",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, slot: CPlayerSlot, arg1: i32)"
+        },
+        {
+          "cxx_signature": "void (CPlayerSlot)",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 82,
+          "name": "OnClientHltvReplayStop",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, slot: CPlayerSlot)"
+        },
+        {
+          "cxx_signature": "bool (CEntityIndex, FlattenedSerializerSpewField_t &)",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 83,
+          "name": "FormatSerializerFieldValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, nEntityIndex: CEntityIndex, field: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 84,
+          "name": "CaptureUserCommands",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "CNetMessagePB<CSVCMsg_UserCommands> *()",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 85,
+          "name": "CreateUserCommandsMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (CPlayerSlot, const CCommand &, uint32)",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 86,
+          "name": "ProcessClientStringCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, slot: CPlayerSlot, args: *mut ::core::ffi::c_void, nPredictionSync: u32) -> bool"
+        },
+        {
+          "cxx_signature": "void (uint32, int, const char *)",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 87,
+          "name": "OnPreMatchInterfaceCommand",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, uiAccountID: u32, arg1: i32, pszCommand: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (uint32, int)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 88,
+          "name": "SetPlayerTeammatePreferredColor",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, uiAccountID: u32, nColor: i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 89,
+          "name": "UpdateCompTeammateColors",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "ENetworkDisconnectionReason (const CSteamID &)",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 90,
+          "name": "GetClientConnectRejectReason",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, steamID: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "const char *(const CSteamID &, const char *)",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_slot": 91,
+          "name": "ClientConnectionValidatePreNetChan",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, steamID: *mut ::core::ffi::c_void, pszPlayerName: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_slot": 92,
+          "name": "LogForHTTPListeners",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszLogLine: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 93,
+          "name": "unk_301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 94,
+          "name": "unk_302",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 95,
+          "name": "unk_303",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 96,
+          "name": "unk_304",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server)"
+        },
+        {
+          "cxx_signature": "void (INetChannel *, CPlayerSlot, int)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 97,
+          "name": "RegisterClientNetMessageHandlers",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pNetChannel: *mut ::core::ffi::c_void, slot: CPlayerSlot, nAction: i32)"
+        },
+        {
+          "cxx_signature": "bool (const char *, CUtlString &)",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_slot": 98,
+          "name": "GetAddonForMap",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszMapName: *const ::core::ffi::c_char, addonName: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "uint64 ()",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_slot": 99,
+          "name": "GetMatchID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> u64"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 100,
+          "name": "OnSteamAuthWarning",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pszMessage: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (INetworkGameServer *)",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 101,
+          "name": "OnNetworkGameServerActivated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server, pNetworkGameServer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 102,
+          "name": "GetSteamGroupAccountID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISource2Server) -> u32"
+        }
+      ],
+      "msvc": {
+        "length": 103,
+        "own_entries": 92
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    }
+  ]
+}

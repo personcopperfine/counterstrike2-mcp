@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 03:11:22 -0500
+Subject: [PATCH 10/47] Fix IEngineService destructor
+
+---
+ public/engine2/igameresourceservice.h  | 2 --
+ public/engine2/inetworkserverservice.h | 1 -
+ 2 files changed, 3 deletions(-)
+
+diff --git a/public/engine2/igameresourceservice.h b/public/engine2/igameresourceservice.h
+index 66625b3b..93b7025d 100644
+--- a/public/engine2/igameresourceservice.h
++++ b/public/engine2/igameresourceservice.h
+@@ -27,8 +27,6 @@ public:
+ abstract_class IGameResourceService : public IEngineService
+ {
+ public:
+-	virtual ~IGameResourceService() {}
+-
+ 	virtual HGameResourceManifest LoadGameResourceManifestNamed( const char *pszResourceName, ResourceManifestLoadBehavior_t eBehavior, const char *pszManifestName, ResourceManifestLoadPriority_t ePriority ) = 0;
+ 	virtual HGameResourceManifest LoadGameResourceManifestGroup( const char *pszResourceGroupName, ResourceManifestLoadBehavior_t eBehavior, const char *pszManifestName, ResourceManifestLoadPriority_t ePriority ) = 0;
+ 	virtual HGameResourceManifest LoadGameResourceManifest( int nResourceCount, const char *const *ppszResourceNames, ResourceManifestLoadBehavior_t eBehavior, const char *pszManifestName, ResourceManifestLoadPriority_t ePriority ) = 0;
+diff --git a/public/engine2/inetworkserverservice.h b/public/engine2/inetworkserverservice.h
+index 789c4a48..ebb66fbb 100644
+--- a/public/engine2/inetworkserverservice.h
++++ b/public/engine2/inetworkserverservice.h
+@@ -26,7 +26,6 @@ class IEntityReport;
+ abstract_class INetworkServerService : public IEngineService
+ {
+ public:
+-	virtual ~INetworkServerService() {}
+ 	virtual CNetworkGameServerBase	*GetIGameServer( void ) = 0;
+ 	virtual bool	IsActiveInGame( void ) const = 0;
+ 	virtual bool	IsMultiplayer( void ) const = 0;

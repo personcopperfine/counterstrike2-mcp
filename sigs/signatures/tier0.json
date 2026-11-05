@@ -1,0 +1,4174 @@
+{
+ "module": "tier0.dll",
+ "image_base": 6442450944,
+ "_doc": "tier0.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "builds": {
+  "2000921": {
+   "sha256": "4e0dcb0af3f6953f",
+   "timestamp": 1790023707
+  },
+  "2000930": {
+   "sha256": "00ecf3e3d33f9036",
+   "timestamp": 1791234089
+  },
+  "2000933": {
+   "sha256": "990ea56bf1626d29",
+   "timestamp": 1792003060
+  },
+  "2000940": {
+   "sha256": "030d4fa04a62208d",
+   "timestamp": 1793662171
+  }
+ },
+ "entries": {
+  "T0V_TESTSCRIPTMGR_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CTestScriptMgr"
+   },
+   "via": "tier0!0x18032DB30 (CTestScriptMgr primary, 18 slots; TestScriptMgr001 singleton 0x1803A1960)",
+   "tag": "RTTI",
+   "bridge": "T0V_TESTSCRIPTMGR_VT",
+   "status": "verified",
+   "expect": {
+    "2000921": 3332912,
+    "2000930": 3332912,
+    "2000933": 3332888,
+    "2000940": 3332888
+   }
+  },
+  "T0VS_TS_CHECKPOINT": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 12
+   },
+   "via": "tier0!0x18016E540 CTestScriptMgr::CheckPoint(name)",
+   "tag": "V",
+   "bridge": "T0VS_TS_CHECKPOINT",
+   "sdk": "S2_SLOT_ITestScriptMgr_CheckPoint",
+   "notes": "ITestScriptMgr::CheckPoint",
+   "status": "verified",
+   "expect": {
+    "2000921": 1500480,
+    "2000930": 1500480,
+    "2000933": 1500800,
+    "2000940": 1500800
+   }
+  },
+  "T0VS_TS_IS_ACTIVE": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 13
+   },
+   "via": "tier0!0x18016E530 CTestScriptMgr::IsActive: command count > 0",
+   "tag": "V",
+   "bridge": "T0VS_TS_IS_ACTIVE",
+   "sdk": "S2_SLOT_ITestScriptMgr_IsRunningTestScript",
+   "notes": "ITestScriptMgr::IsActive",
+   "status": "verified",
+   "expect": {
+    "2000921": 1500464,
+    "2000930": 1500464,
+    "2000933": 1500784,
+    "2000940": 1500784
+   }
+  },
+  "sub_180005D40": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 4C 8D 0D ?? ?? ?? ?? 48 89 44 24 20 45 33 C0"
+   },
+   "via": "tier0!0x180005D40 (sub_180005D40)",
+   "tag": "V",
+   "expect": {
+    "2000921": 23872,
+    "2000930": 23872,
+    "2000933": 23872,
+    "2000940": 23872
+   },
+   "status": "verified"
+  },
+  "CUtlCharConversion::GetDelimiterLength": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "?GetDelimiterLength@CUtlCharConversion@@QEBAHXZ"
+   },
+   "via": "tier0!0x1800070E0 (export ?GetDelimiterLength@CUtlCharConversion@@QEBAHXZ)",
+   "tag": "V",
+   "expect": {
+    "2000921": 28896,
+    "2000930": 28896,
+    "2000933": 28896,
+    "2000940": 28896
+   },
+   "status": "verified"
+  },
+  "Plat_Is64BitOS": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "?AssertOwnedByCurrentThread@CThreadCrossProcessMutex@@QEBA_NXZ"
+   },
+   "via": "tier0!0x180008690 (export ?AssertOwnedByCurrentThread@CThreadCrossProcessMutex@@QEBA_NXZ)",
+   "tag": "V",
+   "expect": {
+    "2000921": 34448,
+    "2000930": 34448,
+    "2000933": 34448,
+    "2000940": 34448
+   },
+   "status": "verified"
+  },
+  "_Warning_AlwaysSpewCallStack_Length": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "??1CDbgHelpFunctionsLoader@@QEAA@XZ"
+   },
+   "via": "tier0!0x1800086A0 (export ??1CDbgHelpFunctionsLoader@@QEAA@XZ)",
+   "tag": "V",
+   "expect": {
+    "2000921": 34464,
+    "2000930": 34464,
+    "2000933": 34464,
+    "2000940": 34464
+   },
+   "status": "verified"
+  },
+  "CThread::GetClassKind": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "?GetClassKind@CThread@@QEBA?AW4CThreadClassKind_t@@XZ"
+   },
+   "via": "tier0!0x180008760 (export ?GetClassKind@CThread@@QEBA?AW4CThreadClassKind_t@@XZ)",
+   "tag": "V",
+   "expect": {
+    "2000921": 34656,
+    "2000930": 34656,
+    "2000933": 34656,
+    "2000940": 34656
+   },
+   "status": "verified"
+  },
+  "CommandLine": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CommandLine"
+   },
+   "via": "tier0!0x18005C130 (export CommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 377136,
+    "2000930": 377136,
+    "2000933": 377136,
+    "2000940": 377136
+   },
+   "status": "verified"
+  },
+  "CreateCommandLine": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateCommandLine"
+   },
+   "via": "tier0!0x18005C140 (export CreateCommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 377152,
+    "2000930": 377152,
+    "2000933": 377152,
+    "2000940": 377152
+   },
+   "status": "verified"
+  },
+  "FreeCommandLine": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "FreeCommandLine"
+   },
+   "via": "tier0!0x18005C210 (export FreeCommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 377360,
+    "2000930": 377360,
+    "2000933": 377360,
+    "2000940": 377360
+   },
+   "status": "verified"
+  },
+  "CCommandLine::scalar_deleting_dtor": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 24
+   },
+   "via": "tier0!0x18005C270 (CCommandLine slot 24 -> CCommandLine::scalar_deleting_dtor)",
+   "tag": "V",
+   "expect": {
+    "2000921": 377456,
+    "2000930": 377456,
+    "2000933": 377456,
+    "2000940": 377456
+   },
+   "status": "verified"
+  },
+  "CCommandLine::GetParmBuffer": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 16
+   },
+   "via": "tier0!0x18005C600 (CCommandLine slot 16 -> CCommandLine::GetParmBuffer)",
+   "tag": "V",
+   "expect": {
+    "2000921": 378368,
+    "2000930": 378368,
+    "2000933": 378368,
+    "2000940": 378368
+   },
+   "status": "verified"
+  },
+  "CCommandLine::CreateCmdLine_argv": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 0
+   },
+   "via": "tier0!0x18005D430 (CCommandLine slot 0 -> CCommandLine::CreateCmdLine_argv)",
+   "tag": "V",
+   "expect": {
+    "2000921": 382000,
+    "2000930": 382000,
+    "2000933": 382000,
+    "2000940": 382000
+   },
+   "status": "verified"
+  },
+  "CCommandLine::CreateCmdLinePrependAppName": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 2
+   },
+   "via": "tier0!0x18005D5A0 (CCommandLine slot 2 -> CCommandLine::CreateCmdLinePrependAppName)",
+   "tag": "V",
+   "expect": {
+    "2000921": 382368,
+    "2000930": 382368,
+    "2000933": 382368,
+    "2000940": 382368
+   },
+   "status": "verified"
+  },
+  "CCommandLine::CreateCmdLine": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 1
+   },
+   "via": "tier0!0x18005D7A0 (CCommandLine slot 1 -> CCommandLine::CreateCmdLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 382880,
+    "2000930": 382880,
+    "2000933": 382880,
+    "2000940": 382880
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParseCommandLine": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 54 24 10 48 89 4C 24 08 55 53 56 57 41 54 41 55 41 56 41 57 B8 18 84 00 00"
+   },
+   "via": "tier0!0x18005D890 (CCommandLine::ParseCommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 383120,
+    "2000930": 383120,
+    "2000933": 383120,
+    "2000940": 383120
+   },
+   "status": "verified"
+  },
+  "CCommandLine::UpdateRestrictedGate": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 55 56 57 41 54 41 56 41 57 48 83 EC 60"
+   },
+   "via": "tier0!0x18005DF90 (CCommandLine::UpdateRestrictedGate)",
+   "tag": "V",
+   "expect": {
+    "2000921": 384912,
+    "2000930": 384912,
+    "2000933": 384912,
+    "2000940": 384912
+   },
+   "status": "verified"
+  },
+  "CCommandLine::UpdateRestrictedGate_site_506": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 81 38 5F 04 74 8F 74 ??"
+   },
+   "via": "tier0!0x18005E496 (cmp     dword ptr [r8], 8F74045Fh)",
+   "tag": "V",
+   "expect": {
+    "2000921": 386198,
+    "2000930": 386198,
+    "2000933": 386198,
+    "2000940": 386198
+   },
+   "status": "verified"
+  },
+  "CCommandLine::AppendParm": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 14
+   },
+   "via": "tier0!0x18005E690 (CCommandLine slot 14 -> CCommandLine::AppendParm)",
+   "tag": "V",
+   "expect": {
+    "2000921": 386704,
+    "2000930": 386704,
+    "2000933": 386704,
+    "2000940": 386704
+   },
+   "status": "verified"
+  },
+  "CMiniDumpComment::GetStartPointer": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "?GetNextCommentBuilder@CMiniDumpCommentBuilderBase@@UEAAPEAV1@XZ"
+   },
+   "via": "tier0!0x18005E7E0 (export ?GetNextCommentBuilder@CMiniDumpCommentBuilderBase@@UEAAPEAV1@XZ)",
+   "tag": "V",
+   "expect": {
+    "2000921": 387040,
+    "2000930": 387040,
+    "2000933": 387040,
+    "2000940": 387040
+   },
+   "status": "verified"
+  },
+  "CCommandLine::CheckParmUnrestricted": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 17
+   },
+   "via": "tier0!0x18005E7F0 (CCommandLine slot 17 -> CCommandLine::CheckParmUnrestricted)",
+   "tag": "V",
+   "expect": {
+    "2000921": 387056,
+    "2000930": 387056,
+    "2000933": 387056,
+    "2000940": 387056
+   },
+   "status": "verified"
+  },
+  "CCommandLine::CheckParm": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 3
+   },
+   "via": "tier0!0x18005E880 (CCommandLine slot 3 -> CCommandLine::CheckParm)",
+   "tag": "V",
+   "expect": {
+    "2000921": 387200,
+    "2000930": 387200,
+    "2000933": 387200,
+    "2000940": 387200
+   },
+   "status": "verified"
+  },
+  "CCommandLine::FindParmUnrestricted": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 19
+   },
+   "via": "tier0!0x18005EB40 (CCommandLine slot 19 -> CCommandLine::FindParmUnrestricted)",
+   "tag": "V",
+   "expect": {
+    "2000921": 387904,
+    "2000930": 387904,
+    "2000933": 387904,
+    "2000940": 387904
+   },
+   "status": "verified"
+  },
+  "CCommandLine::FindParm": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 6
+   },
+   "via": "tier0!0x18005EB90 (CCommandLine slot 6 -> CCommandLine::FindParm)",
+   "tag": "V",
+   "expect": {
+    "2000921": 387984,
+    "2000930": 387984,
+    "2000933": 387984,
+    "2000940": 387984
+   },
+   "status": "verified"
+  },
+  "CCommandLine::HasParmUnrestricted": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 18
+   },
+   "via": "tier0!0x18005EBE0 (CCommandLine slot 18 -> CCommandLine::HasParmUnrestricted)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388064,
+    "2000930": 388064,
+    "2000933": 388064,
+    "2000940": 388064
+   },
+   "status": "verified"
+  },
+  "CCommandLine::HasParm": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 4
+   },
+   "via": "tier0!0x18005EC20 (CCommandLine slot 4 -> CCommandLine::HasParm)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388128,
+    "2000930": 388128,
+    "2000933": 388128,
+    "2000940": 388128
+   },
+   "status": "verified"
+  },
+  "CCommandLine::GetParm": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 7
+   },
+   "via": "tier0!0x18005EC60 (CCommandLine slot 7 -> CCommandLine::GetParm)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388192,
+    "2000930": 388192,
+    "2000933": 388192,
+    "2000940": 388192
+   },
+   "status": "verified"
+  },
+  "CProcess": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CProcess"
+   },
+   "via": "tier0!0x18032BED0 (??_7CProcess@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3325648,
+    "2000930": 3325648,
+    "2000933": 3325656,
+    "2000940": 3325656
+   },
+   "status": "verified"
+  },
+  "CCommandLine::GetParms": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcess",
+    "slot": 3
+   },
+   "via": "tier0!0x18005EC80 (CProcess slot 3 -> CCommandLine::GetParms)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388224,
+    "2000930": 388224,
+    "2000933": 388224,
+    "2000940": 388224
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValueUnrestricted_str": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 23
+   },
+   "via": "tier0!0x18005EC90 (CCommandLine slot 23 -> CCommandLine::ParmValueUnrestricted_str)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388240,
+    "2000930": 388240,
+    "2000933": 388240,
+    "2000940": 388240
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValue_str": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 11
+   },
+   "via": "tier0!0x18005ED10 (CCommandLine slot 11 -> CCommandLine::ParmValue_str)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388368,
+    "2000930": 388368,
+    "2000933": 388368,
+    "2000940": 388368
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValueUnrestricted_int": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 22
+   },
+   "via": "tier0!0x18005ED90 (CCommandLine slot 22 -> CCommandLine::ParmValueUnrestricted_int)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388496,
+    "2000930": 388496,
+    "2000933": 388496,
+    "2000940": 388496
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValue_int": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 10
+   },
+   "via": "tier0!0x18005EDF0 (CCommandLine slot 10 -> CCommandLine::ParmValue_int)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388592,
+    "2000930": 388592,
+    "2000933": 388592,
+    "2000940": 388592
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValueUnrestricted_float": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 21
+   },
+   "via": "tier0!0x18005EE70 (CCommandLine slot 21 -> CCommandLine::ParmValueUnrestricted_float)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388720,
+    "2000930": 388720,
+    "2000933": 388720,
+    "2000940": 388720
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValue_float": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 9
+   },
+   "via": "tier0!0x18005EEE0 (CCommandLine slot 9 -> CCommandLine::ParmValue_float)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388832,
+    "2000930": 388832,
+    "2000933": 388832,
+    "2000940": 388832
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValueUnrestricted_buf": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 20
+   },
+   "via": "tier0!0x18005EF50 (CCommandLine slot 20 -> CCommandLine::ParmValueUnrestricted_buf)",
+   "tag": "V",
+   "expect": {
+    "2000921": 388944,
+    "2000930": 388944,
+    "2000933": 388944,
+    "2000940": 388944
+   },
+   "status": "verified"
+  },
+  "CCommandLine::ParmValue_buf": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 8
+   },
+   "via": "tier0!0x18005F080 (CCommandLine slot 8 -> CCommandLine::ParmValue_buf)",
+   "tag": "V",
+   "expect": {
+    "2000921": 389248,
+    "2000930": 389248,
+    "2000933": 389248,
+    "2000940": 389248
+   },
+   "status": "verified"
+  },
+  "CCommandLine_StaticSingletonAddRef": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 0F B6 FA"
+   },
+   "via": "tier0!0x18005F350 (CCommandLine_StaticSingletonAddRef)",
+   "tag": "V",
+   "expect": {
+    "2000921": 389968,
+    "2000930": 389968,
+    "2000933": 389968,
+    "2000940": 389968
+   },
+   "status": "verified"
+  },
+  "_CCallStackStatsGatherer_GetSharedGlobalInstance": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "?EncodeAsNativePointer@CVirtualMachineCallStackTranslationEncoder@@QEAAPEAXPEBD0I@Z"
+   },
+   "via": "tier0!0x1800652A0 (export ?EncodeAsNativePointer@CVirtualMachineCallStackTranslationEncoder@@QEAAPEAXPEBD0I@Z)",
+   "tag": "V",
+   "expect": {
+    "2000921": 414368,
+    "2000930": 414368,
+    "2000933": 414368,
+    "2000940": 414368
+   },
+   "status": "verified"
+  },
+  "sub_180065A50": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 10
+   },
+   "via": "tier0!0x180065A50 (T0V_TESTSCRIPTMGR_VT slot 10 -> sub_180065A50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 416336,
+    "2000930": 416336,
+    "2000933": 416336,
+    "2000940": 416336
+   },
+   "status": "verified"
+  },
+  "sub_180067B10": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 81 EC C0 00 00 00 33 DB"
+   },
+   "via": "tier0!0x180067B10 (sub_180067B10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 424720,
+    "2000930": 424720,
+    "2000933": 424720,
+    "2000940": 424720
+   },
+   "status": "verified"
+  },
+  "Import_GetICVarFactory": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "Import_GetICVarFactory"
+   },
+   "via": "tier0!0x1800685B0 (export Import_GetICVarFactory)",
+   "tag": "V",
+   "expect": {
+    "2000921": 427440,
+    "2000930": 427440,
+    "2000933": 427440,
+    "2000940": 427440
+   },
+   "status": "verified"
+  },
+  "CCvar::CCvar": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 48 89 4C 24 08 55 41 56"
+   },
+   "via": "tier0!0x1800685C0 (CCvar::CCvar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 427456,
+    "2000930": 427456,
+    "2000933": 427456,
+    "2000940": 427456
+   },
+   "status": "verified"
+  },
+  "T0V_CCVAR_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCvar"
+   },
+   "via": "tier0!0x180313208 (??_7CCvar@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3224072,
+    "2000930": 3224072,
+    "2000933": 3224072,
+    "2000940": 3224072
+   },
+   "bridge": "T0V_CCVAR_VT",
+   "notes": "CCvar (VEngineCvar007), the object cvar.get checks before calling FindConVar/GetConVarData",
+   "status": "verified"
+  },
+  "CCvar::Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 3
+   },
+   "via": "tier0!0x180068F40 (CCvar slot 3 -> CCvar::Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 429888,
+    "2000930": 429888,
+    "2000933": 429888,
+    "2000940": 429888
+   },
+   "status": "verified"
+  },
+  "CCvar::Shutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 4
+   },
+   "via": "tier0!0x180069090 (CCvar slot 4 -> CCvar::Shutdown)",
+   "tag": "V",
+   "expect": {
+    "2000921": 430224,
+    "2000930": 430224,
+    "2000933": 430224,
+    "2000940": 430224
+   },
+   "status": "verified"
+  },
+  "CCvar::QueryInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 2
+   },
+   "via": "tier0!0x1800695A0 (CCvar slot 2 -> CCvar::QueryInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 431520,
+    "2000930": 431520,
+    "2000933": 431520,
+    "2000940": 431520
+   },
+   "status": "verified"
+  },
+  "sub_180069740": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 18 55 56 57 48 83 EC 20 8B F2"
+   },
+   "via": "tier0!0x180069740 (sub_180069740)",
+   "tag": "V",
+   "expect": {
+    "2000921": 431936,
+    "2000930": 431936,
+    "2000933": 431936,
+    "2000940": 431936
+   },
+   "status": "verified"
+  },
+  "sub_180069E70": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 41 57 48 83 EC 38 48 89 6C 24 58"
+   },
+   "via": "tier0!0x180069E70 (sub_180069E70)",
+   "tag": "V",
+   "expect": {
+    "2000921": 433776,
+    "2000930": 433776,
+    "2000933": 433776,
+    "2000940": 433776
+   },
+   "status": "verified"
+  },
+  "CCvar::RegisterConCommand": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 42
+   },
+   "via": "tier0!0x180069FF0 (CCvar slot 42 -> CCvar::RegisterConCommand)",
+   "tag": "V",
+   "expect": {
+    "2000921": 434160,
+    "2000930": 434160,
+    "2000933": 434160,
+    "2000940": 434160
+   },
+   "status": "verified"
+  },
+  "CCvar::UnregisterConCommandCallbacks": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 43
+   },
+   "via": "tier0!0x18006A4F0 (CCvar slot 43 -> CCvar::UnregisterConCommandCallbacks)",
+   "tag": "V",
+   "expect": {
+    "2000921": 435440,
+    "2000930": 435440,
+    "2000933": 435440,
+    "2000940": 435440
+   },
+   "status": "verified"
+  },
+  "CCvar::CallChangeCallback": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 14
+   },
+   "via": "tier0!0x18006AF30 (CCvar slot 14 -> CCvar::CallChangeCallback)",
+   "tag": "V",
+   "expect": {
+    "2000921": 438064,
+    "2000930": 438064,
+    "2000933": 438064,
+    "2000940": 438064
+   },
+   "status": "verified"
+  },
+  "CCvar::IterateConVarCallbacks": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 15
+   },
+   "via": "tier0!0x18006B120 (CCvar slot 15 -> CCvar::IterateConVarCallbacks)",
+   "tag": "V",
+   "expect": {
+    "2000921": 438560,
+    "2000930": 438560,
+    "2000933": 438560,
+    "2000940": 438560
+   },
+   "status": "verified"
+  },
+  "CCvar::CallFilterCallback": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 16
+   },
+   "via": "tier0!0x18006B290 (CCvar slot 16 -> CCvar::CallFilterCallback)",
+   "tag": "V",
+   "expect": {
+    "2000921": 438928,
+    "2000930": 438928,
+    "2000933": 438928,
+    "2000940": 438928
+   },
+   "status": "verified"
+  },
+  "CCvar::QueueThreadSetValue": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 45
+   },
+   "via": "tier0!0x18006B460 (CCvar slot 45 -> CCvar::QueueThreadSetValue)",
+   "tag": "V",
+   "expect": {
+    "2000921": 439392,
+    "2000930": 439392,
+    "2000933": 439392,
+    "2000940": 439392
+   },
+   "status": "verified"
+  },
+  "sub_18006B570": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 57 48 83 EC 30 83 B9 68 0A 00 00 00"
+   },
+   "via": "tier0!0x18006B570 (sub_18006B570)",
+   "tag": "V",
+   "expect": {
+    "2000921": 439664,
+    "2000930": 439664,
+    "2000933": 439664,
+    "2000940": 439664
+   },
+   "status": "verified"
+  },
+  "CCvar::RegisterConVar": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 38
+   },
+   "via": "tier0!0x18006B740 (CCvar slot 38 -> CCvar::RegisterConVar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 440128,
+    "2000930": 440128,
+    "2000933": 440128,
+    "2000940": 440128
+   },
+   "status": "verified"
+  },
+  "CCvar::LockConVarValueInitialisation": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 40
+   },
+   "via": "tier0!0x18006C0F0 (CCvar slot 40 -> CCvar::LockConVarValueInitialisation)",
+   "tag": "V",
+   "expect": {
+    "2000921": 442608,
+    "2000930": 442608,
+    "2000933": 442608,
+    "2000940": 442608
+   },
+   "status": "verified"
+  },
+  "CCvar::UnregisterConVarCallbacks": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 39
+   },
+   "via": "tier0!0x18006C2F0 (CCvar slot 39 -> CCvar::UnregisterConVarCallbacks)",
+   "tag": "V",
+   "expect": {
+    "2000921": 443120,
+    "2000930": 443120,
+    "2000933": 443120,
+    "2000940": 443120
+   },
+   "status": "verified"
+  },
+  "CCvar::GetConVarData": {
+   "kind": "function",
+   "sdk": "S2_SLOT_ICvar_GetConVarData",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 41
+   },
+   "via": "tier0!0x18006C5F0 (CCvar slot 41 -> CCvar::GetConVarData)",
+   "tag": "V",
+   "expect": {
+    "2000921": 443888,
+    "2000930": 443888,
+    "2000933": 443888,
+    "2000940": 443888
+   },
+   "bridge": "T0VS_CVAR_GET_DATA",
+   "notes": "ICvar::GetConVarData",
+   "status": "verified"
+  },
+  "CCvar::FindConVar": {
+   "kind": "function",
+   "sdk": "S2_SLOT_ICvar_FindConVar",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 11
+   },
+   "via": "tier0!0x18006C6B0 (CCvar slot 11 -> CCvar::FindConVar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 444080,
+    "2000930": 444080,
+    "2000933": 444080,
+    "2000940": 444080
+   },
+   "bridge": "T0VS_CVAR_FIND",
+   "notes": "ICvar::FindConVar",
+   "status": "verified"
+  },
+  "CCvar::FindFirstConVar": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 12
+   },
+   "via": "tier0!0x18006C8C0 (CCvar slot 12 -> CCvar::FindFirstConVar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 444608,
+    "2000930": 444608,
+    "2000933": 444608,
+    "2000940": 444608
+   },
+   "status": "verified"
+  },
+  "CCvar::FindNextConVar": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 13
+   },
+   "via": "tier0!0x18006CA00 (CCvar slot 13 -> CCvar::FindNextConVar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 444928,
+    "2000930": 444928,
+    "2000933": 444928,
+    "2000940": 444928
+   },
+   "status": "verified"
+  },
+  "CCvar::FindConCommand": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 17
+   },
+   "via": "tier0!0x18006CB10 (CCvar slot 17 -> CCvar::FindConCommand)",
+   "tag": "V",
+   "expect": {
+    "2000921": 445200,
+    "2000930": 445200,
+    "2000933": 445200,
+    "2000940": 445200
+   },
+   "status": "verified"
+  },
+  "CCvar::FindFirstConCommand": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 18
+   },
+   "via": "tier0!0x18006CD00 (CCvar slot 18 -> CCvar::FindFirstConCommand)",
+   "tag": "V",
+   "expect": {
+    "2000921": 445696,
+    "2000930": 445696,
+    "2000933": 445696,
+    "2000940": 445696
+   },
+   "status": "verified"
+  },
+  "CCvar::FindNextConCommand": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 19
+   },
+   "via": "tier0!0x18006CE20 (CCvar slot 19 -> CCvar::FindNextConCommand)",
+   "tag": "V",
+   "expect": {
+    "2000921": 445984,
+    "2000930": 445984,
+    "2000933": 445984,
+    "2000940": 445984
+   },
+   "status": "verified"
+  },
+  "CCvar::GetConCommandData": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 44
+   },
+   "via": "tier0!0x18006CF20 (CCvar slot 44 -> CCvar::GetConCommandData)",
+   "tag": "V",
+   "expect": {
+    "2000921": 446240,
+    "2000930": 446240,
+    "2000933": 446240,
+    "2000940": 446240
+   },
+   "status": "verified"
+  },
+  "CCvar::DispatchConCommand": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 20
+   },
+   "via": "tier0!0x18006D030 (CCvar slot 20 -> CCvar::DispatchConCommand)",
+   "tag": "V",
+   "expect": {
+    "2000921": 446512,
+    "2000930": 446512,
+    "2000933": 446512,
+    "2000940": 446512
+   },
+   "status": "verified"
+  },
+  "CCvar::InstallGlobalChangeCallback": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 21
+   },
+   "via": "tier0!0x18006D5C0 (CCvar slot 21 -> CCvar::InstallGlobalChangeCallback)",
+   "tag": "V",
+   "expect": {
+    "2000921": 447936,
+    "2000930": 447936,
+    "2000933": 447936,
+    "2000940": 447936
+   },
+   "status": "verified"
+  },
+  "CCvar::RemoveGlobalChangeCallback": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 22
+   },
+   "via": "tier0!0x18006D790 (CCvar slot 22 -> CCvar::RemoveGlobalChangeCallback)",
+   "tag": "V",
+   "expect": {
+    "2000921": 448400,
+    "2000930": 448400,
+    "2000933": 448400,
+    "2000940": 448400
+   },
+   "status": "verified"
+  },
+  "CCvar::CallGlobalChangeCallbacks": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 23
+   },
+   "via": "tier0!0x18006D880 (CCvar slot 23 -> CCvar::CallGlobalChangeCallbacks)",
+   "tag": "V",
+   "expect": {
+    "2000921": 448640,
+    "2000930": 448640,
+    "2000933": 448640,
+    "2000940": 448640
+   },
+   "status": "verified"
+  },
+  "CCvar::ResetConVarsToDefaultValuesByFlag": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 24
+   },
+   "via": "tier0!0x18006D9E0 (CCvar slot 24 -> CCvar::ResetConVarsToDefaultValuesByFlag)",
+   "tag": "V",
+   "expect": {
+    "2000921": 448992,
+    "2000930": 448992,
+    "2000933": 448992,
+    "2000940": 448992
+   },
+   "status": "verified"
+  },
+  "CCvar::RegisterCreationListeners": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 26
+   },
+   "via": "tier0!0x18006DB50 (CCvar slot 26 -> CCvar::RegisterCreationListeners)",
+   "tag": "V",
+   "expect": {
+    "2000921": 449360,
+    "2000930": 449360,
+    "2000933": 449360,
+    "2000940": 449360
+   },
+   "status": "verified"
+  },
+  "CCvar::RemoveCreationListeners": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 27
+   },
+   "via": "tier0!0x18006DDE0 (CCvar slot 27 -> CCvar::RemoveCreationListeners)",
+   "tag": "V",
+   "expect": {
+    "2000921": 450016,
+    "2000930": 450016,
+    "2000933": 450016,
+    "2000940": 450016
+   },
+   "status": "verified"
+  },
+  "CCvar::GetTotalUserInfoCvarsByteSize": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 35
+   },
+   "via": "tier0!0x18006DED0 (CCvar slot 35 -> CCvar::GetTotalUserInfoCvarsByteSize)",
+   "tag": "V",
+   "expect": {
+    "2000921": 450256,
+    "2000930": 450256,
+    "2000933": 450256,
+    "2000940": 450256
+   },
+   "status": "verified"
+  },
+  "CCvar::CopyUserInfoCvarDefaults": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 36
+   },
+   "via": "tier0!0x18006DEE0 (CCvar slot 36 -> CCvar::CopyUserInfoCvarDefaults)",
+   "tag": "V",
+   "expect": {
+    "2000921": 450272,
+    "2000930": 450272,
+    "2000933": 450272,
+    "2000940": 450272
+   },
+   "status": "verified"
+  },
+  "CCvar::GetCompletionResults": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 37
+   },
+   "via": "tier0!0x18006E050 (CCvar slot 37 -> CCvar::GetCompletionResults)",
+   "tag": "V",
+   "expect": {
+    "2000921": 450640,
+    "2000930": 450640,
+    "2000933": 450640,
+    "2000940": 450640
+   },
+   "status": "verified"
+  },
+  "CCvar::SetMaxSplitScreenSlots": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 25
+   },
+   "via": "tier0!0x180072AC0 (CCvar slot 25 -> CCvar::SetMaxSplitScreenSlots)",
+   "tag": "V",
+   "expect": {
+    "2000921": 469696,
+    "2000930": 469696,
+    "2000933": 469696,
+    "2000940": 469696
+   },
+   "status": "verified"
+  },
+  "CCvar::ResetConVarsToDefaultValuesByName": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 28
+   },
+   "via": "tier0!0x180072B60 (CCvar slot 28 -> CCvar::ResetConVarsToDefaultValuesByName)",
+   "tag": "V",
+   "expect": {
+    "2000921": 469856,
+    "2000930": 469856,
+    "2000933": 469856,
+    "2000940": 469856
+   },
+   "status": "verified"
+  },
+  "sub_180072CA0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 55 56 57 41 56 48 83 EC 40"
+   },
+   "via": "tier0!0x180072CA0 (sub_180072CA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 470176,
+    "2000930": 470176,
+    "2000933": 470176,
+    "2000940": 470176
+   },
+   "status": "verified"
+  },
+  "CCvar::TakeConVarSnapshot": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 29
+   },
+   "via": "tier0!0x180072E80 (CCvar slot 29 -> CCvar::TakeConVarSnapshot)",
+   "tag": "V",
+   "expect": {
+    "2000921": 470656,
+    "2000930": 470656,
+    "2000933": 470656,
+    "2000940": 470656
+   },
+   "status": "verified"
+  },
+  "CCvar::ResetConVarsToSnapshot": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 30
+   },
+   "via": "tier0!0x180073130 (CCvar slot 30 -> CCvar::ResetConVarsToSnapshot)",
+   "tag": "V",
+   "expect": {
+    "2000921": 471344,
+    "2000930": 471344,
+    "2000933": 471344,
+    "2000940": 471344
+   },
+   "status": "verified"
+  },
+  "CCvar::DestroyConVarSnapshot": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 31
+   },
+   "via": "tier0!0x180073440 (CCvar slot 31 -> CCvar::DestroyConVarSnapshot)",
+   "tag": "V",
+   "expect": {
+    "2000921": 472128,
+    "2000930": 472128,
+    "2000933": 472128,
+    "2000940": 472128
+   },
+   "status": "verified"
+  },
+  "CCvar::GetCharacterSet": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 32
+   },
+   "via": "tier0!0x180077D70 (CCvar slot 32 -> CCvar::GetCharacterSet)",
+   "tag": "V",
+   "expect": {
+    "2000921": 490864,
+    "2000930": 490864,
+    "2000933": 490864,
+    "2000940": 490864
+   },
+   "status": "verified"
+  },
+  "CCvar::SetConVarsFromGameInfo": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 33
+   },
+   "via": "tier0!0x180077D80 (CCvar slot 33 -> CCvar::SetConVarsFromGameInfo)",
+   "tag": "V",
+   "expect": {
+    "2000921": 490880,
+    "2000930": 490880,
+    "2000933": 490880,
+    "2000940": 490880
+   },
+   "status": "verified"
+  },
+  "CCvar::StripDevelopmentFlags": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 34
+   },
+   "via": "tier0!0x1800780D0 (CCvar slot 34 -> CCvar::StripDevelopmentFlags)",
+   "tag": "V",
+   "expect": {
+    "2000921": 491728,
+    "2000930": 491728,
+    "2000933": 491728,
+    "2000940": 491728
+   },
+   "status": "verified"
+  },
+  "j_DisconnectInterfaces": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 1
+   },
+   "via": "tier0!0x1800789D0 (CCvar slot 1 -> j_DisconnectInterfaces)",
+   "tag": "V",
+   "expect": {
+    "2000921": 494032,
+    "2000930": 494032,
+    "2000933": 494032,
+    "2000940": 494032
+   },
+   "status": "verified"
+  },
+  "sub_1800789E0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 0
+   },
+   "via": "tier0!0x1800789E0 (CCvar slot 0 -> sub_1800789E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 494048,
+    "2000930": 494048,
+    "2000933": 494048,
+    "2000940": 494048
+   },
+   "status": "verified"
+  },
+  "sub_180078A00": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_CCVAR_VT",
+    "slot": 8
+   },
+   "via": "tier0!0x180078A00 (CCvar slot 8 -> sub_180078A00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 494080,
+    "2000930": 494080,
+    "2000933": 494080,
+    "2000940": 494080
+   },
+   "status": "verified"
+  },
+  "MemAlloc_CallocFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_CallocFunc"
+   },
+   "via": "tier0!0x18012DBA0 (export MemAlloc_CallocFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1235872,
+    "2000930": 1235872,
+    "2000933": 1236192,
+    "2000940": 1236192
+   },
+   "status": "verified"
+  },
+  "MemAlloc_AllocFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_AllocFunc"
+   },
+   "via": "tier0!0x18012DBF0 (export MemAlloc_AllocFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1235952,
+    "2000930": 1235952,
+    "2000933": 1236272,
+    "2000940": 1236272
+   },
+   "status": "verified"
+  },
+  "MemAlloc_ReallocFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_ReallocFunc"
+   },
+   "via": "tier0!0x18012DC10 (export MemAlloc_ReallocFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1235984,
+    "2000930": 1235984,
+    "2000933": 1236304,
+    "2000940": 1236304
+   },
+   "status": "verified"
+  },
+  "MemAlloc_FreeFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_FreeFunc"
+   },
+   "via": "tier0!0x18012DC30 (export MemAlloc_FreeFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236016,
+    "2000930": 1236016,
+    "2000933": 1236336,
+    "2000940": 1236336
+   },
+   "status": "verified"
+  },
+  "MemAlloc_AllocAlignedFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_AllocAlignedFunc"
+   },
+   "via": "tier0!0x18012DC50 (export MemAlloc_AllocAlignedFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236048,
+    "2000930": 1236048,
+    "2000933": 1236368,
+    "2000940": 1236368
+   },
+   "status": "verified"
+  },
+  "MemAlloc_FreeAlignedFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_FreeAlignedFunc"
+   },
+   "via": "tier0!0x18012DC70 (export MemAlloc_FreeAlignedFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236080,
+    "2000930": 1236080,
+    "2000933": 1236400,
+    "2000940": 1236400
+   },
+   "status": "verified"
+  },
+  "MemAlloc_GetSizeFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_GetSizeFunc"
+   },
+   "via": "tier0!0x18012DC90 (export MemAlloc_GetSizeFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236112,
+    "2000930": 1236112,
+    "2000933": 1236432,
+    "2000940": 1236432
+   },
+   "status": "verified"
+  },
+  "MemAlloc_GetAllocAttributesFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_GetAllocAttributesFunc"
+   },
+   "via": "tier0!0x18012DD20 (export MemAlloc_GetAllocAttributesFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236256,
+    "2000930": 1236256,
+    "2000933": 1236576,
+    "2000940": 1236576
+   },
+   "status": "verified"
+  },
+  "MemAlloc_SetAllocAttributesFunc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "MemAlloc_SetAllocAttributesFunc"
+   },
+   "via": "tier0!0x18012DD40 (export MemAlloc_SetAllocAttributesFunc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1236288,
+    "2000930": 1236288,
+    "2000933": 1236608,
+    "2000940": 1236608
+   },
+   "status": "verified"
+  },
+  "CMemAllocSystemInitialize": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CMemAllocSystemInitialize"
+   },
+   "via": "tier0!0x18012E0A0 (export CMemAllocSystemInitialize)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1237152,
+    "2000930": 1237152,
+    "2000933": 1237472,
+    "2000940": 1237472
+   },
+   "status": "verified"
+  },
+  "MemAlloc_InitProcessHeap": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 53 56 48 81 EC 58 02 00 00"
+   },
+   "via": "tier0!0x180132640 (MemAlloc_InitProcessHeap)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1254976,
+    "2000930": 1254976,
+    "2000933": 1255296,
+    "2000940": 1255296
+   },
+   "status": "verified"
+  },
+  "MemAlloc_InitDefaultAllocator": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 58 E8 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x180133F00 (MemAlloc_InitDefaultAllocator)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1261312,
+    "2000930": 1261312,
+    "2000933": 1261632,
+    "2000940": 1261632
+   },
+   "status": "verified"
+  },
+  "Plat_IsInTestMode": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "Plat_IsInTestMode"
+   },
+   "via": "tier0!0x1801483C0 (export Plat_IsInTestMode)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1344448,
+    "2000930": 1344448,
+    "2000933": 1344768,
+    "2000940": 1344768
+   },
+   "status": "verified"
+  },
+  "Plat_IsRunningOnCustomerMachine": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "Plat_IsRunningOnCustomerMachine"
+   },
+   "via": "tier0!0x180148580 (export Plat_IsRunningOnCustomerMachine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1344896,
+    "2000930": 1344896,
+    "2000933": 1345216,
+    "2000940": 1345216
+   },
+   "status": "verified"
+  },
+  "V_GetProcessUtils": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "V_GetProcessUtils"
+   },
+   "via": "tier0!0x180156630 (export V_GetProcessUtils)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1402416,
+    "2000930": 1402416,
+    "2000933": 1402736,
+    "2000940": 1402736
+   },
+   "status": "verified"
+  },
+  "CProcess::CProcess": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 18 56 41 56"
+   },
+   "via": "tier0!0x1801572F0 (CProcess::CProcess)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1405680,
+    "2000930": 1405680,
+    "2000933": 1406000,
+    "2000940": 1406000
+   },
+   "status": "verified"
+  },
+  "CProcess::WaitForExit": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 57 41 54 41 55 41 57 48 83 EC 20"
+   },
+   "via": "tier0!0x180157C90 (CProcess::WaitForExit)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1408144,
+    "2000930": 1408144,
+    "2000933": 1408464,
+    "2000940": 1408464
+   },
+   "status": "verified"
+  },
+  "CProcess::SetupPipes": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 56 41 57 48 83 EC 60 48 8B 6A 10"
+   },
+   "via": "tier0!0x180157E50 (CProcess::SetupPipes)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1408592,
+    "2000930": 1408592,
+    "2000933": 1408912,
+    "2000940": 1408912
+   },
+   "status": "verified"
+  },
+  "CProcess::Launch": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 55 48 8D A8 38 FB FF FF"
+   },
+   "via": "tier0!0x180158390 (CProcess::Launch)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1409936,
+    "2000930": 1409936,
+    "2000933": 1410256,
+    "2000940": 1410256
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 3
+   },
+   "via": "tier0!0x180158820 (CProcessUtils slot 3 -> CProcessUtils::Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1411104,
+    "2000930": 1411104,
+    "2000933": 1411424,
+    "2000940": 1411424
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::Shutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 4
+   },
+   "via": "tier0!0x180158860 (CProcessUtils slot 4 -> CProcessUtils::Shutdown)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1411168,
+    "2000930": 1411168,
+    "2000933": 1411488,
+    "2000940": 1411488
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::StartProcess": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 13
+   },
+   "via": "tier0!0x1801589B0 (CProcessUtils slot 13 -> CProcessUtils::StartProcess)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1411504,
+    "2000930": 1411504,
+    "2000933": 1411824,
+    "2000940": 1411824
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::StartProcess_argv": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 12
+   },
+   "via": "tier0!0x1801589F0 (CProcessUtils slot 12 -> CProcessUtils::StartProcess_argv)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1411568,
+    "2000930": 1411568,
+    "2000933": 1411888,
+    "2000940": 1411888
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::StartProcess_env": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 14
+   },
+   "via": "tier0!0x180158CA0 (CProcessUtils slot 14 -> CProcessUtils::StartProcess_env)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1412256,
+    "2000930": 1412256,
+    "2000933": 1412576,
+    "2000940": 1412576
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::StartProcess_info": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 11
+   },
+   "via": "tier0!0x180158CF0 (CProcessUtils slot 11 -> CProcessUtils::StartProcess_info)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1412336,
+    "2000930": 1412336,
+    "2000933": 1412656,
+    "2000940": 1412656
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::SimpleRunProcess": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 15
+   },
+   "via": "tier0!0x180158EA0 (CProcessUtils slot 15 -> CProcessUtils::SimpleRunProcess)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1412768,
+    "2000930": 1412768,
+    "2000933": 1413088,
+    "2000940": 1413088
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::EnsureKillJobCreated": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 57 48 81 EC B0 02 00 00"
+   },
+   "via": "tier0!0x180158F30 (CProcessUtils::EnsureKillJobCreated)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1412912,
+    "2000930": 1412912,
+    "2000933": 1413232,
+    "2000940": 1413232
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::DebugEventLoop": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 4C 24 20 55 56 57 41 54 41 55 41 57"
+   },
+   "via": "tier0!0x180159070 (CProcessUtils::DebugEventLoop)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1413232,
+    "2000930": 1413232,
+    "2000933": 1413552,
+    "2000940": 1413552
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::GetMinidumpDirectory": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 16
+   },
+   "via": "tier0!0x1801594C0 (CProcessUtils slot 16 -> CProcessUtils::GetMinidumpDirectory)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414336,
+    "2000930": 1414336,
+    "2000933": 1414656,
+    "2000940": 1414656
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::SetMinidumpDirectory": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 17
+   },
+   "via": "tier0!0x1801594E0 (CProcessUtils slot 17 -> CProcessUtils::SetMinidumpDirectory)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414368,
+    "2000930": 1414368,
+    "2000933": 1414688,
+    "2000940": 1414688
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::GetMinidumpName": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 18
+   },
+   "via": "tier0!0x180159510 (CProcessUtils slot 18 -> CProcessUtils::GetMinidumpName)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414416,
+    "2000930": 1414416,
+    "2000933": 1414736,
+    "2000940": 1414736
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::SetMinidumpName": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 19
+   },
+   "via": "tier0!0x180159530 (CProcessUtils slot 19 -> CProcessUtils::SetMinidumpName)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414448,
+    "2000930": 1414448,
+    "2000933": 1414768,
+    "2000940": 1414768
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::WriteChildMinidump": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 56 48 81 EC 28 01 00 00"
+   },
+   "via": "tier0!0x1801595A0 (CProcessUtils::WriteChildMinidump)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414560,
+    "2000930": 1414560,
+    "2000933": 1414880,
+    "2000940": 1414880
+   },
+   "status": "verified"
+  },
+  "sub_18016C610": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 83 BA 38 04 00 00 02 0F 8C ?? ?? ?? ??"
+   },
+   "via": "tier0!0x18016C610 (sub_18016C610)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1492496,
+    "2000930": 1492496,
+    "2000933": 1492816,
+    "2000940": 1492816
+   },
+   "status": "verified"
+  },
+  "Test_StartScript_cb": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 57 48 83 EC 20 83 BA 38 04 00 00 02"
+   },
+   "via": "tier0!0x18016CCA0 (Test_StartScript_cb)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1494176,
+    "2000930": 1494176,
+    "2000933": 1494496,
+    "2000940": 1494496
+   },
+   "status": "verified"
+  },
+  "CTestScriptMgr::dtor_scalar": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 17
+   },
+   "via": "tier0!0x18016CDB0 (T0V_TESTSCRIPTMGR_VT slot 17 -> CTestScriptMgr::dtor_scalar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1494448,
+    "2000930": 1494448,
+    "2000933": 1494768,
+    "2000940": 1494768
+   },
+   "status": "verified"
+  },
+  "CTestScriptMgr::StartFromCommandLine": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 11
+   },
+   "via": "tier0!0x18016CF70 (T0V_TESTSCRIPTMGR_VT slot 11 -> CTestScriptMgr::StartFromCommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1494896,
+    "2000930": 1494896,
+    "2000933": 1495216,
+    "2000940": 1495216
+   },
+   "status": "verified"
+  },
+  "sub_18016E090": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 54 41 55 41 56 41 57 48 83 EC 20 33 FF"
+   },
+   "via": "tier0!0x18016E090 (sub_18016E090)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1499280,
+    "2000930": 1499280,
+    "2000933": 1499600,
+    "2000940": 1499600
+   },
+   "status": "verified"
+  },
+  "CTestScriptMgr::FrameEnd": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 14
+   },
+   "via": "tier0!0x18016E960 (T0V_TESTSCRIPTMGR_VT slot 14 -> CTestScriptMgr::FrameEnd)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1501536,
+    "2000930": 1501536,
+    "2000933": 1501856,
+    "2000940": 1501856
+   },
+   "status": "verified"
+  },
+  "CTestScriptMgr::SetWaitCheckPoint": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 15
+   },
+   "via": "tier0!0x18016EAD0 (T0V_TESTSCRIPTMGR_VT slot 15 -> CTestScriptMgr::SetWaitCheckPoint)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1501904,
+    "2000930": 1501904,
+    "2000933": 1502224,
+    "2000940": 1502224
+   },
+   "status": "verified"
+  },
+  "CTestScriptMgr::InsertCommandsBeforeCheckpoint": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 16
+   },
+   "via": "tier0!0x18016FC70 (T0V_TESTSCRIPTMGR_VT slot 16 -> CTestScriptMgr::InsertCommandsBeforeCheckpoint)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1506416,
+    "2000930": 1506416,
+    "2000933": 1506736,
+    "2000940": 1506736
+   },
+   "status": "verified"
+  },
+  "sub_1801705A0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 4
+   },
+   "via": "tier0!0x1801705A0 (T0V_TESTSCRIPTMGR_VT slot 4 -> sub_1801705A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1508768,
+    "2000930": 1508768,
+    "2000933": 1509088,
+    "2000940": 1509088
+   },
+   "status": "verified"
+  },
+  "sub_1801705B0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "T0V_TESTSCRIPTMGR_VT",
+    "slot": 3
+   },
+   "via": "tier0!0x1801705B0 (T0V_TESTSCRIPTMGR_VT slot 3 -> sub_1801705B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1508784,
+    "2000930": 1508784,
+    "2000933": 1509104,
+    "2000940": 1509104
+   },
+   "status": "verified"
+  },
+  "RegisterStringToken": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "RegisterStringToken"
+   },
+   "via": "tier0!0x1801A4000 (export RegisterStringToken)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1720320,
+    "2000930": 1720320,
+    "2000933": 1720640,
+    "2000940": 1720640
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem::CUtlStringTokenSystem": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 57 48 83 EC 20 33 FF"
+   },
+   "via": "tier0!0x1801A4090 (CUtlStringTokenSystem::CUtlStringTokenSystem)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1720464,
+    "2000930": 1720464,
+    "2000933": 1720784,
+    "2000940": 1720784
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CUtlStringTokenSystem"
+   },
+   "via": "tier0!0x1803307F8 (??_7CUtlStringTokenSystem@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3344376,
+    "2000930": 3344376,
+    "2000933": 3344344,
+    "2000940": 3344344
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem::Connect": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CUtlStringTokenSystem",
+    "slot": 0
+   },
+   "via": "tier0!0x1801A43D0 (CUtlStringTokenSystem slot 0 -> CUtlStringTokenSystem::Connect)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1721296,
+    "2000930": 1721296,
+    "2000933": 1721616,
+    "2000940": 1721616
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem::AddString": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "89 54 24 10 4C 8B DC 49 89 4B 08"
+   },
+   "via": "tier0!0x1801A4420 (CUtlStringTokenSystem::AddString)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1721376,
+    "2000930": 1721376,
+    "2000933": 1721696,
+    "2000940": 1721696
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem::GetString": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CUtlStringTokenSystem",
+    "slot": 11
+   },
+   "via": "tier0!0x1801A4590 (CUtlStringTokenSystem slot 11 -> CUtlStringTokenSystem::GetString)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1721744,
+    "2000930": 1721744,
+    "2000933": 1722064,
+    "2000940": 1722064
+   },
+   "status": "verified"
+  },
+  "CUtlStringTokenSystem::FindOrInsert": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 4C 89 4C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 83 EC 20"
+   },
+   "via": "tier0!0x1801A45F0 (CUtlStringTokenSystem::FindOrInsert)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1721840,
+    "2000930": 1721840,
+    "2000933": 1722160,
+    "2000940": 1722160
+   },
+   "status": "verified"
+  },
+  "_MakeGlobalSymbol": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "_MakeGlobalSymbol"
+   },
+   "via": "tier0!0x1801A6040 (export _MakeGlobalSymbol)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1728576,
+    "2000930": 1728576,
+    "2000933": 1728896,
+    "2000940": 1728896
+   },
+   "status": "verified"
+  },
+  "ConnectInterfaces": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B DC 41 57 48 83 EC 40"
+   },
+   "via": "tier0!0x18020DF10 (ConnectInterfaces)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2154256,
+    "2000930": 2154256,
+    "2000933": 2154576,
+    "2000940": 2154576
+   },
+   "status": "verified"
+  },
+  "DisconnectInterfaces": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 15 ?? ?? ?? ?? 83 EA 01"
+   },
+   "via": "tier0!0x18020E0C0 (DisconnectInterfaces)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2154688,
+    "2000930": 2154688,
+    "2000933": 2155008,
+    "2000940": 2155008
+   },
+   "status": "verified"
+  },
+  "sub_18020E100": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 56 41 57 48 83 EC 20 48 8B EA"
+   },
+   "via": "tier0!0x18020E100 (sub_18020E100)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2154752,
+    "2000930": 2154752,
+    "2000933": 2155072,
+    "2000940": 2155072
+   },
+   "status": "verified"
+  },
+  "sub_18020E1F0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 60 44 8B 15 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x18020E1F0 (sub_18020E1F0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2154992,
+    "2000930": 2154992,
+    "2000933": 2155312,
+    "2000940": 2155312
+   },
+   "status": "verified"
+  },
+  "ConVar_Register": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 83 3D ?? ?? ?? ?? 00 74 ?? 80 3D ?? ?? ?? ?? 00"
+   },
+   "via": "tier0!0x18020E870 (ConVar_Register)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2156656,
+    "2000930": 2156656,
+    "2000933": 2156976,
+    "2000940": 2156976
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_ctor": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x18020E8C0 (mov     [rcx+8], r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2156736,
+    "2000930": 2156736,
+    "2000933": 2157056,
+    "2000940": 2157056
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "tier0!0x18020E8E0 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2156768,
+    "2000930": 2156768,
+    "2000933": 2157088,
+    "2000940": 2157088
+   },
+   "status": "verified"
+  },
+  "ConVarRefAbstract": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 B8 FF FF FF FF"
+   },
+   "via": "tier0!0x18020EA10 (ConVarRefAbstract::Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2157072,
+    "2000930": 2157072,
+    "2000933": 2157392,
+    "2000940": 2157392
+   },
+   "status": "verified"
+  },
+  "ConVarRefAbstract::GetSlotCount": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 41 08 8B 48 30 48 C1 E9 0F"
+   },
+   "via": "tier0!0x18020F2C0 (ConVarRefAbstract::GetSlotCount)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2159296,
+    "2000930": 2159296,
+    "2000933": 2159616,
+    "2000940": 2159616
+   },
+   "status": "verified"
+  },
+  "GetCvarTypeTraits": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 0F BF C1 48 8D 0D ?? ?? ?? ?? 48 6B C0 58 48 03 C1"
+   },
+   "via": "tier0!0x18020F2F0 (GetCvarTypeTraits)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2159344,
+    "2000930": 2159344,
+    "2000933": 2159664,
+    "2000940": 2159664
+   },
+   "status": "verified"
+  },
+  "sub_1802101F0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 30 4C 8B 59 08"
+   },
+   "via": "tier0!0x1802101F0 (sub_1802101F0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2163184,
+    "2000930": 2163184,
+    "2000933": 2163504,
+    "2000940": 2163504
+   },
+   "status": "verified"
+  },
+  "off_1802F4390": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 2D ?? ?? ?? ?? 33 ED",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18020DF55 (ConnectInterfaces reads off_1802F4390)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3097488,
+    "2000930": 3097488,
+    "2000933": 3097488,
+    "2000940": 3097488
+   },
+   "status": "verified"
+  },
+  "CCommandLine_vftable": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 03 33 C0 48 89 43 38",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18005C164 (CreateCommandLine reads CCommandLine_vftable)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3197808,
+    "2000930": 3197808,
+    "2000933": 3197808,
+    "2000940": 3197808
+   },
+   "status": "verified"
+  },
+  "str_VEngineCvar007": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "VEngineCvar007"
+   },
+   "via": "tier0!0x180311A68 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 3218024,
+    "2000930": 3218024,
+    "2000933": 3218024,
+    "2000940": 3218024
+   },
+   "status": "verified"
+  },
+  "IMemAlloc": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "IMemAlloc"
+   },
+   "via": "tier0!0x1803277D0 (??_7IMemAlloc@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3307472,
+    "2000930": 3307472,
+    "2000933": 3307472,
+    "2000940": 3307472
+   },
+   "status": "verified"
+  },
+  "CHeapMemAlloc": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CHeapMemAlloc"
+   },
+   "via": "tier0!0x180327918 (??_7CHeapMemAlloc@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3307800,
+    "2000930": 3307800,
+    "2000933": 3307800,
+    "2000940": 3307800
+   },
+   "status": "verified"
+  },
+  "__CStdMemAlloc_UMemConfig_t__": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "?$CStdMemAlloc@UMemConfig_t@@"
+   },
+   "via": "tier0!0x180328478 (??_7?$CStdMemAlloc@UMemConfig_t@@@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3310712,
+    "2000930": 3310712,
+    "2000933": 3310696,
+    "2000940": 3310696
+   },
+   "status": "verified"
+  },
+  "CMemStdPurePassThroughAlloc": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CMemStdPurePassThroughAlloc"
+   },
+   "via": "tier0!0x1803285E0 (??_7CMemStdPurePassThroughAlloc@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3311072,
+    "2000930": 3311072,
+    "2000933": 3311056,
+    "2000940": 3311056
+   },
+   "status": "verified"
+  },
+  "__CMemPassAllocT_U__LLA_AddAlignedSelectors_ULowLevelAllocationScheme_mimalloc____": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "?$CMemPassAllocT@U?$LLA_AddAlignedSelectors@ULowLevelAllocationScheme_mimalloc@@@@"
+   },
+   "via": "tier0!0x180328758 (??_7?$CMemPassAllocT@U?$LLA_AddAlignedSelectors@ULowLevelAllocationScheme_mimalloc@@@@@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3311448,
+    "2000930": 3311448,
+    "2000933": 3311432,
+    "2000940": 3311432
+   },
+   "status": "verified"
+  },
+  "str_VProcessUtils002": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "VProcessUtils002"
+   },
+   "via": "tier0!0x18032BAF0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 3324656,
+    "2000930": 3324656,
+    "2000933": 3324568,
+    "2000940": 3324568
+   },
+   "status": "verified"
+  },
+  "CProcessPipeRead": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CProcessPipeRead"
+   },
+   "via": "tier0!0x18032BDC0 (??_7CProcessPipeRead@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3325376,
+    "2000930": 3325376,
+    "2000933": 3325384,
+    "2000940": 3325384
+   },
+   "status": "verified"
+  },
+  "str_TestScriptMgr001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "TestScriptMgr001"
+   },
+   "via": "tier0!0x18032CEA0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 3329696,
+    "2000930": 3329696,
+    "2000933": 3329680,
+    "2000940": 3329680
+   },
+   "status": "verified"
+  },
+  "str_VStringTokenSystem001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "VStringTokenSystem001"
+   },
+   "via": "tier0!0x180330758 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 3344216,
+    "2000930": 3344216,
+    "2000933": 3344200,
+    "2000940": 3344200
+   },
+   "status": "verified"
+  },
+  "unk_1803307E0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 3D ?? ?? ?? ?? 0F 57 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x1801A426A (CUtlStringTokenSystem::CUtlStringTokenSystem reads unk_1803307E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3344352,
+    "2000930": 3344352,
+    "2000933": 3344320,
+    "2000940": 3344320
+   },
+   "status": "verified"
+  },
+  "s_CvarTypeTraits": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 35 ?? ?? ?? ?? 4C 8B 4D 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18020EAEA (sub_18020EAA0 reads s_CvarTypeTraits)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3769872,
+    "2000930": 3769872,
+    "2000933": 3769872,
+    "2000940": 3769872
+   },
+   "status": "verified"
+  },
+  "off_180399290": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 47 08 48 8B 74 24 38",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18020EA6E (ConVarRefAbstract::Init reads off_180399290)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3773072,
+    "2000930": 3773072,
+    "2000933": 3773072,
+    "2000940": 3773072
+   },
+   "status": "verified"
+  },
+  "byte_18039BCE8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "C6 05 ?? ?? ?? ?? 00 EB ?? E8 ?? ?? ?? ?? BA 49 F9 3C A5 48 8B 08 4C 8B 41 20 48 8B C8 41 FF D0 84 C0 74 ?? C6 05 ?? ?? ?? ?? 01 C6 05 ?? ?? ?? ?? 01 80 3D ?? ?? ?? ?? 00 0F 84 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18004C71E (sub_18004C6B0 reads byte_18039BCE8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3783912,
+    "2000930": 3783912,
+    "2000933": 3783912,
+    "2000940": 3783912
+   },
+   "status": "verified"
+  },
+  "off_18039BDC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 89 74 24 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x1801524B9 (Plat_LoadSDL reads off_18039BDC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3784128,
+    "2000930": 3784128,
+    "2000933": 3784128,
+    "2000940": 3784128
+   },
+   "status": "verified"
+  },
+  "off_18039E878": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 1D ?? ?? ?? ?? 66 44 01 57 04",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18006CFEC (CCvar::GetConCommandData reads off_18039E878)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3795064,
+    "2000930": 3795064,
+    "2000933": 3795064,
+    "2000940": 3795064
+   },
+   "status": "verified"
+  },
+  "g_HeapMemAlloc": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C6 05 ?? ?? ?? ?? 01 48 89 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x1801329C0 (MemAlloc_InitProcessHeap reads g_HeapMemAlloc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3806064,
+    "2000930": 3806064,
+    "2000933": 3806064,
+    "2000940": 3806064
+   },
+   "status": "verified"
+  },
+  "g_MemStdPurePassThroughAlloc": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 8B 5C 24 70",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180134022 (MemAlloc_InitDefaultAllocator reads g_MemStdPurePassThroughAlloc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3806120,
+    "2000930": 3806120,
+    "2000933": 3806120,
+    "2000940": 3806120
+   },
+   "status": "verified"
+  },
+  "g_CProcessUtils": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 83 EC 28 80 3D ?? ?? ?? ?? 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180156620 (Create_VProcessUtils002 reads g_CProcessUtils)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3807264,
+    "2000930": 3807264,
+    "2000933": 3807264,
+    "2000940": 3807264
+   },
+   "status": "verified"
+  },
+  "byte_1803A1848": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "80 3D ?? ?? ?? ?? 00 75 ?? 48 83 3D ?? ?? ?? ?? 00",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180156634 (V_GetProcessUtils reads byte_1803A1848)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3807304,
+    "2000930": 3807304,
+    "2000933": 3807304,
+    "2000940": 3807304
+   },
+   "status": "verified"
+  },
+  "g_CTestScriptMgr": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 83 EC 28 48 8B CA",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18016C5C0 (Create_TestScriptMgr001 reads g_CTestScriptMgr)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3807584,
+    "2000930": 3807584,
+    "2000933": 3807584,
+    "2000940": 3807584
+   },
+   "status": "verified"
+  },
+  "g_pCVar": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 00 01 00 00 C7 44 24 4C 08 00 00 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18005B575 (?AddText@CCommandBuffer@@QEAA_NPEBDHH_NN_K@Z reads qword_1803A9568)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3839336,
+    "2000930": 3839336,
+    "2000933": 3839336,
+    "2000940": 3839336
+   },
+   "status": "verified"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18020E8C7 (InterfaceReg_Init_VEngineCvar007 reads s_pInterfaceRegs)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3842192,
+    "2000930": 3842192,
+    "2000933": 3842192,
+    "2000940": 3842192
+   },
+   "status": "verified"
+  },
+  "g_pMemAlloc": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "g_pMemAlloc"
+   },
+   "via": "tier0!0x1803AC458 (export g_pMemAlloc)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3851352,
+    "2000930": 3851352,
+    "2000933": 3851352,
+    "2000940": 3851352
+   },
+   "status": "verified"
+  },
+  "g_CommandLine": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? BA B6 8F AE BE",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180001830 (sub_180001500 reads g_CommandLine)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3851664,
+    "2000930": 3851664,
+    "2000933": 3851664,
+    "2000940": 3851664
+   },
+   "status": "verified"
+  },
+  "dword_1803AC5F8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 05 ?? ?? ?? ?? 0F BA E0 1A 72 ?? B2 01 48 8B CB E8 ?? ?? ?? ?? F0 81 0D ?? ?? ?? ?? 00 00 00 08 48 8D 0D ?? ?? ?? ?? 48 83 C4 20 5B E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 48 83 EC 28 8B 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "tier0!0x180001A87 (sub_180001A70 reads dword_1803AC5F8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3851768,
+    "2000930": 3851768,
+    "2000933": 3851768,
+    "2000940": 3851768
+   },
+   "status": "verified"
+  },
+  "qword_1803AC650": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 8B 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180001B2E (InterfaceReg_Init_VEngineCvar007 reads qword_1803AC650)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3851856,
+    "2000930": 3851856,
+    "2000933": 3851856,
+    "2000940": 3851856
+   },
+   "status": "verified"
+  },
+  "g_CCvar": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC E9 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x1800685A0 (Create_VEngineCvar007 reads g_CCvar)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3851888,
+    "2000930": 3851888,
+    "2000933": 3851888,
+    "2000940": 3851888
+   },
+   "status": "verified"
+  },
+  "unk_1803CC310": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 40 53",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18000562E (InterfaceReg_Init_VProcessUtils002 reads unk_1803CC310)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3982096,
+    "2000930": 3982096,
+    "2000933": 3982096,
+    "2000940": 3982096
+   },
+   "status": "verified"
+  },
+  "testscript_debug_data": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 B4 24 98 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18016E5DD (CTestScriptMgr::CheckPoint reads testscript_debug_data)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3982352,
+    "2000930": 3982352,
+    "2000933": 3982352,
+    "2000940": 3982352
+   },
+   "status": "verified"
+  },
+  "unk_1803CC428": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180005D2E (InterfaceReg_Init_TestScriptMgr001 reads unk_1803CC428)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3982376,
+    "2000930": 3982376,
+    "2000933": 3982376,
+    "2000940": 3982376
+   },
+   "status": "verified"
+  },
+  "g_CUtlStringTokenSystem": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 55 48 83 EC 20 48 8D 6C 24 20 48 89 5D 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x1801A3FF0 (Create_VStringTokenSystem001 reads g_CUtlStringTokenSystem)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4010752,
+    "2000930": 4010752,
+    "2000933": 4010752,
+    "2000940": 4010752
+   },
+   "status": "verified"
+  },
+  "unk_1803D3580": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 C7 44 24 28 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180006F4E (InterfaceReg_Init_VStringTokenSystem001 reads unk_1803D3580)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4011392,
+    "2000930": 4011392,
+    "2000933": 4011392,
+    "2000940": 4011392
+   },
+   "status": "verified"
+  },
+  "byte_1803D74B0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "C6 05 ?? ?? ?? ?? 01 FF 90 90 00 00 00",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x18006903A (CCvar::Init reads byte_1803D74B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4027568,
+    "2000930": 4027568,
+    "2000933": 4027568,
+    "2000940": 4027568
+   },
+   "status": "verified"
+  },
+  "sub_180001A70": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8D 1D ?? ?? ?? ?? F6 C3 07 74 ?? E8 ?? ?? ?? ?? 8B 05 ?? ?? ?? ?? 0F BA E0 1A 72 ?? B2 01 48 8B CB E8 ?? ?? ?? ?? F0 81 0D ?? ?? ?? ?? 00 00 00 08 48 8D 0D ?? ?? ?? ?? 48 83 C4 20 5B E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 48 83 EC 28 8B 05 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x180001A70 (sub_180001A70 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 6768,
+    "2000930": 6768,
+    "2000933": 6768,
+    "2000940": 6768
+   },
+   "status": "verified"
+  },
+  "sub_180001B00": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 8B 05 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x180001B00 (sub_180001B00 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 6912,
+    "2000930": 6912,
+    "2000933": 6912,
+    "2000940": 6912
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Init_VEngineCvar007": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 8B 05 ?? ?? ?? ??"
+   },
+   "via": "tier0!0x180001B20 (InterfaceReg_Init_VEngineCvar007 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 6944,
+    "2000930": 6944,
+    "2000933": 6944,
+    "2000940": 6944
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Init_VProcessUtils002": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 40 53"
+   },
+   "via": "tier0!0x180005620 (InterfaceReg_Init_VProcessUtils002 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 22048,
+    "2000930": 22048,
+    "2000933": 22048,
+    "2000940": 22048
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Init_TestScriptMgr001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC"
+   },
+   "via": "tier0!0x180005D20 (InterfaceReg_Init_TestScriptMgr001 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 23840,
+    "2000930": 23840,
+    "2000933": 23840,
+    "2000940": 23840
+   },
+   "status": "verified"
+  },
+  "sub_180006F20": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 C7 44 24 28 00 00 00 00"
+   },
+   "via": "tier0!0x180006F20 (sub_180006F20 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 28448,
+    "2000930": 28448,
+    "2000933": 28448,
+    "2000940": 28448
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Init_VStringTokenSystem001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 C7 44 24 28 00 00 00 00"
+   },
+   "via": "tier0!0x180006F40 (InterfaceReg_Init_VStringTokenSystem001 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 28480,
+    "2000930": 28480,
+    "2000933": 28480,
+    "2000940": 28480
+   },
+   "status": "verified"
+  },
+  "CCommandLine::HasParms": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCommandLine",
+    "slot": 15
+   },
+   "via": "tier0!0x18005C0F0 (CCommandLine slot 15 -> CCommandLine::HasParms)",
+   "tag": "V",
+   "expect": {
+    "2000921": 377072,
+    "2000930": 377072,
+    "2000933": 377072,
+    "2000940": 377072
+   },
+   "status": "verified"
+  },
+  "Create_VEngineCvar007": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 8B 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180001B27 (InterfaceReg_Init_VEngineCvar007 references Create_VEngineCvar007 (prologue not unique): lea     rdx, Create_VEngineCvar007)",
+   "tag": "V",
+   "expect": {
+    "2000921": 427424,
+    "2000930": 427424,
+    "2000933": 427424,
+    "2000940": 427424
+   },
+   "status": "verified"
+  },
+  "Create_VProcessUtils002": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 40 53",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180005627 (InterfaceReg_Init_VProcessUtils002 references Create_VProcessUtils002 (prologue not unique): lea     rdx, Create_VProcessUtils002)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1402400,
+    "2000930": 1402400,
+    "2000933": 1402720,
+    "2000940": 1402720
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::SetMinidumpType": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 21
+   },
+   "via": "tier0!0x180159560 (CProcessUtils slot 21 -> CProcessUtils::SetMinidumpType)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414496,
+    "2000930": 1414496,
+    "2000933": 1414816,
+    "2000940": 1414816
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::GetMinidumpsWritten": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 22
+   },
+   "via": "tier0!0x180159570 (CProcessUtils slot 22 -> CProcessUtils::GetMinidumpsWritten)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414512,
+    "2000930": 1414512,
+    "2000933": 1414832,
+    "2000940": 1414832
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::GetMaxMinidumps": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 23
+   },
+   "via": "tier0!0x180159580 (CProcessUtils slot 23 -> CProcessUtils::GetMaxMinidumps)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414528,
+    "2000930": 1414528,
+    "2000933": 1414848,
+    "2000940": 1414848
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::SetMaxMinidumps": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CProcessUtils",
+    "slot": 24
+   },
+   "via": "tier0!0x180159590 (CProcessUtils slot 24 -> CProcessUtils::SetMaxMinidumps)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1414544,
+    "2000930": 1414544,
+    "2000933": 1414864,
+    "2000940": 1414864
+   },
+   "status": "verified"
+  },
+  "Create_TestScriptMgr001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180005D27 (InterfaceReg_Init_TestScriptMgr001 references Create_TestScriptMgr001 (prologue not unique): lea     rdx, Create_TestScriptMgr001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1492416,
+    "2000930": 1492416,
+    "2000933": 1492736,
+    "2000940": 1492736
+   },
+   "status": "verified"
+  },
+  "Create_VStringTokenSystem001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 38 C7 44 24 28 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "tier0!0x180006F47 (InterfaceReg_Init_VStringTokenSystem001 references Create_VStringTokenSystem001 (prologue not unique): lea     rdx, Create_VStringTokenSystem001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1720304,
+    "2000930": 1720304,
+    "2000933": 1720624,
+    "2000940": 1720624
+   },
+   "status": "verified"
+  },
+  "CProcessUtils::vftable": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 83 EC 28 80 3D ?? ?? ?? ?? 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "tier0!0x1803A1820 (pointer to off_18032BE00 stored in g_CProcessUtils+0x0; tier0!0x180156620 (Create_VProcessUtils002 reads g_CProcessUtils))",
+   "tag": "V",
+   "expect": {
+    "2000921": 3325440,
+    "2000930": 3325440,
+    "2000933": 3325448,
+    "2000940": 3325448
+   },
+   "status": "verified"
+  },
+  "___R4CCvar__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "T0V_CCVAR_VT",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180341F38 (??_R4CCvar@@6B@ via CCvar)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3415864,
+    "2000930": 3415864,
+    "2000933": 3415736,
+    "2000940": 3415736
+   },
+   "status": "verified"
+  },
+  "___R4CProcessPipeRead__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CProcessPipeRead",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180344060 (??_R4CProcessPipeRead@@6B@ via CProcessPipeRead)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3424352,
+    "2000930": 3424352,
+    "2000933": 3424224,
+    "2000940": 3424224
+   },
+   "status": "verified"
+  },
+  "___R4CProcess__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CProcess",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180344288 (??_R4CProcess@@6B@ via CProcess)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3424904,
+    "2000930": 3424904,
+    "2000933": 3424776,
+    "2000940": 3424776
+   },
+   "status": "verified"
+  },
+  "___R4CTestScriptMgr__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "T0V_TESTSCRIPTMGR_VT",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180344428 (??_R4CTestScriptMgr@@6B@ via T0V_TESTSCRIPTMGR_VT)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3425320,
+    "2000930": 3425320,
+    "2000933": 3425192,
+    "2000940": 3425192
+   },
+   "status": "verified"
+  },
+  "___R2CUtlStringTokenSystem__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CUtlStringTokenSystem",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     },
+     {
+      "rva": 12
+     }
+    ]
+   },
+   "via": "tier0!0x180344B98 (??_R2CUtlStringTokenSystem@@8 via CUtlStringTokenSystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3427224,
+    "2000930": 3427224,
+    "2000933": 3427096,
+    "2000940": 3427096
+   },
+   "status": "verified"
+  },
+  "___R4CUtlStringTokenSystem__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CUtlStringTokenSystem",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180344BE0 (??_R4CUtlStringTokenSystem@@6B@ via CUtlStringTokenSystem)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3427296,
+    "2000930": 3427296,
+    "2000933": 3427168,
+    "2000940": 3427168
+   },
+   "status": "verified"
+  },
+  "str_AVIMemAlloc": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": ".?AVIMemAlloc@@",
+    "section": ".data"
+   },
+   "via": "tier0!0x1803A3380 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 3814272,
+    "2000930": 3814272,
+    "2000933": 3814232,
+    "2000940": 3814232
+   },
+   "status": "verified"
+  },
+  "CCommandLine": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCommandLine"
+   },
+   "via": "tier0!0x18030CB70 (CCommandLine_vftable)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3197808,
+    "2000930": 3197808,
+    "2000933": 3197808,
+    "2000940": 3197808
+   },
+   "status": "verified"
+  },
+  "___R4CCommandLine__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CCommandLine",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x180341A98 (??_R4CCommandLine@@6B@ via CCommandLine)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3414680,
+    "2000930": 3414680,
+    "2000933": 3414552,
+    "2000940": 3414552
+   },
+   "status": "verified"
+  },
+  "CProcessUtils": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CProcessUtils"
+   },
+   "via": "tier0!0x18032BE00 (off_18032BE00)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3325440,
+    "2000930": 3325440,
+    "2000933": 3325448,
+    "2000940": 3325448
+   },
+   "status": "verified"
+  },
+  "___R4CProcessUtils__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CProcessUtils",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "tier0!0x1803442B0 (??_R4CProcessUtils@@6B@ via CProcessUtils)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 3424944,
+    "2000930": 3424944,
+    "2000933": 3424816,
+    "2000940": 3424816
+   },
+   "status": "verified"
+  },
+  "ConVarData::m_nFlags": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ConVarData_m_nFlags",
+   "locator": {
+    "type": "sig",
+    "sig": "48 85 C9 74 ?? 48 8B 49 ?? 48 0F BA E1 0A 72",
+    "steps": [
+     {
+      "disp": 8,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18006C82D in CCvar::FindConVar (slot 11, 0x18006C6B0): after ConVarRefAbstract(ref) fills its m_ConVarData, `mov rcx,[rcx+30h]; bt rcx,0Ah` reads the flags and refuses FCVAR_REFERENCE (bit 10); the same +30h is tested against FCVAR_DEVELOPMENTONLY (bit 1) and FCVAR_DEFENSIVE (bit 32) next",
+   "tag": "V",
+   "expect": {
+    "2000930": 48,
+    "2000933": 48,
+    "2000940": 48
+   },
+   "status": "verified"
+  },
+  "ConVarRefAbstract::m_ConVarData": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ConVarRefAbstract_m_ConVarData",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 ?? 48 0F BF 41 ?? 48 8B 49 ?? 4C 6B C0 58 48 8D 05",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18020F140 (ConVarRefAbstract::GetDefaultAsString: tail-jumps through the type-traits table 0x180398610 + 88*m_eVarType + 0x30 = ValueToString(m_defaultValue, buf)): first `mov rcx,[rcx+8]` loads the ref's ConVarData*",
+   "tag": "V",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   },
+   "status": "verified"
+  },
+  "ConVarData::m_eVarType": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ConVarData_m_eVarType",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 ?? 48 0F BF 41 ?? 48 8B 49 ?? 4C 6B C0 58 48 8D 05",
+    "steps": [
+     {
+      "disp": 8,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18020F144 (same function): `movsx rax, word ptr [rcx+28h]` = the int16 EConVarType that indexes the 88-byte type-traits table (entry names bool,int16,uint16,int32,uint32,int64,uint64,float32,float64,string,color,vector2,vector3,vector4,qangle,vectorws = EConVarType 0..15)",
+   "tag": "V",
+   "expect": {
+    "2000930": 40,
+    "2000933": 40,
+    "2000940": 40
+   },
+   "status": "verified"
+  },
+  "ConVarData::m_defaultValue": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ConVarData_m_defaultValue",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 ?? 48 0F BF 41 ?? 48 8B 49 ?? 4C 6B C0 58 48 8D 05",
+    "steps": [
+     {
+      "disp": 12,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18020F149 (same function): `mov rcx,[rcx+8]` loads the CVValue_t* default handed to the type's ValueToString; sub_18006A880 reads the same +8 as the default in its \"Parent and child ConVars with different default values! %s\" warning (name = +0)",
+   "tag": "V",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   },
+   "status": "verified"
+  },
+  "ConVarData::m_Values": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ConVarData_m_Values",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B 51 08 48 8D 1D ?? ?? ?? ?? 4D 8B D8 49 8B 42 30 4D 8D 4A ?? 48 0F BA E0 0F",
+    "steps": [
+     {
+      "disp": 21,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18020F354 in ConVarRefAbstract::GetValueAsString(slot, buf) (0x18020F340): `lea r9,[r10+58h]` is the slot-0 value; with FCVAR_PER_USER (bt rax,0Fh) slot n adds n*traits.size; out-of-range slots fall back to m_defaultValue [r10+8]",
+   "tag": "V",
+   "expect": {
+    "2000930": 88,
+    "2000933": 88,
+    "2000940": 88
+   },
+   "status": "verified"
+  },
+  "FCVAR_HIDDEN": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_HIDDEN",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 41 08 48 85 C0 74 ?? 48 8B 40 30 48 0F BA E0 0A 72 ?? A8 ?? 75 ?? D0 E8 24 01 C3",
+    "steps": [
+     {
+      "disp": 21,
+      "size": 1
+     }
+    ]
+   },
+   "via": "tier0!0x18020F7E4 in ConVarRefAbstract's cvarlist skip test (0x18020F7D0: true when m_ConVarData is null or flags & (REFERENCE 0x400 | 0x10 | DEVELOPMENTONLY 0x2)); `test al,10h` is the hidden bit (no flag-name table names it; header name FCVAR_HIDDEN)",
+   "tag": "V",
+   "expect": {
+    "2000930": 16,
+    "2000933": 16,
+    "2000940": 16
+   },
+   "status": "verified"
+  },
+  "FCVAR_DEVELOPMENTONLY": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_DEVELOPMENTONLY",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": -8
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 0 is {0x2, \"DEVELOPMENTONLY\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 2,
+    "2000933": 2,
+    "2000940": 2
+   },
+   "status": "verified"
+  },
+  "FCVAR_PROTECTED": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_PROTECTED",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 64
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 3 is {0x20, \"PROTECTED\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 32,
+    "2000933": 32,
+    "2000940": 32
+   },
+   "status": "verified"
+  },
+  "FCVAR_ARCHIVE": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_ARCHIVE",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 112
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 5 is {0x80, \"ARCHIVE\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 128,
+    "2000933": 128,
+    "2000940": 128
+   },
+   "status": "verified"
+  },
+  "FCVAR_NOTIFY": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_NOTIFY",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 136
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 6 is {0x100, \"NOTIFY\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 256,
+    "2000933": 256,
+    "2000940": 256
+   },
+   "status": "verified"
+  },
+  "FCVAR_REPLICATED": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_REPLICATED",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 208
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 9 is {0x2000, \"REPLICATED\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 8192,
+    "2000933": 8192,
+    "2000940": 8192
+   },
+   "status": "verified"
+  },
+  "FCVAR_CHEAT": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_CHEAT",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 232
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 10 is {0x4000, \"CHEAT\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 16384,
+    "2000933": 16384,
+    "2000940": 16384
+   },
+   "status": "verified"
+  },
+  "FCVAR_RELEASE": {
+   "kind": "const",
+   "sdk": "S2_CONST_FCVAR_RELEASE",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 15 ?? ?? ?? ?? 45 8B DE 4C 8B 70 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "add": 328
+     },
+     {
+      "disp": 0,
+      "size": 8
+     }
+    ]
+   },
+   "via": "tier0!0x180075A48 `lea r10, off_18039A108` in the cvarlist-by-flag command (0x180075950) = the engine's 23-entry {uint64 bit; long name; short name} flag table (bit at 0x18039A100 + 24*k); entry 14 is {0x80000, \"RELEASE\"}",
+   "tag": "V",
+   "expect": {
+    "2000930": 524288,
+    "2000933": 524288,
+    "2000940": 524288
+   },
+   "status": "verified"
+  },
+  "CONVARREF_INVALID_ACCESS_INDEX": {
+   "kind": "const",
+   "sdk": "S2_CONST_CONVARREF_INVALID_ACCESS_INDEX",
+   "locator": {
+    "type": "sig",
+    "sig": "BA ?? ?? ?? ?? 66 3B DA 74 ?? B8 FF 7F 00 00 66 85 46 4A",
+    "steps": [
+     {
+      "disp": 1,
+      "size": 4
+     }
+    ]
+   },
+   "via": "tier0!0x18006C644 `mov edx, 0FFFFh; cmp bx, dx` in CCvar::GetConVarData (0x18006C5F0): the ConVarRef access index compared with ConVarRef::kInvalidAccessIndex before the table lookup (workflows/streamline/re/cvar-re.md section 2)",
+   "tag": "V",
+   "expect": {
+    "2000930": 65535,
+    "2000933": 65535,
+    "2000940": 65535
+   },
+   "status": "verified"
+  }
+ }
+}

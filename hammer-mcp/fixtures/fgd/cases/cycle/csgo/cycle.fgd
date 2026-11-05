@@ -1,0 +1,4 @@
+// Fixture: closing the @include cycle (back to csgo.fgd, which is on the stack).
+@include "csgo.fgd"
+
+@PointClass base(Targetname) = also_never_reached : "Never parsed." []

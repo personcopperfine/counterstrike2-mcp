@@ -1,0 +1,305 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 02:19:29 -0500
+Subject: [PATCH 09/47] Add ISoundOpSystem, ISoundEventManager &
+ ISoundEventListener
+
+Ported from Wend4r/sourcesdk s2/restore-soundsystem
+public/soundsystem/isoundopsystem.h, verified against CS2 2000930 (win64 and
+linux); SosStartSoundEventParams_t re-verified against 2000940.
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/soundsystem/isoundopsystem.h | 283 ++++++++++++++++++++++++++++
+ 1 file changed, 283 insertions(+)
+ create mode 100644 public/soundsystem/isoundopsystem.h
+
+diff --git a/public/soundsystem/isoundopsystem.h b/public/soundsystem/isoundopsystem.h
+new file mode 100644
+index 00000000..3e961805
+--- /dev/null
++++ b/public/soundsystem/isoundopsystem.h
+@@ -0,0 +1,283 @@
++#ifndef ISOUNDOPSYSTEM_H
++#define ISOUNDOPSYSTEM_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "appframework/iappsystem.h"
++#include "tier0/basetypes.h"
++#include "tier0/utlleanvector.h"
++#include "tier0/utlstringtoken.h"
++#include "tier0/utlvector.h"
++
++class CSoundEvent;
++class CSosEventInfo_t;
++class CSosFieldData;
++class CSosOperatorStack;
++class CUtlString;
++class KeyValues;
++class KeyValues3;
++struct ResourceBindingBase_t;
++
++class SoundEventGuid_t
++{
++public:
++	SoundEventGuid_t() : m_Data( 0 ) {}
++	explicit SoundEventGuid_t( int32 nGuid ) : m_Data( nGuid ) {}
++
++	int32 m_Data;
++};
++
++class SoundGuid_t
++{
++public:
++	SoundGuid_t() : m_Data( 0 ) {}
++	explicit SoundGuid_t( int32 nGuid ) : m_Data( nGuid ) {}
++
++	int32 m_Data;
++};
++
++// AMNOTE: Messages queued for the operator system, keyed by sound event guid or library stack hash.
++template < class T >
++class CSosMessageQueue
++{
++public:
++	struct Entry_t
++	{
++		T m_Key;
++		CSosEventInfo_t *m_pMessage;
++	};
++
++	CUtlVector< Entry_t > m_Messages;
++};
++
++struct SosStartSoundEventParams_t
++{
++	SosStartSoundEventParams_t() :
++		m_unk001( nullptr ),
++		m_pFieldData( nullptr ),
++		m_nSoundEventHash( 0 ),
++		m_SourceEntity( -1 ),
++		m_Guid( 0 ),
++		m_unk201( 0 ),
++		m_nFieldDataSize( 0 ),
++		m_nSeed( -1 ),
++		m_nLayer( 0 ),
++		m_unk101( 0 ),
++		m_bTraceSoundscapes( false )
++	{
++	}
++
++	// AMNOTE: Copied (64 characters) into the queued start.
++	const char *m_unk001;
++	// AMNOTE: Packed field data of m_nFieldDataSize bytes, as for ISoundOpSystem::SetSoundEventFields.
++	const void *m_pFieldData;
++	uint32 m_nSoundEventHash;
++	CEntityIndex m_SourceEntity;
++	// AMNOTE: 0 starts the sound event with a new guid.
++	SoundEventGuid_t m_Guid;
++	// AMNOTE: Copied into the started sound event; callers pass 0.
++	uint32 m_unk201;
++	int m_nFieldDataSize;
++	// AMNOTE: -1 uses ISoundOpSystem::GetNextRandomSeed.
++	int16 m_nSeed;
++	// AMNOTE: Voice layer, see ISoundOpSystem::StopSoundEventsOnLayer.
++	uint8 m_nLayer;
++	uint8 m_unk101;
++	// AMNOTE: Only the server traces soundscapes.
++	bool m_bTraceSoundscapes;
++};
++
++abstract_class ISoundEventListener
++{
++public:
++	virtual void OnStartSoundEventMessages( const CSosMessageQueue< SoundEventGuid_t > &messages ) = 0;
++	virtual void OnSoundEventsStopped( const CUtlVector< SoundEventGuid_t > &guids ) = 0;
++	virtual void OnSoundEventFieldsMessages( const CSosMessageQueue< SoundEventGuid_t > &messages ) = 0;
++	virtual void OnLibraryStackFieldsMessages( const CSosMessageQueue< uint32 > &messages ) = 0;
++	virtual void unk101( const void *pUnk ) = 0;
++	// AMNOTE: Called for every sound event the operator system starts.
++	virtual void OnSoundEventStarted( SoundEventGuid_t guid, SoundEventGuid_t parentGuid, SoundEventGuid_t rootGuid ) = 0;
++};
++
++abstract_class ISoundEventManager
++{
++public:
++	virtual uint32 GetSoundEventHash( const char *pSoundEventName ) const = 0;
++	virtual bool IsValidSoundEventHash( uint32 nSoundEvent ) const = 0;
++	virtual const char *GetSoundEventName( uint32 nSoundEvent ) const = 0;
++	virtual bool HasSoundEvent( const char *pSoundEventName ) const = 0;
++	virtual CSoundEvent *GetSoundEvent( uint32 nSoundEvent, bool bWarn ) const = 0;
++	virtual CSoundEvent *GetSoundEvent( const char *pSoundEventName ) const = 0;
++	virtual const ResourceBindingBase_t *GetSoundEventResourceBinding( const char *pSoundEventName ) = 0;
++	// AMNOTE: Looks up the resource of the sound event's binding.
++	virtual bool unk101( const char *pSoundEventName ) = 0;
++	virtual void ListSoundEvents( CUtlVector< const char * > &list ) const = 0;
++	virtual void ListSoundEvents( CUtlVector< CUtlString > &list ) const = 0;
++	virtual void ListSoundEventsForResource( CUtlVector< const char * > &list, const ResourceBindingBase_t *pBinding ) = 0;
++	virtual void FindSoundEvents( const char *pSubString, CUtlVector< CUtlString > &list ) = 0;
++	virtual void WriteSoundEventsKV3( const CUtlString &sPrefix, void *pTree, const CUtlVector< const char * > &soundEventNames ) = 0;
++	virtual void DereferenceSoundEvent( CSoundEvent *pSoundEvent ) = 0;
++	virtual void RemoveSoundEvent( const char *pSoundEventName ) = 0;
++	virtual void RemoveAllSoundEvents() = 0;
++	virtual uint32 GetSoundEventUpdateStackHash( uint32 nSoundEvent ) const = 0;
++	virtual uint32 GetSoundEventUpdateStackHash( const char *pSoundEventName ) const = 0;
++	virtual void GetSoundEventUpdateStackName( uint32 nSoundEvent, CUtlString &sName ) = 0;
++	virtual uint8 *GetSoundEventUpdateStackFlags( uint32 nSoundEvent ) = 0;
++	virtual bool SoundEventHasCustomStack( uint32 nSoundEvent ) = 0;
++	virtual uint32 GetSoundEventDefinitionBaseHash( uint32 nSoundEvent, int nBase ) = 0;
++	virtual uint32 GetSoundEventDefinitionBaseHash( const char *pSoundEventName, int nBase ) = 0;
++	virtual void GetSoundEventDefinitionBaseName( uint32 nSoundEvent, CUtlString &sName, int nBase ) = 0;
++	virtual void GetSoundEventDefinitionBaseField( uint32 nSoundEvent, CUtlString &sField, int nBase ) = 0;
++	virtual int GetSoundEventDefinitionBaseCount( uint32 nSoundEvent ) = 0;
++	virtual int GetSoundEventDefinitionBaseCount( const char *pSoundEventName ) = 0;
++	virtual bool SoundEventHasPreloadVsnd( const char *pSoundEventName ) = 0;
++	virtual uint8 *GetSoundEventUpdateGroups( uint32 nSoundEvent ) = 0;
++	virtual uint8 *GetSoundEventUpdateGroups( const char *pSoundEventName ) = 0;
++	virtual float GetSoundDuration( const char *pSoundEventName ) = 0;
++	virtual float GetSoundDuration( uint32 nSoundEvent ) = 0;
++	virtual const char *GetVSndNameForSoundEvent( const char *pSoundEventName, bool bFromSymbolTable ) = 0;
++	virtual void GetVSndNameListForSoundEvent( const char *pSoundEventName, CUtlVector< const char * > &list, bool bFromSymbolTable ) = 0;
++	virtual void PreloadSoundEvent( uint32 nSoundEvent, uint16 nUnk ) = 0;
++	virtual void PreloadSoundEvent( const char *pSoundEventName, uint16 nUnk ) = 0;
++	virtual bool AddSoundEvent( const char *pSoundEventName, KeyValues3 *pKV, const ResourceBindingBase_t *pBinding, bool bUpdate, bool bNoDefer, bool bUnused ) = 0;
++	virtual void AddSoundEvents( KeyValues3 *pKV, const ResourceBindingBase_t *pBinding ) = 0;
++	virtual void RemoveTimedOutDeferredSoundEvent() = 0;
++	virtual bool CopySoundEvent( const char *pSoundEventName, const char *pSourceSoundEventName, const ResourceBindingBase_t *pBinding ) = 0;
++	virtual void AddNewSoundEvent( const char *pSoundEventName, const ResourceBindingBase_t *pBinding ) = 0;
++	virtual bool SetSoundEventUpdateStack( const char *pSoundEventName, const char *pStackName ) = 0;
++	virtual bool AddSoundEventDefinitionField( const char *pSoundEventName, const char *pFieldName, const CSosFieldData *pData ) = 0;
++	virtual bool SetSoundEventKeyValue( const char *pSoundEventName, const char *pKey, const char *pValue ) = 0;
++	virtual bool HasSoundEventField( CSoundEvent *pSoundEvent, CUtlStringToken nFieldToken, int nIndex ) = 0;
++	virtual bool HasSoundEventField( const char *pSoundEventName, const char *pFieldName, int nIndex ) = 0;
++	virtual bool SetSoundEventDefinitionField( CSoundEvent *pSoundEvent, CUtlStringToken nFieldToken, const CSosFieldData *pData, int nIndex ) = 0;
++	virtual bool SetSoundEventDefinitionFieldIndex( CSoundEvent *pSoundEvent, CUtlStringToken nFieldToken, int nIndex ) = 0;
++	virtual int GetSoundEventDefinitionFieldCount( uint32 nSoundEvent, CUtlStringToken nFieldToken, bool *pbArray, bool bIgnoreBases ) = 0;
++	virtual int GetSoundEventDefinitionFieldElementCount( uint32 nSoundEvent, CUtlStringToken nFieldToken, bool bIgnoreBases ) = 0;
++	virtual bool GetSoundEventDefinitionField( uint32 nSoundEvent, CUtlStringToken nFieldToken, uint8 **ppData, int nIndex, bool bIgnoreBases ) = 0;
++	virtual bool GetSoundEventDefinitionField( uint32 nSoundEvent, CUtlStringToken nFieldToken, CUtlString &sValue, int nIndex, bool bIgnoreBases ) = 0;
++	virtual bool GetSoundEventDefinitionField( uint32 nSoundEvent, CUtlStringToken nFieldToken, KeyValues3 *pKV, int nIndex, bool bIgnoreBases ) = 0;
++	virtual void BeginSoundEventOverrides() = 0;
++	virtual void EndSoundEventOverrides() = 0;
++	virtual void RestoreOverriddenSoundEvents() = 0;
++	virtual void SoundEventKVToKV3( KeyValues *pKV, KeyValues3 *pKV3 ) = 0;
++	virtual void CompareSoundEvents( const char *pSoundEventA, const char *pSoundEventB ) = 0;
++	virtual bool GetSoundEventVoiceGraph( uint32 nSoundEvent, CUtlString &sValue ) = 0;
++	virtual void ListDeferredSoundEvents() = 0;
++	virtual void ClearDeferredSoundEvents() = 0;
++	virtual bool GetSoundEventKeyValue( const char *pSoundEventName, const char *pKey, CUtlString &sValue ) = 0;
++	virtual bool GetSoundEventVSnds( const char *pSoundEventName, CUtlVector< CUtlString > *pVSndNames, float *pflMaxDuration ) = 0;
++};
++
++abstract_class ISoundOpSystem : public IAppSystem, public ISoundEventManager
++{
++public:
++	virtual SoundEventGuid_t StartSoundEvent( const char *pSoundEventName, CEntityIndex nSource, uint8 nLayer ) = 0;
++	// AMNOTE: Sets pParams->m_nSoundEventHash from the name.
++	virtual SoundEventGuid_t StartSoundEvent( const char *pSoundEventName, SosStartSoundEventParams_t *pParams ) = 0;
++	virtual SoundEventGuid_t StartSoundEvent( const SosStartSoundEventParams_t *pParams ) = 0;
++	// AMNOTE: Starts the stack through the empty sound event core.empty.
++	virtual SoundEventGuid_t StartStack( const char *pStackName, CEntityIndex nSource, uint8 nLayer ) = 0;
++	virtual void QueueStopSoundEvent( SoundEventGuid_t guid ) = 0;
++	virtual bool StopSoundEvent( SoundEventGuid_t guid ) = 0;
++	virtual bool StopSoundEvent( uint32 nSoundEvent, CEntityIndex nSource ) = 0;
++	virtual bool StopSoundEvent( const char *pSoundEventName, CEntityIndex nSource ) = 0;
++	virtual bool StopSoundEventImmediately( SoundEventGuid_t guid ) = 0;
++	// AMNOTE: 0xFF stops the sound events of every layer.
++	virtual void StopSoundEventsOnLayer( uint8 nLayer ) = 0;
++	virtual void StopAllSoundEvents( bool bStopSounds ) = 0;
++	virtual bool PauseSoundEvent( SoundEventGuid_t guid ) = 0;
++	virtual bool PauseSoundEvents( uint32 nSoundEvent, CEntityIndex nSource ) = 0;
++	virtual bool PauseSoundEvents( const char *pSoundEventName, CEntityIndex nSource ) = 0;
++	// AMNOTE: 0xFF with 0xFE pauses every sound event.
++	virtual void PauseSoundEventsOnLayer( uint8 nLayer, uint8 nExceptLayer ) = 0;
++	virtual bool UnPauseSoundEvent( SoundEventGuid_t guid ) = 0;
++	virtual bool UnPauseSoundEvents( uint32 nSoundEvent, CEntityIndex nSource ) = 0;
++	virtual bool UnPauseSoundEvents( const char *pSoundEventName, CEntityIndex nSource ) = 0;
++	virtual void UnPauseAllSoundEvents() = 0;
++	virtual CSosOperatorStack *GetStack( uint32 nStackHash ) = 0;
++	virtual uint8 *GetStackFlags( uint32 nStackHash ) = 0;
++	virtual bool SetSoundEventParam( SoundEventGuid_t guid, CUtlStringToken nFieldToken, const CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool SetSoundEventFields( SoundEventGuid_t guid, const void *pData, int nSize ) = 0;
++	virtual bool SetSoundEventPublicParam( SoundEventGuid_t guid, const char *pFieldName, const CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool SetLibraryStackField( uint32 nStackHash, CUtlStringToken nFieldToken, const CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool SetLibraryStackFields( uint32 nStackHash, const void *pData, int nSize ) = 0;
++	virtual bool SetLibraryStackField( const char *pStackName, const char *pOperatorName, const char *pFieldName, const CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool SetLibraryStackPublicField( const char *pStackName, const char *pFieldName, const CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool GetLibraryStackField( const uint32 *pStackField, CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool GetLibraryStackField( uint32 nStackHash, CUtlStringToken nFieldToken, CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool GetLibraryStackField( const char *pStackName, const char *pOperatorName, const char *pFieldName, CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool GetLibraryStackPublicField( const char *pStackName, const char *pFieldName, CSosFieldData *pData, int16 nIndex ) = 0;
++	// AMNOTE: The returned type is an nType as in GetAtomicDataType.
++	virtual uint8 GetLibraryStackFieldType( const char *pStackName, const char *pOperatorName, const char *pFieldName ) = 0;
++	virtual CUtlStringToken GetFieldToken( const char *pOperatorName, const char *pFieldName ) = 0;
++	virtual CUtlStringToken GetPublicFieldToken( const char *pFieldName ) = 0;
++	virtual uint32 GetStackHash( const char *pStackName ) = 0;
++	// AMNOTE: 0 for an unknown guid, 1 while the start is queued, 2 or 3 while active (3 when paused).
++	virtual int GetSoundEventState( SoundEventGuid_t guid ) = 0;
++	virtual bool IsSoundEventPlaying( SoundEventGuid_t guid ) = 0;
++	virtual bool IsSoundEventPaused( SoundEventGuid_t guid ) = 0;
++	virtual float GetSoundEventStartOffset( SoundEventGuid_t guid ) = 0;
++	virtual float GetSoundEventElapsedTime( SoundEventGuid_t guid ) = 0;
++	virtual float GetSoundEventSeekTime( SoundEventGuid_t guid ) = 0;
++	virtual void GetSoundEventPublicFieldNames( const char *pSoundEventName, CUtlVector< const char * > &list ) = 0;
++	virtual bool ValidateStackFieldData( uint32 nStackHash, CUtlStringToken nFieldToken, const CSosFieldData *pData, int *pnCount ) = 0;
++	virtual bool ValidateStackFieldData( uint32 nStackHash, const char *pOperatorName, const char *pFieldName, const CSosFieldData *pData, int *pnCount ) = 0;
++	// AMNOTE: nType indexes the sound field type table (0 none, 1 bool, 2 int, 3 uint32, 4 uint64, 5 vsnd, 6 string_token, 7 enum, 8 float, 9-15 float2 to float_max_speakers, 16 string, 17 float16, 18 dsppreset, 19 sndevt, 20 mixgroup, 21 public_opvar).
++	virtual int GetAtomicDataType( uint8 nType ) = 0;
++	// AMNOTE: nType as in GetAtomicDataType.
++	virtual int GetFieldDataTypeSize( uint8 nType ) = 0;
++	// AMNOTE: nType as in GetAtomicDataType.
++	virtual int GetFieldDataTypeCount( uint8 nType ) = 0;
++	virtual CSosFieldData *CreateFieldDataFromKV3( KeyValues3 *pKV ) = 0;
++	virtual bool SetSoundEventDefinitionFieldFromString( uint32 nSoundEvent, const char *pFieldName, const char *pValue ) = 0;
++	virtual bool SetSoundEventDefinitionFieldFromString( const char *pSoundEventName, const char *pFieldName, const char *pValue ) = 0;
++	// AMNOTE: nType as in GetAtomicDataType.
++	virtual CSosFieldData *CreateFieldData( uint8 nType, const void *pData ) = 0;
++	virtual uint16 AddString( const char *pString ) = 0;
++	virtual uint16 FindString( const char *pString ) = 0;
++	virtual const char *GetString( uint16 hString ) = 0;
++	virtual bool IsValidStack( uint32 nStackHash ) = 0;
++	// AMNOTE: Used when SosStartSoundEventParams_t::m_nSeed is -1.
++	virtual int16 GetNextRandomSeed() = 0;
++	virtual const char *GetActiveSoundEventName( SoundEventGuid_t guid ) = 0;
++	virtual int SelectIndex( CSosOperatorStack *pStack, uint8 *pState, int nMode, int nMax, CUtlVector< float > *pWeights ) = 0;
++	virtual const char *GetUpdateGroupName( int8 nGroup ) = 0;
++	virtual void GetActiveSoundEvents( CUtlVector< SoundEventGuid_t > &list ) = 0;
++	virtual bool IsDetailedToolDebuggingEnabled() = 0;
++	virtual void SetDetailedToolDebugging( bool bEnable ) = 0;
++	virtual void *GetSoundEventHistory( SoundEventGuid_t guid ) = 0;
++	virtual void KeepSoundEventHistory( SoundEventGuid_t guid ) = 0;
++	virtual uint32 GetVSndSymbol( const char *pVsndName ) = 0;
++	virtual bool StackKVToKV3( KeyValues *pKV, KeyValues3 *pKV3 ) = 0;
++	virtual bool StackKV3ToKV( KeyValues3 *pKV3, KeyValues *pKV ) = 0;
++	virtual void WriteStackFieldsKV3( uint32 nStackHash, KeyValues3 *pKV ) = 0;
++	virtual void ReadStackFieldsKV3( uint32 nStackHash, KeyValues3 *pKV ) = 0;
++	virtual void AddSoundEventListener( ISoundEventListener *pListener ) = 0;
++	virtual void RemoveSoundEventListener( ISoundEventListener *pListener ) = 0;
++	virtual const char *GetFieldValueString( SoundEventGuid_t guid, CUtlStringToken nFieldToken ) = 0;
++	virtual const char *GetFieldValueString( uint32 nStackHash, CUtlStringToken nFieldToken ) = 0;
++	virtual const char *GetStackName( uint32 nStackHash ) = 0;
++	// AMNOTE: The source entity the sound event was started with, -1 when it is not active.
++	virtual CEntityIndex GetSoundEventSourceEntity( SoundEventGuid_t guid ) = 0;
++	virtual bool GetSoundEventParam( SoundEventGuid_t guid, CUtlStringToken nFieldToken, CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual bool GetSoundEventPublicParam( SoundEventGuid_t guid, const char *pFieldName, CSosFieldData *pData, int16 nIndex ) = 0;
++	virtual int16 GetSoundEventSeed( SoundEventGuid_t guid ) = 0;
++	// AMNOTE: 0xFE when the sound event is not active.
++	virtual uint8 GetSoundEventLayer( SoundEventGuid_t guid ) = 0;
++	// AMNOTE: Guid of another active sound event.
++	virtual SoundEventGuid_t GetSoundEventParentGuid( SoundEventGuid_t guid ) = 0;
++	virtual SoundEventGuid_t GetSoundEventRootGuid( SoundEventGuid_t guid ) = 0;
++	virtual SoundGuid_t GetSoundEventVoiceGuid( SoundEventGuid_t guid ) = 0;
++	virtual int GetSymbolListCount( const CUtlLeanVector< uint32 > *const *ppList ) = 0;
++	virtual const char *GetSymbolListString( const CUtlLeanVector< uint32 > *const *ppList, int nIndex ) = 0;
++	// AMNOTE: nType as in GetAtomicDataType.
++	virtual void GetSoundEventFieldNamesOfType( const char *pSoundEventName, CUtlVector< const char * > &list, uint8 nType ) = 0;
++	// AMNOTE: Non-zero makes StartSoundEvent and StartStack fail.
++	virtual void SetSuppressStartSoundEvent( int nSuppress ) = 0;
++	virtual void LockOperatorSystem() = 0;
++	virtual void UnlockOperatorSystem() = 0;
++	virtual void ParseManifestStacksForErrors( KeyValues3 *pStacks, void *pUnk ) = 0;
++};
++
++#endif // ISOUNDOPSYSTEM_H

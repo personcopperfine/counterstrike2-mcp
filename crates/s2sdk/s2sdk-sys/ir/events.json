@@ -1,0 +1,631 @@
+{
+  "enums": [],
+  "records": [],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IGameEvent",
+      "header": "public/igameevents.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IGameEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent)"
+        },
+        {
+          "cxx_signature": "const char *() const",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "GetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "int () const",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "GetID",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent) -> i32"
+        },
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "IsReliable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent) -> bool"
+        },
+        {
+          "cxx_signature": "bool () const",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "IsLocal",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const GameEventKeySymbol_t &)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "IsEmpty",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const GameEventKeySymbol_t &, bool)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 6,
+          "name": "GetBool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: bool) -> bool"
+        },
+        {
+          "cxx_signature": "int (const GameEventKeySymbol_t &, int)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 7,
+          "name": "GetInt",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: i32) -> i32"
+        },
+        {
+          "cxx_signature": "uint64 (const GameEventKeySymbol_t &, uint64)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 8,
+          "name": "GetUint64",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: u64) -> u64"
+        },
+        {
+          "cxx_signature": "float (const GameEventKeySymbol_t &, float)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 9,
+          "name": "GetFloat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: f32) -> f32"
+        },
+        {
+          "cxx_signature": "const char *(const GameEventKeySymbol_t &, const char *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 10,
+          "name": "GetString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: *const ::core::ffi::c_char) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void *(const GameEventKeySymbol_t &)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 11,
+          "name": "GetPtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CEntityHandle (const GameEventKeySymbol_t &, CEntityHandle)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, ret: *mut CEntityHandle, keySymbol: *const CKV3MemberName, defaultValue: CEntityHandle) -> *mut CEntityHandle",
+          "msvc_slot": 12,
+          "name": "GetEHandle",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: CEntityHandle) -> CEntityHandle"
+        },
+        {
+          "cxx_signature": "CEntityInstance *(const GameEventKeySymbol_t &, CEntityInstance *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "GetEntity",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, fallbackInstance: *mut CEntityInstance) -> *mut CEntityInstance"
+        },
+        {
+          "cxx_signature": "CEntityIndex (const GameEventKeySymbol_t &, CEntityIndex)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, ret: *mut CEntityIndex, keySymbol: *const CKV3MemberName, defaultValue: CEntityIndex) -> *mut CEntityIndex",
+          "msvc_slot": 14,
+          "name": "GetEntityIndex",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, defaultValue: CEntityIndex) -> CEntityIndex"
+        },
+        {
+          "cxx_signature": "CPlayerSlot (const GameEventKeySymbol_t &)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, ret: *mut CPlayerSlot, keySymbol: *const CKV3MemberName) -> *mut CPlayerSlot",
+          "msvc_slot": 15,
+          "name": "GetPlayerSlot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> CPlayerSlot"
+        },
+        {
+          "cxx_signature": "CEntityInstance *(const GameEventKeySymbol_t &)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 16,
+          "name": "GetPlayerController",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> *mut CEntityInstance"
+        },
+        {
+          "cxx_signature": "CEntityInstance *(const GameEventKeySymbol_t &)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 17,
+          "name": "GetPlayerPawn",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> *mut CEntityInstance"
+        },
+        {
+          "cxx_signature": "CEntityHandle (const GameEventKeySymbol_t &)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, ret: *mut CEntityHandle, keySymbol: *const CKV3MemberName) -> *mut CEntityHandle",
+          "msvc_slot": 18,
+          "name": "GetPawnEHandle",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> CEntityHandle"
+        },
+        {
+          "cxx_signature": "CEntityIndex (const GameEventKeySymbol_t &)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, ret: *mut CEntityIndex, keySymbol: *const CKV3MemberName) -> *mut CEntityIndex",
+          "msvc_slot": 19,
+          "name": "GetPawnEntityIndex",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 4,
+              "sret": false
+            },
+            "msvc": {
+              "size": 4,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> CEntityIndex"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, bool)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 20,
+          "name": "SetBool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: bool)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, int)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 21,
+          "name": "SetInt",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: i32)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, uint64)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 22,
+          "name": "SetUint64",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: u64)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, float)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "SetFloat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: f32)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, const char *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "SetString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, void *)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "SetPtr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, CEntityHandle)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "SetEntity",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: CEntityHandle)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, CEntityInstance *)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 26,
+          "name": "SetEntity",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: *mut CEntityInstance)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, CEntityInstance *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "SetPlayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, pawn: *mut CEntityInstance)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, CPlayerSlot)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 28,
+          "name": "SetPlayer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName, value: CPlayerSlot)"
+        },
+        {
+          "cxx_signature": "void (const GameEventKeySymbol_t &, const GameEventKeySymbol_t &, CEntityInstance *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 30,
+          "name": "SetPlayerRaw",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, controllerKeySymbol: *const CKV3MemberName, pawnKeySymbol: *const CKV3MemberName, pawn: *mut CEntityInstance)"
+        },
+        {
+          "cxx_signature": "bool (const GameEventKeySymbol_t &)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 31,
+          "name": "HasKey",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent, keySymbol: *const CKV3MemberName) -> bool"
+        },
+        {
+          "cxx_signature": "CVariant ()",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 32,
+          "name": "CreateVMTable",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "KeyValues3 *() const",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "GetDataKeys",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEvent) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 34,
+        "own_entries": 34
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IGameEventListener2",
+      "header": "public/igameevents.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IGameEventListener2",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventListener2)"
+        },
+        {
+          "cxx_signature": "void (IGameEvent *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "FireGameEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventListener2, event: *mut IGameEvent)"
+        }
+      ],
+      "msvc": {
+        "length": 2,
+        "own_entries": 2
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IGameEventManager2",
+      "header": "public/igameevents.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IGameEventManager2",
+          "overrides": "IBaseInterface::~IBaseInterface",
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2)"
+        },
+        {
+          "cxx_signature": "int (const char *, bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "LoadEventsFromFile",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, filename: *const ::core::ffi::c_char, bSearchAll: bool) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "Reset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2)"
+        },
+        {
+          "cxx_signature": "int (IGameEventListener2 *, const char *, bool)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "AddListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, listener: *mut IGameEventListener2, name: *const ::core::ffi::c_char, bServerSide: bool) -> i32"
+        },
+        {
+          "cxx_signature": "bool (IGameEventListener2 *, const char *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "FindListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, listener: *mut IGameEventListener2, name: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "void (IGameEventListener2 *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "RemoveListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, listener: *mut IGameEventListener2)"
+        },
+        {
+          "cxx_signature": "IGameEvent *(const char *, bool, int *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_name": "CreateEventA",
+          "msvc_slot": 6,
+          "name": "CreateEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, name: *const ::core::ffi::c_char, bForce: bool, pCookie: *mut i32) -> *mut IGameEvent"
+        },
+        {
+          "cxx_signature": "bool (IGameEvent *, bool)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 7,
+          "name": "FireEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent, bDontBroadcast: bool) -> bool"
+        },
+        {
+          "cxx_signature": "bool (IGameEvent *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 8,
+          "name": "FireEventClientSide",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent) -> bool"
+        },
+        {
+          "cxx_signature": "IGameEvent *(IGameEvent *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 9,
+          "name": "DuplicateEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent) -> *mut IGameEvent"
+        },
+        {
+          "cxx_signature": "void (IGameEvent *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 10,
+          "name": "FreeEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent)"
+        },
+        {
+          "cxx_signature": "bool (IGameEvent *, CNetMessagePB<CMsgSource1LegacyGameEvent> *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 11,
+          "name": "SerializeEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent, ev: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "IGameEvent *(const CNetMessagePB<CMsgSource1LegacyGameEvent> &)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 12,
+          "name": "UnserializeEvent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, ev: *mut ::core::ffi::c_void) -> *mut IGameEvent"
+        },
+        {
+          "cxx_signature": "int (const char *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "LookupEventId",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, name: *const ::core::ffi::c_char) -> i32"
+        },
+        {
+          "cxx_signature": "void (IGameEvent *, CUtlString &)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 14,
+          "name": "PrintEventToString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, event: *mut IGameEvent, out: *mut CUtlString)"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 15,
+          "name": "HasEventDescriptor",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IGameEventManager2, name: *const ::core::ffi::c_char) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 16,
+        "own_entries": 16
+      },
+      "primary_base": "IBaseInterface",
+      "secondary_bases": []
+    }
+  ]
+}

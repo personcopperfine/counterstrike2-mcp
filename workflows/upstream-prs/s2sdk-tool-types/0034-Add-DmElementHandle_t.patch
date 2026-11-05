@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:10:57 -0500
+Subject: [PATCH 34/47] Add DmElementHandle_t
+
+The enum is Source SDK 2013 public/datamodel/dmelementhandle.h, verified against CS2 2000930 (win64).
+---
+ public/datamodel/dmelementhandle.h | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 public/datamodel/dmelementhandle.h
+
+diff --git a/public/datamodel/dmelementhandle.h b/public/datamodel/dmelementhandle.h
+new file mode 100644
+index 00000000..d2a97275
+--- /dev/null
++++ b/public/datamodel/dmelementhandle.h
+@@ -0,0 +1,21 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Handle of an element of the datamodel
++//
++//===========================================================================//
++
++#ifndef DMELEMENTHANDLE_H
++#define DMELEMENTHANDLE_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "tier0/platform.h"
++
++// AMNOTE: 23-bit index into the datamodel's handle table, the upper 9 bits are the slot's serial
++enum DmElementHandle_t : uint32
++{
++	DMELEMENT_HANDLE_INVALID = 0xffffffff
++};
++
++#endif // DMELEMENTHANDLE_H

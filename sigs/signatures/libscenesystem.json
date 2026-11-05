@@ -1,0 +1,143 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for libscenesystem.so of build 2000930 (the build the Windows",
+  "scenesystem.dll in the database is, ClientVersion 2000930). The module exports no `_ZTV` symbol for",
+  "its own classes, so each vtable is located by the one function that stores its address point",
+  "(a constructor): a sig ending in `lea rax,[rip+vtable]` and a `rip` step, the way libtier0.json's",
+  "CTestScriptMgr is. The VTLEN_* consts are the `vtlen` scan of those tables; sdkcheck.py compares them",
+  "with the Itanium vtable lengths of the generated IR (LINUX_VT_PAIRS, rule `==`).",
+  "CSceneSystem is not here: its Itanium table carries the entries GCC adds for the overrides of three",
+  "secondary bases and its destructors, so no `==` claim about ISceneSystem's 198 slots can be made.",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only."
+ ],
+ "module": "libscenesystem.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000930": {
+   "sha256": "22a5899bf16e2c34"
+  },
+  "2000933": {
+   "sha256": "51cfcd206cb37afa"
+  },
+  "2000940": {
+   "sha256": "17854c306c4b12cf"
+  }
+ },
+ "entries": {
+  "CSceneUtils": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 54 49 89 FC 53",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libscenesystem.so 0x38a290: a function that begins with push rbp, lea rax,[rip+vtable] (the CSceneUtils vtable address point; it stores the vtable pointer, i.e. a constructor). No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISceneUtils implementation (the SceneUtils_001 interface), single table, offset-to-top 0, no destructor entries; the Windows build's table has the same 62 entries (s2sdk-types RE3 section 4)",
+   "expect": {
+    "2000930": 10614328,
+    "2000933": 10614328,
+    "2000940": 10614328
+   }
+  },
+  "VTLEN_CSceneUtils": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CSceneUtils"
+   },
+   "via": "libscenesystem.so address point 0xA1F638: 62 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of ISceneUtils' implementation, compared by sdkcheck.py with upstream's Itanium vtable length of ISceneUtils (62)",
+   "expect": {
+    "2000930": 62,
+    "2000933": 62,
+    "2000940": 62
+   }
+  },
+  "CRenderingPipelineAlias": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "49 89 C7 C7 40 10 00 00 00 00 48 8D 05 ?? ?? ?? ?? 49 89 5F 18 49 89 07",
+    "steps": [
+     {
+      "rip": 13,
+      "next": 17
+     }
+    ]
+   },
+   "via": "libscenesystem.so 0x38fcd9: the code that initialises a new CRenderingPipelineAlias, which stores the vtable address point (lea rax,[rip+vtable]) as the object's first qword and the aliased pipeline at +0x18. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IRenderingPipeline implementation that forwards every slot but one to the aliased pipeline, single table, offset-to-top 0; the Windows build's table has the same 14 entries (s2sdk-types RE3 section 4)",
+   "expect": {
+    "2000930": 10614200,
+    "2000933": 10614200,
+    "2000940": 10614200
+   }
+  },
+  "VTLEN_CRenderingPipelineAlias": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CRenderingPipelineAlias"
+   },
+   "via": "libscenesystem.so address point 0xA1F5B8: 14 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IRenderingPipeline's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of IRenderingPipeline (14)",
+   "expect": {
+    "2000930": 14,
+    "2000933": 14,
+    "2000940": 14
+   }
+  },
+  "CSceneView": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 66 0F EF C0 48 89 E5 41 57",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libscenesystem.so 0x2e0c60: a function that begins with push rbp, lea rax,[rip+vtable] (the CSceneView vtable address point; it stores the vtable pointer, i.e. a constructor). No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISceneView implementation, single table, offset-to-top 0; the Itanium table has 113 entries where the Windows one has 112 because ISceneView's inline destructor takes two slots (s2sdk-types RE3 section 4)",
+   "expect": {
+    "2000930": 10607776,
+    "2000933": 10607776,
+    "2000940": 10607776
+   }
+  },
+  "VTLEN_CSceneView": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CSceneView"
+   },
+   "via": "libscenesystem.so address point 0xA1DCA0: 113 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of ISceneView's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of ISceneView (113)",
+   "expect": {
+    "2000930": 113,
+    "2000933": 113,
+    "2000940": 113
+   }
+  }
+ }
+}

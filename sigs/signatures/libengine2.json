@@ -1,0 +1,144 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for libengine2.so of build 2000930 (the build the Windows",
+  "engine2.dll in the database is, ClientVersion 2000930). The module exports no `_ZTV` symbol for its own",
+  "classes, so each vtable is located by one function that stores its address point (a constructor or a",
+  "destructor): a sig starting with `push rbp; lea rax,[rip+vtable]` and a `rip` step, the way",
+  "libscenesystem.json's CSceneUtils is. The VTLEN_* consts are the `vtlen` scan of those tables;",
+  "sdkcheck.py compares them with the Itanium vtable lengths of the generated IR (LINUX_VT_PAIRS).",
+  "A concrete service's Itanium table is longer than its interface by the entries GCC adds for the",
+  "overrides of a secondary base (CRenderService and CInputService have one: +1 each); CEngineClient has",
+  "a single base, so its table is exactly IVEngineClient2's.",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only."
+ ],
+ "module": "libengine2.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000930": {
+   "sha256": "f5745c46cb38b1d1"
+  },
+  "2000933": {
+   "sha256": "6c4c9b08d530d7c4"
+  },
+  "2000940": {
+   "sha256": "39938565c4a80350"
+  }
+ },
+ "entries": {
+  "CRenderService": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 55 41 54 49 89 FC 53 48 83 EC 08 48 89 07 48 05 58 01 00 00",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libengine2.so 0x440760: a function that begins with push rbp, lea rax,[rip+vtable] (the CRenderService vtable address point) and stores it as the object's first qword, then stores the address of a secondary table at +0x38. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IRenderService implementation (the RenderService_001 interface), primary table, offset-to-top 0; the Windows build's table has 39 entries (s2sdk-types RE5 section 0.1)",
+   "expect": {
+    "2000930": 10245640,
+    "2000933": 10246152,
+    "2000940": 10931208
+   }
+  },
+  "VTLEN_CRenderService": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CRenderService"
+   },
+   "via": "libengine2.so address point 0x9c5608: 41 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IRenderService's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of IRenderService (40): the interface's 40 slots plus one entry GCC adds for the override of the secondary base",
+   "expect": {
+    "2000930": 41,
+    "2000933": 41,
+    "2000940": 41
+   }
+  },
+  "CInputService": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 56 41 55 41 54 49 89 FC 53 48 89 07 48 05 18 02 00 00",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libengine2.so 0x3e1920: a function that begins with push rbp, lea rax,[rip+vtable] (the CInputService vtable address point) and stores it as the object's first qword, then stores the address of a secondary table at +0x38. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IInputService implementation (the InputService_001 interface), primary table, offset-to-top 0; the Windows build's table has 63 entries (s2sdk-types RE5 section 0.1)",
+   "expect": {
+    "2000930": 10212552,
+    "2000933": 10213064,
+    "2000940": 10898120
+   }
+  },
+  "VTLEN_CInputService": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CInputService"
+   },
+   "via": "libengine2.so address point 0x9bd4c8: 65 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IInputService's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of IInputService (64): the interface's 64 slots plus one entry GCC adds for the override of the secondary base",
+   "expect": {
+    "2000930": 65,
+    "2000933": 65,
+    "2000940": 65
+   }
+  },
+  "CEngineClient": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 53 48 89 FB 48 83 EC 08 81 7F 3C FF FF FF 3F",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libengine2.so 0x4f81f0: a function that begins with push rbp, lea rax,[rip+vtable] (the CEngineClient vtable address point) and stores it as the object's first qword. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IVEngineClient2 implementation (the Source2EngineToClient001 interface), single table, offset-to-top 0; the Windows build's table has the same 185 entries (s2sdk-types RE5 section 4)",
+   "expect": {
+    "2000930": 10275928,
+    "2000933": 10276440,
+    "2000940": 10961496
+   }
+  },
+  "VTLEN_CEngineClient": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CEngineClient"
+   },
+   "via": "libengine2.so address point 0x9ccc58: 185 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IVEngineClient2's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of IVEngineClient2 (185): the interface's 185 slots, no added virtual",
+   "expect": {
+    "2000930": 185,
+    "2000933": 185,
+    "2000940": 185
+   }
+  }
+ }
+}

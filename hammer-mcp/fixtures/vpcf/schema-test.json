@@ -1,0 +1,405 @@
+{
+  "build": "test",
+  "placeholder": false,
+  "rootClass": "CParticleSystemDefinition",
+  "arrays": [
+    {
+      "type": 0,
+      "key": "m_PreEmissionOperators",
+      "elementClass": null
+    },
+    {
+      "type": 1,
+      "key": "m_Emitters",
+      "elementClass": null
+    },
+    {
+      "type": 2,
+      "key": "m_Initializers",
+      "elementClass": null
+    },
+    {
+      "type": 3,
+      "key": "m_Operators",
+      "elementClass": null
+    },
+    {
+      "type": 4,
+      "key": "m_ForceGenerators",
+      "elementClass": null
+    },
+    {
+      "type": 5,
+      "key": "m_Constraints",
+      "elementClass": null
+    },
+    {
+      "type": 6,
+      "key": "m_Renderers",
+      "elementClass": null
+    },
+    {
+      "type": 7,
+      "key": "m_Children",
+      "elementClass": "ParticleChildrenInfo_t"
+    },
+    {
+      "type": 8,
+      "key": "m_NamedValueLocals",
+      "elementClass": "ParticleNamedValueSource_t"
+    }
+  ],
+  "functions": [
+    {
+      "type": 1,
+      "className": "C_OP_ContinuousEmitter",
+      "name": "Emit continuously",
+      "obsolete": false,
+      "singleton": null
+    },
+    {
+      "type": 2,
+      "className": "C_INIT_CreateWithinSphereTransform",
+      "name": "Create within sphere",
+      "obsolete": false,
+      "singleton": null
+    },
+    {
+      "type": 3,
+      "className": "C_OP_BasicMovement",
+      "name": "Movement basic",
+      "obsolete": false,
+      "singleton": null
+    },
+    {
+      "type": 3,
+      "className": "C_OP_Decay",
+      "name": "Decay",
+      "obsolete": false,
+      "singleton": null
+    },
+    {
+      "type": 4,
+      "className": "C_OP_Decay",
+      "name": "Decay",
+      "obsolete": false,
+      "singleton": null
+    },
+    {
+      "type": 3,
+      "className": "C_OP_TestObsolete",
+      "name": "Old style operator",
+      "obsolete": true,
+      "singleton": null
+    },
+    {
+      "type": 6,
+      "className": "C_OP_RenderSprites",
+      "name": "Render sprites",
+      "obsolete": false,
+      "singleton": null
+    }
+  ],
+  "classes": {
+    "CParticleSystemDefinition": {
+      "bases": [],
+      "fields": [
+        {
+          "name": "m_nMaxParticles",
+          "type": "int32",
+          "declaredIn": "CParticleSystemDefinition"
+        },
+        {
+          "name": "m_flConstantRadius",
+          "type": "float32",
+          "declaredIn": "CParticleSystemDefinition"
+        },
+        {
+          "name": "m_nConstantColor",
+          "type": "int32",
+          "declaredIn": "CParticleSystemDefinition"
+        },
+        {
+          "name": "m_controlPointConfigurations",
+          "type": "CParticleControlPointConfiguration_t",
+          "declaredIn": "CParticleSystemDefinition"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "CParticleFunction": {
+      "bases": [],
+      "fields": [
+        {
+          "name": "m_bEnabled",
+          "type": "bool",
+          "declaredIn": "CParticleFunction"
+        }
+      ],
+      "metadata": []
+    },
+    "CParticleFunctionOperator": {
+      "bases": [
+        "CParticleFunction"
+      ],
+      "fields": [
+        {
+          "name": "m_flOpStartFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        },
+        {
+          "name": "m_flOpEndFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        }
+      ],
+      "metadata": []
+    },
+    "C_OP_BasicMovement": {
+      "bases": [
+        "CParticleFunctionOperator"
+      ],
+      "fields": [
+        {
+          "name": "m_fDrag",
+          "type": "float32",
+          "declaredIn": "C_OP_BasicMovement"
+        },
+        {
+          "name": "m_bEnabled",
+          "type": "bool",
+          "declaredIn": "CParticleFunction"
+        },
+        {
+          "name": "m_flOpStartFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        },
+        {
+          "name": "m_flOpEndFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "C_OP_Decay": {
+      "bases": [
+        "CParticleFunctionOperator"
+      ],
+      "fields": [
+        {
+          "name": "m_bEnabled",
+          "type": "bool",
+          "declaredIn": "CParticleFunction"
+        },
+        {
+          "name": "m_flOpStartFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        },
+        {
+          "name": "m_flOpEndFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "C_OP_TestObsolete": {
+      "bases": [
+        "CParticleFunctionOperator"
+      ],
+      "fields": [
+        {
+          "name": "m_bEnabled",
+          "type": "bool",
+          "declaredIn": "CParticleFunction"
+        },
+        {
+          "name": "m_flOpStartFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        },
+        {
+          "name": "m_flOpEndFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults",
+        "MObsoleteParticleFunction"
+      ]
+    },
+    "C_OP_ContinuousEmitter": {
+      "bases": [
+        "CParticleFunctionEmitter"
+      ],
+      "fields": [
+        {
+          "name": "m_flEmitRate",
+          "type": "CParticleCollectionFloatInput",
+          "declaredIn": "C_OP_ContinuousEmitter"
+        },
+        {
+          "name": "m_bEnabled",
+          "type": "bool",
+          "declaredIn": "CParticleFunction"
+        },
+        {
+          "name": "m_flOpStartFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        },
+        {
+          "name": "m_flOpEndFadeInTime",
+          "type": "float32",
+          "declaredIn": "CParticleFunctionOperator"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "C_INIT_CreateWithinSphereTransform": {
+      "bases": [
+        "CParticleFunctionInitializer"
+      ],
+      "fields": [
+        {
+          "name": "m_fRadius",
+          "type": "float32",
+          "declaredIn": "C_INIT_CreateWithinSphereTransform"
+        },
+        {
+          "name": "m_vecDistanceBias",
+          "type": "Vector",
+          "declaredIn": "C_INIT_CreateWithinSphereTransform"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "C_OP_RenderSprites": {
+      "bases": [
+        "CParticleFunctionRenderer"
+      ],
+      "fields": [
+        {
+          "name": "m_nSequenceCombineMode",
+          "type": "int32",
+          "declaredIn": "C_OP_RenderSprites"
+        },
+        {
+          "name": "m_bFitCycleToLifetime",
+          "type": "bool",
+          "declaredIn": "C_OP_RenderSprites"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "ParticleChildrenInfo_t": {
+      "bases": [],
+      "fields": [
+        {
+          "name": "m_ChildRef",
+          "type": "CStrongHandle<CParticleSystemDefinition>",
+          "declaredIn": "ParticleChildrenInfo_t"
+        },
+        {
+          "name": "m_flDelay",
+          "type": "float32",
+          "declaredIn": "ParticleChildrenInfo_t"
+        },
+        {
+          "name": "m_bEndCap",
+          "type": "bool",
+          "declaredIn": "ParticleChildrenInfo_t"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    },
+    "ParticleNamedValueSource_t": {
+      "bases": [],
+      "fields": [
+        {
+          "name": "m_Name",
+          "type": "CUtlString",
+          "declaredIn": "ParticleNamedValueSource_t"
+        },
+        {
+          "name": "m_IsPublic",
+          "type": "bool",
+          "declaredIn": "ParticleNamedValueSource_t"
+        },
+        {
+          "name": "m_ValueType",
+          "type": "CPulseValueFullType",
+          "declaredIn": "ParticleNamedValueSource_t"
+        },
+        {
+          "name": "m_DefaultConfig",
+          "type": "ParticleNamedValueConfiguration_t",
+          "declaredIn": "ParticleNamedValueSource_t"
+        },
+        {
+          "name": "m_Value",
+          "type": "CParticleCollectionFloatInput",
+          "declaredIn": "ParticleNamedValueSource_t"
+        }
+      ],
+      "metadata": []
+    },
+    "ParticleNamedValueConfiguration_t": {
+      "bases": [],
+      "fields": [
+        {
+          "name": "m_ConfigName",
+          "type": "CUtlString",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        },
+        {
+          "name": "m_ConfigValue",
+          "type": "KeyValues3",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        },
+        {
+          "name": "m_BoundValuePath",
+          "type": "CUtlString",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        },
+        {
+          "name": "m_iAttachType",
+          "type": "ParticleAttachment_t",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        },
+        {
+          "name": "m_strEntityScope",
+          "type": "CUtlString",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        },
+        {
+          "name": "m_strAttachmentName",
+          "type": "CUtlString",
+          "declaredIn": "ParticleNamedValueConfiguration_t"
+        }
+      ],
+      "metadata": [
+        "MGetKV3ClassDefaults"
+      ]
+    }
+  }
+}

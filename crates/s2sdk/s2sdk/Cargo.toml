@@ -1,0 +1,48 @@
+[package]
+name = "s2sdk"
+version = "0.0.1"
+description = "Safe in-process wrappers over s2sdk-sys: interfaces, schema system, convars, game events, protobuf messages"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = ["proto"]
+proto = ["dep:prost"]
+
+[dependencies]
+s2sdk-sys = { path = "../s2sdk-sys" }
+thiserror = { workspace = true }
+prost = { version = "0.14", optional = true }
+
+# `GetModuleHandleW` / `GetProcAddress` / `GetModuleFileNameW` for the Windows twin of
+# `module.rs`, plus `K32EnumProcessModules` (the whole-process module list behind the one
+# game-module finder, `Win32_System_ProcessStatus`). Pinned to the version already in
+# Cargo.lock (a transitive dependency of tokio et al.), so no new download.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_System_LibraryLoader",
+    "Win32_System_ProcessStatus",
+] }
+
+# `dl_iterate_phdr` / `dlopen` / `dlsym` on Linux.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[build-dependencies]
+prost-build = "0.14.4"
+
+[dev-dependencies]
+prost = "0.14"
+# `tests/rtti_itanium_live.rs` dlopens the C++ shared object it builds, so the reader is held to
+# real Itanium RTTI and not to a table written in Rust. Already in Cargo.lock (cs2-bridge's dev
+# dependency), so no download.
+libloading = "0.8"
+
+# The RTTI identity gate over the real game binaries (Windows DLLs and the Linux `.so`), which
+# needs `target/game-bins` (sigs/README.md "Binaries"), so `cargo test -p s2sdk` (no game needed)
+# must not run it: explicit `cargo test -p s2sdk --test rtti_real`.
+[[test]]
+name = "rtti_real"
+test = false

@@ -1,0 +1,1770 @@
+{
+ "initialize": {
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+   "tools": {}
+  },
+  "serverInfo": {
+   "name": "client-mcp",
+   "version": "0.0.1"
+  },
+  "instructions": "Drives a CS2 game client for testing and play. Two session flavours: WineTools (Windows build under Proton with the in-process bridge: input hook, test checkpoints, console.exec, game.tick, world.render) and LinuxClient (native, headless, no bridge). session_status says which tool groups are available and why. console_exec never accepts quit/exit/disconnect/Test_ExitProcess/crash; use stop_session."
+ },
+ "tools": [
+  {
+   "name": "session_status",
+   "description": "Runtime + flavour + bridge + build + liveness + tool-group availability; never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "launch_session",
+   "description": "Start a CS2 container (podman): linux-client (headless, in-container Xvfb), wine-tools (host X, -tools) or wine-client (Windows client under Wine without -tools: Metamod loads with the cs2-mcp bridge as a plugin; bridge RPC once a map runs (the GameFrame tick starts the listener; none at the menu); runs with -insecure: VAC off, no official servers, local servers unaffected). Every launch first runs bridge/install-rs.sh ensure for its tree: a current tree is untouched, a missing/stale one is repaired, and the launch is refused (InstallBusy, naming the containers) while a running container mounts a tree that needs repair. The install phase can exceed the call budget on a first install or right after a game update; the call then returns the install outcome as it stands (InstallFailed/InstallTimeout/InstallBusy). The script is the bridge/install-rs.sh of the checkout this client-mcp was built from, so a worktree-built client-mcp installs that worktree's bridge build into the shared tree (ensure re-installs whichever build launched last); a checkout without a target/bridge-rs build and nothing installed fails the launch with the script's message. Every session loads Metamod:Source with the cs2-mcp bridge as one plugin; third-party Metamod plugins can sit next to it. Linux-client and wine-client sessions run with -insecure (VAC off, no official/secure servers; local and LAN servers are unaffected). Refuses at --max-sessions running cs2* containers and when a session of that kind already uses the same mount (KindBusy). An identical running request returns that session (reused: true) without re-running ensure. Waits at most min(timeoutMs, call budget - 2 s); pending: true means continue with wait_session. Artifacts in <project-root>/artifacts/<container>-<ts>/. Not verified live yet. connect: linux-client does NOT work as of the first live test (the client joins its own loopback listen server); wine-client accepts it as a plain +connect <addr> engine arg at launch; wine-tools uses client_connect instead.",
+   "inputSchema": {
+    "properties": {
+     "addon": {
+      "description": "wine-tools only: addon name [A-Za-z0-9_]{1,64}; adds `-addon <name>` to the engine command line and is echoed in the result",
+      "type": "string"
+     },
+     "args": {
+      "description": "extra engine command-line args, appended after the fixed flags. wine-client refuses tools/testscript/addon in any spelling (-tools, +TestScript, a bare addon, any case): they would silently make the session a different kind \u2014 use kind \"wine-tools\" or the testscript / addon parameters instead",
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "bridge": {
+      "default": true,
+      "description": "wine-tools only. true (default): load the cs2_bridge tool (tool_request) and wait for its control.hello. false: stop the wait at the channel (MenuReached); BridgeHello is reported unchecked.",
+      "type": "boolean"
+     },
+     "capture": {
+      "default": true,
+      "description": "mount and enable the Vulkan capture layer (CS2_MCP_VK_LAYER_DIR must hold a built layer; then the session's frames can be read by screenshot/observe). false opts out.",
+      "type": "boolean"
+     },
+     "connect": {
+      "description": "host:port. linux-client: appends `+connect <addr>` to the game args; NOT WORKING as of the first live test (the client joined its own loopback listen server, not the dedicated server; open question, workflows/05). wine-client: the same `+connect <addr>`, a plain engine command line, applied at launch (there is no bridge console.exec on a wine client to connect later). wine-tools: refused, use client_connect",
+      "type": "string"
+     },
+     "gpus": {
+      "description": "--gpus all; default true for the wine kinds, false for linux-client",
+      "type": "boolean"
+     },
+     "headless": {
+      "description": "default true for linux-client (in-container Xvfb); must be true for it. wine-tools and wine-client must be false (host X)",
+      "type": "boolean"
+     },
+     "kind": {
+      "description": "wine-client: Windows client under Wine without -tools: Metamod loads with the cs2-mcp bridge as a plugin; bridge RPC once a map runs (the GameFrame tick starts the listener; none at the menu); runs with -insecure (VAC off, no official servers; local servers unaffected); accepts connect (appended as +connect <addr>, a plain engine command line)",
+      "enum": [
+       "linux-client",
+       "wine-tools",
+       "wine-client"
+      ],
+      "type": "string"
+     },
+     "map": {
+      "description": "wine-tools only: map to load, e.g. de_dust2 or editor/zoo/smartprop_zoo ([A-Za-z0-9_-] segments joined by /, no --, no .., at most 128 bytes). Staging happens here: writes the per-map harness <app>/vtest/harness-<map with each / as -->.txt, then launches it (loads the map, spawns the player, parks: Parked). With addon, the map loads as map_workshop <addon> <map> only when it is the addon's own (<app>/game/csgo_addons/<addon>/maps/<map>.vpk), else as map; the file is then harness-<addon>--<map>.txt. MapLoadFailed (not retry-safe; the session is left running) when the engine refuses the map or game.local never shows it in game on that map within ~10 s. mapVerified says whether the map was confirmed (false with mapNote for bridge false, a reused session, or no answer). Result gains map, mapCommand, harness, stagedPath, mapVerified",
+      "type": "string"
+     },
+     "testscript": {
+      "description": "wine-tools only: suite name [A-Za-z0-9_-]+; the file must already exist at <app>/vtest/<name>.txt (no staging, SuiteNotStaged otherwise). With map, leave it out or pass \"harness\" (the POC suite); map generates the per-map suite",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "readiness wait upper bound, default 180000; clamped to the call budget minus 2 s (then pending: true)",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "description": "readiness stage to wait for; default MenuReached (linux-client and wine-client), Parked when testscript is set, else BridgeHello (wine-tools; MenuReached with bridge false); ServerLive for linux-dedicated (server_up). wine-tools stages: MenuReached = VToolMessage channel up (vtmsend), BridgeHello = cs2_bridge loaded and control.hello answers. wine-client: MenuReached = the main-menu marker line in the app tree's console.log (no channel, no bridge RPC)",
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "wait_session",
+   "description": "Wait (bounded by the call budget) for a launched session's readiness stage; returns the readiness report. Reads only the container state and console.log; no bridge.",
+   "inputSchema": {
+    "properties": {
+     "container": {
+      "description": "a session this server launched; default: the last one",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "default 180000; clamped to the call budget minus 2 s",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "description": "default: the stage launch_session would have waited for",
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "stop_session",
+   "description": "Stop and remove a session container (podman stop -t 0, wait for the exit, then podman rm without -f; containers run without --rm, so logs stay until this). Before removal, best-effort input.clear and input.uninstall over a connected bridge (inputCleared, inputUninstalled). Default: the session this server launched last. Refuses containers not named cs2mcp-*. alreadyGone: true when there was nothing to remove. A stop still running when the budget ends is pending: true (call again; the stop is not reissued). timing: ms since the stop began for stopIssuedMs, exitedMs, rmIssuedMs, removedMs (null when not reached), totalMs, and initialState (unknown when podman did not answer; the stop is issued anyway). exitedMs is when podman reported the exit; when podman's storage stalls this, the cleanup and the removal can trail the game's death by minutes.",
+   "inputSchema": {
+    "properties": {
+     "container": {
+      "description": "a cs2mcp-* container; default: the session this server launched last",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "console_tail",
+   "description": "Last N lines of a console.log (reads from the end; optional regex filter). Which file: --console-log if set; else the session arg; else the one running cs2mcp-* session; else <project>/workshop/run/app/game/csgo/console.log. Result says path and source. No bridge needed.",
+   "inputSchema": {
+    "properties": {
+     "grep": {
+      "description": "regex; keep only matching lines",
+      "type": "string"
+     },
+     "lines": {
+      "default": 50,
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "session": {
+      "description": "cs2mcp-* container whose console.log to read (running or stopped); required when several sessions run",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "console_wait",
+   "description": "Wait for a complete console.log line matching a regex. Only lines appended after the call starts unless fromStart. Follows truncation and rotation. Which file: same precedence as console_tail. No bridge needed.",
+   "inputSchema": {
+    "properties": {
+     "fromStart": {
+      "default": false,
+      "description": "also search the existing file; exclusive with since",
+      "type": "boolean"
+     },
+     "regex": {
+      "type": "string"
+     },
+     "session": {
+      "description": "cs2mcp-* container whose console.log to wait on (see console_tail)",
+      "type": "string"
+     },
+     "since": {
+      "description": "cursor from console_tail: {inode, offset, path}; exclusive with fromStart. A path that differs from the resolved file wins (source cursor); an inode change restarts at 0 (cursorReset)",
+      "properties": {
+       "inode": {
+        "type": "integer"
+       },
+       "offset": {
+        "type": "integer"
+       },
+       "path": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "inode",
+       "offset"
+      ],
+      "type": "object"
+     },
+     "timeoutMs": {
+      "default": 10000,
+      "description": "capped to the call budget minus 500 ms; 0 only with fromStart or since",
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "regex"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "console_exec",
+   "description": "Queue a console command through the bridge (console.exec; -testscript sessions only; never during a level load). Refuses quit/exit/disconnect/Test_ExitProcess/crash. consoleCursor is taken from the console.log of the session arg (or the same pick as console_tail). confirm: true waits (bounded by the call budget) for console.log to show `Unknown command: <marker>`, a marker queued right after the command. That means the engine processed the command in order, not that it succeeded: returns confirmed, confirmMs, clampedToBudget and warnings (the 'Unknown command:' lines logged before the marker, so a mistyped command shows up there). A timeout is WaitTimeout, not retry-safe (the command was sent).",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "type": "string"
+     },
+     "confirm": {
+      "default": false,
+      "description": "wait for the command to be confirmed as executed (needs the console.log of the session)",
+      "type": "boolean"
+     },
+     "confirmTimeoutMs": {
+      "default": 5000,
+      "description": "only with confirm: true; capped to the call budget minus 500 ms (clampedToBudget)",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "session": {
+      "description": "cs2mcp-* container whose console.log gives the cursor",
+      "type": "string"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_tick",
+   "description": "Current server tick + input-hook frame count (bridge game.tick; returned as-is).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "checkpoint",
+   "description": "Fire a test-script checkpoint (bridge test.checkpoint). Checkpoints arriving during Test_Wait are dropped; use Test_WaitForCheckPoint barriers.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "checkpoint name (no whitespace or ';'); pair with Test_WaitForCheckPoint in the script",
+      "maxLength": 127,
+      "minLength": 1,
+      "pattern": "^[^\\s;]+$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "input_set",
+   "description": "Press/release/tap virtual buttons and set the view-angle override (bridge input.set; usercmd-level hook). turn {dyaw,dpitch} is resolved against the active override via input.status.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "absolute view override [pitch, yaw, roll] (pitch in [-89, 89], roll in [-180, 180], yaw wraps); null clears the override; absent leaves it alone",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "frames": {
+      "description": "hold length for tap (default 1); requires tap",
+      "maximum": 640,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "press": {
+      "description": "buttons to press and hold until released (game input names: forward, back, left, right, jump, duck, attack, attack2, use, reload, sprint, ...)",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "release": {
+      "description": "buttons to release",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "tap": {
+      "description": "buttons held for `frames` input frames",
+      "items": {
+       "maxLength": 47,
+       "minLength": 1,
+       "pattern": "^[^\\s\"\\\\]+$",
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "turn": {
+      "additionalProperties": false,
+      "description": "relative turn applied to the current override angles (requires an active override); cannot be combined with angles",
+      "properties": {
+       "dpitch": {
+        "description": "pitch delta in degrees",
+        "type": "number"
+       },
+       "dyaw": {
+        "description": "yaw delta in degrees",
+        "type": "number"
+       }
+      },
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "input_clear",
+   "description": "Release every virtual button and disable the angle override (bridge input.clear).",
+   "inputSchema": {
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "run_testscript",
+   "description": "Stage a CTestScriptMgr suite (library name or inline script), launch a wine-tools session with -testscript (no -testmode), and return {runId, container, stagedPath, artifactsDir} at once. A background task follows console.log (timeline of checkpoints), stops at container exit or timeout, collects console.log, vtest_* PNGs and media into artifactsDir, and judges with the optional preset. Poll with test_status / test_wait. Not verified live yet.",
+   "inputSchema": {
+    "properties": {
+     "demo": {
+      "default": false,
+      "description": "also require a SourceTV demo vtest_*.dem larger than 10000 bytes",
+      "type": "boolean"
+     },
+     "inline": {
+      "description": "script text; ';' splits lines, `mark <name>` is a checkpoint barrier, the quit/wait/exit trailer is appended, specials are case-insensitive. Exclusive with suite",
+      "type": "string"
+     },
+     "judge": {
+      "description": "judge preset; without it the run passes on exit code 0 alone",
+      "enum": [
+       "move_jump"
+      ],
+      "type": "string"
+     },
+     "suite": {
+      "description": "a suite shipped with the server; exclusive with inline",
+      "enum": [
+       "move_jump",
+       "sandbox",
+       "harness"
+      ],
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 300000,
+      "description": "run timeout; on expiry the container is stopped and the state is error",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "test_status",
+   "description": "State of a run_testscript run: running|passed|failed|error, timeline of checkpoints/quit/fatal lines, and checks + artifacts once finished. Reads server memory and the artifacts dir only.",
+   "inputSchema": {
+    "properties": {
+     "runId": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "runId"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "test_wait",
+   "description": "Wait (bounded by the call budget) for a run to finish, then return test_status. pending: true with next when it is still running.",
+   "inputSchema": {
+    "properties": {
+     "runId": {
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 60000,
+      "description": "capped to the call budget minus 500 ms; a run still going returns its status with pending: true and next",
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "runId"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "demo_record_start",
+   "description": "Start a SourceTV recording: reads the console.log cursor, sends console.exec `tv_delay 0; tv_record <name>` (WineTools; gated on console.exec), then waits up to 2 s for the engine's \"Recording SourceTV replay from\" line: recording true, or RecordingNotStarted (retry-safe). recording \"unconfirmed\" when no console.log is resolvable. tv_enable 1 must be set BEFORE map: this does not reload the map; the result says so. Stop with demo_record_stop.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "recording name: alphanumeric first, then [A-Za-z0-9_-], at most 64 characters (the file is csgo/<name>.dem)",
+      "type": "string"
+     },
+     "session": {
+      "description": "cs2mcp-* container whose console.log confirms the recording and gives the .dem folder",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "demo_record_stop",
+   "description": "Stop a SourceTV recording: reads the cursor, sends console.exec `tv_stoprecord`, then waits up to 5 s for the engine's \"Completed SourceTV demo\" line (DemoNotCompleted if absent). Returns the host csgo/<name>.dem path, bytes and confirmedBy. A .dem older than the call is rejected (DemoStale). Without a console.log it falls back to the file size settling. Gated on console.exec.",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "the name given to demo_record_start",
+      "type": "string"
+     },
+     "session": {
+      "description": "cs2mcp-* container (see demo_record_start)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "demo_to_video",
+   "description": "Turn a demo in csgo/ into a video: stages movie_<name>_<ms> (playdemo <demo> --startmovie <name> <format> framerate N no_unique_dir, wait for DemoPlaybackFinished, quit) and runs it through run_testscript under wine-tools on every flavour (the proven engine encoder path; the Linux frame-dump runner is a TODO). Returns runId; poll test_wait. The judge checks the checkpoints, the recorder's Finishing-movie count, the file (>= 10000 B, EBML magic), with ffprobe the stream, packet or decoded-frame count (within 2%) and r_frame_rate, and a contact sheet with ffmpeg. Tools that are absent are reported in skipped, never as passed.",
+   "inputSchema": {
+    "properties": {
+     "bitrate": {
+      "description": "webm only, kbps",
+      "maximum": 500,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "countFrames": {
+      "default": false,
+      "description": "count decoded frames with ffprobe -count_frames (slow); default counts packets (one per webm frame)",
+      "type": "boolean"
+     },
+     "demo": {
+      "description": "a demo in csgo/: its stem (vtest_src) or its host path <app>/game/csgo/<stem>.dem (directly in csgo/)",
+      "type": "string"
+     },
+     "format": {
+      "default": "webm",
+      "description": "webm is the engine encoder. Always runs under wine-tools, on every flavour (the Linux frame-dump runner is a TODO, workflows/07)",
+      "enum": [
+       "webm",
+       "png",
+       "tga",
+       "jpg"
+      ],
+      "type": "string"
+     },
+     "framerate": {
+      "default": 30,
+      "maximum": 240,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "height": {
+      "description": "with width",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "description": "movie name: alphanumeric first, then [A-Za-z0-9_-], at most 64 characters; csgo/<name>.webm (or <name>NNNNNNNN.<format> frames)",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 300000,
+      "description": "run timeout, same bounds as run_testscript",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "width": {
+      "description": "with height; default: the render target size",
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "demo",
+     "name"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "server_up",
+   "description": "Launch a headless Linux dedicated server (cs2 -dedicated, --network=host, no X; cs2-home volume shared with clients under a flock) on map (default de_dust2), port (default 27015, refused with PortInUse when bound), and RCON (rconPassword, random if absent; saved to server-session.json, mode 0600). Every launch first runs bridge/install-rs.sh --platform linux ensure on the shared cs2-home tree (current trees are untouched; a stale one is repaired unless a running container mounts it, then InstallBusy names the containers); the install phase can exceed the call budget on a first install or right after a game update, and the call then returns the install outcome as it stands. It also loads Metamod:Source with the cs2-mcp bridge as one plugin. Its full log is stdout, saved to server.log. Waits at most min(timeoutMs, call budget - 2 s) for ServerLive (markers observed live: SetServerState ss_active, socket opened, hibernating); pending: true means continue with wait_session. bots {ct,t} are added over RCON once live. Returns container, port, rconCandidates, rconPassword.",
+   "inputSchema": {
+    "properties": {
+     "args": {
+      "description": "extra server command-line args, appended last (so they override the tool's own convars, e.g. +sv_hibernate_when_empty). Not accepted: +rcon_password, +hostport, -port, +con_logfile (the tool sets the first two; CS2 has no con_logfile)",
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "bots": {
+      "description": "bots added once the server is live (bot_add_ct / bot_add_t over RCON); skipped with applied: false while pending",
+      "properties": {
+       "ct": {
+        "default": 0,
+        "maximum": 10,
+        "minimum": 0,
+        "type": "integer"
+       },
+       "t": {
+        "default": 0,
+        "maximum": 10,
+        "minimum": 0,
+        "type": "integer"
+       }
+      },
+      "type": "object"
+     },
+     "hibernate": {
+      "default": false,
+      "description": "false (default): the tool passes +sv_hibernate_when_empty 0 (before args) so the bridge ticks on an empty server: sv_hibernate_when_empty defaults to 1, and an empty hibernating server runs no GameFrame, so the Metamod-hosted bridge never starts its listener and no bridge RPC answers until a client joins. true: the convar is left at the game default (the server hibernates when empty). A +sv_hibernate_when_empty in args wins over the default (args are appended last)",
+      "type": "boolean"
+     },
+     "map": {
+      "description": "map name [A-Za-z0-9_]{1,64}, default de_dust2 (`+map`)",
+      "type": "string"
+     },
+     "port": {
+      "default": 27015,
+      "description": "game + RCON port (TCP and UDP). Refused with PortInUse when taken",
+      "maximum": 65535,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "rconPassword": {
+      "description": "[A-Za-z0-9_.-]{1,64}; default: a random one, returned in the result and saved in server-session.json",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "readiness wait upper bound, default 180000; clamped to the call budget minus 2 s (then pending: true)",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "description": "default ServerLive",
+      "enum": [
+       "ContainerUp",
+       "ConsoleLogExists",
+       "MenuReached",
+       "BridgeHello",
+       "Parked",
+       "ServerLive"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "client_connect",
+   "description": "Send `connect <address>` to a client session. wine-tools: via the bridge console.exec (testscript sessions only). linux-client: no command route yet, so NotImplemented with the alternative launch_session {connect} (the client starts with +connect). Default: the client session launched last.",
+   "inputSchema": {
+    "properties": {
+     "address": {
+      "description": "host:port, default 127.0.0.1:27015",
+      "type": "string"
+     },
+     "container": {
+      "description": "a client session (cs2mcp-*); default: the client session this server launched last",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "server_console_exec",
+   "description": "Run one console command on a dedicated server over RCON. Password and port come from the server's server-session.json (works from any MCP process); rconPassword/port override. Refuses the console_exec list (quit, exit, disconnect, rcon_password, sv_shutdown, ..., and aliases that run them) and commands over 4086 bytes: use stop_session. Returns the reply text.",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "description": "one server console command, sent over RCON (at most 4086 bytes)",
+      "type": "string"
+     },
+     "container": {
+      "description": "a running linux-dedicated session; default: the only running one",
+      "type": "string"
+     },
+     "port": {
+      "description": "override the port saved in server-session.json",
+      "maximum": 65535,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "rconPassword": {
+      "description": "override the password saved in server-session.json",
+      "type": "string"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "script_run",
+   "description": "Run the scripts of a compiled addon map (kind cs_script, addon, map?, entry? {target, input} fired as ent_fire <target> RunScriptInput <input>, expect: ordered regexes over the [cs_script] console lines, timeoutMs): launches or reuses the session (launch_session map_workshop), judges the console output and returns matched, scriptLines and passed (false is a result, not an error). Refused with NotImplementedYet: vscript (retail CS2 runs VScript on CNopVM) and inline source/path (compiling JS needs resourcecompiler, not wired). Only compiled scripts already in an addon map run.",
+   "inputSchema": {
+    "properties": {
+     "addon": {
+      "description": "cs_script: the compiled addon whose scripts run, [A-Za-z0-9_]{1,64}. Required unless source or path is given",
+      "type": "string"
+     },
+     "anyLine": {
+      "default": false,
+      "description": "cs_script: match the expects against every console line, not only `[cs_script] ` lines and script error lines. The confirmation marker's line is never matched",
+      "type": "boolean"
+     },
+     "entry": {
+      "description": "cs_script: one trigger fired after the map loads, through the bridge and confirmed by console.log. Either {target, input} = `ent_fire <target> RunScriptInput <input>` (the point_script entity is not client-visible; name it as the map defines it), or {command} = a plain console command, e.g. a cheat a script registered (script_zoo_trace). Forbidden commands (quit, exit, disconnect, ...) are refused before launch. An engine 'Unknown command' for the entry fails the run at once. The judged output starts just before it fires; without an entry it is the whole log since the session's load (earlier entries' output included)",
+      "properties": {
+       "command": {
+        "description": "console command, [A-Za-z0-9_ .-]{1,128} (alone)",
+        "type": "string"
+       },
+       "input": {
+        "description": "the script function the point_script runs, an identifier (with target)",
+        "type": "string"
+       },
+       "target": {
+        "description": "entity name that owns the point_script, [A-Za-z0-9_]{1,64} (with input)",
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "expect": {
+      "description": "regexes matched in order, each against the WHOLE console line as logged. Every line starts with a `MM/DD HH:MM:SS ` timestamp, then the channel: script output is `[cs_script] <text>`. So an unanchored pattern matches anywhere (`Hello cs_script!`), and `^` anchors at the timestamp (`^\\d\\d/\\d\\d \\d\\d:\\d\\d:\\d\\d \\[cs_script\\] Hello`). Lines considered: `[cs_script] ` lines and script error lines (every line with anyLine; the confirmation marker's line never). scriptLines and matched.line keep the timestamp. At least one. The run passes when every expect matches in order and no script error line appears",
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 16,
+      "minItems": 1,
+      "type": "array"
+     },
+     "kind": {
+      "description": "cs_script = the scripts of a compiled addon map (runs: addon, map, entry, expect); vscript = VScript VM (NotImplementedYet: CNopVM)",
+      "enum": [
+       "cs_script",
+       "vscript"
+      ],
+      "type": "string"
+     },
+     "map": {
+      "description": "cs_script: the map to load, [A-Za-z0-9_]{1,64}; default: the addon's name (loaded with map_workshop). The game must report it in game (game.local) or the run fails with MapLoadFailed",
+      "type": "string"
+     },
+     "path": {
+      "description": "host path of a script file: NotImplementedYet (as source); exclusive with source",
+      "type": "string"
+     },
+     "source": {
+      "description": "inline script text: NotImplementedYet (compiling JS needs resourcecompiler, not wired); exclusive with path",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "cs_script: how long the session may take to be ready plus how long the expects may take to match; default 60000. A wait the call budget cuts short is pending (passed null), not passed false",
+      "maximum": 900000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "kind",
+     "expect"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_test",
+   "description": "Run a declarative in-game test in one call. Spec {name, map?, addon?, setup?, steps, expect?, teardown?, timeoutMs?, demo?, continueOnFailure?}: the session must be on map (else launched like launch_session, wine-tools), then setup, steps, spec expects (fresh game_state/weapons reads), and teardown (input_clear runs first; teardown always runs). A step is {tool, args?, label?, expect?}; tool is one of round_start, setpos, game_snapshot, game_restore, input_sequence, fire_weapon, look_at, use_entity, ent_fire, console_exec, console_wait, game_wait, game_state, weapons, sounds_drain, demo_record_start, demo_record_stop, checkpoint (script_run is not a step: it launches its own session). An assertion is {path (dot-separated, e.g. totals.distance, clip1Delta), op: eq|ne|lt|le|gt|ge|approx|contains|matches, value, tolerance? (approx, default 0.001), from?: result|game_state|weapons}; value may be {\"$ref\": \"label.path\"} into an earlier step's result. Stops at the first failing step unless continueOnFailure. Validation is complete before anything is sent (InvalidParams; each step's args are checked against its tool's schema). Refused with BudgetTooSmall {neededMs} when setup, steps and cleanup cannot fit the call budget, and failed with BudgetTooSmall when the budget runs out during the steps. Steps run in-process through the same handlers, each with a slice of this call's budget; only a session launch the call budget cuts short is pending: true with next. A step over timeoutMs or the 30 s per-step cap fails with TestTimeout / StepTimeout; a tool's own error (WaitTimeout etc.) keeps its type and message. A step whose result says pending: true or passed: false fails unless it asserts on that key. Teardown runs input_clear first. Markers gt_begin_<name> / gt_pass_<name> or gt_fail_<name> go through checkpoint (best effort). demo: true records a SourceTV demo around the steps (demo.path, demo.ticks); verbose: false drops the results of passing steps (failed steps always carry result, trimmed to 8 KiB). Returns {name, passed, pending, steps:[{phase, label, tool, ok, ms, error?, assertions:[{path, op, wanted, got, ok}]}], durationMs, ticks:{start,end}, demo?}; stored for game_test_results. Example spec (also assets/gametests/zoo_smoke.json): {\"name\":\"smartprop_zoo\",\"map\":\"editor/zoo/smartprop_zoo\",\"setup\":[{\"label\":\"round\",\"tool\":\"round_start\",\"args\":{\"mode\":\"ensure\"}},{\"label\":\"place\",\"tool\":\"setpos\",\"args\":{\"origin\":[-6176,-2192,0.031],\"angles\":[0,0,0]}},{\"label\":\"snap\",\"tool\":\"game_snapshot\",\"args\":{\"name\":\"zoo_start\"}}],\"steps\":[{\"label\":\"walk\",\"tool\":\"input_sequence\",\"args\":{\"steps\":[{\"press\":[\"forward\"],\"holdTicks\":64}]},\"expect\":[{\"path\":\"totals.distance\",\"op\":\"ge\",\"value\":100}]},{\"label\":\"shoot\",\"tool\":\"fire_weapon\",\"args\":{\"shots\":1},\"expect\":[{\"path\":\"clip1Delta\",\"op\":\"eq\",\"value\":-1}]},{\"label\":\"restore\",\"tool\":\"game_restore\",\"args\":{\"name\":\"zoo_start\"},\"expect\":[{\"path\":\"restored\",\"op\":\"eq\",\"value\":true}]}]}",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "spec": {
+      "description": "see the tool description; unknown keys and bad steps are refused before anything is sent",
+      "properties": {
+       "addon": {
+        "description": "addon mounted for the launch ([A-Za-z0-9_]{1,64})",
+        "type": "string"
+       },
+       "continueOnFailure": {
+        "default": false,
+        "type": "boolean"
+       },
+       "demo": {
+        "default": false,
+        "description": "record a SourceTV demo around the steps (named after the spec)",
+        "type": "boolean"
+       },
+       "expect": {
+        "description": "over fresh game_state reads (from: game_state | weapons)",
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "map": {
+        "description": "the session must be on this map, else it is launched (wine-tools, launch_session)",
+        "type": "string"
+       },
+       "name": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$",
+        "type": "string"
+       },
+       "setup": {
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "steps": {
+        "items": {
+         "type": "object"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "teardown": {
+        "description": "always runs; input_clear runs first",
+        "items": {
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "timeoutMs": {
+        "default": 120000,
+        "maximum": 600000,
+        "minimum": 1,
+        "type": "integer"
+       },
+       "verbose": {
+        "default": true,
+        "description": "false: successful steps carry no result (failed steps always do)",
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "name",
+       "steps"
+      ],
+      "type": "object"
+     }
+    },
+    "required": [
+     "spec"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_test_results",
+   "description": "Results of this process's game_test runs: all, or one by name (NotFound when absent). format json returns {results}; junit returns {xml}: a JUnit document with one testsuite per spec (properties ticks, demo.path, next), one testcase per step (phase.label), failure elements with the failing assertions, skipped for steps that did not run. Reads the store only; no bridge.",
+   "inputSchema": {
+    "properties": {
+     "format": {
+      "default": "json",
+      "enum": [
+       "json",
+       "junit"
+      ],
+      "type": "string"
+     },
+     "name": {
+      "description": "one stored result; default all",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "render_world",
+   "description": "Offscreen freecam render of the map loaded in the engine (bridge world.render; Wine tools runtime). Not the player's view. Writes a PNG on the host, returns its path, stats and an inline image (downscaled above 1920x1080). width*height must be at most 33554432.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "camera angles [pitch,yaw,roll] in degrees",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "fov": {
+      "description": "horizontal FOV in degrees, (1,179); default 90",
+      "type": "number"
+     },
+     "height": {
+      "description": "default 1080; width*height at most 33554432",
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "name": {
+      "description": "file stem [A-Za-z0-9._-], max 64; default render_<tick>_<seq>",
+      "type": "string"
+     },
+     "origin": {
+      "description": "camera position [x,y,z] in world units",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "srgb": {
+      "description": "apply the sRGB curve to the readback",
+      "type": "boolean"
+     },
+     "width": {
+      "description": "default 1920; width*height at most 33554432",
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "zfar": {
+      "description": "default 30000",
+      "type": "number"
+     },
+     "znear": {
+      "description": "default 4",
+      "type": "number"
+     }
+    },
+    "required": [
+     "origin",
+     "angles"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_state",
+   "description": "Local player from inside the game (bridge game.local): map, tick, view angles, eye angles, origin/eye/velocity, health, flags, active weapon. Schema-resolved, no screen scraping. Live-verified 2026-10-11.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "weapons",
+   "description": "Local inventory (bridge game.weapons): active weapon + every held weapon with entindex, name, item def index, clip1/clip2/reserve, reloading.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "radar",
+   "description": "Radar view (bridge game.radar): every player controller/pawn (team, alive, health, origin, eye yaw, spotted/spottedByMask, isLocal), bomb (carried/dropped/planted), hostages; projected onto resource/overviews/<map>.txt when available.",
+   "inputSchema": {
+    "properties": {
+     "map": {
+      "description": "override the map name used to find <map>.txt",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_rules",
+   "description": "Round and warmup state (bridge game.rules): warmup, freeze, team intro, game restart, match started, game phase, rounds played, round start and restart times, round time, round win status and end reason, bomb planted. Schema-resolved through the cs_gamerules proxy; a null field did not resolve (listed in schemaMissing).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "entity_find",
+   "description": "Find entities (bridge game.entities) by class (designer name, e.g. func_button) and/or name (targetname): entindex, class, name, origin, angles, health, toggleState (null until the bridge can read it). Needs class or name; max 1..256 (default 64); truncated is true when more matched.",
+   "inputSchema": {
+    "properties": {
+     "class": {
+      "pattern": "^[A-Za-z0-9_]{1,64}$",
+      "type": "string"
+     },
+     "max": {
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "maxLength": 127,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "select_weapon",
+   "description": "Select a weapon through the game's own selection paths (bridge game.selectWeapon), no synthetic keypresses: {slot: 0..13} -> slotN (slot1 primary, slot2 pistol, slot3 knife, slot4 grenades cycle, slot5 C4), {command: invnext|invprev|invnextselect|invprevselect|lastinv}, or a specific held weapon by {weapon: \"weapon_ak47\"} (designer name; weapon_knife matches any knife), {defIndex: 7} or {handle: h} (from weapons) -> CCSGOInput MakeWeaponSelection -> usercmd weaponselect. CS2 has no `use <weapon>` command.",
+   "inputSchema": {
+    "properties": {
+     "command": {
+      "enum": [
+       "invnext",
+       "invprev",
+       "invnextselect",
+       "invprevselect",
+       "lastinv"
+      ],
+      "type": "string"
+     },
+     "defIndex": {
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "handle": {
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "slot": {
+      "maximum": 13,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "weapon": {
+      "pattern": "^weapon_[a-z0-9_]+$",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "sounds_drain",
+   "description": "Drain game sound events recorded in-process (bridge sound.drain): seq, hash, name, source entindex, guid, via slot, ageMs, origin/entityName when resolvable. Bounded ring (256); dropped counts overflow. Drains (destroys) the ring and installs the hook on first use.",
+   "inputSchema": {
+    "properties": {
+     "max": {
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "resolve": {
+      "default": true,
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "sounds_status",
+   "description": "Install (idempotent) the sound-event sink and report ring counters (bridge sound.status / sound.subscribe {mode}). mode: wrap (default; vtable wrap, hash+entity), listener (the game's own slot-81 listener registry, name+guid), both.",
+   "inputSchema": {
+    "properties": {
+     "mode": {
+      "enum": [
+       "wrap",
+       "listener",
+       "both"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_wait",
+   "description": "Wait until a predicate over the local player holds, polling bridge game.local server-side: until tick (game ticks past the baseline), moved (3D distance from the baseline origin, tick advanced), stopped (speed < 1 on two samples with the tick advancing), weapon (activeWeapon name or defIndex), at (origin within tolerance of a target, optionally view angles within angleTolerance and speed < 1). roundLive (game.rules: no warmup, freeze, team intro or restart, no round winner; local player alive), roundRestarted (game.rules roundStartTime grew or roundsPlayed changed, or the restart window was seen on the previous sample; and roundLive), ammo (activeWeapon.clip1 moved by clip1Delta, default -1, on the baseline weapon: a switch keeps waiting; optional weapon name; clip1 + entindex for a baseline read before the first sample). Returns matched with before/after/delta (rules echoed for round predicates); a timeout is WaitTimeout (retry-safe). Fails fast with PrerequisiteFailed when not in game or dead (round predicates wait through a death).",
+   "inputSchema": {
+    "properties": {
+     "angleTolerance": {
+      "description": "until at: pitch and yaw tolerance in degrees, wrapped to [-180, 180) (default 1.0; needs angles)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "angles": {
+      "description": "until at: target view [pitch, yaw, roll]; pitch and yaw are compared, roll is not",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "clip1": {
+      "description": "until ammo: the baseline clip count before the shot (with entindex); for a shot that lands before the first sample",
+      "maximum": 1000,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "clip1Delta": {
+      "description": "until ammo: activeWeapon.clip1 change from the baseline; negative = at most that, positive = at least that; non-zero (default -1: one shot)",
+      "maximum": 30,
+      "minimum": -30,
+      "type": "integer"
+     },
+     "defIndex": {
+      "description": "until weapon: activeWeapon.defIndex (instead of weapon)",
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "entindex": {
+      "description": "until ammo: the baseline weapon's entindex (with clip1)",
+      "maximum": 32767,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "from": {
+      "description": "baseline for tick and moved (default: the first sample)",
+      "properties": {
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "tick": {
+        "minimum": 0,
+        "type": "integer"
+       }
+      },
+      "required": [
+       "tick",
+       "origin"
+      ],
+      "type": "object"
+     },
+     "minDistance": {
+      "description": "until moved: 3D units from the baseline origin (default 1.0)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "origin": {
+      "description": "until at: target origin [x, y, z] (required for at)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pollMs": {
+      "description": "default 100",
+      "maximum": 1000,
+      "minimum": 50,
+      "type": "integer"
+     },
+     "requireStopped": {
+      "description": "until at: also require speed < 1 on this and the previous sample (default true)",
+      "type": "boolean"
+     },
+     "roundStartTime": {
+      "description": "until roundRestarted: baseline game.rules.roundStartTime (default: the first sample's)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "roundsPlayed": {
+      "description": "until roundRestarted: baseline game.rules.roundsPlayed (default: the first sample's)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "ticks": {
+      "description": "until tick: game ticks past the baseline (default 1)",
+      "maximum": 1000000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "description": "default 5000; clamped to the call budget minus 500 ms",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tolerance": {
+      "description": "until at: horizontal (xy) distance from origin (default 2.0)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "until": {
+      "enum": [
+       "tick",
+       "moved",
+       "stopped",
+       "weapon",
+       "at",
+       "roundLive",
+       "roundRestarted",
+       "ammo"
+      ],
+      "type": "string"
+     },
+     "weapon": {
+      "description": "until weapon: activeWeapon.name must equal this",
+      "pattern": "^weapon_[a-z0-9_]+$",
+      "type": "string"
+     },
+     "zTolerance": {
+      "description": "until at: vertical (z) distance from origin (default 4.0)",
+      "minimum": 0,
+      "type": "number"
+     }
+    },
+    "required": [
+     "until"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "fire_weapon",
+   "description": "Shoot: per shot, a release then a tap of attack (frames each), re-tapped every 200 ms until the active weapon's clip1 drops by one from the baseline read before the first tap (a semi-auto ignores a tap that lands during its cycle). Each shot has a deadline of min(remaining timeoutMs, 1000 ms). Refused before sending (PrerequisiteFailed): not alive or in game, no active weapon, weapon not the one asked for, no clip (knife, clip1 -1), or clip1 below shots (reload first). Then attack is released, and sound.drain is polled for up to 16 ticks until shots shot sounds (Weapon_*.Single|Fire|Auto from the shooter pawn) are seen; BulletImpact sounds are reported too. sounds is null with a note when the bridge has no sound methods; a failed drain makes ok false. Returns clip1Before/After/Delta, shotsFired, taps, released, sounds (with dropped), ticks, ok. A timeout is WaitTimeout, not retry-safe (shotsFired says how far it got); attack is released after any error.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "frames": {
+      "default": 2,
+      "description": "client frames attack is held per tap",
+      "maximum": 64,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "shots": {
+      "default": 1,
+      "description": "attack taps, one per shot; each waits for clip1 to drop by one",
+      "maximum": 30,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "default": 3000,
+      "description": "for all shots together; clamped to the call budget",
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "weapon": {
+      "description": "weapon_x that must be the active weapon (else PrerequisiteFailed, nothing sent)",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "look_at",
+   "description": "Aim the view at a point or an entity (entindex): pitch and yaw from the eye (game.local player.eye; eye false: origin) to the target, sent as an input.set angle override, awaited until the view is within 1 degree. hold false (default) clears the override after it settles and reads the view back a few ticks later (viewAfterClear, the snap-back check); hold true keeps it on. snappedBack is true when viewAfterClear moved more than 1 degree from achieved (with a note); null when not read. Returns angles, achieved (viewAngles), distance and inputCleared. An entity target is looked up in game.entities by entindex (a single-slot read; EntityNotFound when the slot is empty; origin, for a brush entity that may be the brush centre). Refused before sending when not alive or in game. An error after the override was set clears it (inputCleared).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "eye": {
+      "default": true,
+      "description": "aim from the eye (player.eye); false aims from the origin",
+      "type": "boolean"
+     },
+     "hold": {
+      "default": false,
+      "description": "keep the angle override on after the view settles; false clears it and reads the view back a few ticks later (viewAfterClear)",
+      "type": "boolean"
+     },
+     "target": {
+      "description": "[x, y, z] point, or an entindex (1..16383), read straight from that slot (game.entities entindex filter)",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "maximum": 16383,
+        "minimum": 1,
+        "type": "integer"
+       }
+      ]
+     },
+     "timeoutMs": {
+      "default": 2000,
+      "description": "for the view to settle within 1 degree",
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "target"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "use_entity",
+   "description": "Use an entity: refused before sending (PrerequisiteFailed) when the target is farther than maxDistance from the eye (default 64). Otherwise: sound.drain baseline, aim (as look_at, held), press use for 4 frames, wait 32 ticks, clear the aim, drain sounds and re-read the entity. evidence lists use sounds (from the target's entindex, always; or a name containing Button or Door within 128 units of the target, when the event has an origin) and an entity change (origin or angles). A target whose slot is empty after the use is evidence too (removed: true). The use key is released after any error, and the aim is cleared. ok is true only with evidence; changed is the entity's origin or angles moving. toggleState is not reported (the client schema has no field for it). Brush-entity origins may be the brush centre. Live example (cs_script_demo, 2026-10-12): func_button entindex 364..371 (mdlchange.button.*) at x 57, y 1394..1482, z 18; the eye is about 64 above the player origin, so stand within maxDistance of the eye-to-origin distance (setpos near the button first).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "maxDistance": {
+      "default": 64.0,
+      "description": "eye to target distance above which nothing is sent (PrerequisiteFailed)",
+      "exclusiveMinimum": 0,
+      "maximum": 4096.0,
+      "type": "number"
+     },
+     "target": {
+      "description": "[x, y, z] point, or an entindex (1..16383), read straight from that slot (game.entities entindex filter)",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "maximum": 16383,
+        "minimum": 1,
+        "type": "integer"
+       }
+      ]
+     },
+     "timeoutMs": {
+      "default": 2000,
+      "description": "for the view to settle, then for the effect window",
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "target"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "ent_fire",
+   "description": "Send `ent_fire <target> <input> [value] [delay]` through console.exec and confirm the engine ran it (marker, as console_exec confirm). target is [A-Za-z0-9_!*.-] (1..64: names, classnames, !player, !self, !activator), input [A-Za-z0-9_] (1..64), value up to 128 of [A-Za-z0-9_.- ] (quoted when it has a space), delay 0..60 seconds. Validated before anything is sent; a ; quote or newline is InvalidArguments. target * is refused. Kill and KillHierarchy on a wildcard or classname target (a name starting func_, prop_, trigger_, point_, env_, info_, logic_, game_, cs_, weapon_, player and similar) are refused unless allowDestructive is true. Not a security boundary: point_servercommand and logic relays can run other inputs or commands, and ent_fire does not inspect those chains. Returns the engine's warnings (Unknown command lines). The effect is NOT verified: check it separately. Needs a -testscript session (console.exec).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowDestructive": {
+      "default": false,
+      "description": "required for Kill or KillHierarchy on a wildcard or classname target (not for *, which is always refused)",
+      "type": "boolean"
+     },
+     "delay": {
+      "description": "seconds before the input fires (an empty value is sent as \"\" when a delay is given)",
+      "maximum": 60.0,
+      "minimum": 0,
+      "type": "number"
+     },
+     "input": {
+      "description": "entity input, e.g. Press, sethealth, RunScriptInput",
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_]{1,64}$",
+      "type": "string"
+     },
+     "target": {
+      "description": "entity name, classname, or !player / !self / !activator",
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_!*.\\-]{1,64}$",
+      "type": "string"
+     },
+     "value": {
+      "description": "optional parameter (spaces are quoted); no ; quotes or newlines",
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.\\- ]{0,128}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "target",
+     "input"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "setpos",
+   "description": "Teleport the local player: console.exec setpos_exact x y z (and setang_exact p y r when angles is given; setpos/setang when exact is false), then waits for game.local to show the player at origin (xy and z tolerance, speed < 1 on two samples). floor true: the same command, but the wait accepts any landing at origin xy on the ground at or below origin.z (+zTolerance), reports landedZ and dropped, and fails with FellOutOfMap on a fall past 512 u or below minZ. Coordinates |v| <= 32768 and rounded to 0.001; angles are validated like input_set (pitch +-89, roll +-180, yaw wrapped). exact false (setpos) may land vertically offset from origin.z: the zTolerance check decides, and a larger offset is a WaitTimeout. If an input.set angle override is active (input.status), setpos is refused with PrerequisiteFailed before sending: input_clear first. Returns after, toTarget and waitedMs; a timeout is WaitTimeout with a hint when the origin was reached but the view was not. Once the command is sent, every error is not retry-safe (commandsSent). Fails fast with PrerequisiteFailed when not in game or dead. Needs a -testscript session (console.exec).",
+   "inputSchema": {
+    "properties": {
+     "angleTolerance": {
+      "description": "pitch and yaw tolerance in degrees (default 1.0; needs angles; raised to at least 0.01)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "angles": {
+      "description": "target view [pitch, yaw, roll]: pitch within +-89, roll within +-180, yaw wrapped to [-180, 180), rounded to 0.001; roll is not compared",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "exact": {
+      "default": true,
+      "description": "true: setpos_exact / setang_exact; false: setpos / setang. With exact false, z is not guaranteed to land on origin.z (the non-exact teleport can be offset vertically); the zTolerance check then decides, and a larger offset is a WaitTimeout",
+      "type": "boolean"
+     },
+     "floor": {
+      "default": false,
+      "description": "true: origin.z is only the horizontal target; the player may fall to the floor. Sent with the same command (setpos_exact x y z), then verified: xy within tolerance, on the ground (player.flags FL_ONGROUND), stopped, and z <= origin.z + zTolerance (fell or stayed, never rose). Reply adds landedZ and dropped (origin.z - landedZ). A fall of more than 512 u below origin.z, or below minZ, is FellOutOfMap (not retry-safe). Ignores origin.z for the match, so the floor z need not be known.",
+      "type": "boolean"
+     },
+     "minZ": {
+      "description": "needs floor true; a landing below this z is FellOutOfMap. Must not be above origin.z",
+      "maximum": 32768,
+      "minimum": -32768,
+      "type": "number"
+     },
+     "origin": {
+      "description": "target origin [x, y, z], |v| <= 32768, rounded to 0.001",
+      "items": {
+       "maximum": 32768.0,
+       "minimum": -32768.0,
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "timeoutMs": {
+      "description": "default 4000; clamped to the call budget minus 500 ms",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tolerance": {
+      "description": "horizontal (xy) distance from origin that counts as arrived (default 2.0; raised to at least 0.01)",
+      "minimum": 0,
+      "type": "number"
+     },
+     "zTolerance": {
+      "description": "vertical (z) distance that counts as arrived (default 4.0; raised to at least 0.01; with floor, the most the player may stand above origin.z)",
+      "minimum": 0,
+      "type": "number"
+     }
+    },
+    "required": [
+     "origin"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "input_sequence",
+   "description": "Run up to 32 input.set steps in order in one call. Each step takes the input_set fields (press, release, tap, frames, angles, turn) and holds for holdTicks game ticks (default 1, max 640). The hold is counted from the first game.local reading after the step input.set, so every hold covers its usercmds; startTick is that reading. Pacing is by real samples (15 ms), not wall time. Presses persist across steps until a later step releases them (the hook ORs presses). Tap frames are client frames, independent of holdTicks; the closing clear cuts off a tap still running. Budget: about 100 ms per step plus ticks/64 s plus 1.5 s, checked before anything is sent; a sequence that cannot fit is ToolBudgetExceeded (retry-safe, maxTotalTicks says what fits). Every step is validated before anything is sent. input.clear is sent after a run that sent input and on every error after that (inputCleared: true, \"failed\", or false). The closing clear may overrun the call budget by up to 1 s. An error after the first input.set is not retry-safe and carries stepsCompleted and the steps done. Returns steps (startTick, endTick, origin, viewAngles per step), totals (ticks, distance, waitedMs), start, final, inputCleared. Fails fast with PrerequisiteFailed when not in game or dead.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "steps": {
+      "description": "steps run in order; each takes the input_set fields and holds for holdTicks",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "absolute view override [pitch, yaw, roll] (pitch in [-89, 89], roll in [-180, 180], yaw wraps); null clears the override; absent leaves it alone",
+         "oneOf": [
+          {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "frames": {
+         "description": "hold length for tap (default 1); requires tap",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "holdTicks": {
+         "description": "game ticks the step lasts, counted from the first game.local reading after its set (default 1)",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "label": {
+         "description": "free text echoed in the step's result",
+         "maxLength": 64,
+         "type": "string"
+        },
+        "press": {
+         "description": "buttons to press and hold until released (game input names: forward, back, left, right, jump, duck, attack, attack2, use, reload, sprint, ...)",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "release": {
+         "description": "buttons to release",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "tap": {
+         "description": "buttons held for `frames` input frames",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "turn": {
+         "additionalProperties": false,
+         "description": "relative turn applied to the current override angles (requires an active override); cannot be combined with angles",
+         "properties": {
+          "dpitch": {
+           "description": "pitch delta in degrees",
+           "type": "number"
+          },
+          "dyaw": {
+           "description": "yaw delta in degrees",
+           "type": "number"
+          }
+         },
+         "type": "object"
+        }
+       },
+       "type": "object"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "steps"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_snapshot",
+   "description": "Save the local player: origin, view angles, velocity, health, armor, helmet, money, ducked, team, active weapon and held weapons (clip1, reserve), and the round summary (game.rules, when the bridge has it). Read from game.local, game.weapons and game.rules under one lock. Stored in the client process under name (32 at most; the least recently stored is dropped and named). export: true also writes artifacts/snapshots/<name>.json before the store changes (the path is in file). Refuses with PrerequisiteFailed when not in game or dead. Read-only in the game; the export is a file under artifacts.",
+   "inputSchema": {
+    "properties": {
+     "export": {
+      "default": false,
+      "description": "also write <project>/artifacts/snapshots/<name>.json (written before the store changes); the path is in file",
+      "type": "boolean"
+     },
+     "name": {
+      "description": "stored under this name (replaces one of the same name); also the export file stem",
+      "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "game_restore",
+   "description": "Restore a snapshot on the same map (no engine save): input.clear (when advertised), pose through setpos_exact/setang_exact (verified by the at wait; a pose that does not settle is pose.ok false, not an error), health via ent_fire !player sethealth, armor via give item_kevlar/item_assaultsuit, missing weapons via give, then the active weapon via game.selectWeapon (after any give; a give into an occupied slot may drop the weapon there, not live-checked). One settle phase within timeoutMs polls game.local/game.weapons. Returns restored, comparison ({field, wanted, got, ok}; a reason where the console cannot fix the mismatch: armor or helmet removal, extra copies of a weapon, decided before sending), notRestored (requested parts only: velocity, ducked, clip1, reserve, with got and mismatch), approx (armor), extraWeapons (not dropped), commands and budgetExhausted. Refuses before sending: not in game or dead, another map or another team (PrerequisiteFailed), an unknown name (InvalidParams lists the stored names). Once a command is sent, errors are not retry-safe (commandsSent, commands). Needs a -testscript session (console.exec).",
+   "inputSchema": {
+    "properties": {
+     "name": {
+      "description": "a stored snapshot; exactly one of name or snapshot",
+      "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+      "type": "string"
+     },
+     "parts": {
+      "description": "default all: pose (setpos_exact + setang_exact), health, armor (give item_kevlar/item_assaultsuit), weapons (give missing weapons, select the active one)",
+      "items": {
+       "enum": [
+        "pose",
+        "health",
+        "armor",
+        "weapons"
+       ],
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "snapshot": {
+      "description": "an inline snapshot in the game_snapshot form (map, player {origin, angles, health, ...}, weapons, ...)",
+      "type": "object"
+     },
+     "timeoutMs": {
+      "default": 6000,
+      "description": "one deadline for the pose and the settle (capped to the call budget minus 500 ms)",
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "round_start",
+   "description": "Put the round in a known state (idempotent). mode ensure (default): nothing is sent when the round is live (no warmup, freeze, team intro or restart, no winner; local player alive); with cvars or shortcuts on a live round they are sent and nothing waits. A dead player, a player not on a team, or a set round winner falls back to the restart path (fallback restart, fallbackReason). In warmup it queues the cvars and mp_warmup_end and waits for roundRestarted; otherwise it queues the cvars and waits for roundLive. mode restart: queues the cvars and mp_restartgame 1 and waits for roundRestarted against the rules read before anything was sent. input.clear is sent first. Names and values are validated, and refused cvars (map changes, exec/alias/bind, mp_restartgame, mp_warmup_*, host_*, quit) are InvalidParams, before anything is sent. Commands go through console.exec with a confirmation marker: warnings lists the engine's 'Unknown command' lines. timeoutMs is one deadline for the whole call. Returns mode, changed, fallback, fallbackReason, commands, warnings, before.rules, after.rules and after.player, waitedMs, ticks. A timeout is WaitTimeout; once a command is queued every error is not retry-safe (commandsSent). Fails fast with PrerequisiteFailed when not in game. Needs a -testscript session (console.exec).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cvars": {
+      "additionalProperties": {
+       "type": [
+        "number",
+        "string"
+       ]
+      },
+      "description": "extra cvar -> value, sent before the warmup end or restart; names [a-z0-9_], values numbers or simple tokens ([A-Za-z0-9_.-]); map changes, exec/alias/bind, mp_restartgame, mp_warmup_*, host_*, quit and disconnect are refused",
+      "maxProperties": 16,
+      "type": "object"
+     },
+     "freezetime": {
+      "description": "mp_freezetime; omitted leaves it alone",
+      "maximum": 60,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "mode": {
+      "default": "ensure",
+      "description": "ensure: no-op when the round is live, a restart when the player cannot play it (dead, spectator, round winner), else set up and wait; restart: mp_restartgame 1 and wait for roundRestarted",
+      "enum": [
+       "ensure",
+       "restart"
+      ],
+      "type": "string"
+     },
+     "respawn": {
+      "description": "set mp_respawn_on_death_ct and _t to 1 (true) or 0 (false); omitted leaves them alone",
+      "type": "boolean"
+     },
+     "roundtime": {
+      "description": "mp_roundtime in minutes; omitted leaves it alone",
+      "maximum": 60,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "timeoutMs": {
+      "default": 8000,
+      "description": "one deadline for the confirmation and the round wait; clamped to the call budget minus 500 ms",
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "ocr",
+   "description": "Extract text from the last capture (last: true) or a host PNG with tesseract (--psm 6 or 11). Optional crop [x,y,w,h] is upscaled 2x before OCR.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "crop": {
+      "description": "[x, y, w, h] in pixels",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+     },
+     "last": {
+      "description": "use the most recent capture",
+      "type": "boolean"
+     },
+     "png": {
+      "description": "host path of a PNG",
+      "type": "string"
+     },
+     "psm": {
+      "default": 6,
+      "enum": [
+       6,
+       11
+      ],
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "screenshot",
+   "description": "Capture the game view: the next frame the session presents, read from its Vulkan swapchain by the capture layer (never an X grab). Returns the host PNG path (full size), stats, pid/exe/presentIndex of the frame, and an inline image block (full size up to 1920x1080; maxWidth narrows it). Needs a session launched with capture (the default when CS2_MCP_VK_LAYER_DIR is valid). ocr: true adds tesseract text (ocr.text).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "maxWidth": {
+      "description": "inline image width cap (aspect kept); default: full size up to 1920x1080. The path is always the full frame",
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "ocr": {
+      "default": false,
+      "description": "also run tesseract (--psm 6) on the frame, at most 10 s",
+      "type": "boolean"
+     },
+     "session": {
+      "description": "cs2mcp-* container to capture; default: the one running session (error when several run, unless only one has a capture dir)",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "default": 5000,
+      "description": "wait for the layer's answer; clamped to the call budget minus 1 s",
+      "maximum": 60000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "observe",
+   "description": "One playtest observation: a screenshot from the capture layer (capture, default true; frame <= 5 s, OCR <= 10 s), the console.log tail or the lines since a cursor, checkpoint events, game.tick when the target is a wine-tools session whose bridge is the one configured (<= 3 s; skipped with a note otherwise), and a screen guess (dialog | loading | unknown). Every part is independent: a failing part goes to errors[] and the rest still answers.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "capture": {
+      "default": true,
+      "description": "take a screenshot from the capture layer",
+      "type": "boolean"
+     },
+     "consoleLines": {
+      "default": 20,
+      "maximum": 500,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "image": {
+      "default": "small",
+      "description": "inline image: full size up to 1920x1080, small (<= 640 px wide), or none. The full-size file is always the path",
+      "enum": [
+       "inline",
+       "small",
+       "none"
+      ],
+      "type": "string"
+     },
+     "ocr": {
+      "default": false,
+      "description": "OCR the frame; needed for dialog detection",
+      "type": "boolean"
+     },
+     "session": {
+      "description": "cs2mcp-* container to observe (see screenshot and console_tail)",
+      "type": "string"
+     },
+     "since": {
+      "description": "cursor from an earlier observe (console.cursor) or console_tail: {inode, offset, path}; without it the last consoleLines lines are returned",
+      "properties": {
+       "inode": {
+        "type": "integer"
+       },
+       "offset": {
+        "type": "integer"
+       },
+       "path": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "inode",
+       "offset"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  }
+ ]
+}

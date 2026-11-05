@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 01:00:04 -0500
+Subject: [PATCH 01/47] Add ITestScriptMgr
+
+Ported from Wend4r/sourcesdk main public/tier0/itestscriptmgr.h,
+verified against CS2 2000930 (win64) / 2000908 (linux).
+
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/tier0/itestscriptmgr.h | 43 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 public/tier0/itestscriptmgr.h
+
+diff --git a/public/tier0/itestscriptmgr.h b/public/tier0/itestscriptmgr.h
+new file mode 100644
+index 00000000..6e2b8bf8
+--- /dev/null
++++ b/public/tier0/itestscriptmgr.h
+@@ -0,0 +1,43 @@
++//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Runs automated test scripts passed with -testscript
++//
++//===========================================================================//
++
++#ifndef TIER0_ITESTSCRIPTMGR_H
++#define TIER0_ITESTSCRIPTMGR_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "appframework/iappsystem.h"
++
++// Receives the commands a test script issues
++class ITestScriptCommandProcessor;
++
++abstract_class ITestScriptMgr : public IAppSystem
++{
++public:
++	// Loads the scripts given with -testscript and -testscript_inline
++	virtual void InitFromCommandLine( ITestScriptCommandProcessor *pProcessor ) = 0;
++
++	// Reports that the engine reached the named checkpoint
++	virtual void CheckPoint( const char *pName ) = 0;
++
++	// True once a script has commands
++	virtual bool IsRunningTestScript() = 0;
++
++	// Reports the "frame_end" checkpoint
++	virtual void OnFrameEnd() = 0;
++
++	// With bOnce, a checkpoint that was already reached is not waited for
++	virtual void SetWaitCheckPoint( const char *pName, bool bOnce ) = 0;
++
++	// Inserts the commands before the script's wait on pCheckPointName, or appends them when it is null
++	// or not found; "//" comments are stripped
++	virtual void InsertCommandsBeforeCheckpoint( const char *pCommands, const char *pCheckPointName ) = 0;
++
++	virtual ~ITestScriptMgr() {}
++};
++
++#endif // TIER0_ITESTSCRIPTMGR_H

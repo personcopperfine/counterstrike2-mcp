@@ -1,0 +1,10 @@
+[package]
+name = "cs2-kv1"
+version = "0.0.1"
+description = "Valve KeyValues1 reader and writer: text (conditionals, #base/#include) and binary (a Rust port of ValveResourceFormat/ValveKeyValue)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror.workspace = true

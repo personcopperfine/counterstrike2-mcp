@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 07:34:52 -0500
+Subject: [PATCH 22/47] Add IToolsResourceListener
+
+Verified against CS2 2000930 (win64).
+---
+ public/toolutils2/itoolsresourcelistener.h | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 public/toolutils2/itoolsresourcelistener.h
+
+diff --git a/public/toolutils2/itoolsresourcelistener.h b/public/toolutils2/itoolsresourcelistener.h
+new file mode 100644
+index 00000000..61de9c67
+--- /dev/null
++++ b/public/toolutils2/itoolsresourcelistener.h
+@@ -0,0 +1,23 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Notified when tool resources change
++//
++//===========================================================================//
++
++#ifndef ITOOLSRESOURCELISTENER_H
++#define ITOOLSRESOURCELISTENER_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "tier0/platform.h"
++
++abstract_class IToolsResourceListener
++{
++public:
++	virtual int unk001() = 0;
++	// AMNOTE: pResources points to an array of 32-byte entries and its 64-bit count
++	virtual void unk002( const void *pResources ) = 0;
++};
++
++#endif // ITOOLSRESOURCELISTENER_H

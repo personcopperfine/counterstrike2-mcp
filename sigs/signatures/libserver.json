@@ -1,0 +1,80 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for libserver.so. The builds record is the sha256 the judge",
+  "(sigupdate.py check --platform linux) compares a new build's libserver.so against. The CSource2Server",
+  "entries measure the Source2Server001 object's table (its length and the GameFrame slot the bridge hooks",
+  "through KHook) against the generated ISource2Server; the bridge takes the object from CreateInterface and",
+  "the slot from s2sdk_sys, not an RVA from here. Nothing here has a `bridge` macro."
+ ],
+ "module": "libserver.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000930": {
+   "sha256": "c7741272b76f16e9"
+  },
+  "2000933": {
+   "sha256": "d73f5d3b360fce87"
+  },
+  "2000940": {
+   "sha256": "503c5b0e3c7dc0c1"
+  }
+ },
+ "entries": {
+  "CSource2Server": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 4C 89 E2 66 0F EF C9 48 89 05 ?? ?? ?? ?? 48 8D 35 ?? ?? ?? ?? 48 05 ?? ?? 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "libserver.so 0x19b33e3 (build 2000930) in the static initializer 0x19b23c0 that registers Source2Server001: lea rax,[rip+vtable] (the CSource2Server address point 0x2667ba8, header {offset-to-top 0, typeinfo _ZTI14CSource2Server}) is stored into the singleton qword_29F33C0 (the object CreateInterface(\"Source2Server001\") returns), then add rax,0x350 gives the secondary table at object+0x28. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISource2Server implementation (the Source2Server001 interface), primary table, offset-to-top 0; followed by a one-slot secondary table (offset-to-top -0x28, same typeinfo)",
+   "expect": {
+    "2000930": 40270760,
+    "2000933": 40272552,
+    "2000940": 40353896
+   }
+  },
+  "VTLEN_CSource2Server": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CSource2Server"
+   },
+   "via": "libserver.so address point 0x2667ba8 (build 2000930): 104 .text slot pointers up to the secondary table's header {-0x28, _ZTI14CSource2Server}",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of ISource2Server's implementation, compared by sdkcheck.py with the generated Itanium length of ISource2Server (103): the interface's 103 slots plus one entry GCC adds for CSource2Server's override of its secondary base (slot 103 = a ret-only function, the secondary table's one slot is a ret-only function too)",
+   "expect": {
+    "2000930": 104,
+    "2000933": 104,
+    "2000940": 104
+   }
+  },
+  "CSource2Server::GameFrame": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Server",
+    "slot": 19
+   },
+   "via": "libserver.so CSource2Server primary vtable slot 19 = 0x19926d0 (build 2000930): opens the VProf scope \"GameFrame\" at ./gameinterface.cpp:1041, takes three bools (sil, dl, cl), the third gates the autosavedangerousissafe path - the same body as the Windows CSource2Server::GameFrame",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISource2Server::GameFrame(bool simulating, bool bFirstTick, bool bLastTick); its slot is the generated ISource2Server_slots::GameFrame (19, Itanium) - Linux entries carry no `sdk`, the slot index is the vslot's",
+   "expect": {
+    "2000930": 26814160,
+    "2000933": 26815440,
+    "2000940": 26895440
+   }
+  }
+ }
+}

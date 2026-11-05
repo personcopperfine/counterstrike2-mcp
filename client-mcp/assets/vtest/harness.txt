@@ -1,0 +1,16 @@
+// harness: boot once for an in-session gametest run (worknotes/vtest/gametest/).
+// Loads the map, spawns the player, then parks; the host runner drives every test over the bridge
+// (input.*, console.exec, test.checkpoint, game.tick) and releases with `test.checkpoint vtest_release`.
+testscript_debug 1
+sv_cheats 1
+r_always_render_all_windows 1
+tv_enable 1
+tv_delay 0
+map de_dust2
+Test_WaitForCheckPoint FinishedMapLoad once
+Test_Run setup_player
+Test_Run mark VTEST_PARKED
+Test_WaitForCheckPoint vtest_release
+quit
+Test_Wait 30
+Test_ExitProcess 3

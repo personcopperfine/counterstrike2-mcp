@@ -1,0 +1,14 @@
+# LOG
+- STEP: list --full: read docs; ok
+- STEP: new_map clear:gameplay maps/convoy_slice.vmap; ok
+- STEP: apply_layout (9 meshes, 4 spawns), tie_to_entity func_movelinear, create_entities logic_auto; ok
+- STEP: add_entity_connections logic_auto OnMapSpawn->mover Open; save_map ok
+- STEP: compile_map full + wait; ok 17 compiled 0 failed
+- CONFUSED: mover finished its whole 1300 run during the freeze period because logic_auto OnMapSpawn fires at load, not at round start; no tool gave me an obvious round-start output or freezetime value
+- STEP: moved trigger to OnMultiNewRound (ResetPosition + Open delay 20), save, unload, recompile
+- CONFUSED: logic_auto OnMultiNewRound ResetPosition/Open(delay 20) never moved the mover in a loaded round nor after mp_restartgame; switching to logic_eventlistener round_freeze_end
+- STEP: logic_eventlistener round_freeze_end->mover Open; saved, recompiled ok
+- STEP: play_test: CT walked x 64->300+, mover origin x 496->1796 (moves, ends at start+1300). T walk from 1984 blocked at x~1905 by the mover parked at road end (player y=60 overlaps mover y +-48): test-path artifact, not map bug
+- CONFUSED: after a head-on collision the player was wedged at x 1904.9 (mover parked at 1796, 3 units of overlap, y=-60 spawn lane is within mover width+radius) and no input moved it ('moved 0.0 units; otherwise the way may be blocked by geometry'); recovered via run_map reload. Spawns at y +-60 overlap the mover lane: my layout choice
+- STEP: play_test pt7 passed: CT walked 64->1956 along road, mover 496->1796 after freeze end, player alive
+- DONE: saved (0 unsaved edits), compiled clean (17 ok/0 failed), loads, CT+T spawns verified live, mover verified moving; stopping

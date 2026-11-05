@@ -1,0 +1,4 @@
+// Fixture: an unterminated string is fatal -> FgdError::Parse carrying the line the string opens
+// on (4), never a hang. Nothing after it may contain a quote: the string runs to EOF.
+@PointClass base(Targetname) = broken_class :
+	"This description never ends...

@@ -1,0 +1,18 @@
+[package]
+name = "cs2-vtm"
+version = "0.0.1"
+description = "VToolMessage: post KV3 records into a running CS2 -tools session's channel (a Rust vtmsend.exe), for cs2mcp-native and hammer-mcp on a Windows host"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+# Same windows-sys as the bridge, mm-launch and cs2-native (the workspace's resolved 0.61): the
+# named mutex and the file mapping.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_Memory",
+    "Win32_System_Threading",
+] }

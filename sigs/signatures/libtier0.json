@@ -1,0 +1,147 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for libtier0.so of build 2000908, the one module whose game",
+  "classes are still symbolized: `.dynsym` there carries `_ZTV` symbols for a handful of tier0",
+  "utilities (CThread, CUtlCharConversion, the KeyValues dump contexts, the format-output-stream",
+  "family), which is what the `itanium_vtable` locator resolves: the address point of the vtable is",
+  "the `_ZTV…` symbol + 16 (the symbol names the group's [offset-to-top][typeinfo] header, and its",
+  "st_size covers header + slots, so st_size/8 - 2 is the length the linker records).",
+  "",
+  "These are the upstream classes the comparison in the S2 report uses: their Itanium VTLEN is",
+  "fixed by the upstream header (crates/s2sdk/s2sdk-sys/UPSTREAM.lock), so the measured game length is a",
+  "cross-check of upstream's numbers against the shipped Linux binary. The s2sdk IR's own vtable",
+  "classes (IAppSystem, ISchemaSystem, ICvar, IGameEvent…) are pure interfaces with no emitted",
+  "vtable in any staged Linux module and no `_ZTV` symbol - a probe over all staged modules found",
+  "0 of 11 - so no entry can be added for them (S2 report).",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only."
+ ],
+ "module": "libtier0.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000908": {
+   "sha256": "2fd8abc252594812"
+  },
+  "2000930": {
+   "sha256": "a3d4f81bb46eeca0"
+  },
+  "2000933": {
+   "sha256": "5e2ac91894daaab1"
+  },
+  "2000940": {
+   "sha256": "4abd3d2f7447e1f5"
+  }
+ },
+ "entries": {
+  "IKeyValuesDumpContextAsText": {
+   "kind": "vtable",
+   "locator": {
+    "type": "itanium_vtable",
+    "class": "IKeyValuesDumpContextAsText"
+   },
+   "via": "libtier0.so `_ZTV27IKeyValuesDumpContextAsText` = 0x4a70b0 (st_size 56): the exported Itanium vtable of IKeyValuesDumpContextAsText (upstream public/tier0/keyvalues.h:520), first virtual function at 0x4a70c0",
+   "tag": "S",
+   "status": "verified",
+   "notes": "upstream Itanium VTLEN 5 (KvBeginKey, KvWriteValue, KvEndKey, KvWriteIndent, KvWriteText - keyvalues.h:515-529); the game's symbol length is 5 too (st_size 56 = 16 + 5*8). The code-pointer scan gives 4, because the last slot (pure KvWriteText) is a null in this table rather than a thunk: the `vtlen` scan under-counts a table it ends on, `measure: symbol` does not (S2 report, VTLEN_IKeyValuesDumpContextAsText)",
+   "expect": {
+    "2000908": 4878528,
+    "2000930": 4907816,
+    "2000933": 4908200,
+    "2000940": 4908200
+   }
+  },
+  "VTLEN_IKeyValuesDumpContextAsText": {
+   "kind": "const",
+   "locator": {
+    "type": "itanium_vtable",
+    "class": "IKeyValuesDumpContextAsText",
+    "measure": "symbol"
+   },
+   "via": "libtier0.so `_ZTV27IKeyValuesDumpContextAsText` st_size 56: (56 - 16 header bytes) / 8 = 5 slots",
+   "tag": "S",
+   "status": "verified",
+   "notes": "MATCH: upstream Itanium VTLEN for IKeyValuesDumpContextAsText is 5 (public/tier0/keyvalues.h:515-529, one entry per virtual, no virtual destructor)",
+   "expect": {
+    "2000908": 5,
+    "2000930": 5,
+    "2000933": 5,
+    "2000940": 5
+   }
+  },
+  "CKeyValuesDumpContextAsDevMsg": {
+   "kind": "vtable",
+   "locator": {
+    "type": "itanium_vtable",
+    "class": "CKeyValuesDumpContextAsDevMsg"
+   },
+   "via": "libtier0.so `_ZTV29CKeyValuesDumpContextAsDevMsg` = 0x4a70e8 (st_size 56): the exported Itanium vtable of CKeyValuesDumpContextAsDevMsg (upstream public/tier0/keyvalues.h:532), first virtual function at 0x4a70f8",
+   "tag": "S",
+   "status": "verified",
+   "notes": "upstream Itanium VTLEN 5 (IKeyValuesDumpContextAsText's five virtuals, two of them overridden here - keyvalues.h:523-540); the game's st_size gives 5 as well, and here the code-pointer scan agrees (no null slot)",
+   "expect": {
+    "2000908": 4878584,
+    "2000930": 4907872,
+    "2000933": 4908256,
+    "2000940": 4908256
+   }
+  },
+  "VTLEN_CKeyValuesDumpContextAsDevMsg": {
+   "kind": "const",
+   "locator": {
+    "type": "itanium_vtable",
+    "class": "CKeyValuesDumpContextAsDevMsg",
+    "measure": "symbol"
+   },
+   "via": "libtier0.so `_ZTV29CKeyValuesDumpContextAsDevMsg` st_size 56: (56 - 16) / 8 = 5 slots",
+   "tag": "S",
+   "status": "verified",
+   "notes": "MATCH: upstream Itanium VTLEN for CKeyValuesDumpContextAsDevMsg is 5 (keyvalues.h:532-541; it overrides KvBeginKey and KvWriteText of IKeyValuesDumpContextAsText)",
+   "expect": {
+    "2000908": 5,
+    "2000930": 5,
+    "2000933": 5,
+    "2000940": 5
+   }
+  },
+  "CTestScriptMgr": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 56 49 89 FE",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libtier0.so!0x248780 (CTestScriptMgr complete-object destructor, Itanium vtable slot 17: its first instruction after the prologue is lea rax,[rip+vtable address point]). No `_ZTV` symbol is exported for the class (typeinfo name 14CTestScriptMgr, typeinfo 0x4ABDC8, address point 0x4ABDF0 per s2sdk-types RE1 section 5)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ITestScriptMgr implementation (the TestScriptMgr001 singleton), single table, offset-to-top 0; the Windows build's table has 18 entries, the Itanium one 19 because the destructor has two slots",
+   "expect": {
+    "2000908": 4898288,
+    "2000930": 4928032,
+    "2000933": 4928416,
+    "2000940": 4928416
+   }
+  },
+  "VTLEN_CTestScriptMgr": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CTestScriptMgr"
+   },
+   "via": "libtier0.so address point 0x4ABDF0: 19 .text slot pointers (slots 0-18; 17 = complete dtor 0x248780, 18 = deleting dtor 0x2489F0) up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of ITestScriptMgr's implementation, compared by sdkcheck.py against upstream's Itanium vtable length of ITestScriptMgr (19)",
+   "expect": {
+    "2000908": 19,
+    "2000930": 19,
+    "2000933": 19,
+    "2000940": 19
+   }
+  }
+ }
+}

@@ -1,0 +1,40 @@
+[package]
+name = "cs2-mcp-common"
+version = "0.0.1"
+description = "Shared code for the cs2-mcp servers: bridge client, tool registry, rmcp adapter, runtime, sigs, capture, mock bridge"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+rmcp.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+clap.workspace = true
+png.workspace = true
+libc = "0.2"
+s2sdk-sys.workspace = true
+
+[features]
+default = []
+# Rust mock bridge (fixture replay + failure knobs) for the servers' tests.
+mock = []
+# OCR through the host/container `tesseract` CLI (no native bindings).
+ocr-cli = []
+
+[target.'cfg(windows)'.dependencies]
+# the capture dir's owner check (capture/winsec.rs); the workspace's resolved 0.61
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_System_Threading",
+] }
+
+[dev-dependencies]
+cs2-mcp-common = { path = ".", features = ["mock"] }

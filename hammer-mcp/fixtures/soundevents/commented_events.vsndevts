@@ -1,0 +1,20 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	// a comment BETWEEN events (before alpha)
+	"alpha.event" = 
+	{
+		type = "csgo_mega"
+		volume = 0.5
+		// a comment INSIDE alpha.event
+		pitch = 1.0
+	}
+	/* a block comment
+	   spanning two lines, between events */
+	"beta.event" = 
+	{
+		base = "alpha.event"
+		// a comment INSIDE beta.event
+		volume = 0.2
+	}
+	// a trailing comment after the last event
+}

@@ -1,0 +1,3 @@
+// pos.vtest <tag>: tagged position sample; getpos prints "setpos x y z;setang p y r".
+Test_Run mark VTEST_POS_$1
+getpos

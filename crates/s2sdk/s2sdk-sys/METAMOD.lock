@@ -1,0 +1,14 @@
+# Pinned alliedmodders/metamod-source revision the generated `metamod` bindings
+# come from (second upstream, see gen/gen.py "two upstreams"). KHook is pinned
+# too: IKHook's vtable comes from metamod's third_party/khook submodule, not from
+# this repository's own tree, so a bump of either is a change to the bindings.
+# Bump: update the checkouts (metamod, then `git submodule update --init
+# third_party/khook` inside it), edit this file, run gen/gen.py, review the diff.
+# Each `*_date` is the pinned commit's own (`git log -1 --format=%cs`).
+repo = "https://github.com/alliedmodders/metamod-source.git"
+branch = "master"
+commit = "170058a2f0dbd58106b7c76bfe88a94672295356"
+date = "2026-10-18"
+khook_repo = "https://github.com/Kenzzer/KHook.git"
+khook_commit = "0ca2b01363aff9fa11ad73b1b08dfdc2a195fb3a"
+khook_date = "2026-10-18"

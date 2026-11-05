@@ -1,0 +1,103 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 01:54:08 -0500
+Subject: [PATCH 08/47] Add ISceneUtils
+
+Ported from Wend4r/sourcesdk s2/restore-scenesystem
+public/scenesystem/isceneutils.h (names partly from s&box debug information
+via Wend4r/sourcesdk), verified against CS2 2000930 (win64 and linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/scenesystem/isceneutils.h | 82 ++++++++++++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 public/scenesystem/isceneutils.h
+
+diff --git a/public/scenesystem/isceneutils.h b/public/scenesystem/isceneutils.h
+new file mode 100644
+index 00000000..4a91704b
+--- /dev/null
++++ b/public/scenesystem/isceneutils.h
+@@ -0,0 +1,82 @@
++#ifndef ISCENEUTILS_H
++#define ISCENEUTILS_H
++
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "appframework/iappsystem.h"
++#include "scenesystem/iscenesystem.h"
++#include "mathlib/vector4d.h"
++#include "color.h"
++#include <memory>
++
++class ITonemapSystem;
++class IVolumetricFog;
++class CWindController;
++class CRenderGraphBuilder;
++class CCharacterDecalRenderer;
++class IProceduralLayerRenderer;
++struct SceneLayerOutputs_t;
++struct ScreenSpaceVertex_t;
++struct pixelvis_queryparams_t;
++
++class ISceneUtils : public IAppSystem
++{
++public:
++
++	virtual void Add2xDownsampleLayerToView( ISceneView *pView, HRenderTexture hTexture, void *pUnk, bool bUnk ) = 0;
++	virtual void Add4xDownsampleLayerToView( ISceneView *pView, HRenderTexture hTexture, void *pUnk, bool bUnk ) = 0;
++	virtual void Add2xDownsampleLayerToView( ISceneView *pView, uint64 nTextureIndex, void *pUnk, bool bUnk ) = 0;
++	virtual void Add4xDownsampleLayerToView( ISceneView *pView, uint64 nTextureIndex, void *pUnk, bool bUnk ) = 0;
++	virtual ISceneLayer *AddSimpleLayerToView( ISceneView *pView, const char *pszLayerName, const RenderViewport_t &viewport, const CUtlStringToken &token, uint64 nFlags, uint64 nUnk, const SceneLayerOutputs_t &outputs ) = 0;
++	virtual void AddTranslucentScreenspaceLayerToView( ISceneView *pView, const void *pUnk1, const void *pUnk2, const void *pUnk3, void *pUnk4, bool bUnk ) = 0;
++	virtual void RenderScreenQuad( IRenderContext *pRenderContext, Vector *pUnk, const char *pszUnk ) = 0;
++	// AMNOTE: pMSAAModes and pImageLayouts point to one entry per texture and render target; the entry types are unknown.
++	virtual ISceneLayer *AddTextureBarrierLayer( ISceneView *pView, const char *pszDebugName, int nTextureCount, const HRenderTexture *pTextures, int nRenderTargetCount, const HSceneViewRenderTarget *pRenderTargets, const void *pMSAAModes, const void *pImageLayouts ) = 0;
++	virtual std::shared_ptr< ITonemapSystem > CreateTonemapSystem() = 0;
++	virtual IVolumetricFog *CreateVolumetricFog() = 0;
++	virtual void DestroyVolumetricFog( IVolumetricFog *pVolumetricFog ) = 0;
++	virtual CWindController *CreateWindController() = 0;
++	virtual void DestroyWindController( CWindController *pWindController ) = 0;
++	virtual void RegisterRenderingPipeline( IRenderingPipeline *pPipeline ) = 0;
++	virtual void UnregisterRenderingPipeline( IRenderingPipeline *pPipeline ) = 0;
++	virtual IRenderingPipeline *FindRenderingPipeline( CUtlStringToken token ) = 0;
++	virtual void AliasRenderingPipeline( const char *pszAlias, CUtlStringToken token ) = 0;
++	virtual ISceneLayer *AddTextureDebugLayer( ISceneView *pView, const char *pDebugName, const SceneLayerOutputs_t &outputs, const RenderViewport_t &viewport, HSceneViewRenderTarget hTexture, int nDebugShowTextureMode, bool bTextureIsSrgb ) = 0;
++	virtual ISceneLayer *AddTextureDebugLayer( ISceneView *pView, const char *pDebugName, const SceneLayerOutputs_t &outputs, const RenderViewport_t &viewport, HRenderTexture hTexture, int nDebugShowTextureMode, bool bTextureIsSrgb ) = 0;
++	virtual CViewId AppendViewProducerToViewId( CViewId viewId, int nViewProducer ) = 0;
++	virtual int AllocateViewProducerIndex() = 0;
++	virtual bool PixelVisibility_IsAvailable() const = 0;
++	virtual float PixelVisibility_FractionVisible( const pixelvis_queryparams_t &params, int *pQueryHandle, const CViewId &viewId ) = 0;
++	virtual void PixelVisibility_IssueQuery( const pixelvis_queryparams_t &params, int *pQueryHandle, IRenderContext *pRenderContext, const CFrustum &frustum, const CViewId &viewId ) = 0;
++	virtual void PixelVisibility_AppendViewProducerToViewIdsForPlayerQueries( int nUnk1, int nUnk2 ) = 0;
++	virtual void ComputeScreenSpaceVertices( const RenderViewport_t &viewport, int nDestX, int nDestY, int nDestWidth, int nDestHeight, float flSrcTextureX0, float flSrcTextureY0, float flSrcTextureX1, float flSrcTextureY1, int nSrcTextureWidth, int nSrcTextureHeight, ScreenSpaceVertex_t *pVertices ) = 0;
++	virtual IProceduralLayerRenderer *CreateFullscreenQuadRenderer( HMaterialWeak hMaterial, const Color &modulationColor ) = 0;
++	virtual IProceduralLayerRenderer *CreateScalableAORenderer( void *pUnk, RenderMultisampleType_t nMultisampleType, float flRadius, float flBias, float flStrength, bool bBlur, int nUnk ) = 0;
++	virtual IProceduralLayerRenderer *CreateSignalSemaphoreRenderer( const char *pszName ) = 0;
++	virtual void unk101( int nUnk1, int nUnk2, const void *pUnk1, float *pUnk2, bool bUnk ) = 0;
++	virtual void FilterTexture( void *pUnk1, void *pUnk2, uint64 nUnk1, uint32 nUnk2, uint32 nUnk3, void *pUnk3, int *pUnk4, int *pUnk5, bool bUnk1, void *pUnk6, const void *pUnk7, bool bUnk2, int *pUnk8 ) = 0;
++	virtual void CreateFilterLayerRenderer( void *pUnk1, void *pUnk2, int nUnk1, const void *pUnk3, int nUnk2, int nUnk3, void *pUnk4, const void *pUnk5, const void *pUnk6, void *pUnk7, const void *pUnk8 ) = 0;
++	virtual void *CreateMDL() = 0;
++	virtual CSceneObject *Create6FaceSkybox( ISceneWorld *pWorld, HMaterialWeak *pMaterials, CUtlStringToken token ) = 0;
++	virtual CCharacterDecalRenderer *CreateCharacterDecalRenderer() = 0;
++	virtual void DestroyCharacterDecalRenderer( CCharacterDecalRenderer *pRenderer ) = 0;
++	virtual void Compute3DSkyboxFrustum( const CFrustum &inFrustum, const Vector &vSkyboxOrigin, const QAngle &vSkyboxAngles, const Vector &vSkyboxCameraOrigin, float flSkyboxScale, CFrustum *pOutSkyboxFrustum ) = 0;
++	virtual void unk201( void *pUnk1, int nUnk1, uint8 nUnk2, uint8 nUnk3 ) = 0;
++	virtual bool FindClipSpaceRectForObject( const CSceneObject *pObject, const ISceneView *pView, Vector4D &vRect ) = 0;
++	virtual void unk301( void *pUnk1, uint8 nUnk1, float *pUnk2, void *pUnk3 ) = 0;
++	virtual void unk302( CSceneObject *pObject, const void *pUnk1 ) = 0;
++	virtual void unk303( void *pUnk1, int nUnk1 ) = 0;
++	virtual void GPUSort( void *pUnk1, void *pUnk2, void *pUnk3, uint32 nUnk1, void *pUnk4, uint32 nUnk2, uint32 nUnk3 ) = 0;
++	virtual void unk401() = 0;
++	virtual std::shared_ptr< CRenderGraphBuilder > CreateRenderGraphBuilder( void *pUnk ) = 0;
++	virtual IProceduralLayerRenderer *CreateSimplePostProcessingLayerRenderer( const void *pUnk, bool bUnk ) = 0;
++	virtual IProceduralLayerRenderer *CreateQuadRenderer( HMaterialWeak hMaterial, const Color &modulationColor, const RenderViewport_t &viewport ) = 0;
++	virtual void unk501( void *pUnk1, const void *pUnk2, char *pUnk3 ) = 0;
++	virtual void unk502( ISceneView *pView, void *pUnk1, const char *pszName, bool bUnk ) = 0;
++	virtual void unk503( ISceneView *pView, void *pUnk1, const char *pszName, bool bUnk ) = 0;
++	virtual void unk504( void *pUnk1, const void *pUnk2, void *pUnk3, int nUnk1, int nUnk2 ) = 0;
++};
++
++#endif // ISCENEUTILS_H

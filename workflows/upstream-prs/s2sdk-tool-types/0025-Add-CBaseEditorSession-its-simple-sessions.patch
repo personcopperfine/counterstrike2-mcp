@@ -1,0 +1,101 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 07:34:52 -0500
+Subject: [PATCH 25/47] Add CBaseEditorSession & its simple sessions
+
+Verified against CS2 2000930 (win64).
+---
+ public/toolutils2/baseeditorsession.h | 85 +++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 public/toolutils2/baseeditorsession.h
+
+diff --git a/public/toolutils2/baseeditorsession.h b/public/toolutils2/baseeditorsession.h
+new file mode 100644
+index 00000000..b0722348
+--- /dev/null
++++ b/public/toolutils2/baseeditorsession.h
+@@ -0,0 +1,85 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Base classes of a document open in a Workshop Tools editor application
++//
++//===========================================================================//
++
++#ifndef BASEEDITORSESSION_H
++#define BASEEDITORSESSION_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "tier0/utlstring.h"
++#include "tier0/platform.h"
++
++class CBaseEditorApp;
++class CBaseEditorSharedWindowApp;
++class QWidget;
++
++// AMNOTE: Incomplete class, only the untitled flag is known
++class CBaseEditorSession
++{
++public:
++	virtual ~CBaseEditorSession() = 0;
++	// AMNOTE: Asks to save unsaved changes; returns 1 when there are none
++	virtual int unk101( bool ) = 0;
++	virtual int unk102() = 0;
++	// AMNOTE: Sets up a new untitled document named pszName
++	virtual bool unk103( const char *pszName ) = 0;
++	virtual bool unk104() = 0;
++	// AMNOTE: Like unk103, also given a second string
++	virtual bool unk105( const char *pszName, const char * ) = 0;
++	// AMNOTE: Loads pszFileName; returns 2 when loaded, 3 when loaded with the errors written to pErrors,
++	// 4 when loaded without a path, anything else when it failed
++	virtual int unk106( const char *pszFileName, CUtlString *pErrors ) = 0;
++	// AMNOTE: Reloads the document from its file
++	virtual void ReloadDocument() = 0;
++	virtual void unk201() = 0;
++	virtual void unk202() = 0;
++	virtual bool unk203( const char *pszFileName ) = 0;
++	virtual bool IsModified() = 0;
++	virtual void SetModified( bool bModified ) = 0;
++	// AMNOTE: "" for an untitled session
++	virtual const char *GetPath() = 0;
++	// AMNOTE: Writes the default file name for a new file into pOut
++	virtual bool unk301( CUtlString *pOut ) = 0;
++	virtual void unk302( bool ) = 0;
++	virtual bool unk303() = 0;
++	virtual bool unk304() = 0;
++	virtual bool Save( const char *pszOldPath, const char *pszNewPath, bool, bool ) = 0;
++	virtual void unk401( CUtlString *pOut ) = 0;
++	// AMNOTE: True when pszFileName is the session's file
++	virtual bool unk402( const char *pszFileName ) = 0;
++	// AMNOTE: unk101( true ) != 0
++	virtual bool unk403() = 0;
++	// AMNOTE: The window the session is shown in
++	virtual QWidget *unk404() = 0;
++	virtual void unk405() = 0;
++	// AMNOTE: Checks the file out of source control
++	virtual bool unk406() = 0;
++	virtual void unk407() = 0;
++
++public:
++	CBaseEditorApp *m_unk001;
++	uint8 m_unk002[9];
++	// AMNOTE: The session has no file yet
++	bool m_bIsNew;
++	uint8 m_unk101[62];
++};
++
++class CSimpleBaseEditorSession : public CBaseEditorSession
++{
++public:
++	CUtlString m_Path;
++	bool m_bModified;
++	bool m_unk111;
++};
++
++class CSimpleSharedWindowEditorSession : public CSimpleBaseEditorSession
++{
++public:
++	CBaseEditorSharedWindowApp *m_unk021;
++};
++
++#endif // BASEEDITORSESSION_H

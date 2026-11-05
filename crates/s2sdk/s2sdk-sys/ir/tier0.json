@@ -1,0 +1,1221 @@
+{
+  "enums": [],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "char *",
+          "name": "m_pString",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_char",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/utlstring.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pString",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pString",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "CUtlString",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pString",
+          "offset": 0,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/utlsymbollarge.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pString",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pString",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "CUtlSymbolLarge",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "x",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "y",
+          "offset": 4,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "z",
+          "offset": 8,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/vector.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 12
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 12
+      },
+      "name": "Vector",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 12
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "x",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "y",
+          "offset": 4,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "z",
+          "offset": 8,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/vector.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 12
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 12
+      },
+      "name": "QAngle",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 12
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "unsigned char[4]",
+          "name": "_color",
+          "offset": 0,
+          "rust_type": "[u8; 4]",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/color.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "_color",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "_color",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "Color",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "x",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "y",
+          "offset": 4,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/vector2d.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "Vector2D",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "x",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "y",
+          "offset": 4,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "z",
+          "offset": 8,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "vec_t",
+          "name": "w",
+          "offset": 12,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/mathlib/vector4d.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "w",
+            "offset": 12,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "x",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "y",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "z",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "w",
+            "offset": 12,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "Vector4D",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 16
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_nHashCode",
+          "offset": 0,
+          "rust_type": "u32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/utlstringtoken.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHashCode",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHashCode",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "CUtlStringToken",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlStringToken",
+          "name": "m_nHashCode",
+          "offset": 0,
+          "rust_type": "CUtlStringToken",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "UtlSymLargeId_t",
+          "name": "m_SymId",
+          "offset": 4,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pszString",
+          "offset": 8,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/keyvalues3.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHashCode",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_SymId",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszString",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nHashCode",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_SymId",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszString",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "CKV3MemberName",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_Data",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/basetypes.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Data",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Data",
+            "offset": 0,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 4
+      },
+      "name": "CSplitScreenSlot",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 4
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/tier0/buffer_string.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "CBufferString",
+      "opaque": true,
+      "pass_in_registers": false,
+      "size": 16
+    }
+  ],
+  "specs": [
+    {
+      "align": 8,
+      "bases": [],
+      "cxx_name": "CUtlVector<CEntityHandle, int, CUtlVectorMemory_Growable<CEntityHandle>>",
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_Size",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "class CEntityHandle *",
+          "name": "m_pMemory",
+          "offset": 8,
+          "path": [
+            "m_Memory",
+            "m_pMemory"
+          ],
+          "rust_type": "*mut CEntityHandle",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nAllocationCount",
+          "offset": 16,
+          "path": [
+            "m_Memory",
+            "m_nAllocationCount"
+          ],
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nGrowSize",
+          "offset": 20,
+          "path": [
+            "m_Memory",
+            "m_nGrowSize"
+          ],
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Size",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMemory",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nAllocationCount",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nGrowSize",
+            "offset": 20,
+            "size": 4
+          }
+        ],
+        "size": 24
+      },
+      "kind": "class",
+      "members": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 2,
+          "name": null,
+          "offset": 0,
+          "type": "struct base_vector_t (base) (empty)"
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 2,
+          "name": "m_Size",
+          "offset": 0,
+          "type": "int"
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 2,
+          "name": "m_Memory",
+          "offset": 8,
+          "type": "class CUtlVectorMemory_Growable<class CEntityHandle>"
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 3,
+          "name": "m_pMemory",
+          "offset": 8,
+          "type": "class CEntityHandle *"
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 3,
+          "name": "m_nAllocationCount",
+          "offset": 16,
+          "type": "int"
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 3,
+          "name": "m_nGrowSize",
+          "offset": 20,
+          "type": "int"
+        }
+      ],
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Size",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMemory",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nAllocationCount",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nGrowSize",
+            "offset": 20,
+            "size": 4
+          }
+        ],
+        "members": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 2,
+            "name": null,
+            "offset": 0
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 2,
+            "name": "m_Size",
+            "offset": 0
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 2,
+            "name": "m_Memory",
+            "offset": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 3,
+            "name": "m_pMemory",
+            "offset": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 3,
+            "name": "m_nAllocationCount",
+            "offset": 16
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 3,
+            "name": "m_nGrowSize",
+            "offset": 20
+          }
+        ],
+        "size": 24
+      },
+      "name": "CUtlVector<CEntityHandle>",
+      "opaque": false,
+      "pass_in_registers": false,
+      "rust_name": "CUtlVector_CEntityHandle",
+      "size": 24,
+      "template": "CUtlVector"
+    }
+  ],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IAppSystem",
+      "header": "public/appframework/iappsystem.h",
+      "methods": [
+        {
+          "cxx_signature": "bool (CreateInterfaceFn)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "Connect",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem, factory: *const ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "Disconnect",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem)"
+        },
+        {
+          "cxx_signature": "void *(const char *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "QueryInterface",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem, pInterfaceName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "InitReturnVal_t ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "Init",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "Shutdown",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "PreShutdown",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem)"
+        },
+        {
+          "cxx_signature": "const AppSystemInfo_t *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "GetDependencies",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "AppSystemTier_t ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "GetTier",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (CreateInterfaceFn, const char *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "Reconnect",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem, factory: *const ::core::ffi::c_void, pInterfaceName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "IsSingleton",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IAppSystem) -> bool"
+        },
+        {
+          "cxx_signature": "BuildType_t ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "GetBuildType",
+          "overrides": null,
+          "rust_fn": null
+        }
+      ],
+      "msvc": {
+        "length": 11,
+        "own_entries": 11
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IBaseInterface",
+      "header": "public/tier0/interface.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IBaseInterface",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBaseInterface)"
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "ITestScriptMgr",
+      "header": "public/tier0/itestscriptmgr.h",
+      "methods": [
+        {
+          "cxx_signature": "void (ITestScriptCommandProcessor *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "InitFromCommandLine",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr, pProcessor: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "CheckPoint",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr, pName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "IsRunningTestScript",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "OnFrameEnd",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr)"
+        },
+        {
+          "cxx_signature": "void (const char *, bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "SetWaitCheckPoint",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr, pName: *const ::core::ffi::c_char, bOnce: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "InsertCommandsBeforeCheckpoint",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr, pCommands: *const ::core::ffi::c_char, pCheckPointName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 6,
+          "is_dtor": true,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "~ITestScriptMgr",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ITestScriptMgr)"
+        }
+      ],
+      "msvc": {
+        "length": 18,
+        "own_entries": 7
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    }
+  ]
+}

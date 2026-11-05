@@ -1,0 +1,45 @@
+[package]
+name = "cs2-native"
+version = "0.0.1"
+description = "cs2mcp-native: prepares a user's own Steam CS2 install (bridge, Metamod, optional gbe) without modifying it, launches it and prints the MCP config"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[[bin]]
+name = "cs2mcp-native"
+path = "src/main.rs"
+
+# Live-check helpers (tree hashes, VToolMessage posts); not shipped (FIXME 15).
+[[bin]]
+name = "cs2mcp-native-dev"
+path = "src/bin/cs2mcp-native-dev.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2 = "0.10"
+cs2-kv1 = { path = "../cs2-kv1" }
+cs2-vtm = { path = "../cs2-vtm" }
+
+# Same windows-sys as the bridge and mm-launch (the workspace's resolved 0.61). Job objects and
+# process control (the supervisor), the registry (Steam's install path), the toolhelp snapshot
+# (is a cs2.exe running from this tree?) and the std handles (not leaked into the supervisor). The VToolMessage channel is crates/cs2-vtm.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Console",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_JobObjects",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+] }
+
+# Linux: the user + mount namespace and the overlay mount (src/overlay.rs), process groups.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

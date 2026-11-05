@@ -1,0 +1,105 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 07:34:52 -0500
+Subject: [PATCH 23/47] Add IUndoable, IUndoListener, CBaseUndoable &
+ CUndoHistory
+
+Verified against CS2 2000930 (win64).
+---
+ public/toolutils2/undohistory.h | 88 +++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+ create mode 100644 public/toolutils2/undohistory.h
+
+diff --git a/public/toolutils2/undohistory.h b/public/toolutils2/undohistory.h
+new file mode 100644
+index 00000000..0c447a2e
+--- /dev/null
++++ b/public/toolutils2/undohistory.h
+@@ -0,0 +1,88 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Undo history of the Workshop Tools documents
++//
++//===========================================================================//
++
++#ifndef UNDOHISTORY_H
++#define UNDOHISTORY_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "tier0/utlvector.h"
++#include "tier0/utlstring.h"
++#include "tier0/platform.h"
++
++// AMNOTE: A document state the undo history records
++abstract_class IUndoable
++{
++public:
++	// AMNOTE: Returns a snapshot of this object
++	virtual IUndoable *unk001() = 0;
++	// AMNOTE: Restores this object from a snapshot
++	virtual void unk002( IUndoable *pSource ) = 0;
++	// AMNOTE: Destroys the object
++	virtual void unk003() = 0;
++	virtual void unk004() = 0;
++	virtual void unk005() = 0;
++	virtual void unk006( bool ) = 0;
++	virtual void unk007() = 0;
++	virtual bool unk008() = 0;
++	virtual void *unk009() = 0;
++	virtual void unk0010( void * ) = 0;
++	virtual int unk0011() = 0;
++	virtual void unk0012() = 0;
++};
++
++abstract_class IUndoListener
++{
++public:
++	virtual void unk001( int ) = 0;
++};
++
++class CBaseUndoable : public IUndoable
++{
++public:
++	virtual ~CBaseUndoable() = 0;
++};
++
++class CUndoHistory;
++
++// AMNOTE: Placeholder name; a step of an undo history (the label the Edit menu shows and the undoables it records)
++struct UndoGroup_t
++{
++	// AMNOTE: Pointers to the recorded entries (0x50-byte objects)
++	CUtlVector< void * > m_unk001;
++	CUndoHistory *m_unk002;
++	// AMNOTE: Taken from a global counter when the step is created
++	int m_nSerial;
++	char m_szName[128];
++	bool m_unk101;
++	bool m_unk102;
++	CUtlString m_unk103;
++	// AMNOTE: 16 bytes, likely a KeyValues3
++	uint8 m_unk104[16];
++};
++
++// AMNOTE: Incomplete class, only the step list and the partner history are known
++class CUndoHistory
++{
++public:
++	virtual ~CUndoHistory() = 0;
++	// AMNOTE: Records pUndoable as a new step
++	virtual void unk101( IUndoable *pUndoable ) = 0;
++	// AMNOTE: Undoes the last step and moves it to m_pPartner; on a redo history (the partner of an undo history) this redoes
++	virtual void Undo() = 0;
++	// AMNOTE: A step can be undone
++	virtual bool HasEntries() = 0;
++
++public:
++	CUtlVector< UndoGroup_t * > m_unk001;
++	uint8 m_unk002[96];
++	// AMNOTE: The history that receives the undone steps (the redo history of the undo history and back)
++	CUndoHistory *m_pPartner;
++	uint8 m_unk101[1064];
++};
++
++#endif // UNDOHISTORY_H

@@ -1,0 +1,5 @@
+// Fixture: an empty class body, then a bare '@include' as the last line of the file (both must
+// terminate; the bare include is a warning, not a hang).
+@PointClass base(Targetname) = extra_parses : "Loaded through the include." []
+
+@include

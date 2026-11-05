@@ -1,0 +1,16 @@
+10/10 14:33:32 [CommandLine] -tools -vulkan -console -condebug -insecure -testscript Z:\app\vtest\movie_demo.txt +engine_no_focus_sleep 0
+10/10 14:33:46 TESTSCRIPT: CheckPoint -> 'VTEST_BEGIN'.
+10/10 14:33:46 TESTSCRIPT: waiting for checkpoint 'DemoPlaybackFinished'.
+10/10 14:33:55 TESTSCRIPT: CheckPoint -> 'DemoPlaybackStarted'.
+10/10 14:34:07 [WebM] CCUDAWrapper::BLoad() failed to load required function "cuInit"
+10/10 14:34:07 [WebM] CCudaHelper::BLoad() Failed to load cuda wrapper
+10/10 14:34:07 [WebM] CCudaHelper::EnumerateNVENCCapableDevices() failed to load
+10/10 14:34:07 [WebM] CreateAV1Encoder() failed to create a GPU accelerated encoder. Falling back to CPU encoder.
+10/10 14:34:07 [Movie] Started recording movie: vtest_movie.*: framerate 30.000000
+10/10 14:34:19 [Demo] Demo vtest_src.dem finished
+10/10 14:34:19 [Demo] Demo playback finished ( 7.1 seconds, 259 render frames, 36.63 fps).
+10/10 14:34:19 TESTSCRIPT: CheckPoint -> 'DemoPlaybackFinished'.
+10/10 14:34:19 TESTSCRIPT: CheckPoint -> 'VTEST_DEMO_DONE'.
+10/10 14:34:19 [Movie] Finishing movie: vtest_movie.* [337 frames @ 30.000000 == 11.233334 seconds]
+10/10 14:34:24 TESTSCRIPT: waiting for checkpoint 'VTEST_DONE'.
+10/10 14:34:24 TESTSCRIPT: CheckPoint -> 'VTEST_DONE'.

@@ -1,0 +1,12 @@
+// sandbox: load de_dust2 as a CT, then park until checkpoint vtest_release (send "Test_Checkpoint vtest_release").
+testscript_debug 1
+sv_cheats 1
+r_always_render_all_windows 1
+map de_dust2
+Test_WaitForCheckPoint FinishedMapLoad once
+Test_Run setup_player
+Test_Run mark VTEST_PARKED
+Test_WaitForCheckPoint vtest_release
+quit
+Test_Wait 30
+Test_ExitProcess 3

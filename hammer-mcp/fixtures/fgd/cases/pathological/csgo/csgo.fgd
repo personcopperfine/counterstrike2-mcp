@@ -1,0 +1,15 @@
+// Fixture: pathological (but lexable) input. Every parser loop must terminate: the class
+// directive with nothing after it, the key without a '(type)' and the unclosed body below all
+// end in warnings, and the classes around them still load — no hang, no error.
+@include "extra.fgd"
+
+@PointClass
+@PointClass base(Targetname) = survivor : "Survives the mess above."
+[
+	typed(integer) : "Typed" : 0
+	untyped : "No (type) here"
+]
+
+@PointClass base(Targetname) = truncated : "The body bracket below never closes"
+[
+	lonely(integer) : "Lonely" : 0

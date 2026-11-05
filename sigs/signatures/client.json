@@ -1,0 +1,6752 @@
+{
+ "module": "client.dll",
+ "image_base": 6442450944,
+ "_doc": "client.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "builds": {
+  "2000921": {
+   "sha256": "9ddf30d68b8ef666",
+   "timestamp": 1790800399
+  },
+  "2000930": {
+   "sha256": "44af2aa0d2c64f90",
+   "timestamp": 1791492090
+  },
+  "2000933": {
+   "sha256": "659940c1db362ed9",
+   "timestamp": 1792021268
+  },
+  "2000940": {
+   "sha256": "57ee728e15c50881",
+   "timestamp": 1793662616
+  }
+ },
+ "entries": {
+  "CV_CSGOINPUT_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGOInput"
+   },
+   "via": "client!0x181C9AD38 (??_7CCSGOInput@@6B@ primary, 33 slots)",
+   "tag": "RTTI",
+   "bridge": "CV_CSGOINPUT_VT",
+   "status": "verified",
+   "expect": {
+    "2000921": 29994296,
+    "2000930": 29981480,
+    "2000933": 30006048,
+    "2000940": 30022736
+   }
+  },
+  "CVS_INPUT_FRAME_BEGIN": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CV_CSGOINPUT_VT",
+    "slot": 30
+   },
+   "via": "client!0x180B7C210 CClientInput::ProcessInput: call [rax+0F0h](this, 0, rec) before the button gather; CCSGOInput leaves it empty (nullsub 0x180B78C90)",
+   "tag": "V",
+   "bridge": "CVS_INPUT_FRAME_BEGIN",
+   "sdk": "S2_SLOT_CClientInput_unk3021",
+   "notes": "CClientInput ProcessInput begin hook (empty in CCSGOInput)",
+   "status": "verified",
+   "expect": {
+    "2000921": 12029072,
+    "2000930": 12025568,
+    "2000933": 12029552,
+    "2000940": 12035872
+   }
+  },
+  "CVS_INPUT_FRAME_END": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CV_CSGOINPUT_VT",
+    "slot": 31
+   },
+   "via": "client!0x180B7C210 CClientInput::ProcessInput: last call [rax+0F8h](this, 0, rec); nullsub 0x180B78C80 in CCSGOInput",
+   "tag": "V",
+   "bridge": "CVS_INPUT_FRAME_END",
+   "sdk": "S2_SLOT_CClientInput_unk3022",
+   "notes": "CClientInput ProcessInput end hook (empty in CCSGOInput)",
+   "status": "verified",
+   "expect": {
+    "2000921": 12029056,
+    "2000930": 12025552,
+    "2000933": 12029536,
+    "2000940": 12035856
+   }
+  },
+  "CVS_INPUT_OVERRIDE_ANGLES": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CV_CSGOINPUT_VT",
+    "slot": 32
+   },
+   "via": "client!0x180B66250 CClientInput::CreateMove: call r8=[rax+100h](this, slot, curtime, &angles) -> if true angles stored; returns 0 in CCSGOInput (0x180B78170)",
+   "tag": "V",
+   "bridge": "CVS_INPUT_OVERRIDE_ANGLES",
+   "sdk": "S2_SLOT_CClientInput_unk3023",
+   "notes": "CClientInput CreateMove view-angle override (returns false in CCSGOInput)",
+   "status": "verified",
+   "expect": {
+    "2000921": 12026224,
+    "2000930": 12022720,
+    "2000933": 12026704,
+    "2000940": 12033024
+   }
+  },
+  "CG_INPUT_PTR": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 44 0F B6 CE C6 05 ?? ?? ?? ?? 01 0F 28 D6 8B D3 48 8B 01 FF 50 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B7C794 CSource2Client::CreateMove: mov rcx, cs:g_pInput; ... call [rax+20h]; target client!0x182238320",
+   "tag": "V",
+   "bridge": "CG_INPUT_PTR",
+   "notes": "g_pInput (pointer to the static CCSGOInput)",
+   "status": "verified",
+   "expect": {
+    "2000921": 35881760,
+    "2000930": 35863824,
+    "2000933": 35896576,
+    "2000940": 35912848
+   }
+  },
+  "COFF_INPUT_BUTTONS": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "B8 3F 00 00 00 2B C1 48 98 48 89 54 C3 10 48 8B 92 88 00 00 00",
+    "steps": [
+     {
+      "disp": 13,
+      "size": 1
+     }
+    ]
+   },
+   "via": "client!0x180B72693 CClientInput button table build: mov [rbx+rax*8+10h], rdx (64 button objects indexed by IN_ bit)",
+   "tag": "V",
+   "bridge": "COFF_INPUT_BUTTONS",
+   "sdk": "S2_OFF_CClientInput_m_pButtons",
+   "status": "verified",
+   "expect": {
+    "2000921": 16,
+    "2000930": 16,
+    "2000933": 16,
+    "2000940": 16
+   }
+  },
+  "sub_180003140_site_1348": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 90 01 00 00 48 8D 05 ?? ?? ?? ?? 48 89 84 24 80 01 00 00"
+   },
+   "via": "client!0x180004488 (call    qword ptr [rax+190h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 17544,
+    "2000930": 17544,
+    "2000933": 17544,
+    "2000940": 17544
+   },
+   "status": "verified"
+  },
+  "sub_18004DF60": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B DC 48 83 EC 68 48 8D 05 ?? ?? ?? ?? 45 33 C9 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 02 00 00 00 49 89 43 D8 49 89 43 D0 49 89 43 C8 48 8D 05 ?? ?? ?? ?? 49 89 43 C0 48 8D 05 ?? ?? ?? ?? 49 89 43 B8 E8 ?? ?? ?? ?? 48 83 C4 68 C3 CC CC CC CC CC 4C 8B DC 48 83 EC 68 48 8D 05 ?? ?? ?? ?? 45 33 C9 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 04 00 00 00"
+   },
+   "via": "client!0x18004DF60 (sub_18004DF60 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 319328,
+    "2000930": 319328,
+    "2000933": 319328,
+    "2000940": 319328
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Source2ClientConfig001_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 4C 24 30"
+   },
+   "via": "client!0x180082A90 (InterfaceReg_Source2ClientConfig001_init (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 535184,
+    "2000930": 535136,
+    "2000933": 535136,
+    "2000940": 535136
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration_static_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x18008B880 (CCSGameConfiguration_static_init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 571520,
+    "2000930": 571472,
+    "2000933": 571472,
+    "2000940": 571472
+   },
+   "status": "verified"
+  },
+  "sub_18008EDC0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "CC CC CC CC CC CC CC CC CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 40 53",
+    "steps": [
+     {
+      "add": 14
+     }
+    ]
+   },
+   "via": "client!0x18008EDC0 (sub_18008EDC0 anchored on the preceding code, +0xE (no unique own bytes))",
+   "tag": "V",
+   "expect": {
+    "2000921": 585152,
+    "2000930": 585104,
+    "2000933": 585104,
+    "2000940": 585104
+   },
+   "status": "verified"
+  },
+  "sub_18008F590": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 08"
+   },
+   "via": "client!0x18008F590 (sub_18008F590 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 587152,
+    "2000930": 587104,
+    "2000933": 587104,
+    "2000940": 587104
+   },
+   "status": "verified"
+  },
+  "sub_1800CD350": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "add": 9
+     }
+    ]
+   },
+   "via": "client!0x1800CD350 (sub_1800CD350 anchored on the preceding code, +0x9 (no unique own bytes))",
+   "tag": "V",
+   "expect": {
+    "2000921": 840528,
+    "2000930": 840480,
+    "2000933": 840480,
+    "2000940": 840672
+   },
+   "status": "verified"
+  },
+  "sub_1800CD370": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58"
+   },
+   "via": "client!0x1800CD370 (sub_1800CD370 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 840560,
+    "2000930": 840512,
+    "2000933": 840512,
+    "2000940": 840704
+   },
+   "status": "verified"
+  },
+  "sub_1800CD390": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58"
+   },
+   "via": "client!0x1800CD390 (sub_1800CD390 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 840592,
+    "2000930": 840544,
+    "2000933": 840544,
+    "2000940": 840736
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Source2Client002_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 00 00 08 00"
+   },
+   "via": "client!0x1800CD3B0 (InterfaceReg_Source2Client002_init (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 840624,
+    "2000930": 840576,
+    "2000933": 840576,
+    "2000940": 840768
+   },
+   "status": "verified"
+  },
+  "sub_1800D0130": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 10"
+   },
+   "via": "client!0x1800D0130 (sub_1800D0130 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 852272,
+    "2000930": 852224,
+    "2000933": 852224,
+    "2000940": 852416
+   },
+   "status": "verified"
+  },
+  "CSource2Client_static_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? 48 83 EC 48 48 8D 05 ?? ?? ?? ?? C7 44 24 30 00 00 00 00"
+   },
+   "via": "client!0x1800D1830 (CSource2Client_static_init (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 858160,
+    "2000930": 858112,
+    "2000933": 858112,
+    "2000940": 858304
+   },
+   "status": "verified"
+  },
+  "InterfaceReg_Source2ClientPrediction001_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 03 00 00 00"
+   },
+   "via": "client!0x1800D9AB0 (InterfaceReg_Source2ClientPrediction001_init (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 891568,
+    "2000930": 891520,
+    "2000933": 891520,
+    "2000940": 891712
+   },
+   "status": "verified"
+  },
+  "CPrediction_static_init": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x1800DA470 (CPrediction_static_init (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 894064,
+    "2000930": 894016,
+    "2000933": 894016,
+    "2000940": 894208
+   },
+   "status": "verified"
+  },
+  "sub_1800EBEC0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 45 33 C9 48 89 44 24 20 41 B8 00 40 08 00"
+   },
+   "via": "client!0x1800EBEC0 (sub_1800EBEC0 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 966336,
+    "2000930": 966288,
+    "2000933": 966288,
+    "2000940": 966480
+   },
+   "status": "verified"
+  },
+  "sub_1800EE5A0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 33 C9 C7 05 ?? ?? ?? ?? FF FF FF FF"
+   },
+   "via": "client!0x1800EE5A0 (sub_1800EE5A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 976288,
+    "2000930": 976240,
+    "2000933": 976240,
+    "2000940": 976432
+   },
+   "status": "verified"
+  },
+  "sub_1800F73C0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 10 00 00 10"
+   },
+   "via": "client!0x1800F73C0 (sub_1800F73C0 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 1012672,
+    "2000930": 1012624,
+    "2000933": 1013024,
+    "2000940": 1013216
+   },
+   "status": "verified"
+  },
+  "sub_1800F7450_site_20": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "45 33 C9 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 02 00 00 00 49 89 43 D8 49 89 43 D0 49 89 43 C8 48 8D 05 ?? ?? ?? ?? 49 89 43 C0 48 8D 05 ?? ?? ?? ?? 49 89 43 B8 E8 ?? ?? ?? ?? 48 83 C4 68 C3 CC CC CC CC CC 4C 8B DC 48 83 EC 68 48 8D 05 ?? ?? ?? ?? 41 B1 01 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "add": 18
+     }
+    ]
+   },
+   "via": "client!0x1800F7470 (lea     rcx, word_18223C0D8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1012848,
+    "2000930": 1012800,
+    "2000933": 1013200,
+    "2000940": 1013392
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI_StaticInit": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 80 25 ?? ?? ?? ?? FE"
+   },
+   "via": "client!0x1800F7570 (CLegacyGameUI_StaticInit)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1013104,
+    "2000930": 1013056,
+    "2000933": 1013456,
+    "2000940": 1013648
+   },
+   "status": "verified"
+  },
+  "sub_180161720": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 48 8D 54 24 40 48 89 44 24 40 4C 8D 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? C7 44 24 30 00 00 00 80 48 89 44 24 48 41 B1 03 48 8B 01 C7 44 24 28 01 00 00 00 48 89 54 24 20 48 8D 15 ?? ?? ?? ?? FF 90 C0 00 00 00 48 83 C4 58 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 08",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "client!0x18017F3AB (sub_18017F3A0 references sub_180161720 (prologue not unique): call    sub_180161720)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1447712,
+    "2000930": 1447504,
+    "2000933": 1448384,
+    "2000940": 1448640
+   },
+   "status": "verified"
+  },
+  "CCsgoClientUI::Init_site_13": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 48 85 C0 75 ?? 48 83 C4 20"
+   },
+   "via": "client!0x180161F93 (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1449875,
+    "2000930": 1449667,
+    "2000933": 1450547,
+    "2000940": 1450803
+   },
+   "status": "verified"
+  },
+  "CCsgoClientUI::Init_site_40": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 58 48 89 43 50 41 B0 01"
+   },
+   "via": "client!0x180161FC0 (call    qword ptr [rax+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1449920,
+    "2000930": 1449712,
+    "2000933": 1450592,
+    "2000940": 1450848
+   },
+   "status": "verified"
+  },
+  "sub_18016ADF0_site_16A": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 C8 00 00 00 C6 45 E0 01 84 C0 75 ?? 40 88 75 E0 48 8B 44 24 70 48 8D 4C 24 70 89 75 A0 48 8B 10 48 8D 05 ?? ?? ?? ?? 48 3B D0 75 ?? E8 ?? ?? ?? ?? EB ?? FF D2 48 89 BC 24 80 01 00 00"
+   },
+   "via": "client!0x18016AF5A (call    qword ptr [rax+0C8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1486682,
+    "2000930": 1486474,
+    "2000933": 1487354,
+    "2000940": 1487610
+   },
+   "status": "verified"
+  },
+  "sub_18016DD70_site_42B": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 E8 00 00 00 BB 01 00 00 00"
+   },
+   "via": "client!0x18016E19B (call    qword ptr [rax+0E8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1499547,
+    "2000930": 1501291,
+    "2000933": 1502171,
+    "2000940": 1502875
+   },
+   "status": "verified"
+  },
+  "sub_180183120_site_28E": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 92 F0 00 00 00 48 8B 0D ?? ?? ?? ?? 44 38 71 58"
+   },
+   "via": "client!0x1801833AE (call    qword ptr [rdx+0F0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1586094,
+    "2000930": 1585886,
+    "2000933": 1586766,
+    "2000940": 1587022
+   },
+   "status": "verified"
+  },
+  "sub_180184F00_site_153": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 08 BF 01 00 00 00"
+   },
+   "via": "client!0x180185053 (call    qword ptr [rax+8])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1593427,
+    "2000930": 1593219,
+    "2000933": 1594099,
+    "2000940": 1594355
+   },
+   "status": "verified"
+  },
+  "sub_180184F00_site_286": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 4C 8B 48 78"
+   },
+   "via": "client!0x180185186 (mov     rcx, cs:qword_182797D90)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1593734,
+    "2000930": 1593526,
+    "2000933": 1594406,
+    "2000940": 1594662
+   },
+   "status": "verified"
+  },
+  "sub_180188E60": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 40 48 8B F9 48 8B 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x180188E60 (sub_180188E60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 1609312,
+    "2000930": 1609104,
+    "2000933": 1609984,
+    "2000940": 1610240
+   },
+   "status": "verified"
+  },
+  "sub_180189920_site_14": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "49 FF A1 C8 01 00 00 CC"
+   },
+   "via": "client!0x180189934 (jmp     qword ptr [r9+1C8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 1612084,
+    "2000930": 1611876,
+    "2000933": 1612756,
+    "2000940": 1613012
+   },
+   "status": "verified"
+  },
+  "sub_18020F8C0_site_2CE": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF D3 33 D2 48 8D 8D B0 00 00 00 0F B6 D8 FF 15 ?? ?? ?? ?? 84 DB"
+   },
+   "via": "client!0x18020FB8E (call    rbx)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2161550,
+    "2000930": 2161342,
+    "2000933": 2162222,
+    "2000940": 2162478
+   },
+   "status": "verified"
+  },
+  "sub_180211F80_site_215": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 48 8B 44 24 70"
+   },
+   "via": "client!0x180212195 (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 2171285,
+    "2000930": 2171077,
+    "2000933": 2171957,
+    "2000940": 2172213
+   },
+   "status": "verified"
+  },
+  "sub_180367240": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "0F B6 C1 33 C9 48 39 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x180367240 (sub_180367240)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3568192,
+    "2000930": 3567984,
+    "2000933": 3568864,
+    "2000940": 3571920
+   },
+   "status": "verified"
+  },
+  "CEntityDebugGameSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CEntityDebugGameSystem"
+   },
+   "via": "client!0x181B006A8 (??_7CEntityDebugGameSystem@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 28313256,
+    "2000930": 28300968,
+    "2000933": 28325512,
+    "2000940": 28341896
+   },
+   "status": "verified"
+  },
+  "sub_1803675B0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CEntityDebugGameSystem",
+    "slot": 8
+   },
+   "via": "client!0x1803675B0 (CEntityDebugGameSystem slot 8 -> sub_1803675B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3569072,
+    "2000930": 3568864,
+    "2000933": 3569744,
+    "2000940": 3572800
+   },
+   "status": "verified"
+  },
+  "sub_180367940": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CEntityDebugGameSystem",
+    "slot": 12
+   },
+   "via": "client!0x180367940 (CEntityDebugGameSystem slot 12 -> sub_180367940)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3569984,
+    "2000930": 3569776,
+    "2000933": 3570656,
+    "2000940": 3573712
+   },
+   "status": "verified"
+  },
+  "sub_1803782B0_site_1AF": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 58 84 C0 74 ?? 49 8B 17"
+   },
+   "via": "client!0x18037845F (call    qword ptr [rax+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3638367,
+    "2000930": 3638159,
+    "2000933": 3638815,
+    "2000940": 3642207
+   },
+   "status": "verified"
+  },
+  "sub_180378D20_site_2DD": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 4D 8B C8 4C 8B C6"
+   },
+   "via": "client!0x180378FFD (mov     rcx, cs:qword_182718D30)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3641341,
+    "2000930": 3641133,
+    "2000933": 3641789,
+    "2000940": 3645181
+   },
+   "status": "verified"
+  },
+  "sub_180385C70_site_CC": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 48 63 6C 24 20"
+   },
+   "via": "client!0x180385D3C (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3693884,
+    "2000930": 3693676,
+    "2000933": 3694332,
+    "2000940": 3698124
+   },
+   "status": "verified"
+  },
+  "sub_18038A550": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 20 55 56 41 57 48 83 EC 20"
+   },
+   "via": "client!0x18038A550 (sub_18038A550)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3712336,
+    "2000930": 3712128,
+    "2000933": 3712784,
+    "2000940": 3716656
+   },
+   "status": "verified"
+  },
+  "sub_18038E250_site_86": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B F8 48 8B 11 FF 92 C8 00 00 00"
+   },
+   "via": "client!0x18038E2D6 (mov     rcx, cs:qword_182797C98)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3728086,
+    "2000930": 3727878,
+    "2000933": 3728534,
+    "2000940": 3732406
+   },
+   "status": "verified"
+  },
+  "sub_1803A2780_site_125": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 78 48 8B B4 24 80 00 00 00"
+   },
+   "via": "client!0x1803A28A5 (call    qword ptr [rax+78h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3811493,
+    "2000930": 3811285,
+    "2000933": 3811941,
+    "2000940": 3815813
+   },
+   "status": "verified"
+  },
+  "sub_1803B4400_site_2EC": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B 08 48 8D 05 ?? ?? ?? ?? 48 89 44 24 28 48 8B 59 58"
+   },
+   "via": "client!0x1803B46EC (mov     rax, cs:qword_182718D00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3884780,
+    "2000930": 3884572,
+    "2000933": 3885228,
+    "2000940": 3889100
+   },
+   "status": "verified"
+  },
+  "sub_1803B4950_site_50": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B 08 48 8D 05 ?? ?? ?? ?? 48 89 44 24 28 48 8B 59 60"
+   },
+   "via": "client!0x1803B49A0 (mov     rax, cs:qword_182718D00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3885472,
+    "2000930": 3885264,
+    "2000933": 3885920,
+    "2000940": 3889792
+   },
+   "status": "verified"
+  },
+  "sub_1803BCD70": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 6C 24 18 57 48 83 EC 20 48 8B 01 0F B6 EA"
+   },
+   "via": "client!0x1803BCD70 (sub_1803BCD70)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3919216,
+    "2000930": 3919008,
+    "2000933": 3919664,
+    "2000940": 3923536
+   },
+   "status": "verified"
+  },
+  "sub_1803BCD70_site_3D": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF 51 58 48 89 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x1803BCDAD (call    qword ptr [r9+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3919277,
+    "2000930": 3919069,
+    "2000933": 3919725,
+    "2000940": 3923597
+   },
+   "status": "verified"
+  },
+  "sub_1803BCD70_site_91": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 D8 01 00 00 33 DB"
+   },
+   "via": "client!0x1803BCE01 (call    qword ptr [rax+1D8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3919361,
+    "2000930": 3919153,
+    "2000933": 3919809,
+    "2000940": 3923681
+   },
+   "status": "verified"
+  },
+  "sub_1803C16D0_site_777B": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 84 C0 0F 84 ?? ?? ?? ?? 48 8B 35 ?? ?? ?? ??"
+   },
+   "via": "client!0x1803C8E4B (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3968587,
+    "2000930": 3968379,
+    "2000933": 3969035,
+    "2000940": 3972907
+   },
+   "status": "verified"
+  },
+  "sub_1803CD760_site_178": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 40 01 00 00 E8 ?? ?? ?? ??"
+   },
+   "via": "client!0x1803CD8D8 (call    qword ptr [rax+140h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3987672,
+    "2000930": 3987464,
+    "2000933": 3988120,
+    "2000940": 3991992
+   },
+   "status": "verified"
+  },
+  "sub_1803CD760_site_34A": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 49 8D 96 80 01 00 00"
+   },
+   "via": "client!0x1803CDAAA (mov     rcx, cs:qword_182718D00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 3988138,
+    "2000930": 3987930,
+    "2000933": 3988586,
+    "2000940": 3992458
+   },
+   "status": "verified"
+  },
+  "sub_1803CD760_site_351": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "49 8D 96 80 01 00 00 48 8B 01"
+   },
+   "via": "client!0x1803CDAB1 (lea     rdx, [r14+180h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 3988145,
+    "2000930": 3987937,
+    "2000933": 3988593,
+    "2000940": 3992465
+   },
+   "status": "verified"
+  },
+  "sub_1803F0CF0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 56 48 83 EC 28 F6 81 30 05 00 00 01"
+   },
+   "via": "client!0x1803F0CF0 (sub_1803F0CF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 4132080,
+    "2000930": 4131872
+   },
+   "status": "stale"
+  },
+  "sub_1803F2900_site_D9": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 B8 00 00 00 48 8D 3D ?? ?? ?? ??"
+   },
+   "via": "client!0x1803F29D9 (call    qword ptr [rax+0B8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 4139481,
+    "2000930": 4139273,
+    "2000933": 4140169,
+    "2000940": 4144041
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGameConfiguration"
+   },
+   "via": "client!0x181BA7DC8 (??_7CCSGameConfiguration@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 28999112,
+    "2000930": 29012144,
+    "2000933": 29035976,
+    "2000940": 29055160
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration::sub_731A90_GetRenderingPipelineToken": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCSGameConfiguration",
+    "slot": 13
+   },
+   "via": "client!0x180731A90 (CCSGameConfiguration slot 13 -> CCSGameConfiguration::sub_731A90_GetRenderingPipelineToken)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7543440,
+    "2000930": 7539456,
+    "2000933": 7540352,
+    "2000940": 7544080
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration::sub_731BE0_GetRenderingPipeline": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCSGameConfiguration",
+    "slot": 12
+   },
+   "via": "client!0x180731BE0 (CCSGameConfiguration slot 12 -> CCSGameConfiguration::sub_731BE0_GetRenderingPipeline)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7543776,
+    "2000930": 7539792,
+    "2000933": 7540688,
+    "2000940": 7544416
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration::col_8": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGameConfiguration",
+    "col_offset": 8
+   },
+   "via": "client!0x181BA7EE0 (??_7CCSGameConfiguration@@6B@_0 secondary vtable, mdisp +0x8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 28999392,
+    "2000930": 29012424,
+    "2000933": 29036256,
+    "2000940": 29055440
+   },
+   "status": "verified"
+  },
+  "sub_180731C90": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCSGameConfiguration::col_8",
+    "slot": 12
+   },
+   "via": "client!0x180731C90 (CCSGameConfiguration::col_8 slot 12 -> sub_180731C90)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7543952,
+    "2000930": 7539968,
+    "2000933": 7540864,
+    "2000940": 7544592
+   },
+   "status": "verified"
+  },
+  "sub_180756330_site_2CB": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 89 45 BF",
+    "steps": [
+     {
+      "add": 1
+     }
+    ]
+   },
+   "via": "client!0x1807565FB (mov     rcx, cs:qword_182797E68 (+1 into the instruction))",
+   "tag": "V",
+   "expect": {
+    "2000921": 7693819,
+    "2000930": 7689419,
+    "2000933": 7690315,
+    "2000940": 7695659
+   },
+   "status": "verified"
+  },
+  "sub_180756330_site_2D8": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 A0 00 00 00 8B 55 6F"
+   },
+   "via": "client!0x180756608 (call    qword ptr [rax+0A0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 7693832,
+    "2000930": 7689432,
+    "2000933": 7690328,
+    "2000940": 7695672
+   },
+   "status": "verified"
+  },
+  "CCSGameConfiguration_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 4C 24 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180082A97 (InterfaceReg_Source2ClientConfig001_init references CCSGameConfiguration_CreateInterfaceFn (prologue not unique): lea     rdx, CCSGameConfiguration_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7810768,
+    "2000930": 7806368,
+    "2000933": 7807280,
+    "2000940": 7813024
+   },
+   "status": "verified"
+  },
+  "CCSGOVScriptGameSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGOVScriptGameSystem"
+   },
+   "via": "client!0x181BB7888 (??_7CCSGOVScriptGameSystem@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29063304,
+    "2000930": 29048640,
+    "2000933": 29073592,
+    "2000940": 29090360
+   },
+   "status": "verified"
+  },
+  "sub_1807743E0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCSGOVScriptGameSystem",
+    "slot": 65
+   },
+   "via": "client!0x1807743E0 (CCSGOVScriptGameSystem slot 65 -> sub_1807743E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7816160,
+    "2000930": 7810320,
+    "2000933": 7811584,
+    "2000940": 7817568
+   },
+   "status": "verified"
+  },
+  "IsEmptyWorld": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 84 C0 0F 85 ?? ?? ?? ?? 48 8B 0B 48 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "client!0x180822069 (sub_180821FA0 references IsEmptyWorld (prologue not unique): call    IsEmptyWorld)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7896000,
+    "2000930": 7891600,
+    "2000933": 7892944,
+    "2000940": 7899392
+   },
+   "status": "verified"
+  },
+  "CreateInterface_EmptyWorldService001_Client": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 85 DB 74 ?? 48 8B 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x18079B6A0 (CreateInterface_EmptyWorldService001_Client (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 7976608,
+    "2000930": 7972208,
+    "2000933": 7974544,
+    "2000940": 7980608
+   },
+   "status": "verified"
+  },
+  "C_Item_Healthshot": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "C_Item_Healthshot"
+   },
+   "via": "client!0x181BCDA78 (??_7C_Item_Healthshot@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29153912,
+    "2000930": 29141112,
+    "2000933": 29165672,
+    "2000940": 29182120
+   },
+   "status": "verified"
+  },
+  "sub_180821FA0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "C_Item_Healthshot",
+    "slot": 7
+   },
+   "via": "client!0x180821FA0 (C_Item_Healthshot slot 7 -> sub_180821FA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 8527776,
+    "2000930": 8523376,
+    "2000933": 8525712,
+    "2000940": 8531920
+   },
+   "status": "verified"
+  },
+  "sub_1808FDE80_site_82": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 A8 01 00 00 48 89 AB 90 12 00 00 48 39 AB A0 12 00 00 74 ?? 48 8B 83 98 12 00 00 48 8D 8B 98 12 00 00 FF 50 68 48 89 AB A0 12 00 00 8B 83 D4 15 00 00"
+   },
+   "via": "client!0x1808FDF02 (mov     rcx, cs:qword_182797C98)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9428738,
+    "2000930": 9424466,
+    "2000933": 9428242,
+    "2000940": 9434194
+   },
+   "status": "verified"
+  },
+  "sub_1809157E0_site_9": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 78 48 89 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x1809157E9 (mov     rcx, cs:qword_182718D28)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9525225,
+    "2000930": 9526729,
+    "2000933": 9529801,
+    "2000940": 9541977
+   },
+   "status": "verified"
+  },
+  "sub_180918FF0_site_FD": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 15 ?? ?? ?? ?? 48 8B 01 FF 50 58"
+   },
+   "via": "client!0x1809190ED (mov     rcx, cs:qword_182718D28)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9539821,
+    "2000930": 9524013,
+    "2000933": 9526525,
+    "2000940": 9538333
+   },
+   "status": "verified"
+  },
+  "sub_1809195A0_site_41": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B D6 48 89 9C 24 80 00 00 00"
+   },
+   "via": "client!0x1809195E1 (mov     rcx, cs:qword_182718D28)",
+   "tag": "V",
+   "expect": {
+    "2000921": 9541089,
+    "2000930": 9525281,
+    "2000933": 9527793,
+    "2000940": 9539601
+   },
+   "status": "verified"
+  },
+  "sub_180927A20_site_2B": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 48 89 03 48 85 C0"
+   },
+   "via": "client!0x180927A4B (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 9599563,
+    "2000930": 9595307,
+    "2000933": 9599083,
+    "2000940": 9605067
+   },
+   "status": "verified"
+  },
+  "sub_1809370B0_site_61": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 48 8B 0D ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 45 33 E4"
+   },
+   "via": "client!0x180937111 (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 9662737,
+    "2000930": 9658481,
+    "2000933": 9662257,
+    "2000940": 9668241
+   },
+   "status": "verified"
+  },
+  "sub_1809405C0_site_59": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 48 89 05 ?? ?? ?? ?? 48 85 C0 75 ?? 8B 0D ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 84 C0 74 ?? 8B 0D ?? ?? ?? ?? 4C 8D 0D ?? ?? ?? ?? 4C 8D 05 ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC 48 83 EC 28"
+   },
+   "via": "client!0x180940619 (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 9700889,
+    "2000930": 9696633,
+    "2000933": 9700409,
+    "2000940": 9706393
+   },
+   "status": "verified"
+  },
+  "sub_1809C11C0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "33 D2 48 8D 05 ?? ?? ?? ?? 48 89 51 18"
+   },
+   "via": "client!0x1809C11C0 (sub_1809C11C0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 10228160,
+    "2000930": 10223904,
+    "2000933": 10227680,
+    "2000940": 10233664
+   },
+   "status": "verified"
+  },
+  "sub_1809E2BA0_site_102": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 B8 00 00 00 48 85 C0 74 ?? 4C 8B 00"
+   },
+   "via": "client!0x1809E2CA2 (call    qword ptr [rax+0B8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10366114,
+    "2000930": 10361762,
+    "2000933": 10365538,
+    "2000940": 10371522
+   },
+   "status": "verified"
+  },
+  "sub_1809EAA00_site_59": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 49 89 86 20 01 00 00"
+   },
+   "via": "client!0x1809EAA59 (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10398297,
+    "2000930": 10394473,
+    "2000933": 10398249,
+    "2000940": 10404233
+   },
+   "status": "verified"
+  },
+  "sub_1809EAA00_site_187": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 48 8B 7C 24 48"
+   },
+   "via": "client!0x1809EAB87 (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10398599,
+    "2000930": 10394775,
+    "2000933": 10398551,
+    "2000940": 10404535
+   },
+   "status": "verified"
+  },
+  "sub_180A04870_site_3D5": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 20 48 8D 15 ?? ?? ?? ?? 48 8B CF"
+   },
+   "via": "client!0x180A04C45 (call    qword ptr [rax+20h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10505285,
+    "2000930": 10501765,
+    "2000933": 10505541,
+    "2000940": 10511525
+   },
+   "status": "verified"
+  },
+  "sub_180A0E300_site_70": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 48 83 C4 40 5B C3 CC CC CC CC CC CC CC 40 53"
+   },
+   "via": "client!0x180A0E370 (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10543984,
+    "2000930": 10540464,
+    "2000933": 10544240,
+    "2000940": 10550224
+   },
+   "status": "verified"
+  },
+  "sub_180A14150_site_3C": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 48 8B AE 20 01 00 00"
+   },
+   "via": "client!0x180A1418C (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 10568076,
+    "2000930": 10564540,
+    "2000933": 10568316,
+    "2000940": 10574300
+   },
+   "status": "verified"
+  },
+  "sub_180A17980": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 55 41 56 41 57 48 8B EC 48 83 EC 50 8B 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x180A17980 (sub_180A17980)",
+   "tag": "V",
+   "expect": {
+    "2000921": 10582400,
+    "2000930": 10578896,
+    "2000933": 10582672,
+    "2000940": 10588656
+   },
+   "status": "verified"
+  },
+  "sub_180A4E250_site_759": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 B8 00 00 00 45 85 F6"
+   },
+   "via": "client!0x180A4E9A9 (mov     rcx, cs:qword_182797F50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 10807721,
+    "2000930": 10804361,
+    "2000933": 10808137,
+    "2000940": 10814121
+   },
+   "status": "verified"
+  },
+  "sub_180AF1B50_site_61": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 70 48 8B CF E8 ?? ?? ?? ??"
+   },
+   "via": "client!0x180AF1BB1 (call    qword ptr [rax+70h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11475889,
+    "2000930": 11472625,
+    "2000933": 11476433,
+    "2000940": 11482433
+   },
+   "status": "verified"
+  },
+  "sub_180B26D30_site_D6": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 E8 00 00 00 48 8D 0D ?? ?? ?? ?? 48 89 74 24 30"
+   },
+   "via": "client!0x180B26E06 (call    qword ptr [rax+0E8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11693574,
+    "2000930": 11698678,
+    "2000933": 11702486,
+    "2000940": 11708918
+   },
+   "status": "verified"
+  },
+  "sub_180B26E60_site_60": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 C8 00 00 00 48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 E8 00 00 00"
+   },
+   "via": "client!0x180B26EC0 (call    qword ptr [rax+0C8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11693760,
+    "2000930": 11698864,
+    "2000933": 11702672,
+    "2000940": 11709104
+   },
+   "status": "verified"
+  },
+  "sub_180B3E650_site_1C5": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 C0 00 00 00 48 8B 0D ?? ?? ?? ?? 48 8D 56 48"
+   },
+   "via": "client!0x180B3E815 (call    qword ptr [rax+0C0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11790357,
+    "2000930": 11787141,
+    "2000933": 11790949,
+    "2000940": 11796949
+   },
+   "status": "verified"
+  },
+  "sub_180B43B10_site_115": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 44 8B 0D ?? ?? ?? ?? 4C 8D 83 00 06 00 00"
+   },
+   "via": "client!0x180B43C25 (mov     rcx, cs:qword_18255B3A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11811877,
+    "2000930": 11808661,
+    "2000933": 11812469,
+    "2000940": 11818469
+   },
+   "status": "verified"
+  },
+  "sub_180B43B10_site_143": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 60 4C 8D 9C 24 30 01 00 00"
+   },
+   "via": "client!0x180B43C53 (call    qword ptr [rax+60h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11811923,
+    "2000930": 11808707,
+    "2000933": 11812515,
+    "2000940": 11818515
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo_QueryInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 2
+   },
+   "via": "client!0x180B55220 (CClientToolsInfo slot 2 -> CClientToolsInfo_QueryInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883040,
+    "2000930": 11888160,
+    "2000933": 11891968,
+    "2000940": 11898224
+   },
+   "status": "verified"
+  },
+  "nullsub_2793": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 5
+   },
+   "via": "client!0x180B55230 (CClientToolsInfo slot 5 -> nullsub_2793)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883056,
+    "2000930": 11888176,
+    "2000933": 11891984,
+    "2000940": 11898240
+   },
+   "status": "verified"
+  },
+  "sub_180B55240": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 9
+   },
+   "via": "client!0x180B55240 (CClientToolsInfo slot 9 -> sub_180B55240)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883072,
+    "2000930": 11888192,
+    "2000933": 11892000,
+    "2000940": 11898256
+   },
+   "status": "verified"
+  },
+  "sub_180B55250": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 10
+   },
+   "via": "client!0x180B55250 (CClientToolsInfo slot 10 -> sub_180B55250)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883088,
+    "2000930": 11888208,
+    "2000933": 11892016,
+    "2000940": 11898272
+   },
+   "status": "verified"
+  },
+  "sub_180B55260": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 7
+   },
+   "via": "client!0x180B55260 (CClientToolsInfo slot 7 -> sub_180B55260)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883104,
+    "2000930": 11888224,
+    "2000933": 11892032,
+    "2000940": 11898288
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo_Connect": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 0
+   },
+   "via": "client!0x180B55270 (CClientToolsInfo slot 0 -> CClientToolsInfo_Connect)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883120,
+    "2000930": 11888240,
+    "2000933": 11892048,
+    "2000940": 11898304
+   },
+   "status": "verified"
+  },
+  "sub_180B55310": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 8
+   },
+   "via": "client!0x180B55310 (CClientToolsInfo slot 8 -> sub_180B55310)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883280,
+    "2000930": 11888400,
+    "2000933": 11892208,
+    "2000940": 11898464
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo_Init": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 3
+   },
+   "via": "client!0x180B55370 (CClientToolsInfo slot 3 -> CClientToolsInfo_Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883376,
+    "2000930": 11888496,
+    "2000933": 11892304,
+    "2000940": 11898560
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo_Shutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 4
+   },
+   "via": "client!0x180B553A0 (CClientToolsInfo slot 4 -> CClientToolsInfo_Shutdown)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883424,
+    "2000930": 11888544,
+    "2000933": 11892352,
+    "2000940": 11898608
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo_GetDependencies": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CClientToolsInfo",
+    "slot": 6
+   },
+   "via": "client!0x180B553B0 (CClientToolsInfo slot 6 -> CClientToolsInfo_GetDependencies)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11883440,
+    "2000930": 11888560,
+    "2000933": 11892368,
+    "2000940": 11898624
+   },
+   "status": "verified"
+  },
+  "CSource2Client::CSource2Client": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 55 48 8B EC 48 83 EC 50 33 F6 48 8D 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x180B5C150 (CSource2Client::CSource2Client)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11911504,
+    "2000930": 11908000,
+    "2000933": 11911808,
+    "2000940": 11917808
+   },
+   "status": "verified"
+  },
+  "CSource2Client": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSource2Client"
+   },
+   "via": "client!0x181C60300 (??_7CSource2Client@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29754112,
+    "2000930": 29741280,
+    "2000933": 29765872,
+    "2000940": 29782544
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Connect": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client",
+    "slot": 0
+   },
+   "via": "client!0x180B64D20 (CSource2Client slot 0 -> CSource2Client::Connect)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11947296,
+    "2000930": 11943792
+   },
+   "status": "stale"
+  },
+  "ISource2Client::Connect": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 58 33 D2 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x180B64DAA (call    qword ptr [rax+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 11947434,
+    "2000930": 11943930,
+    "2000933": 11947898,
+    "2000940": 11953898
+   },
+   "status": "verified"
+  },
+  "ISource2Client::Connect_180B64F54": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x180B641A4 (lea     rcx, aGamemodelinfo0; \"GameModelInfo001\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11947860,
+    "2000930": 11944356,
+    "2000933": 11948324,
+    "2000940": 11954324
+   },
+   "status": "verified",
+   "notes": "locator regenerated 2026-10-10: the old pattern matched twice once overlapping matches are counted"
+  },
+  "CSource2Client::Connect_site_315": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 48 83 3D ?? ?? ?? ?? 00"
+   },
+   "via": "client!0x180B65035 (lea     rcx, aScenefilecache; \"SceneFileCache002\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11948085,
+    "2000930": 11944581,
+    "2000933": 11948549,
+    "2000940": 11954549
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Connect_site_330": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 48 83 3D ?? ?? ?? ?? 00"
+   },
+   "via": "client!0x180B65050 (lea     rcx, aResponserulesc; \"ResponseRulesCache001\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11948112,
+    "2000930": 11944608,
+    "2000933": 11948576,
+    "2000940": 11954576
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Connect_site_3BB": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x180B650DB (lea     rcx, aGametypes001; \"GameTypes001\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11948251,
+    "2000930": 11944747,
+    "2000933": 11948715,
+    "2000940": 11954715
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Connect_site_45B": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? FF D3 B9 01 00 00 00"
+   },
+   "via": "client!0x180B6517B (lea     rcx, aLegacygameui00; \"LegacyGameUI001\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11948411,
+    "2000930": 11944907,
+    "2000933": 11948875,
+    "2000940": 11954875
+   },
+   "status": "verified"
+  },
+  "CSource2Client::FrameStageNotify": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client",
+    "slot": 36
+   },
+   "via": "client!0x180B6D530 (CSource2Client slot 36 -> CSource2Client::FrameStageNotify)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11982128,
+    "2000930": 11978624
+   },
+   "status": "stale"
+  },
+  "CSource2Client::GetDependencies": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client",
+    "slot": 6
+   },
+   "via": "client!0x180B6E660 (CSource2Client slot 6 -> sub_180B6E660)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11986528,
+    "2000930": 11983024,
+    "2000933": 11986992,
+    "2000940": 11992992
+   },
+   "status": "verified"
+  },
+  "sub_180B6E660_site_60": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "41 FF D0 84 C0 48 8D 15 ?? ?? ?? ??"
+   },
+   "via": "client!0x180B6E6C0 (call    r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11986624,
+    "2000930": 11983120,
+    "2000933": 11987088,
+    "2000940": 11993088
+   },
+   "status": "verified"
+  },
+  "sub_180B6E660_site_65": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 0F 57 C0"
+   },
+   "via": "client!0x180B6E6C5 (lea     rdx, aServerValve; \"server_valve\")",
+   "tag": "V",
+   "expect": {
+    "2000921": 11986629,
+    "2000930": 11983125,
+    "2000933": 11987093,
+    "2000940": 11993093
+   },
+   "status": "verified"
+  },
+  "sub_180B71480": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client",
+    "slot": 37
+   },
+   "via": "client!0x180B71480 (CSource2Client slot 37 -> sub_180B71480)",
+   "tag": "V",
+   "expect": {
+    "2000921": 11998336,
+    "2000930": 11994832,
+    "2000933": 11998816,
+    "2000940": 12005136
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Init_site_26C": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? FF 15 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x180B71D3C (call    RegisterAllEngineServices)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12000572,
+    "2000930": 11997068,
+    "2000933": 12001052,
+    "2000940": 12007372
+   },
+   "status": "verified"
+  },
+  "CClientBugBugService::OnEventBugBugComplete": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 55 48 8D 6C 24 A9 48 81 EC D0 00 00 00"
+   },
+   "via": "client!0x180B79530 (CClientBugBugService::OnEventBugBugComplete)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12031280,
+    "2000930": 12027776,
+    "2000933": 12031760,
+    "2000940": 12038080
+   },
+   "status": "verified"
+  },
+  "CSource2Client::col_30": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSource2Client",
+    "col_offset": 48
+   },
+   "via": "client!0x181C609A8 (??_7CSource2Client@@6B@_1 secondary vtable, mdisp +0x30)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29755816,
+    "2000930": 29742984,
+    "2000933": 29767576,
+    "2000940": 29784256
+   },
+   "status": "verified"
+  },
+  "nullsub_1103": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client::col_30",
+    "slot": 0
+   },
+   "via": "client!0x180B7A410 (CSource2Client::col_30 slot 0 -> nullsub_1103)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12035088,
+    "2000930": 12031584,
+    "2000933": 12035568,
+    "2000940": 12041888
+   },
+   "status": "verified"
+  },
+  "sub_180B81A50": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client",
+    "slot": 71
+   },
+   "via": "client!0x180B81A50 (CSource2Client slot 71 -> sub_180B81A50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12065360,
+    "2000930": 12061856,
+    "2000933": 12065872,
+    "2000940": 12072192
+   },
+   "status": "verified"
+  },
+  "CSource2Client::Shutdown_site_253": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B C8 E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x180B81CD3 (call    UnregisterAllEngineServices)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12066003,
+    "2000930": 12062499,
+    "2000933": 12066515,
+    "2000940": 12072835
+   },
+   "status": "verified"
+  },
+  "CSource2Client::col_8": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSource2Client",
+    "col_offset": 8
+   },
+   "via": "client!0x181C60998 (??_7CSource2Client@@6B@_0 secondary vtable, mdisp +0x8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29755800,
+    "2000930": 29742968,
+    "2000933": 29767560,
+    "2000940": 29784240
+   },
+   "status": "verified"
+  },
+  "nullsub_1102": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSource2Client::col_8",
+    "slot": 0
+   },
+   "via": "client!0x180B823C0 (CSource2Client::col_8 slot 0 -> nullsub_1102)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12067776,
+    "2000930": 12064272,
+    "2000933": 12068288,
+    "2000940": 12074608
+   },
+   "status": "verified"
+  },
+  "CreateInterface_ClientBugBugServic001_Client": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD357 (sub_1800CD350 references CreateInterface_ClientBugBugServic001_Client (prologue not unique): lea     rdx, CreateInterface_ClientBugBugServic001_Client)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12079760,
+    "2000930": 12076256,
+    "2000933": 12080272,
+    "2000940": 12086592
+   },
+   "status": "verified"
+  },
+  "CreateInterface_GameClientExports001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD397 (sub_1800CD390 references CreateInterface_GameClientExports001 (prologue not unique): lea     rdx, CreateInterface_GameClientExports001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12079792,
+    "2000930": 12076288,
+    "2000933": 12080304,
+    "2000940": 12086624
+   },
+   "status": "verified"
+  },
+  "CSource2Client_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 00 00 08 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD3B7 (InterfaceReg_Source2Client002_init references CSource2Client_CreateInterfaceFn (prologue not unique): lea     rdx, CSource2Client_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12079808,
+    "2000930": 12076304,
+    "2000933": 12080320,
+    "2000940": 12086640
+   },
+   "status": "verified"
+  },
+  "CPrediction::CPrediction": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 57 48 83 EC 20 33 FF 48 8B 5C 24 30"
+   },
+   "via": "client!0x180BCBA00 (CPrediction::CPrediction)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12368384,
+    "2000930": 12364880,
+    "2000933": 12368896,
+    "2000940": 12375216
+   },
+   "status": "verified"
+  },
+  "CPrediction::col_28": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CPrediction",
+    "col_offset": 40
+   },
+   "via": "client!0x181C6EFA8 (??_7CPrediction@@6B@_0 secondary vtable, mdisp +0x28)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29814696,
+    "2000930": 29801848,
+    "2000933": 29826472,
+    "2000940": 29843144
+   },
+   "status": "verified"
+  },
+  "CPrediction::OnVConCommDataReceived": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CPrediction::col_28",
+    "slot": 0
+   },
+   "via": "client!0x180BE5610 (CPrediction::col_28 slot 0 -> CPrediction::OnVConCommDataReceived)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12473872,
+    "2000930": 12470368,
+    "2000933": 12474384,
+    "2000940": 12480704
+   },
+   "status": "verified"
+  },
+  "CPrediction": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CPrediction"
+   },
+   "via": "client!0x181C6EEA0 (??_7CPrediction@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29814432,
+    "2000930": 29801584,
+    "2000933": 29826208,
+    "2000940": 29842880
+   },
+   "status": "verified"
+  },
+  "CPrediction::PostEntityPacketReceived": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CPrediction",
+    "slot": 14
+   },
+   "via": "client!0x180BE8410 (CPrediction slot 14 -> CPrediction::PostEntityPacketReceived)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12485648,
+    "2000930": 12482144,
+    "2000933": 12486160,
+    "2000940": 12492480
+   },
+   "status": "verified"
+  },
+  "sub_180BEFAA0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 4C 24 08 48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 B8 48 20 00 00"
+   },
+   "via": "client!0x180BEFAA0 (sub_180BEFAA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12516000,
+    "2000930": 12512496,
+    "2000933": 12516512,
+    "2000940": 12522832
+   },
+   "status": "verified"
+  },
+  "CPrediction_CreateInterfaceFn": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D9AB7 (InterfaceReg_Source2ClientPrediction001_init references CPrediction_CreateInterfaceFn (prologue not unique): lea     rdx, CPrediction_CreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12546112,
+    "2000930": 12542608,
+    "2000933": 12546624,
+    "2000940": 12552944
+   },
+   "status": "verified"
+  },
+  "sub_180BFC020": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CSoundEmitterSystem",
+    "slot": 3
+   },
+   "via": "client!0x180BFC020 (CSoundEmitterSystem slot 3 -> sub_180BFC020)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12566560,
+    "2000930": 12547728,
+    "2000933": 12550512,
+    "2000940": 12558176
+   },
+   "status": "verified"
+  },
+  "BinaryProperties_GetValue": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "BinaryProperties_GetValue"
+   },
+   "via": "client!0x180C31530 (export BinaryProperties_GetValue)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12784944,
+    "2000930": 12781424
+   },
+   "status": "stale"
+  },
+  "ExtractModuleMetadata": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "ExtractModuleMetadata"
+   },
+   "via": "client!0x180C31D30 (export ExtractModuleMetadata)",
+   "tag": "V",
+   "expect": {
+    "2000921": 12786992,
+    "2000930": 12783472,
+    "2000933": 12787488,
+    "2000940": 12793808
+   },
+   "status": "verified"
+  },
+  "CCsgoClientUI": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCsgoClientUI"
+   },
+   "via": "client!0x181C9FBD0 (??_7CCsgoClientUI@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 30014416,
+    "2000930": 30001600,
+    "2000933": 30026224,
+    "2000940": 30042912
+   },
+   "status": "verified"
+  },
+  "CCsgoClientUI::RegisterRenderHandler": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCsgoClientUI",
+    "slot": 11
+   },
+   "via": "client!0x180CE3F10 (CCsgoClientUI slot 11 -> CCsgoClientUI::RegisterRenderHandler)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13516560,
+    "2000930": 13515024,
+    "2000933": 13517712,
+    "2000940": 13525920
+   },
+   "status": "verified"
+  },
+  "GetClientMode": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "E8 ?? ?? ?? ?? 48 8B C8 48 8B 10 FF 52 28",
+    "steps": [
+     {
+      "call": 0
+     }
+    ]
+   },
+   "via": "client!0x180AC5949 (sub_180AC5870 references GetClientMode (prologue not unique): call    GetClientMode)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13553392,
+    "2000930": 13551856,
+    "2000933": 13554544,
+    "2000940": 13562752
+   },
+   "status": "verified"
+  },
+  "sub_180CED610": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCsgoClientUI",
+    "slot": 6
+   },
+   "via": "client!0x180CED610 (CCsgoClientUI slot 6 -> sub_180CED610)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13555216,
+    "2000930": 13553680,
+    "2000933": 13556368,
+    "2000940": 13564576
+   },
+   "status": "verified"
+  },
+  "CCsgoClientUI::Shutdown": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CCsgoClientUI",
+    "slot": 4
+   },
+   "via": "client!0x180D09EF0 (CCsgoClientUI slot 4 -> CCsgoClientUI::Shutdown)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13672176,
+    "2000930": 13670640,
+    "2000933": 13673616,
+    "2000940": 13681824
+   },
+   "status": "verified"
+  },
+  "CreateInterface_Source2ClientUI001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 45 33 C9 48 89 44 24 20 41 B8 00 40 08 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800EBEC7 (sub_1800EBEC0 references CreateInterface_Source2ClientUI001 (prologue not unique): lea     rdx, CreateInterface_Source2ClientUI001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13697440,
+    "2000930": 13695904,
+    "2000933": 13698880,
+    "2000940": 13707088
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI::_CLegacyGameUI": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 57 48 83 EC 20 33 FF 48 8D 05 ?? ?? ?? ?? 48 89 01 48 8B D9 48 89 3D ?? ?? ?? ??"
+   },
+   "via": "client!0x180D51A90 (CLegacyGameUI::_CLegacyGameUI)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13965968,
+    "2000930": 13964432,
+    "2000933": 13975472,
+    "2000940": 13984864
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI::CreateGlobalPanels_site_BE": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 4C 8B E0 4D 8B 46 E4"
+   },
+   "via": "client!0x180D5326E (mov     rcx, cs:qword_182797D90)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13972078,
+    "2000930": 13970542,
+    "2000933": 13982526,
+    "2000940": 13991918
+   },
+   "status": "verified"
+  },
+  "sub_180D53FD0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 88 03 00 00"
+   },
+   "via": "client!0x180D53FD0 (sub_180D53FD0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13975504,
+    "2000930": 13973968,
+    "2000933": 13985952,
+    "2000940": 13995344
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CLegacyGameUI"
+   },
+   "via": "client!0x181CABB48 (??_7CLegacyGameUI@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 30063432,
+    "2000930": 30050632,
+    "2000933": 30076328,
+    "2000940": 30093080
+   },
+   "status": "verified"
+  },
+  "sub_180D53FF0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CLegacyGameUI",
+    "slot": 6
+   },
+   "via": "client!0x180D53FF0 (CLegacyGameUI slot 6 -> sub_180D53FF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13975536,
+    "2000930": 13974000,
+    "2000933": 13985984,
+    "2000940": 13995376
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI::Init_site_93": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 C8 02 00 00 48 8B 0D ?? ?? ?? ?? 48 8B 01"
+   },
+   "via": "client!0x180D54243 (call    qword ptr [rax+2C8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 13976131,
+    "2000930": 13974595,
+    "2000933": 13986579,
+    "2000940": 13995971
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI::OnGameUIActivated_site_1D4": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 FF A0 F0 02 00 00 CC"
+   },
+   "via": "client!0x180D55D74 (jmp     qword ptr [rax+2F0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 13983092,
+    "2000930": 13981556,
+    "2000933": 13993540,
+    "2000940": 14002932
+   },
+   "status": "verified"
+  },
+  "CLegacyGameUI::OnGameUIHidden_site_93": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 F0 02 00 00 38 9F E2 01 00 00"
+   },
+   "via": "client!0x180D55E13 (call    qword ptr [rax+2F0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 13983251,
+    "2000930": 13981715,
+    "2000933": 13993699,
+    "2000940": 14003091
+   },
+   "status": "verified"
+  },
+  "CreateInterface_LegacyGameUI001": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 10 00 00 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F73C7 (sub_1800F73C0 references CreateInterface_LegacyGameUI001 (prologue not unique): lea     rdx, CreateInterface_LegacyGameUI001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 13994576,
+    "2000930": 13993040,
+    "2000933": 14005024,
+    "2000940": 14014416
+   },
+   "status": "verified"
+  },
+  "sub_180DF6E00_site_14AB": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 08 01 00 00 84 C0 74 ?? B3 01"
+   },
+   "via": "client!0x180DF82AB (call    qword ptr [rax+108h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 14647979,
+    "2000930": 14646635,
+    "2000933": 14658731,
+    "2000940": 14668203
+   },
+   "status": "verified"
+  },
+  "sub_180E08120_site_E3": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 B8 00 00 00 84 C0 74 ?? 48 8B 4E 78 4C 8D 0D ?? ?? ?? ?? 4C 89 64 24 38 4C 8D 05 ?? ?? ?? ?? 4C 89 64 24 30 48 8D 15 ?? ?? ?? ?? 48 89 6C 24 28 C7 44 24 20 02 00 00 00"
+   },
+   "via": "client!0x180E08203 (call    qword ptr [rax+0B8h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 14713347,
+    "2000930": 14712003,
+    "2000933": 14724115,
+    "2000940": 14733603
+   },
+   "status": "verified"
+  },
+  "sub_180E42B50_site_4F": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 58 48 89 87 B8 04 00 00"
+   },
+   "via": "client!0x180E42B9F (call    qword ptr [rax+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 14953375,
+    "2000930": 14952031,
+    "2000933": 14964143,
+    "2000940": 14973679
+   },
+   "status": "verified"
+  },
+  "CRenderingPipelineCsgo": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderingPipelineCsgo"
+   },
+   "via": "client!0x181D28630 (??_7CRenderingPipelineCsgo@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 30574128,
+    "2000930": 30559808,
+    "2000933": 30585584,
+    "2000940": 30603520
+   },
+   "status": "verified"
+  },
+  "sub_1811C77F0": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CRenderingPipelineCsgo",
+    "slot": 10
+   },
+   "via": "client!0x1811C77F0 (CRenderingPipelineCsgo slot 10 -> sub_1811C77F0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18642928,
+    "2000930": 18624560,
+    "2000933": 18647328,
+    "2000940": 18663888
+   },
+   "status": "verified"
+  },
+  "sub_1811CF160": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CRenderingPipelineCsgo",
+    "slot": 1
+   },
+   "via": "client!0x1811CF160 (CRenderingPipelineCsgo slot 1 -> sub_1811CF160)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18674016,
+    "2000930": 18662768,
+    "2000933": 18685536,
+    "2000940": 18702096
+   },
+   "status": "verified"
+  },
+  "sub_1811E5BC0_site_345": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 68 4C 8D AD B0 02 00 00"
+   },
+   "via": "client!0x1811E5F05 (call    qword ptr [rax+68h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 18767621,
+    "2000930": 18756373,
+    "2000933": 18779109,
+    "2000940": 18795669
+   },
+   "status": "verified"
+  },
+  "sub_181201C80": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CRenderingPipelineCsgo",
+    "slot": 11
+   },
+   "via": "client!0x181201C80 (CRenderingPipelineCsgo slot 11 -> sub_181201C80)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18881664,
+    "2000930": 18870416,
+    "2000933": 18894688,
+    "2000940": 18911296
+   },
+   "status": "verified"
+  },
+  "sub_181202000": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CRenderingPipelineCsgo",
+    "slot": 3
+   },
+   "via": "client!0x181202000 (CRenderingPipelineCsgo slot 3 -> sub_181202000)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18882560,
+    "2000930": 18871312,
+    "2000933": 18895584,
+    "2000940": 18912192
+   },
+   "status": "verified"
+  },
+  "sub_181202B00": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CRenderingPipelineCsgo",
+    "slot": 9
+   },
+   "via": "client!0x181202B00 (CRenderingPipelineCsgo slot 9 -> sub_181202B00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18885376,
+    "2000930": 18874128,
+    "2000933": 18898400,
+    "2000940": 18915008
+   },
+   "status": "verified"
+  },
+  "sub_181203F10_site_283": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 52 18 8B 0D ?? ?? ?? ??"
+   },
+   "via": "client!0x181204193 (call    qword ptr [rdx+18h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 18891155,
+    "2000930": 18879907,
+    "2000933": 18904179,
+    "2000940": 18920787
+   },
+   "status": "verified"
+  },
+  "MonitorTemplateView_AddLayers": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 10 55 56 57 48 8D AC 24 20 FD FF FF"
+   },
+   "via": "client!0x181210F30 (MonitorTemplateView_AddLayers)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18943792,
+    "2000930": 18932544,
+    "2000933": 18956816,
+    "2000940": 18973424
+   },
+   "status": "verified"
+  },
+  "MonitorTemplateView_AddLayers_site_24": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "BA E3 8D 4C CE 48 8B 01"
+   },
+   "via": "client!0x181210F54 (mov     edx, 0CE4C8DE3h)",
+   "tag": "V",
+   "expect": {
+    "2000921": 18943828,
+    "2000930": 18932580,
+    "2000933": 18956852,
+    "2000940": 18973460
+   },
+   "status": "verified"
+  },
+  "sub_18008F590_site_1517100": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 01 48 8B C1 48 89 0D ?? ?? ?? ?? 4C 89 41 08"
+   },
+   "via": "client!0x1815A6690 (mov     rax, cs:qword_182715788)",
+   "tag": "V",
+   "expect": {
+    "2000921": 22701712,
+    "2000930": 22690512,
+    "2000933": 22714784,
+    "2000940": 22731392
+   },
+   "status": "verified"
+  },
+  "RegisterAllEngineServices": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 85 DB 74 ?? 0F 1F 40 00 66 66 0F 1F 84 00 00 00 00 00 48 8B 0D ?? ?? ?? ?? 4C 8B 43 08 48 8B 53 10 48 8B 01 FF 50 58"
+   },
+   "via": "client!0x1815A66B0 (RegisterAllEngineServices)",
+   "tag": "V",
+   "expect": {
+    "2000921": 22701744,
+    "2000930": 22690544,
+    "2000933": 22714816,
+    "2000940": 22731424
+   },
+   "status": "verified"
+  },
+  "UnregisterAllEngineServices": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 85 DB 74 ?? 0F 1F 40 00 66 66 0F 1F 84 00 00 00 00 00 48 8B 0D ?? ?? ?? ?? 4C 8B 43 08 48 8B 53 10 48 8B 01 FF 50 60"
+   },
+   "via": "client!0x1815A6700 (UnregisterAllEngineServices)",
+   "tag": "V",
+   "expect": {
+    "2000921": 22701824,
+    "2000930": 22690624,
+    "2000933": 22714896,
+    "2000940": 22731504
+   },
+   "status": "verified"
+  },
+  "sub_1815DFDB0_site_222": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 10 48 8D 4D A7 E8 ?? ?? ?? ??"
+   },
+   "via": "client!0x1815DFFD2 (call    qword ptr [rax])",
+   "tag": "V",
+   "expect": {
+    "2000921": 22937554,
+    "2000930": 22926354,
+    "2000933": 22950626,
+    "2000940": 22967234
+   },
+   "status": "verified"
+  },
+  "loc_1817A6830": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 10 08 00 00"
+   },
+   "via": "client!0x1817A6830 (mov     rcx, [rcx+8])",
+   "tag": "V",
+   "expect": {
+    "2000921": 24799280,
+    "2000930": 24787728,
+    "2000933": 24811824,
+    "2000940": 24828432
+   },
+   "status": "verified"
+  },
+  "sub_1817B1530": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 00 08 00 00"
+   },
+   "via": "client!0x1817B1530 (sub_1817B1530)",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843568,
+    "2000930": 24832016,
+    "2000933": 24856112,
+    "2000940": 24872720
+   },
+   "status": "verified"
+  },
+  "loc_1817B1540": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 E8 07 00 00"
+   },
+   "via": "client!0x1817B1540 (mov     rcx, [rcx+8])",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843584,
+    "2000930": 24832032,
+    "2000933": 24856128,
+    "2000940": 24872736
+   },
+   "status": "verified"
+  },
+  "loc_1817B1550": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "0F B6 44 24 40 48 8B 49 08"
+   },
+   "via": "client!0x1817B1550 (movzx   eax, byte ptr [rsp+40h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843600,
+    "2000930": 24832048,
+    "2000933": 24856144,
+    "2000940": 24872752
+   },
+   "status": "verified"
+  },
+  "sub_1817B1580": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 F0 07 00 00"
+   },
+   "via": "client!0x1817B1580 (sub_1817B1580)",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843648,
+    "2000930": 24832096,
+    "2000933": 24856192,
+    "2000940": 24872800
+   },
+   "status": "verified"
+  },
+  "sub_1817B16A0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 F8 07 00 00"
+   },
+   "via": "client!0x1817B16A0 (sub_1817B16A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843936,
+    "2000930": 24832384,
+    "2000933": 24856480,
+    "2000940": 24873088
+   },
+   "status": "verified"
+  },
+  "loc_1817B16B0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 E0 07 00 00"
+   },
+   "via": "client!0x1817B16B0 (mov     rcx, [rcx+8])",
+   "tag": "V",
+   "expect": {
+    "2000921": 24843952,
+    "2000930": 24832400,
+    "2000933": 24856496,
+    "2000940": 24873104
+   },
+   "status": "verified"
+  },
+  "sub_1817B3600": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 49 08 48 8B 01 48 FF A0 08 01 00 00"
+   },
+   "via": "client!0x1817B3600 (sub_1817B3600)",
+   "tag": "V",
+   "expect": {
+    "2000921": 24851968,
+    "2000930": 24840416,
+    "2000933": 24864512,
+    "2000940": 24881120
+   },
+   "status": "verified"
+  },
+  "sub_1818946D0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B C4 48 89 68 20 41 56"
+   },
+   "via": "client!0x1818946D0 (sub_1818946D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 25773776,
+    "2000930": 25763904,
+    "2000933": 25788000,
+    "2000940": 25804704
+   },
+   "status": "verified"
+  },
+  "sub_1818946D0_site_CA": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 52 58 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x18189479A (call    qword ptr [rdx+58h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 25773978,
+    "2000930": 25764106,
+    "2000933": 25788202,
+    "2000940": 25804906
+   },
+   "status": "verified"
+  },
+  "sub_1818946D0_site_FD": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF D7 48 8B 05 ?? ?? ?? ?? 48 8B 08"
+   },
+   "via": "client!0x1818947CD (call    rdi)",
+   "tag": "V",
+   "expect": {
+    "2000921": 25774029,
+    "2000930": 25764157,
+    "2000933": 25788253,
+    "2000940": 25804957
+   },
+   "status": "verified"
+  },
+  "sub_1818946D0_site_124": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF D3 F3 0F 59 35 ?? ?? ?? ??"
+   },
+   "via": "client!0x1818947F4 (call    rbx)",
+   "tag": "V",
+   "expect": {
+    "2000921": 25774068,
+    "2000930": 25764196,
+    "2000933": 25788292,
+    "2000940": 25804996
+   },
+   "status": "verified"
+  },
+  "sub_181894870": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 57 48 83 EC 40 48 8B 3A"
+   },
+   "via": "client!0x181894870 (sub_181894870)",
+   "tag": "V",
+   "expect": {
+    "2000921": 25774192,
+    "2000930": 25764320,
+    "2000933": 25788416,
+    "2000940": 25805120
+   },
+   "status": "verified"
+  },
+  "sub_181894870_site_C1": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 08 01 00 00 0F B6 47 30"
+   },
+   "via": "client!0x181894931 (call    qword ptr [rax+108h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 25774385,
+    "2000930": 25764513,
+    "2000933": 25788609,
+    "2000940": 25805313
+   },
+   "status": "verified"
+  },
+  "__CParallelLambdaJob_V<lambda_1>__9__SimulateParticles_CParticleMgr__AEAAXAEAV__CUtlVectorFixedGrowableCompat_UParticleSimListItem_t_CParticleMgr___0EAA_H___Z__CParallelProcessLauncher": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "?$CParallelLambdaJob@V<lambda_1>@?9??SimulateParticles@CParticleMgr@@AEAAXAEAV?$CUtlVectorFixedGrowableCompat@UParticleSimListItem_t@CParticleMgr@@$0EAA@H@@@Z@@CParallelProcessLauncher"
+   },
+   "via": "client!0x181E35B50 (??_7?$CParallelLambdaJob@V_lambda_1_@?9??SimulateParticles@CParticleMgr@@AEAAXAEAV?$CUtlVectorFixedGrowableCompat@UParticleSimListItem_t@CParticleMgr@@$0EAA@H@@@Z@@CParallelProcessLauncher@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 31677264,
+    "2000930": 31665632,
+    "2000933": 31690208,
+    "2000940": 31706608
+   },
+   "status": "verified"
+  },
+  "sub_181895210": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "__CParallelLambdaJob_V<lambda_1>__9__SimulateParticles_CParticleMgr__AEAAXAEAV__CUtlVectorFixedGrowableCompat_UParticleSimListItem_t_CParticleMgr___0EAA_H___Z__CParallelProcessLauncher",
+    "slot": 1
+   },
+   "via": "client!0x181895210 (__CParallelLambdaJob_V<lambda_1>__9__SimulateParticles_CParticleMgr__AEAAXAEAV__CUtlVectorFixedGrowableCompat_UParticleSimListItem_t_CParticleMgr___0EAA_H___Z__CParallelProcessLauncher slot 1 -> sub_181895210)",
+   "tag": "V",
+   "expect": {
+    "2000921": 25776656,
+    "2000930": 25766784,
+    "2000933": 25790880,
+    "2000940": 25807584
+   },
+   "status": "verified"
+  },
+  "sub_181896090_site_45B": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 90 D0 00 00 00 45 85 ED"
+   },
+   "via": "client!0x1818964EB (call    qword ptr [rax+0D0h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 25781483,
+    "2000930": 25771611,
+    "2000933": 25795707,
+    "2000940": 25812411
+   },
+   "status": "verified"
+  },
+  "sub_1819A9260": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B DC 53 48 81 EC B0 00 00 00 0F 57 C0"
+   },
+   "via": "client!0x1819A9260 (sub_1819A9260)",
+   "tag": "V",
+   "expect": {
+    "2000921": 26907232,
+    "2000930": 26897360,
+    "2000933": 26921456,
+    "2000940": 26938160
+   },
+   "status": "verified"
+  },
+  "InterfaceReg::InterfaceReg": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x1819C8DE0 (mov     [rcx+8], r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27037152,
+    "2000930": 27027280,
+    "2000933": 27051376,
+    "2000940": 27068080
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "client!0x1819C8E00 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27037184,
+    "2000930": 27027312,
+    "2000933": 27051408,
+    "2000940": 27068112
+   },
+   "status": "verified"
+  },
+  "GetResourceManifestCount": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "GetResourceManifestCount"
+   },
+   "via": "client!0x1819D4770 (export GetResourceManifestCount)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27084656,
+    "2000930": 27074784,
+    "2000933": 27098880,
+    "2000940": 27115584
+   },
+   "status": "verified"
+  },
+  "GetResourceManifests": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "GetResourceManifests"
+   },
+   "via": "client!0x1819D4780 (export GetResourceManifests)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27084672,
+    "2000930": 27074800,
+    "2000933": 27098896,
+    "2000940": 27115600
+   },
+   "status": "verified"
+  },
+  "InstallSchemaBindings": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "InstallSchemaBindings"
+   },
+   "via": "client!0x1819D6570 (export InstallSchemaBindings)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27092336,
+    "2000930": 27082464,
+    "2000933": 27106560,
+    "2000940": 27123264
+   },
+   "status": "verified"
+  },
+  "sub_181A755F0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC 33 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18008B89E (CCSGameConfiguration_static_init references sub_181A755F0 (prologue not unique): lea     rcx, sub_181A755F0; void (__cdecl *)())",
+   "tag": "V",
+   "expect": {
+    "2000921": 27743728,
+    "2000930": 27733808,
+    "2000933": 27757904,
+    "2000940": 27774608
+   },
+   "status": "verified"
+  },
+  "sub_181A76D90": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18008F580 (sub_18008F580 references sub_181A76D90 (prologue not unique): lea     rcx, sub_181A76D90)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27749776,
+    "2000930": 27739856,
+    "2000933": 27763952,
+    "2000940": 27780688
+   },
+   "status": "verified"
+  },
+  "sub_181A87C10": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D0120 (sub_1800D0120 references sub_181A87C10 (prologue not unique): lea     rcx, sub_181A87C10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27819024,
+    "2000930": 27809104,
+    "2000933": 27833200,
+    "2000940": 27849968
+   },
+   "status": "verified"
+  },
+  "sub_181A88150": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? 48 83 EC 48 48 8D 05 ?? ?? ?? ?? C7 44 24 30 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D1840 (CSource2Client_static_init references sub_181A88150 (prologue not unique): lea     rcx, sub_181A88150; void (__cdecl *)())",
+   "tag": "V",
+   "expect": {
+    "2000921": 27820368,
+    "2000930": 27810448,
+    "2000933": 27834544,
+    "2000940": 27851312
+   },
+   "status": "verified"
+  },
+  "sub_181A8A3D0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 8B 1D ?? ?? ?? ??"
+   },
+   "via": "client!0x181A8A3D0 (sub_181A8A3D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27829200,
+    "2000930": 27819280,
+    "2000933": 27843376,
+    "2000940": 27860144
+   },
+   "status": "verified"
+  },
+  "sub_181A8F7D0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 48 8B 15 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ??"
+   },
+   "via": "client!0x181A8F7D0 (sub_181A8F7D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27850704,
+    "2000930": 27840816,
+    "2000933": 27864880,
+    "2000940": 27881648
+   },
+   "status": "verified"
+  },
+  "sub_181A91740": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 66 0F 7F 0D ?? ?? ?? ?? 89 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F7638 (CLegacyGameUI_StaticInit references sub_181A91740 (prologue not unique): lea     rcx, sub_181A91740; void (__cdecl *)())",
+   "tag": "V",
+   "expect": {
+    "2000921": 27858752,
+    "2000930": 27848864,
+    "2000933": 27872832,
+    "2000940": 27889600
+   },
+   "status": "verified"
+  },
+  "SteamInternal_SteamAPI_Init": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 15 ?? ?? ?? ?? 8B F8 85 C0 74 ??",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x180B64DF2 (CSource2Client::Connect reads SteamInternal_SteamAPI_Init)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27956688,
+    "2000930": 27944400,
+    "2000933": 27968976,
+    "2000940": 27985360
+   },
+   "status": "verified"
+  },
+  "LoggingSystem_RegisterLoggingChannel": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 15 ?? ?? ?? ?? 89 05 ?? ?? ?? ?? 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 83 EC 38 C7 44 24 40 FF 64 00 FF",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x180053450 (sub_180053430 reads LoggingSystem_RegisterLoggingChannel)",
+   "tag": "V",
+   "expect": {
+    "2000921": 27962032,
+    "2000930": 27949720,
+    "2000933": 27974312,
+    "2000940": 27990688
+   },
+   "status": "verified"
+  },
+  "str_Source2ClientConfig001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "Source2ClientConfig001"
+   },
+   "via": "client!0x181BA6368 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 28992360,
+    "2000930": 29008616,
+    "2000933": 29031904,
+    "2000940": 29053448
+   },
+   "status": "verified"
+  },
+  "str_EmptyWorldService001_Client": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "EmptyWorldService001_Client"
+   },
+   "via": "client!0x181BB42D0 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29049552,
+    "2000930": 29055128,
+    "2000933": 29080392,
+    "2000940": 29097112
+   },
+   "status": "verified"
+  },
+  "off_181BBB380": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x182213230 (pointer to off_181BBB380 stored in g_EmptyWorldService+0x0; client!0x18008F590 (sub_18008F590 reads g_EmptyWorldService))",
+   "tag": "V",
+   "expect": {
+    "2000921": 29078400,
+    "2000930": 29065616,
+    "2000933": 29090176,
+    "2000940": 29106688
+   },
+   "status": "verified"
+  },
+  "aPlayer": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8B 01 FF 50 68 48 89 05 ?? ?? ?? ?? 48 85 C0 75 ?? 8B 0D ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 84 C0 74 ?? 8B 0D ?? ?? ?? ?? 4C 8D 0D ?? ?? ?? ?? 4C 8D 05 ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18094060F (sub_1809405C0 reads aPlayer)",
+   "tag": "V",
+   "expect": {
+    "2000921": 29468500,
+    "2000930": 29455652,
+    "2000933": 29480260,
+    "2000940": 29496948
+   },
+   "status": "verified"
+  },
+  "CGameEntitySystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CGameEntitySystem"
+   },
+   "via": "client!0x181C2BAF0 (??_7CGameEntitySystem@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29539056,
+    "2000930": 29526224,
+    "2000933": 29550832,
+    "2000940": 29567472
+   },
+   "status": "verified"
+  },
+  "C_BaseEntity": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "C_BaseEntity"
+   },
+   "via": "client!0x181C44DD0 (??_7C_BaseEntity@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29642192,
+    "2000930": 29629376,
+    "2000933": 29653968,
+    "2000940": 29670640
+   },
+   "status": "verified"
+  },
+  "str_Source2Client002": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "Source2Client002"
+   },
+   "via": "client!0x181C5BB20 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29735712,
+    "2000930": 29726480,
+    "2000933": 29751072,
+    "2000940": 29767856
+   },
+   "status": "verified"
+  },
+  "off_181C5C338": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 08 48 89 74 24 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x18222F7B0 (pointer to off_181C5C338 stored in g_CClientToolsInfo+0x0; client!0x180B852A0 (sub_180B852A0 reads g_CClientToolsInfo))",
+   "tag": "V",
+   "expect": {
+    "2000921": 29737784,
+    "2000930": 29728584,
+    "2000933": 29753184,
+    "2000940": 29769968
+   },
+   "status": "verified"
+  },
+  "str_client_entities_for_tools": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "client_entities_for_tools"
+   },
+   "via": "client!0x181C5C390 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29737872,
+    "2000930": 29728672,
+    "2000933": 29753272,
+    "2000940": 29770056
+   },
+   "status": "verified"
+  },
+  "str_ClientToolsInfo_001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "ClientToolsInfo_001"
+   },
+   "via": "client!0x181C5C408 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29737992,
+    "2000930": 29728792,
+    "2000933": 29753392,
+    "2000940": 29770176
+   },
+   "status": "verified"
+  },
+  "off_181C5C8B8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 08 48 89 74 24 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x18222C458 (pointer to off_181C5C8B8 stored in g_GameClientExports+0x0; client!0x180B852B0 (CreateInterface_GameClientExports001 reads g_GameClientExports))",
+   "tag": "V",
+   "expect": {
+    "2000921": 29739192,
+    "2000930": 29729992,
+    "2000933": 29754544,
+    "2000940": 29771304
+   },
+   "status": "verified"
+  },
+  "str_GameClientExports001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "GameClientExports001"
+   },
+   "via": "client!0x181C5C990 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29739408,
+    "2000930": 29730208,
+    "2000933": 29754800,
+    "2000940": 29771560
+   },
+   "status": "verified"
+  },
+  "str_ClientBugBugServic001_Client": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "ClientBugBugServic001_Client"
+   },
+   "via": "client!0x181C5CB48 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29739848,
+    "2000930": 29730648,
+    "2000933": 29755240,
+    "2000940": 29763872
+   },
+   "status": "verified"
+  },
+  "off_181C60AA8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 83 C4 20 5B C3 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? FF 75 ?? 33 D2",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x18222C480 (pointer to off_181C60AA8 stored in off_18222C480+0x0; client!0x180B70849 (sub_180B70820 reads off_18222C480))",
+   "tag": "V",
+   "expect": {
+    "2000921": 29756072,
+    "2000930": 29743240,
+    "2000933": 29767832,
+    "2000940": 29784512
+   },
+   "status": "verified"
+  },
+  "str_LegacyGameUI001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "LegacyGameUI001"
+   },
+   "via": "client!0x181C61580 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29758848,
+    "2000930": 29746016,
+    "2000933": 29770624,
+    "2000940": 29787312
+   },
+   "status": "verified"
+  },
+  "str_CClientBugBugService": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "CClientBugBugService"
+   },
+   "via": "client!0x181C61D40 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29760832,
+    "2000930": 29748000,
+    "2000933": 29772608,
+    "2000940": 29789296
+   },
+   "status": "verified"
+  },
+  "str_Source2ClientPrediction001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "Source2ClientPrediction001"
+   },
+   "via": "client!0x181C6C628 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29804072,
+    "2000930": 29788360,
+    "2000933": 29823160,
+    "2000940": 29831328
+   },
+   "status": "verified"
+  },
+  "CViewRender": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CViewRender"
+   },
+   "via": "client!0x181C7A3F8 (??_7CViewRender@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29860856,
+    "2000930": 29847992,
+    "2000933": 29872632,
+    "2000940": 29889320
+   },
+   "status": "verified"
+  },
+  "C_CSPlayerPawn": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "C_CSPlayerPawn"
+   },
+   "via": "client!0x181C87328 (??_7C_CSPlayerPawn@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29913896,
+    "2000930": 29901048,
+    "2000933": 29925688,
+    "2000940": 29942376
+   },
+   "status": "verified"
+  },
+  "str_Source2ClientUI001": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "Source2ClientUI001"
+   },
+   "via": "client!0x181C97078 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 29978744,
+    "2000930": 29973616,
+    "2000933": 29998176,
+    "2000940": 30015904
+   },
+   "status": "verified"
+  },
+  "CParticleMgr": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CParticleMgr"
+   },
+   "via": "client!0x181E35930 (??_7CParticleMgr@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 31676720,
+    "2000930": 31665088,
+    "2000933": 31689664,
+    "2000940": 31706064
+   },
+   "status": "verified"
+  },
+  "off_181E59640": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 85 C9 74 ?? C7 01 73 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1819A8DA0 (sub_1819A8DA0 reads off_181E59640)",
+   "tag": "V",
+   "expect": {
+    "2000921": 31823424,
+    "2000930": 31811792,
+    "2000933": 31836368,
+    "2000940": 31852768
+   },
+   "status": "verified"
+  },
+  "___R4CCSGameConfiguration__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CCSGameConfiguration",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181EEBC58 (??_R4CCSGameConfiguration@@6B@ via CCSGameConfiguration)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32423000,
+    "2000930": 32411016,
+    "2000933": 32435592,
+    "2000940": 32451896
+   },
+   "status": "verified"
+  },
+  "CEmptyWorldService": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CEmptyWorldService"
+   },
+   "via": "client!0x181BBB380 (off_181BBB380)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29078400,
+    "2000930": 29065616,
+    "2000933": 29090176,
+    "2000940": 29106688
+   },
+   "status": "verified"
+  },
+  "___R4CEmptyWorldService__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CEmptyWorldService",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181EED3B0 (??_R4CEmptyWorldService@@6B@ via CEmptyWorldService)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32428976,
+    "2000930": 32416912,
+    "2000933": 32441696,
+    "2000940": 32458080
+   },
+   "status": "verified"
+  },
+  "CGameClientExports": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CGameClientExports"
+   },
+   "via": "client!0x181C5C8B8 (off_181C5C8B8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29739192,
+    "2000930": 29729992,
+    "2000933": 29754544,
+    "2000940": 29771304
+   },
+   "status": "verified"
+  },
+  "___R4CGameClientExports__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CGameClientExports",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F114E0 (??_R4CGameClientExports@@6B@ via CGameClientExports)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32576736,
+    "2000930": 32564672,
+    "2000933": 32589456,
+    "2000940": 32605840
+   },
+   "status": "verified"
+  },
+  "CClientToolsInfo": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CClientToolsInfo"
+   },
+   "via": "client!0x181C5C338 (off_181C5C338)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29737784,
+    "2000930": 29728584,
+    "2000933": 29753184,
+    "2000940": 29769968
+   },
+   "status": "verified"
+  },
+  "___R4CClientToolsInfo__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CClientToolsInfo",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F119A8 (??_R4CClientToolsInfo@@6B@ via CClientToolsInfo)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32577960,
+    "2000930": 32565896,
+    "2000933": 32590680,
+    "2000940": 32607064
+   },
+   "status": "verified"
+  },
+  "___R3CClientToolsInfo__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CClientToolsInfo",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     }
+    ]
+   },
+   "via": "client!0x181F119D0 (??_R3CClientToolsInfo@@8 via CClientToolsInfo)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32578000,
+    "2000930": 32565936,
+    "2000933": 32590720,
+    "2000940": 32607104
+   },
+   "status": "verified"
+  },
+  "___R1A__0A_EA_CClientToolsInfo__8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CClientToolsInfo",
+    "steps": [
+     {
+      "deref": -8
+     },
+     {
+      "rva": 16
+     },
+     {
+      "rva": 12
+     },
+     {
+      "rva": 0
+     }
+    ]
+   },
+   "via": "client!0x181F11A40 (??_R1A@?0A@EA@CClientToolsInfo@@8 via CClientToolsInfo)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32578112,
+    "2000930": 32566048,
+    "2000933": 32590832,
+    "2000940": 32607216
+   },
+   "status": "verified"
+  },
+  "CClientBugBugService": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CClientBugBugService"
+   },
+   "via": "client!0x181C5CA90 (off_181C5CA90)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29739664,
+    "2000930": 29730464,
+    "2000933": 29755056,
+    "2000940": 29771832
+   },
+   "status": "verified"
+  },
+  "___R4CClientBugBugService__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CClientBugBugService",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F11D28 (??_R4CClientBugBugService@@6B@ via CClientBugBugService)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32578856,
+    "2000930": 32566792,
+    "2000933": 32591576,
+    "2000940": 32607960
+   },
+   "status": "verified"
+  },
+  "___R4CSource2Client__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CSource2Client",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F12620 (??_R4CSource2Client@@6B@ via CSource2Client)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32581152,
+    "2000930": 32569088,
+    "2000933": 32593872,
+    "2000940": 32610256
+   },
+   "status": "verified"
+  },
+  "___R4CPrediction__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CPrediction",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F172D0 (??_R4CPrediction@@6B@ via CPrediction)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32600784,
+    "2000930": 32588720,
+    "2000933": 32613600,
+    "2000940": 32629984
+   },
+   "status": "verified"
+  },
+  "___R4CCsgoClientUI__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CCsgoClientUI",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F23AE0 (??_R4CCsgoClientUI@@6B@ via CCsgoClientUI)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32652000,
+    "2000930": 32639936,
+    "2000933": 32665024,
+    "2000940": 32681408
+   },
+   "status": "verified"
+  },
+  "___R4CLegacyGameUI__6B_": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "CLegacyGameUI",
+    "steps": [
+     {
+      "deref": -8
+     }
+    ]
+   },
+   "via": "client!0x181F280B0 (??_R4CLegacyGameUI@@6B@ via CLegacyGameUI)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 32669872,
+    "2000930": 32657808,
+    "2000933": 32683792,
+    "2000940": 32700176
+   },
+   "status": "verified"
+  },
+  "word_1821BAF98": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 02 00 00 00 49 89 43 D8 49 89 43 D0 49 89 43 C8 48 8D 05 ?? ?? ?? ?? 49 89 43 C0 48 8D 05 ?? ?? ?? ?? 49 89 43 B8 E8 ?? ?? ?? ?? 48 83 C4 68 C3 CC CC CC CC CC 4C 8B DC 48 83 EC 68 48 8D 05 ?? ?? ?? ?? 45 33 C9 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 04 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18004DF80 (sub_18004DF60 reads word_1821BAF98)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35368856,
+    "2000930": 35349096,
+    "2000933": 35381864,
+    "2000940": 35401064
+   },
+   "status": "verified"
+  },
+  "g_EmptyWorldService": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18008F590 (sub_18008F590 reads g_EmptyWorldService)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35729968,
+    "2000930": 35713280,
+    "2000933": 35746032,
+    "2000940": 35762528
+   },
+   "status": "verified"
+  },
+  "off_182224ED8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 48 8B 5C 24 30 48 8B 6C 24 38",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x182223140 (pointer to off_182224ED8 stored in off_182223140+0x0; client!0x180A4FF9A (sub_180A4FE60 reads off_182223140))",
+   "tag": "V",
+   "expect": {
+    "2000921": 35802840,
+    "2000930": 35786200,
+    "2000933": 35818968,
+    "2000940": 35835480
+   },
+   "status": "verified"
+  },
+  "unk_18222BDC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 85 D2 48 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B80547 (CSource2Client::SetGlobals reads unk_18222BDC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35831232,
+    "2000930": 35815584,
+    "2000933": 35848352,
+    "2000940": 35864864
+   },
+   "status": "verified"
+  },
+  "gpGlobals": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 0F 57 C0 8B 48 44",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180076E40 (sub_180076E40 reads gpGlobals)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35831448,
+    "2000930": 35815568,
+    "2000933": 35848336,
+    "2000940": 35864840
+   },
+   "status": "verified"
+  },
+  "g_GameClientExports": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 08 48 89 74 24 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B852B0 (CreateInterface_GameClientExports001 reads g_GameClientExports)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35832920,
+    "2000930": 35816280,
+    "2000933": 35849048,
+    "2000940": 35865560
+   },
+   "status": "verified"
+  },
+  "off_18222C5B0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 83 C4 28 C3 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? FF 75 ?? FF 15 ?? ?? ?? ?? BA 85 74 0E 02",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B6E687 (sub_180B6E660 reads off_18222C5B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35833264,
+    "2000930": 35816624,
+    "2000933": 35849392,
+    "2000940": 35865904
+   },
+   "status": "verified"
+  },
+  "g_CClientToolsInfo": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 08 48 89 74 24 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B852A0 (sub_180B852A0 reads g_CClientToolsInfo)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35846064,
+    "2000930": 35829424,
+    "2000933": 35862192,
+    "2000940": 35878704
+   },
+   "status": "verified"
+  },
+  "g_ClientBugBugService": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D0130 (sub_1800D0130 reads g_ClientBugBugService)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35846112,
+    "2000930": 35829472,
+    "2000933": 35862240,
+    "2000940": 35878752
+   },
+   "status": "verified"
+  },
+  "off_182232430": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 49 8B 5D 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803D6CCC (sub_1803D6A40 reads off_182232430)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35857456,
+    "2000930": 35840776,
+    "2000933": 35873528,
+    "2000940": 35890032
+   },
+   "status": "verified"
+  },
+  "off_182233B98": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC F3 0F 10 41 44",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "client!0x182233140 (pointer to off_182233B98 stored in off_182233140+0x0; client!0x180B70B80 (sub_180B70B80 reads off_182233140))",
+   "tag": "V",
+   "expect": {
+    "2000921": 35863448,
+    "2000930": 35846824,
+    "2000933": 35879576,
+    "2000940": 35896104
+   },
+   "status": "verified"
+  },
+  "g_CsgoClientUI": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180D101A0 (CreateInterface_Source2ClientUI001 reads g_CsgoClientUI)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35891552,
+    "2000930": 35874960,
+    "2000933": 35907696,
+    "2000940": 35924240
+   },
+   "status": "verified"
+  },
+  "word_18223C0D8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "45 33 C9 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 02 00 00 00 49 89 43 D8 49 89 43 D0 49 89 43 C8 48 8D 05 ?? ?? ?? ?? 49 89 43 C0 48 8D 05 ?? ?? ?? ?? 49 89 43 B8 E8 ?? ?? ?? ?? 48 83 C4 68 C3 CC CC CC CC CC 4C 8B DC 48 83 EC 68 48 8D 05 ?? ?? ?? ?? 41 B1 01 49 89 43 E8 48 8D 15 ?? ?? ?? ?? 49 89 43 E0 48 8D 0D ?? ?? ?? ?? 33 C0 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "add": 18
+     },
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F7470 (sub_1800F7450 reads word_18223C0D8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35897560,
+    "2000930": 35880960,
+    "2000933": 35913952,
+    "2000940": 35930496
+   },
+   "status": "verified"
+  },
+  "g_LegacyGameUI": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 33 DB 48 89 05 ?? ?? ?? ?? 33 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F7589 (CLegacyGameUI_StaticInit reads g_LegacyGameUI)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35897568,
+    "2000930": 35880976,
+    "2000933": 35913968,
+    "2000940": 35930512
+   },
+   "status": "verified"
+  },
+  "off_18223C310": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 8B 81 C0 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180D53FF0 (sub_180D53FF0 reads off_18223C310)",
+   "tag": "V",
+   "expect": {
+    "2000921": 35898128,
+    "2000930": 35881536,
+    "2000933": 35914528,
+    "2000940": 35931072
+   },
+   "status": "verified"
+  },
+  "off_1822689E0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 3D ?? ?? ?? ?? 4C 89 64 24 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x181616241 (sub_181616200 reads off_1822689E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 36080096,
+    "2000930": 36063472,
+    "2000933": 36096496,
+    "2000940": 36113088
+   },
+   "status": "verified"
+  },
+  "str_AVCClientToolsInfo": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": ".?AVCClientToolsInfo@@",
+    "section": ".data"
+   },
+   "via": "client!0x18231D520 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 36820256,
+    "2000930": 36803472,
+    "2000933": 36836368,
+    "2000940": 36853104
+   },
+   "status": "verified"
+  },
+  "___R0_AVCClientToolsInfo___8": {
+   "kind": "global",
+   "locator": {
+    "type": "base",
+    "base": "str_AVCClientToolsInfo",
+    "steps": [
+     {
+      "add": -16
+     }
+    ]
+   },
+   "via": "client!0x18231D510 (??_R0?AVCClientToolsInfo@@@8 (TypeDescriptor = name string - 16))",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 36820240,
+    "2000930": 36803456,
+    "2000933": 36836352,
+    "2000940": 36853088
+   },
+   "status": "verified"
+  },
+  "str_AVCClientToolsInfo_18231D520": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": ".?AVCClientToolsInfo@@",
+    "section": ".data"
+   },
+   "via": "client!0x18231D520 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 36820256,
+    "2000930": 36803472,
+    "2000933": 36836368,
+    "2000940": 36853104
+   },
+   "status": "verified"
+  },
+  "qword_1823B6798": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 3D ?? ?? ?? ?? 00 49 8B E8 4C 8B F2 74 ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 8
+     }
+    ]
+   },
+   "via": "client!0x1803604AB (sub_1803604A0 reads qword_1823B6798)",
+   "tag": "V",
+   "expect": {
+    "2000921": 37447576,
+    "2000930": 37430560,
+    "2000933": 37468192,
+    "2000940": 37485024
+   },
+   "status": "verified"
+  },
+  "byte_1823B67A4": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "88 05 ?? ?? ?? ?? C3 CC",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x18036724F (sub_180367240 reads byte_1823B67A4)",
+   "tag": "V",
+   "expect": {
+    "2000921": 37447588,
+    "2000930": 37430572,
+    "2000933": 37468204,
+    "2000940": 37485036
+   },
+   "status": "verified"
+  },
+  "qword_1823B8368": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 55 D0 C6 45 E8 1F",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180213787 (sub_1802136E0 reads qword_1823B8368)",
+   "tag": "V",
+   "expect": {
+    "2000921": 37454696,
+    "2000930": 37436888,
+    "2000933": 37474504,
+    "2000940": 37491360
+   },
+   "status": "verified"
+  },
+  "qword_1823B89E8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 44 38 60 58 75 ?? 48 8B 0D ?? ?? ?? ?? 49 8D 96 80 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803CDA9D (sub_1803CD760 reads qword_1823B89E8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 37456360,
+    "2000930": 37438552,
+    "2000933": 37476168,
+    "2000940": 37493016
+   },
+   "status": "verified"
+  },
+  "g_CSGameConfiguration": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC 33 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18008B884 (CCSGameConfiguration_static_init reads g_CSGameConfiguration)",
+   "tag": "V",
+   "expect": {
+    "2000921": 38498880,
+    "2000930": 38481040,
+    "2000933": 38518640,
+    "2000940": 38535520
+   },
+   "status": "verified"
+  },
+  "unk_1824B7280": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 4C 24 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180082A9E (InterfaceReg_Source2ClientConfig001_init reads unk_1824B7280)",
+   "tag": "V",
+   "expect": {
+    "2000921": 38498944,
+    "2000930": 38481104,
+    "2000933": 38518704,
+    "2000940": 38535584
+   },
+   "status": "verified"
+  },
+  "unk_1824B9E18": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18008F59E (sub_18008F590 reads unk_1824B9E18)",
+   "tag": "V",
+   "expect": {
+    "2000921": 38510104,
+    "2000930": 38495376,
+    "2000933": 38533344,
+    "2000940": 38546784
+   },
+   "status": "verified"
+  },
+  "qword_1824BFE80": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B D3 48 8B 01 FF 90 88 00 00 00 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180731A3C (sub_180731950 reads qword_1824BFE80)",
+   "tag": "V",
+   "expect": {
+    "2000921": 38534784,
+    "2000930": 38515912,
+    "2000933": 38553528,
+    "2000940": 38571192
+   },
+   "status": "verified"
+  },
+  "qword_182533930": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800B8658 (sub_1800B85D0 reads qword_182533930)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39008560,
+    "2000930": 38990288,
+    "2000933": 39027872,
+    "2000940": 39046752
+   },
+   "status": "verified"
+  },
+  "qword_182538D68": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 83 C4 28 C3 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? FF 75 ?? 48 8B 0D ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8B 01 FF 50 68 48 89 05 ?? ?? ?? ?? 48 85 C0 75 ?? 8B 0D ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 84 C0 74 ?? 8B 0D ?? ?? ?? ?? 4C 8D 0D ?? ?? ?? ?? 4C 8D 05 ?? ?? ?? ?? BA 03 00 00 00 FF 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1809405E7 (sub_1809405C0 reads qword_182538D68)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39030120,
+    "2000930": 39013048,
+    "2000933": 39050632,
+    "2000940": 39067568
+   },
+   "status": "verified"
+  },
+  "GameConfigClientV001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 00 01 00 00 84 C0 0F 85 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18075D866 (sub_18075D840 reads qword_182545C00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39083008,
+    "2000930": 39069968,
+    "2000933": 39107600,
+    "2000940": 39124496
+   },
+   "status": "verified"
+  },
+  "qword_182546BC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 89 44 24 28 4C 89 6C 24 20 E8 ?? ?? ?? ?? 8B F0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18016BB6F (sub_18016B890 reads qword_182546BC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39087040,
+    "2000930": 39069992,
+    "2000933": 39107624,
+    "2000940": 39124504
+   },
+   "status": "verified"
+  },
+  "ISource2Client::Connect_182546BD0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 68 49 89 86 20 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1809EAA4F (sub_1809EAA00 reads qword_182546BD0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39087056,
+    "2000930": 39069880,
+    "2000933": 39107512,
+    "2000940": 39124408
+   },
+   "status": "verified"
+  },
+  "dword_18255A228": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "89 05 ?? ?? ?? ?? 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 4C 8D 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x1800CD32C (sub_1800CD300 reads dword_18255A228)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39166504,
+    "2000930": 39149408,
+    "2000933": 39187040,
+    "2000940": 39204000
+   },
+   "status": "verified"
+  },
+  "unk_18255A360": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD39E (sub_1800CD390 reads unk_18255A360)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39166816,
+    "2000930": 39149720,
+    "2000933": 39187352,
+    "2000940": 39204312
+   },
+   "status": "verified"
+  },
+  "g_Source2Client": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? 48 83 EC 48 48 8D 05 ?? ?? ?? ?? C7 44 24 30 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D1834 (CSource2Client_static_init reads g_Source2Client)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39166880,
+    "2000930": 39149792,
+    "2000933": 39187424,
+    "2000940": 39204384
+   },
+   "status": "verified"
+  },
+  "unk_18255A830": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 00 00 08 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD3BE (InterfaceReg_Source2Client002_init reads unk_18255A830)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39168048,
+    "2000930": 39150960,
+    "2000933": 39188672,
+    "2000940": 39205632
+   },
+   "status": "verified"
+  },
+  "g_InterfaceReg_ClientToolsInfo_001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD37E (sub_1800CD370 reads g_InterfaceReg_ClientToolsInfo_001)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39168176,
+    "2000930": 39151080,
+    "2000933": 39188792,
+    "2000940": 39205752
+   },
+   "status": "verified"
+  },
+  "unk_18255A8D0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800CD35E (sub_1800CD350 reads unk_18255A8D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39168208,
+    "2000930": 39151112,
+    "2000933": 39188824,
+    "2000940": 39205784
+   },
+   "status": "verified"
+  },
+  "unk_18255A8E8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 89 5C 24 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D013E (sub_1800D0130 reads unk_18255A8E8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39168232,
+    "2000930": 39151136,
+    "2000933": 39188848,
+    "2000940": 39205808
+   },
+   "status": "verified"
+  },
+  "qword_18255B348": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 83 C4 28 C3 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? FF 75 ?? 48 8D 05 ?? ?? ?? ?? 0F 57 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B553D7 (CClientToolsInfo_GetDependencies reads qword_18255B348)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170888,
+    "2000930": 39156648,
+    "2000933": 39194360,
+    "2000940": 39211304
+   },
+   "status": "verified"
+  },
+  "GameEventSystemClientV001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 1D ?? ?? ?? ?? 48 85 D2 75 ?? 48 8B 15 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 48 85 D2 75 ?? 48 8B 01 4C 8D 05 ?? ?? ?? ?? 88 54 24 30 41 B9 68 00 00 00 C6 44 24 28 01 48 89 54 24 20 BA 1A 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180159D8D (sub_180159D80 reads qword_18255B370)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170928,
+    "2000930": 39156552,
+    "2000933": 39194264,
+    "2000940": 39211200
+   },
+   "status": "verified"
+  },
+  "qword_18255B380": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 54 24 40 45 33 C0 48 8B 01 FF 90 A8 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18078A330 (sub_18078A240 reads qword_18255B380)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170944,
+    "2000930": 39156568,
+    "2000933": 39194280,
+    "2000940": 39211224
+   },
+   "status": "verified"
+  },
+  "ISource2Client::Connect_18255B388": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 49 C1 E5 04",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180212178 (sub_180211F80 reads qword_18255B388)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170952,
+    "2000930": 39156576,
+    "2000933": 39194288,
+    "2000940": 39211232
+   },
+   "status": "verified"
+  },
+  "qword_18255B3A0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 44 8B 0D ?? ?? ?? ?? 4C 8D 83 00 06 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B43C25 (sub_180B43B10 reads qword_18255B3A0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170976,
+    "2000930": 39156600,
+    "2000933": 39194312,
+    "2000940": 39211256
+   },
+   "status": "verified"
+  },
+  "Source2EngineToClient001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 D0 02 00 00 83 8C 24 B0 00 00 00 01",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180004331 (sub_180003140 reads g_pEngineClient)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39170984,
+    "2000930": 39156608,
+    "2000933": 39194320,
+    "2000940": 39211264
+   },
+   "status": "verified"
+  },
+  "dword_18255C124": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "39 05 ?? ?? ?? ?? 7F ?? 48 8D 05 ?? ?? ?? ?? 48 83 C4 28 C3 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? FF 75 ?? FF 15 ?? ?? ?? ?? BA 85 74 0E 02",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x180B6E67F (sub_180B6E660 reads dword_18255C124)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39174436,
+    "2000930": 39157356,
+    "2000933": 39195068,
+    "2000940": 39212012
+   },
+   "status": "verified"
+  },
+  "qword_18255CE50": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B 1D ?? ?? ?? ?? 48 8B D8",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180188E9E (sub_180188E60 reads qword_18255CE50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39177808,
+    "2000930": 39173760,
+    "2000933": 39211472,
+    "2000940": 39228408
+   },
+   "status": "verified"
+  },
+  "g_Prediction": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800DA474 (CPrediction_static_init reads g_Prediction)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39191968,
+    "2000930": 39174864,
+    "2000933": 39212576,
+    "2000940": 39229520
+   },
+   "status": "verified"
+  },
+  "unk_182560720": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800D9ABE (InterfaceReg_Source2ClientPrediction001_init reads unk_182560720)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39192352,
+    "2000930": 39175248,
+    "2000933": 39212960,
+    "2000940": 39229904
+   },
+   "status": "verified"
+  },
+  "g_CCSGOInput": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 33 C9 C7 05 ?? ?? ?? ?? FF FF FF FF",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800EE5A4 (sub_1800EE5A0 reads g_CCSGOInput)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39280992,
+    "2000930": 39265376,
+    "2000933": 39302720,
+    "2000940": 39320080
+   },
+   "status": "verified"
+  },
+  "unk_182576D90": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 B0 49 89 43 B8 49 89 43 C0 49 89 43 C8 49 89 43 D0 41 88 43 E8 49 89 43 E0 66 41 89 43 D8 E8 ?? ?? ?? ?? 48 8D 44 24 30 C6 44 24 34 01 45 33 C9 48 89 44 24 20 41 B8 00 40 08 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800EBECE (sub_1800EBEC0 reads unk_182576D90)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39284112,
+    "2000930": 39268496,
+    "2000933": 39305856,
+    "2000940": 39323216
+   },
+   "status": "verified"
+  },
+  "g_pClientModeSlots": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 35 ?? ?? ?? ?? 90 83 FB 01",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180CBF188 (sub_180CBF170 reads g_pClientModeSlots)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39284936,
+    "2000930": 39269496,
+    "2000933": 39306856,
+    "2000940": 39324216
+   },
+   "status": "verified"
+  },
+  "g_pLegacyGameUI": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? 33 C0 48 89 1D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F7592 (CLegacyGameUI_StaticInit reads g_pLegacyGameUI)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39588280,
+    "2000930": 39571232,
+    "2000933": 39608960,
+    "2000940": 39625896
+   },
+   "status": "verified"
+  },
+  "unk_1825C11D0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 58 80 64 24 38 F8 48 8D 05 ?? ?? ?? ?? 48 89 44 24 30 4C 8D 0D ?? ?? ?? ?? 0F 57 C0 48 8D 44 24 40 0F 11 44 24 40 4C 8D 44 24 30 48 89 44 24 28 0F 28 44 24 30 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 C7 44 24 20 10 00 00 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1800F73CE (sub_1800F73C0 reads unk_1825C11D0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39588304,
+    "2000930": 39571248,
+    "2000933": 39608976,
+    "2000940": 39625936
+   },
+   "status": "verified"
+  },
+  "qword_1825C1750": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 45 33 C9 48 89 5C 24 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180D5421A (CLegacyGameUI::Init reads qword_1825C1750)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39589712,
+    "2000930": 39572656,
+    "2000933": 39610384,
+    "2000940": 39627344
+   },
+   "status": "verified"
+  },
+  "ISource2Client::Connect_1825EDDF0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? FF D3",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B64DB6 (CSource2Client::Connect reads qword_1825EDDF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 39771632,
+    "2000930": 39754976,
+    "2000933": 39792704,
+    "2000940": 39809792
+   },
+   "status": "verified"
+  },
+  "qword_182715788": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 01 48 8B C1 48 89 0D ?? ?? ?? ?? 4C 89 41 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1815A6690 (sub_18008F590 reads qword_182715788)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40982408,
+    "2000930": 40965368,
+    "2000933": 41003112,
+    "2000940": 41020168
+   },
+   "status": "verified"
+  },
+  "dword_182715798": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "8B 05 ?? ?? ?? ?? 45 33 FF 8B C8",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "client!0x180A1799B (sub_180A17980 reads dword_182715798)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40982424,
+    "2000930": 40965384,
+    "2000933": 41003128,
+    "2000940": 41020336
+   },
+   "status": "verified"
+  },
+  "qword_182715828": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B B0 10 02 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180149630 (sub_1801495E0 reads qword_182715828)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40982568,
+    "2000930": 40965528,
+    "2000933": 41003272,
+    "2000940": 41020328
+   },
+   "status": "verified"
+  },
+  "qword_182718D00": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B 10 48 8D 05 ?? ?? ?? ?? 48 89 44 24 28 48 8B 5A 58",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803675B6 (sub_1803675B0 reads qword_182718D00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40996096,
+    "2000930": 40979056,
+    "2000933": 41016800,
+    "2000940": 41033856
+   },
+   "status": "verified"
+  },
+  "qword_182718D10": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 68 48 89 03",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180927A41 (sub_180927A20 reads qword_182718D10)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40996112,
+    "2000930": 40979072,
+    "2000933": 41016816,
+    "2000940": 41033872
+   },
+   "status": "verified"
+  },
+  "qword_182718D28": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 78 48 89 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1809157E9 (sub_1809157E0 reads qword_182718D28)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40996136,
+    "2000930": 40979096,
+    "2000933": 41016840,
+    "2000940": 41033896
+   },
+   "status": "verified"
+  },
+  "qword_182718D30": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 39 0D ?? ?? ?? ?? 0F 44 C1",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180367245 (sub_180367240 reads qword_182718D30)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40996144,
+    "2000930": 40979104,
+    "2000933": 41016848,
+    "2000940": 41033904
+   },
+   "status": "verified"
+  },
+  "qword_182718D40": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 58 84 C0 74 ?? 49 8B 17",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180378455 (sub_1803782B0 reads qword_182718D40)",
+   "tag": "V",
+   "expect": {
+    "2000921": 40996160,
+    "2000930": 40979120,
+    "2000933": 41016864,
+    "2000940": 41033920
+   },
+   "status": "verified"
+  },
+  "unk_18273F080": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC 48 83 EC 28 41 B8 07 00 00 00 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC 48 83 EC 28 41 B8 03 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180145351 (sub_180145340 reads unk_18273F080)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41152640,
+    "2000930": 41135616,
+    "2000933": 41173376,
+    "2000940": 41190432
+   },
+   "status": "verified"
+  },
+  "qword_1827972D8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? 48 8B 4B 18",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1809157F6 (sub_1809157E0 reads qword_1827972D8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41513688,
+    "2000930": 41496664,
+    "2000933": 41534424,
+    "2000940": 41551496
+   },
+   "status": "verified"
+  },
+  "VApplication001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 FF 90 B0 00 00 00 C6 05 ?? ?? ?? ?? 01",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18012D184 (sub_18012D180 reads qword_182797C50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516112,
+    "2000930": 41499088,
+    "2000933": 41536848,
+    "2000940": 41553920
+   },
+   "status": "verified"
+  },
+  "VEngineCvar007": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? B8 FF FF FF FF 44 89 54 24 24",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180148BB0 (sub_180148B00 reads qword_182797C58)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516120,
+    "2000930": 41499096,
+    "2000933": 41536856,
+    "2000940": 41553928
+   },
+   "status": "verified"
+  },
+  "AnimationSystem_001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B F8 48 8B 11 FF 92 C8 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18038E2D6 (sub_18038E250 reads qword_182797C98)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516184,
+    "2000930": 41499160,
+    "2000933": 41536920,
+    "2000940": 41553992
+   },
+   "status": "verified"
+  },
+  "TestScriptMgr001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 39 35 ?? ?? ?? ?? 4C 89 B5 60 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803C8E1C (sub_1803C16D0 reads qword_182797CA8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516200,
+    "2000930": 41499176,
+    "2000933": 41536936,
+    "2000940": 41554008
+   },
+   "status": "verified"
+  },
+  "Localize_001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 15 ?? ?? ?? ?? 48 8B 01 48 83 C4 20 5B 48 FF 60 78 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18075D7C7 (sub_18075D780 reads qword_182797CB8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516216,
+    "2000930": 41499192,
+    "2000933": 41536952,
+    "2000940": 41554024
+   },
+   "status": "verified"
+  },
+  "qword_182797CC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 49 8B D0 4C 8B 41 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180189920 (sub_180189920 reads qword_182797CC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516224,
+    "2000930": 41499200,
+    "2000933": 41536960,
+    "2000940": 41554032
+   },
+   "status": "verified"
+  },
+  "qword_182797CF8": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 15 ?? ?? ?? ?? 4C 8D 0D ?? ?? ?? ?? 4C 89 7C 24 30 4C 8B C5 4C 89 7C 24 28 48 8B CF 4C 89 7C 24 20 FF 15 ?? ?? ?? ?? 84 C0 75 ?? 48 8B 15 ?? ?? ?? ?? 4C 8D 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180165ACF (sub_180165A20 reads qword_182793A78)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516280,
+    "2000930": 41499256,
+    "2000933": 41537016,
+    "2000940": 41554088
+   },
+   "status": "verified",
+   "notes": "locator regenerated 2026-10-10: the old pattern matched twice once overlapping matches are counted"
+  },
+  "SchemaSystem_001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 45 33 C0 48 8B 11 4C 8B 4A 68 48 8B D0 41 FF D1 4C 8B C3 48 8D 54 24 40",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180367A7A (sub_1803679A0 reads qword_182797D20)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516320,
+    "2000930": 41499296,
+    "2000933": 41537056,
+    "2000940": 41554128
+   },
+   "status": "verified"
+  },
+  "qword_182797D30": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 3D ?? ?? ?? ?? 74 ?? BA 76 6D 61 74 48 8D 4C 24 40",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18018A297 (sub_18018A180 reads qword_182797D30)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516336,
+    "2000930": 41499312,
+    "2000933": 41537072,
+    "2000940": 41554144
+   },
+   "status": "verified"
+  },
+  "qword_182797D48": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 41 B0 01",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18016ECB8 (sub_18016DD70 reads qword_182797D48)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516360,
+    "2000930": 41499336,
+    "2000933": 41537096,
+    "2000940": 41554168
+   },
+   "status": "verified"
+  },
+  "qword_182797D50": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 60 48 89 AB B8 04 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180E2D985 (sub_180E2D900 reads qword_182797D50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516368,
+    "2000930": 41499344,
+    "2000933": 41537104,
+    "2000940": 41554176
+   },
+   "status": "verified"
+  },
+  "qword_182797D58": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 98 01 00 00 49 8B 57 40",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18099C2E4 (sub_18099C0F0 reads qword_182797D58)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516376,
+    "2000930": 41499352,
+    "2000933": 41537112,
+    "2000940": 41554184
+   },
+   "status": "verified"
+  },
+  "qword_182797D60": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 41 B8 0D 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180161FA9 (CCsgoClientUI::Init reads qword_182797D60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516384,
+    "2000930": 41499360,
+    "2000933": 41537120,
+    "2000940": 41554192
+   },
+   "status": "verified"
+  },
+  "qword_182797D70": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 60 48 8D 15 ?? ?? ?? ?? 48 8B 08 4C 8B 41 10 48 8B C8 41 FF D0 48 8B C8 48 8B 10 48 83 C4 28 48 FF 62 58 CC",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180731C94 (sub_180731C90 reads qword_182797D70)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516400,
+    "2000930": 41499376,
+    "2000933": 41537136,
+    "2000940": 41554208
+   },
+   "status": "verified"
+  },
+  "qword_182797D78": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 BA 44 4E 4D 43",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18038E3A0 (sub_18038E250 reads qword_182797D78)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516408,
+    "2000930": 41499384,
+    "2000933": 41537144,
+    "2000940": 41554216
+   },
+   "status": "verified"
+  },
+  "qword_182797D88": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 68 48 85 C0 75 ?? 48 83 C4 20",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180161F89 (CCsgoClientUI::Init reads qword_182797D88)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516424,
+    "2000930": 41499400,
+    "2000933": 41537160,
+    "2000940": 41554232
+   },
+   "status": "verified"
+  },
+  "IMEManager001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 45 33 C0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B65136 (CSource2Client::Connect reads qword_182797DA0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516448,
+    "2000930": 41499424,
+    "2000933": 41537184,
+    "2000940": 41554256
+   },
+   "status": "verified"
+  },
+  "qword_182797DC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 4D 85 C0 C7 45 D0 04 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180185326 (sub_180184F00 reads qword_182797DC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516480,
+    "2000930": 41499456,
+    "2000933": 41537216,
+    "2000940": 41554288
+   },
+   "status": "verified"
+  },
+  "qword_182797DE0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? F2 0F 10 0A",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803AEAE5 (sub_1803AE980 reads qword_182797DE0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516512,
+    "2000930": 41499488,
+    "2000933": 41537248,
+    "2000940": 41554320
+   },
+   "status": "verified"
+  },
+  "MeshSystem001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 88 00 00 00 48 8B 57 08 48 8B 05 ?? ?? ?? ?? 48 85 D2 74 ?? 48 85 C0 75 ?? 48 85 D2 74 ?? 48 85 C0 74 ?? F0 FF 4A 20 48 83 3D ?? ?? ?? ?? 00 74 ?? 8B 42 20 85 C0 75 ?? 48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 10 48 C7 47 08 00 00 00 00 BA 08 01 00 00 48 8B CF E8 ?? ?? ?? ?? 45 84 FF",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180341DAC (sub_180341AF0 reads qword_182797E00)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516544,
+    "2000930": 41499520,
+    "2000933": 41537280,
+    "2000940": 41554352
+   },
+   "status": "verified"
+  },
+  "g_pSceneSystem_client": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 80 00 00 00 48 8B 53 70 48 8D 73 70",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18015B421 (sub_18015B380 reads g_pSceneSystem_client)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516560,
+    "2000930": 41499536,
+    "2000933": 41537296,
+    "2000940": 41554368
+   },
+   "status": "verified"
+  },
+  "qword_182797E18": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 20 01 00 00 48 8B 0D ?? ?? ?? ?? 48 8D 56 18",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1806FA5E2 (sub_1806FA5D0 reads qword_182797E18)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516568,
+    "2000930": 41499544,
+    "2000933": 41537304,
+    "2000940": 41554376
+   },
+   "status": "verified"
+  },
+  "VScriptManager010": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 68 48 85 C0 74 ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803B402E (sub_1803B4020 reads qword_182797E28)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516584,
+    "2000930": 41499560,
+    "2000933": 41537320,
+    "2000940": 41554392
+   },
+   "status": "verified"
+  },
+  "qword_182797E38": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? FF D3 33 D2",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B6501C (CSource2Client::Connect reads qword_182797E38)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516600,
+    "2000930": 41499576,
+    "2000933": 41537336,
+    "2000940": 41554408
+   },
+   "status": "verified"
+  },
+  "qword_182797E58": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 3D ?? ?? ?? ?? 00 75 ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 83 3D ?? ?? ?? ?? 00 75 ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 83 3D ?? ?? ?? ?? 00 75 ?? 33 D2 48 8D 0D ?? ?? ?? ?? FF D3 48 89 05 ?? ?? ?? ?? 48 83 3D ?? ?? ?? ?? 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 8
+     }
+    ]
+   },
+   "via": "client!0x180B642B9 (CSource2Client::Connect reads qword_182793BD8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516632,
+    "2000930": 41499608,
+    "2000933": 41537368,
+    "2000940": 41554440
+   },
+   "status": "verified",
+   "notes": "locator regenerated 2026-10-10: the old pattern matched twice once overlapping matches are counted"
+  },
+  "qword_182797E60": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C0 75 ?? 48 8B 01 4C 8D 05 ?? ?? ?? ?? C6 44 24 30 00 41 B9 58 00 00 00 C6 44 24 28 01 BA 48 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18014B92B (sub_18014B920 reads qword_182797E60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516640,
+    "2000930": 41499616,
+    "2000933": 41537376,
+    "2000940": 41554448
+   },
+   "status": "verified"
+  },
+  "qword_182797E68": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 89 45 BF",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1807565FA (sub_180756330 reads qword_182797E68)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516648,
+    "2000930": 41499624,
+    "2000933": 41537384,
+    "2000940": 41554456
+   },
+   "status": "verified"
+  },
+  "qword_182797E80": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 FF 90 40 01 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803CD8C9 (sub_1803CD760 reads qword_182797E80)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516672,
+    "2000930": 41499648,
+    "2000933": 41537408,
+    "2000940": 41554480
+   },
+   "status": "verified"
+  },
+  "ToolFramework2_002": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 3D ?? ?? ?? ?? 00 74 ?? 48 83 3D ?? ?? ?? ?? 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 8
+     }
+    ]
+   },
+   "via": "client!0x180215AE1 (sub_180214C60 reads qword_182797E88)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516680,
+    "2000930": 41499656,
+    "2000933": 41537416,
+    "2000940": 41554488
+   },
+   "status": "verified"
+  },
+  "qword_182797EB0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 80 65 07 EF",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1801C194E (sub_1801C17B0 reads qword_182797EB0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516720,
+    "2000930": 41499696,
+    "2000933": 41537456,
+    "2000940": 41554528
+   },
+   "status": "verified"
+  },
+  "Source2Client002": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 0F 57 C9 66 0F 7F 45 A0",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803AE9E8 (sub_1803AE980 reads qword_182797ED8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516760,
+    "2000930": 41499736,
+    "2000933": 41537496
+   },
+   "status": "stale"
+  },
+  "Source2Server001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 4C 8D 45 07 4C 89 44 24 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180A4E566 (sub_180A4E250 reads qword_182797EF0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516784,
+    "2000930": 41499760,
+    "2000933": 41537520,
+    "2000940": 41554592
+   },
+   "status": "verified"
+  },
+  "Source2EngineToClient001_182797F18": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B D6 48 8B 01 FF 90 E8 04 00 00 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803CD885 (sub_1803CD760 reads qword_182797F18)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516824,
+    "2000930": 41499800,
+    "2000933": 41537560,
+    "2000940": 41554632
+   },
+   "status": "verified"
+  },
+  "Source2EngineToServer001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 58 84 C0 74 ?? 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803B3D5D (sub_1803B3BE0 reads qword_182797F20)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516832,
+    "2000930": 41499808,
+    "2000933": 41537568,
+    "2000940": 41554640
+   },
+   "status": "verified"
+  },
+  "Source2EngineToClientStringTable001_182797F30": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 50 70 48 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180DAE877 (sub_180DAE860 reads qword_182797F30)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516848,
+    "2000930": 41499824,
+    "2000933": 41537584,
+    "2000940": 41554656
+   },
+   "status": "verified"
+  },
+  "EngineServiceMgr001": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 E8 00 00 00 48 8B F8 48 8B 08 48 8B 59 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803677CB (sub_180367640 reads qword_182797F40)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516864,
+    "2000930": 41499840,
+    "2000933": 41537600,
+    "2000940": 41554672
+   },
+   "status": "verified"
+  },
+  "qword_182797F48": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 4C 8B C3 48 8B D7 48 8B 01 FF 50 68",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180CEFD87 (sub_180CEFBC0 reads qword_182797F48)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516872,
+    "2000930": 41499848,
+    "2000933": 41537608,
+    "2000940": 41554680
+   },
+   "status": "verified"
+  },
+  "qword_182797F50": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 B8 00 00 00 45 85 F6",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180A4E9A9 (sub_180A4E250 reads qword_182797F50)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516880,
+    "2000930": 41499856,
+    "2000933": 41537616,
+    "2000940": 41554688
+   },
+   "status": "verified"
+  },
+  "qword_182797F58": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 00 01 00 00 84 C0 74 ?? 48 8B 0D ?? ?? ?? ?? 48 8B 01",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18000445D (sub_180003140 reads qword_182797F58)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516888,
+    "2000930": 41499864,
+    "2000933": 41537624,
+    "2000940": 41554696
+   },
+   "status": "verified"
+  },
+  "qword_182797F60": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 3D ?? ?? ?? ?? 48 8B 1D ?? ?? ?? ?? 48 85 C0 75 ?? 48 8B 03 4C 8D 05 ?? ?? ?? ?? 40 88 74 24 30",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180B26D54 (sub_180B26D30 reads qword_182797F60)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516896,
+    "2000930": 41499872,
+    "2000933": 41537632,
+    "2000940": 41554704
+   },
+   "status": "verified"
+  },
+  "qword_182797F68": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? 48 8B 01 FF 90 B8 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803F29CA (sub_1803F2900 reads qword_182797F68)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516904,
+    "2000930": 41499880,
+    "2000933": 41537640,
+    "2000940": 41554712
+   },
+   "status": "verified"
+  },
+  "qword_182797FB0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 0D ?? ?? ?? ?? 48 8B 01 FF 90 10 01 00 00 48 85 C0 75 ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1803CDB17 (sub_1803CD760 reads qword_182797FB0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41516976,
+    "2000930": 41499952,
+    "2000933": 41537712,
+    "2000940": 41554784
+   },
+   "status": "verified"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10 48 8B C1 48 89 0D ?? ?? ?? ?? C3 CC CC CC 4C 8B 0D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x1819C8DE7 (InterfaceReg_Source2ClientConfig001_init reads qword_182798948)",
+   "tag": "V",
+   "expect": {
+    "2000921": 41519432,
+    "2000930": 41502408,
+    "2000933": 41540168,
+    "2000940": 41557240
+   },
+   "status": "verified"
+  },
+  "CSoundEmitterSystem": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CSoundEmitterSystem"
+   },
+   "via": "client!0x181C765C8 (off_181C765C8)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 29844936,
+    "2000930": 29827440,
+    "2000933": 29852064,
+    "2000940": 29869184
+   },
+   "status": "verified"
+  },
+  "CG_ENTITY_CHUNKS": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B 0D ?? ?? ?? ?? 4C 89 74 24 30 4C 8B F7 0F 1F 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x18015CE1E (sub_18015CDD0 reads qword_182366770); entity lookups read *(QWORD*)(chunks + 8*((h & 0x7FFF) >> 9)) + 112*(h & 0x1FF) at client!0x18020BF44, 0x18016AD41, 0x18016B110",
+   "tag": "V",
+   "bridge": "CG_ENTITY_CHUNKS",
+   "notes": "pointer to the CEntityIdentity chunk-pointer array (512 identities per chunk; identity size = schema CEntityIdentity m_nSize) (research: cs2-mcp/client-mcp/research/game-state.md)",
+   "expect": {
+    "2000930": 37119856,
+    "2000933": 37157488,
+    "2000940": 37174256
+   }
+  },
+  "CG_LOCAL_CONTROLLERS": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? 33 F6 4C 89 34 F9",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180932FA7 (sub_180932F20 = local controller registration: qword_1825338A8[splitSlot] = controller after IVEngineClient2 slot 34 GetLocalPlayer(&out, splitSlot) == entindex-1)",
+   "tag": "V",
+   "bridge": "CG_LOCAL_CONTROLLERS",
+   "notes": "CBasePlayerController* per split-screen slot (slot 0 = local player) (research: cs2-mcp/client-mcp/research/game-state.md)",
+   "expect": {
+    "2000930": 39008424,
+    "2000933": 39046008,
+    "2000940": 39064888
+   }
+  },
+  "CG_GAME_ENTITY_SYSTEM": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 8B B0 10 02 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "client!0x180149560 (sub_180149510 reads qword_182711598 = CGameEntitySystem*; also mov rbx, cs:qword_182711598 at client!0x180A16C3B in CGameEntitySystem init)",
+   "tag": "V",
+   "bridge": "CG_GAME_ENTITY_SYSTEM",
+   "notes": "CGameEntitySystem* (diagnostics only; lookups use CG_ENTITY_CHUNKS) (research: cs2-mcp/client-mcp/research/game-state.md)",
+   "expect": {
+    "2000930": 40965528,
+    "2000933": 41003272,
+    "2000940": 41020328
+   }
+  },
+  "CVS_INPUT_MAKE_WEAPON_SELECTION": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CV_CSGOINPUT_VT",
+    "slot": 9
+   },
+   "via": "client!0x180B77040 (CCSGOInput and CClientInput vtable slot 9): MakeWeaponSelection(this, splitSlot, C_BasePlayerWeapon*) - for splitSlot 0 stores the weapon's entity handle at this+0x694 (tick accumulator +0x46C); CreateMove (client!0x180B64E60) resolves it and writes CBaseUserCmdPB.weaponselect (base+104, hasbit 0x400)",
+   "tag": "V",
+   "bridge": "CVS_INPUT_MAKE_WEAPON_SELECTION",
+   "sdk": "S2_SLOT_CClientInput_MakeWeaponSelection",
+   "notes": "select a specific held weapon through the usercmd weaponselect path (what slotN ends in); CS2 has no 'use <weapon>' command (research: cs2-mcp/client-mcp/research/game-state.md)",
+   "expect": {
+    "2000930": 12021824,
+    "2000933": 12025808,
+    "2000940": 12032128
+   }
+  },
+  "CCONST_IDENTITY_CHUNK_BITS": {
+   "kind": "const",
+   "via": "bridge/mcp_bridge_game.inc gs_ident (chunk = chunks[index / S2_CONST_MAX_ENTITIES_IN_LIST]; slot index & (512-1); \"512 CEntityIdentity per chunk\")",
+   "tag": "V",
+   "expect": {
+    "2000930": 9,
+    "2000933": 9,
+    "2000940": 9
+   },
+   "status": "verified",
+   "notes": "CEntityIdentity chunk geometry: 512 identities per chunk = 1<<9, mask 0x1FF. A measurement only (no bridge macro, nothing emitted): the bridge uses upstream's MAX_ENTITIES_IN_LIST (S2_CONST_MAX_ENTITIES_IN_LIST) and sdkcheck.py holds `1 << this == S2_CONST_MAX_ENTITIES_IN_LIST` (id: row, PASS on linux where libclient.json measures the shift, LITERAL SKIP here); the 0x8000 identity-index bound is upstream const.h",
+   "value": 9
+  },
+  "CVC_INPUT_VT_SLOTS": {
+   "kind": "const",
+   "sdk": "S2_VTLEN_CClientInput",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CV_CSGOINPUT_VT"
+   },
+   "via": "client!0x181C97B28 (??_7CCSGOInput@@6B@ primary vftable: 33 .text slot pointers from the first slot to the next COL pointer; the bridge copies this vtable, mcp_bridge.c:2344)",
+   "tag": "V",
+   "expect": {
+    "2000930": 33,
+    "2000933": 33,
+    "2000940": 33
+   },
+   "status": "verified"
+  },
+  "COFF_BUTTON_INPUTVALUE": {
+   "kind": "offset",
+   "sdk": "S2_OFF_ClientInputButton_t_m_InputValue",
+   "via": "bridge/mcp_bridge.c:2362-2364 (in_btn_name: CInputValue inside a client button object at btn+8, iv+0 = name; same +8 passed to g_inApply at :2398 and :2444)",
+   "tag": "V",
+   "expect": {
+    "2000930": 8,
+    "2000933": 8,
+    "2000940": 8
+   },
+   "status": "verified",
+   "value": 8,
+   "notes": "CInputValue at +8 inside a client button object (class name not recovered; accessed via the CCSGOInput button table, COFF_INPUT_BUTTONS)"
+  },
+  "CClientInput": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CClientInput"
+   },
+   "via": "client!0x181C5AE00 (??_7CClientInput@@6B@ primary vftable: the destructor plus 32 virtuals, 33 slots)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 29732352,
+    "2000933": 29756944,
+    "2000940": 29773616
+   },
+   "notes": "CClientInput, the base of CCSGOInput; sdkcheck.py compares its table length with the generated CClientInput (s2sdk-types RE8 section 3.1)",
+   "status": "verified"
+  },
+  "CCSGOInput::IKeybindChangeListener": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGOInput",
+    "col_offset": 2944
+   },
+   "via": "client!0x181C97C38 (CCSGOInput's IKeybindChangeListener subobject table, mdisp +0xB80)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 29981752,
+    "2000933": 30006320,
+    "2000940": 30023008
+   },
+   "notes": "one-slot secondary table of CCSGOInput (RE8 section 3.2)",
+   "status": "verified"
+  },
+  "CCSGOInput::IInputHandler": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CCSGOInput",
+    "col_offset": 2952
+   },
+   "via": "client!0x181C97C48 (CCSGOInput's IInputHandler subobject table, mdisp +0xB88)",
+   "tag": "RTTI",
+   "expect": {
+    "2000930": 29981768,
+    "2000933": 30006336,
+    "2000940": 30023024
+   },
+   "notes": "one-slot secondary table of CCSGOInput (RE8 section 3.2)",
+   "status": "verified"
+  }
+ }
+}

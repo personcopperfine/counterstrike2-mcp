@@ -1,0 +1,5 @@
+// Fixture: a '{ … }' metadata block that never closes is a fatal Parse error at the block's own
+// line (4 here, on the '[' line so the block opens there): the raw span scan must stop, not spin.
+@PointClass base(Targetname) = broken_meta
+[ grouped(integer) { group="never closed"
+]

@@ -1,0 +1,395 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:11:04 -0500
+Subject: [PATCH 39/47] Add CMapAtom, CMapPoint & CMapNode
+
+Verified against CS2 2000930 (win64).
+---
+ public/mapdoclib/mapnode.h | 379 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 379 insertions(+)
+ create mode 100644 public/mapdoclib/mapnode.h
+
+diff --git a/public/mapdoclib/mapnode.h b/public/mapdoclib/mapnode.h
+new file mode 100644
+index 00000000..93d4da60
+--- /dev/null
++++ b/public/mapdoclib/mapnode.h
+@@ -0,0 +1,379 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Base classes of the nodes of a Hammer map document
++//
++//===========================================================================//
++
++#ifndef MAPNODE_H
++#define MAPNODE_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "datamodel/dmattribute.h"
++#include "datamodel/dmelement.h"
++#include "mathlib/vector.h"
++#include "mathlib/mathlib.h"
++#include "mathlib/vmatrix.h"
++#include "color.h"
++#include "tier0/utlstring.h"
++#include "tier0/utlvector.h"
++#include "tier0/platform.h"
++#include "toolutils2/toolattr.h"
++#include "toolutils2/undohistory.h"
++
++class CMapNode;
++class ITransformationBaseline;
++
++// AMNOTE: Name and layout not known, 8 bytes
++struct MapNodeUnk8_t
++{
++	uint8 m_unk001[8];
++};
++
++// AMNOTE: Name and layout not known, 4 bytes
++struct MapNodeUnk4_t
++{
++	uint8 m_unk001[4];
++};
++
++abstract_class IToolRenderCallbacks
++{
++public:
++	virtual void unk001( void *, void *, void * ) = 0;
++	virtual void unk002( void * ) = 0;
++	virtual void unk003( void *, void *, void * ) = 0;
++	virtual void unk004( void * ) = 0;
++	virtual void unk005( void * ) = 0;
++	virtual void unk006( float ) = 0;
++};
++
++abstract_class IHitTestable
++{
++public:
++	virtual void unk001( void * ) = 0;
++	virtual bool unk002() = 0;
++	virtual bool unk003() = 0;
++	virtual bool unk004() = 0;
++	virtual void *unk005() = 0;
++	virtual void unk006() = 0;
++	virtual bool unk007() = 0;
++	virtual void *unk008() = 0;
++};
++
++abstract_class ITransformable
++{
++public:
++	virtual void unk001( int, int ) = 0;
++	virtual void unk002() = 0;
++	// AMNOTE: Allocates a snapshot of the transform
++	virtual ITransformationBaseline *unk003() = 0;
++	virtual void unk004( ITransformationBaseline * ) = 0;
++};
++
++abstract_class IMapNodeToolAttrRoot : public IToolAttr_Table
++{
++public:
++	// AMNOTE: The node this table belongs to
++	virtual CMapNode *unk011() = 0;
++};
++
++abstract_class IRaytraceEnvironmentOwner
++{
++public:
++	virtual void *unk001() = 0;
++	virtual bool unk002() = 0;
++	virtual void unk003( void * ) = 0;
++	virtual void unk004( void * ) = 0;
++	virtual void unk005( void *, void * ) = 0;
++	virtual Color unk006() = 0;
++	virtual int unk007() = 0;
++};
++
++class CMapAtom : public CDmElement
++{
++public:
++	virtual void unk011() = 0;
++	virtual void unk012( int ) = 0;
++
++public:
++	// AMNOTE: Taken from a global counter on construction
++	int m_unk011;
++	uint8 m_unk012[4];
++};
++
++class CMapPoint : public CMapAtom
++{
++public:
++	virtual void SetOrigin( const Vector &vecOrigin ) = 0;
++	// AMNOTE: Snaps components below 0.001 to 0 and keeps the yaw in [0, 360)
++	virtual void SetAngles( const QAngle &angAngles ) = 0;
++	virtual void SetScales( const Vector &vecScales ) = 0;
++	// AMNOTE: Rotation and translation only, the scales are not applied
++	virtual void GetWorldTransform( matrix3x4_t &matrix ) = 0;
++	// AMNOTE: The inverse of GetWorldTransform
++	virtual void unk121( matrix3x4_t & ) = 0;
++	// AMNOTE: GetWorldTransform with the scales applied when unk127 is true
++	virtual void unk122( matrix3x4_t & ) = 0;
++	// AMNOTE: The inverse of unk122
++	virtual void unk123( matrix3x4_t & ) = 0;
++	virtual void unk124() = 0;
++	// AMNOTE: Transforms the origin by the matrix
++	virtual void unk125( const VMatrix &, bool ) = 0;
++	virtual void unk126( void * ) = 0;
++	virtual bool unk127() = 0;
++
++public:
++	Vector m_Origin;
++	QAngle m_Angles;
++	Vector m_Scales;
++};
++
++// AMNOTE: Incomplete class, only the parent and the children are known
++class CMapNode : public CMapPoint, public IUndoable, public IToolRenderCallbacks, public IHitTestable, public ITransformable, public IMapNodeToolAttrRoot, public IToolAttrNotifyRoot, public IRaytraceEnvironmentOwner
++{
++public:
++	virtual const void *unk031() = 0;
++	virtual void unk032( CUtlVector< IBaseToolAttr * > * ) = 0;
++	virtual int unk033() = 0;
++	virtual void *unk034( const char * ) = 0;
++	virtual bool unk035() = 0;
++	virtual bool unk036() = 0;
++	virtual bool unk037() = 0;
++	virtual bool unk038() = 0;
++	virtual bool unk039() = 0;
++	virtual bool unk0310() = 0;
++	// AMNOTE: NULL unless this is the subclass that returns itself
++	virtual void *unk0311() = 0;
++	// AMNOTE: NULL unless this is the subclass that returns itself
++	virtual void *unk0312() = 0;
++	virtual bool unk0313( CUtlString * ) = 0;
++	virtual bool unk0314( CUtlString * ) = 0;
++	virtual bool unk0315() = 0;
++	virtual bool unk0316() = 0;
++	virtual bool unk0317() = 0;
++	virtual bool unk0318() = 0;
++	virtual bool unk0319() = 0;
++	virtual bool unk0320() = 0;
++	virtual bool unk0321() = 0;
++	virtual bool unk0322() = 0;
++	virtual bool unk0323() = 0;
++	virtual bool unk0324() = 0;
++	virtual bool unk0325() = 0;
++	virtual bool unk0326() = 0;
++	virtual void unk0327( void * ) = 0;
++	virtual bool unk0328() = 0;
++	virtual bool unk0329() = 0;
++	// AMNOTE: Detaches pChild from its parent first. Returns false for NULL, a cycle or the current parent
++	virtual bool AddChild( CMapNode *pChild ) = 0;
++	virtual void unk131( CMapNode *, bool ) = 0;
++	virtual bool unk132() = 0;
++	virtual bool unk133( CMapNode * ) = 0;
++	virtual bool unk134( CMapNode * ) = 0;
++	virtual int unk135( CMapNode * ) = 0;
++	virtual void SetParent( CMapNode *pParent ) = 0;
++	virtual void unk231() = 0;
++	virtual void unk232( void *, void * ) = 0;
++	virtual void unk233( void *, void *, void * ) = 0;
++	virtual bool unk234() = 0;
++	virtual void unk235( bool ) = 0;
++	virtual void unk236( void * ) = 0;
++	virtual void unk237( void * ) = 0;
++	virtual bool unk238( void * ) = 0;
++	virtual void unk239( void * ) = 0;
++	virtual void unk2310( void * ) = 0;
++	virtual int unk2311() = 0;
++	virtual bool unk2312() = 0;
++	virtual void unk2313( void *, void *, void * ) = 0;
++	virtual void unk2314( void *, void *, void * ) = 0;
++	virtual void unk2315( void *, void * ) = 0;
++	virtual void unk2316( void *, void * ) = 0;
++	virtual void unk2317( void *, int ) = 0;
++	virtual void unk2318( void * ) = 0;
++	virtual void unk2319() = 0;
++	virtual void unk2320( void * ) = 0;
++	virtual void unk2321( void * ) = 0;
++	virtual void unk2322( void *, int ) = 0;
++	virtual void unk2323() = 0;
++	virtual void unk2324( void * ) = 0;
++	virtual void unk2325( void *, bool ) = 0;
++	virtual void unk2326( void * ) = 0;
++	virtual bool unk2327() = 0;
++	virtual bool unk2328( void *, void *, void * ) = 0;
++	virtual bool unk2329() = 0;
++	virtual void unk2330( void *, void *, void *, void *, void * ) = 0;
++	virtual void *unk2331( int ) = 0;
++	virtual bool unk2332( void *, int ) = 0;
++	virtual bool unk2333() = 0;
++	virtual bool unk2334() = 0;
++	virtual bool unk2335() = 0;
++	virtual bool unk2336() = 0;
++	virtual void unk2337( void *, int ) = 0;
++	virtual bool unk2338() = 0;
++	virtual int unk2339() = 0;
++	virtual void unk2340( void * ) = 0;
++	virtual void unk2341() = 0;
++	virtual bool unk2342() = 0;
++	virtual void unk2343( void *, void * ) = 0;
++	virtual bool unk2344( int ) = 0;
++	virtual bool unk2345() = 0;
++	virtual bool unk2346() = 0;
++	virtual bool unk2347() = 0;
++	virtual bool unk2348() = 0;
++	virtual bool unk2349() = 0;
++	virtual bool unk2350() = 0;
++	virtual bool unk2351() = 0;
++	virtual bool unk2352() = 0;
++	virtual bool unk2353() = 0;
++	virtual bool unk2354() = 0;
++	virtual bool unk2355() = 0;
++	// AMNOTE: Name of the node class, "MAPCLASS_ERROR" in the base
++	virtual const char *unk2356() = 0;
++	// AMNOTE: Compares the argument with the node class names this class answers to
++	virtual bool unk2357( const char * ) = 0;
++	virtual const void *unk2358() = 0;
++	virtual const void *unk2359() = 0;
++	virtual void unk2360( void *, bool ) = 0;
++	virtual bool unk2361() = 0;
++	virtual void unk2362() = 0;
++	virtual void unk2363() = 0;
++	virtual bool unk2364() = 0;
++	virtual bool unk2365() = 0;
++	virtual bool unk2366() = 0;
++	virtual bool unk2367() = 0;
++	virtual bool unk2368() = 0;
++	virtual bool unk2369( void *, void *, void *, void * ) = 0;
++	virtual bool unk2370() = 0;
++	virtual void unk2371( bool ) = 0;
++	virtual bool unk2372() = 0;
++	virtual bool unk2373() = 0;
++	virtual bool unk2374() = 0;
++	virtual bool unk2375() = 0;
++	virtual bool unk2376() = 0;
++	// AMNOTE: Moves the origin; a mesh keeps its vertices where they are in the world
++	virtual void SetPivotPosition( const Vector &vecPivot ) = 0;
++	virtual Vector unk331() = 0;
++	virtual bool unk332() = 0;
++	virtual void unk333( float *, float *, void * ) = 0;
++	virtual bool unk334( bool ) = 0;
++	virtual bool unk335() = 0;
++	virtual bool unk336() = 0;
++	virtual int unk337() = 0;
++	virtual int unk338() = 0;
++	virtual bool unk339( void *, int ) = 0;
++	virtual bool unk3310() = 0;
++	virtual void unk3311( void *, void * ) = 0;
++	virtual MapNodeUnk8_t unk3312( void * ) = 0;
++	virtual void unk3313( void *, void *, void * ) = 0;
++	virtual void unk3314( bool, void * ) = 0;
++	virtual void unk3315( int ) = 0;
++	virtual void *unk3316( void *, void * ) = 0;
++	virtual void unk3317( const char *, void * ) = 0;
++	virtual void unk3318( void *, void * ) = 0;
++	virtual void *unk3319( int ) = 0;
++	virtual void *unk3320() = 0;
++	virtual void unk3321( void *, void * ) = 0;
++	virtual void unk3322( void *, int ) = 0;
++	virtual void unk3323( void *, void * ) = 0;
++	virtual void unk3324( void *, void * ) = 0;
++	virtual void unk3325( void *, void *, bool ) = 0;
++	virtual void unk3326() = 0;
++	virtual void unk3327( void * ) = 0;
++	virtual void unk3328( void * ) = 0;
++	virtual bool unk3329( void * ) = 0;
++	virtual bool unk3330( void * ) = 0;
++	virtual void unk3331( void *, void *, void *, bool ) = 0;
++	virtual void unk3332( void *, void *, void * ) = 0;
++	virtual void *unk3333( void *, void * ) = 0;
++	virtual void unk3334( float * ) = 0;
++	virtual void unk3335( void * ) = 0;
++	virtual bool unk3336() = 0;
++	virtual bool unk3337( void * ) = 0;
++	virtual void unk3338() = 0;
++	virtual int unk3339() = 0;
++	virtual void unk3340( int ) = 0;
++	virtual void unk3341( int ) = 0;
++	virtual void unk3342() = 0;
++	virtual bool unk3343( void *, void * ) = 0;
++	virtual bool unk3344( void *, void * ) = 0;
++	virtual bool unk3345() = 0;
++	virtual int unk3346() = 0;
++	virtual void unk3347( void * ) = 0;
++	virtual void unk3348( float *, float * ) = 0;
++	virtual void unk3349( void * ) = 0;
++	virtual void unk3350( void * ) = 0;
++	virtual void unk3351( void *, void *, void *, void *, void *, void *, void *, void * ) = 0;
++	// AMNOTE: The parent unless a subclass has its own
++	virtual CMapNode *unk3352() = 0;
++	virtual void unk3353( void * ) = 0;
++	virtual bool unk3354() = 0;
++	virtual Color unk3355() = 0;
++	virtual void unk3356( int ) = 0;
++	virtual Color unk3357() = 0;
++	virtual void unk3358() = 0;
++	virtual void unk3359( int ) = 0;
++	virtual bool unk3360( int, int, void * ) = 0;
++	virtual void unk3361( void *, void * ) = 0;
++	virtual bool unk3362( void * ) = 0;
++	virtual bool unk3363( void * ) = 0;
++	virtual bool unk3364( void * ) = 0;
++	virtual void unk3365( void *, void *, bool ) = 0;
++	virtual Vector unk3366( int ) = 0;
++	virtual const void *unk3367() = 0;
++	virtual int unk3368() = 0;
++	virtual const void *unk3369() = 0;
++	virtual const void *unk3370() = 0;
++	virtual const void *unk3371() = 0;
++	virtual const void *unk3372() = 0;
++	virtual const void *unk3373() = 0;
++	virtual void unk3374( void *, void * ) = 0;
++	virtual float unk3375() = 0;
++	virtual float unk3376() = 0;
++	virtual bool unk3377( void * ) = 0;
++	virtual void unk3378( void * ) = 0;
++	virtual bool unk3379() = 0;
++	virtual void unk3380( void * ) = 0;
++	virtual void unk3381( void * ) = 0;
++	virtual void unk3382() = 0;
++	virtual void unk3383( void *, void * ) = 0;
++	virtual bool unk3384( void * ) = 0;
++	virtual void unk3385( void *, void *, void * ) = 0;
++	virtual float unk3386() = 0;
++	virtual void unk3387( void *, void *, void *, void *, void *, void *, void *, void * ) = 0;
++	virtual bool unk3388() = 0;
++	virtual void *unk3389() = 0;
++	virtual int unk3390() = 0;
++	virtual bool unk3391( void * ) = 0;
++	virtual void unk3392( void * ) = 0;
++	virtual void unk3393( void * ) = 0;
++	virtual void unk3394() = 0;
++	virtual void unk3395() = 0;
++	virtual void unk3396( int ) = 0;
++	virtual void unk3397( int ) = 0;
++	virtual bool unk3398( const char * ) = 0;
++	virtual bool unk3399( const char * ) = 0;
++	virtual bool unk33100() = 0;
++	virtual bool unk33101() = 0;
++	virtual bool unk33102() = 0;
++	virtual void unk33103() = 0;
++	virtual void unk33104( const char *, void *, void * ) = 0;
++	virtual void unk33105( void * ) = 0;
++	virtual void *unk33106( void * ) = 0;
++	virtual void unk33107( void * ) = 0;
++	virtual void *unk33108( void * ) = 0;
++	virtual const void *unk33109() = 0;
++	virtual void unk33110( void * ) = 0;
++	virtual void unk33111( void *, int, void * ) = 0;
++
++public:
++	uint8 m_unk031[152];
++	CMapNode *m_pParent;
++	uint8 m_unk131[88];
++	CUtlVector< DmElementHandle_t > m_Children;
++	uint8 m_unk231[8];
++	// AMNOTE: The datamodel attribute of m_Children
++	CDmAttribute *m_unk232;
++	uint8 m_unk233[632];
++};
++
++#endif // MAPNODE_H

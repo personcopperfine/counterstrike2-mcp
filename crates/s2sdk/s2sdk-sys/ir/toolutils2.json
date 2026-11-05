@@ -1,0 +1,3122 @@
+{
+  "enums": [],
+  "platforms": [
+    "windows"
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk001",
+          "offset": 8,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": true,
+      "header": "public/toolutils2/ibindtarget.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "IBindTarget",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 16
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/itoolsresourcelistener.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IToolsResourceListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/undohistory.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IUndoable",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/undohistory.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IUndoListener",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IUndoable",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/toolutils2/undohistory.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "CBaseUndoable",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<void *>",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUndoHistory *",
+          "name": "m_unk002",
+          "offset": 24,
+          "rust_type": "*mut CUndoHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nSerial",
+          "offset": 32,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "char[128]",
+          "name": "m_szName",
+          "offset": 36,
+          "rust_type": "[::core::ffi::c_char; 128]",
+          "size": 128
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_unk101",
+          "offset": 164,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_unk102",
+          "offset": 165,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk103",
+          "offset": 168,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[16]",
+          "name": "m_unk104",
+          "offset": 176,
+          "rust_type": "[u8; 16]",
+          "size": 16
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/undohistory.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSerial",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_szName",
+            "offset": 36,
+            "size": 128
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 164,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 165,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk103",
+            "offset": 168,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk104",
+            "offset": 176,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 192
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSerial",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_szName",
+            "offset": 36,
+            "size": 128
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 164,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 165,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk103",
+            "offset": 168,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk104",
+            "offset": 176,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 192
+      },
+      "name": "UndoGroup_t",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 192
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<UndoGroup_t *>",
+          "name": "m_unk001",
+          "offset": 8,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[96]",
+          "name": "m_unk002",
+          "offset": 32,
+          "rust_type": "[u8; 96]",
+          "size": 96
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUndoHistory *",
+          "name": "m_pPartner",
+          "offset": 128,
+          "rust_type": "*mut CUndoHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[1064]",
+          "name": "m_unk101",
+          "offset": 136,
+          "rust_type": "[u8; 1064]",
+          "size": 1064
+        }
+      ],
+      "has_vptr": true,
+      "header": "public/toolutils2/undohistory.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 32,
+            "size": 96
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pPartner",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 136,
+            "size": 1064
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1200
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 32,
+            "size": 96
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pPartner",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 136,
+            "size": 1064
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1200
+      },
+      "name": "CUndoHistory",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1200
+    },
+    {
+      "align": 1,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[40]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 40]",
+          "size": 40
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/toolattr.h",
+      "itanium": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 40
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 40
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 1,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 40
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "name": "ToolAttrUnk_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 40
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/toolattr.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IToolAttr_Table",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/toolattr.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IToolAttrNotifyRoot",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "IToolAttr_Table",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/toolutils2/toolattr.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "CBaseKV3DataWithFGDClass",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CBaseEditorApp *",
+          "name": "m_unk001",
+          "offset": 8,
+          "rust_type": "*mut CBaseEditorApp",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[9]",
+          "name": "m_unk002",
+          "offset": 16,
+          "rust_type": "[u8; 9]",
+          "size": 9
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_bIsNew",
+          "offset": 25,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[62]",
+          "name": "m_unk101",
+          "offset": 26,
+          "rust_type": "[u8; 62]",
+          "size": 62
+        }
+      ],
+      "has_vptr": true,
+      "header": "public/toolutils2/baseeditorsession.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 16,
+            "size": 9
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bIsNew",
+            "offset": 25,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 26,
+            "size": 62
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 88
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 16,
+            "size": 9
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bIsNew",
+            "offset": 25,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 26,
+            "size": 62
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 88
+      },
+      "name": "CBaseEditorSession",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 88
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseEditorSession",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_Path",
+          "offset": 88,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_bModified",
+          "offset": 96,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_unk111",
+          "offset": 97,
+          "rust_type": "bool",
+          "size": 1
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorsession.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Path",
+            "offset": 88,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bModified",
+            "offset": 96,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk111",
+            "offset": 97,
+            "size": 1
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 104
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Path",
+            "offset": 88,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bModified",
+            "offset": 96,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk111",
+            "offset": 97,
+            "size": 1
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 104
+      },
+      "name": "CSimpleBaseEditorSession",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 104
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CSimpleBaseEditorSession",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CBaseEditorSharedWindowApp *",
+          "name": "m_unk021",
+          "offset": 104,
+          "rust_type": "*mut CBaseEditorSharedWindowApp",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorsession.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 104,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 112
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk021",
+            "offset": 104,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 112
+      },
+      "name": "CSimpleSharedWindowEditorSession",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 112
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseToolSystem2",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IBindTarget",
+          "offset": 40,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk001",
+          "offset": 56,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_unk002",
+          "offset": 64,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CBaseEditorSession *",
+          "name": "m_pActiveSession",
+          "offset": 72,
+          "rust_type": "*mut CBaseEditorSession",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<CBaseEditorSession *>",
+          "name": "m_Sessions",
+          "offset": 80,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[307]",
+          "name": "m_unk101",
+          "offset": 104,
+          "rust_type": "[u8; 307]",
+          "size": 307
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_bInOpenFile",
+          "offset": 411,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[68]",
+          "name": "m_unk201",
+          "offset": 412,
+          "rust_type": "[u8; 68]",
+          "size": 68
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 56,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pActiveSession",
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Sessions",
+            "offset": 80,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 104,
+            "size": 307
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bInOpenFile",
+            "offset": 411,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 412,
+            "size": 68
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 480
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "base_offsets": [
+          0,
+          48
+        ],
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pActiveSession",
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Sessions",
+            "offset": 88,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 112,
+            "size": 307
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bInOpenFile",
+            "offset": 419,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk201",
+            "offset": 420,
+            "size": 68
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 488
+      },
+      "name": "CBaseEditorApp",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 480
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseEditorApp",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 480
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 488
+      },
+      "name": "CBaseEditorSharedWindowApp",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 480
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseEditorApp",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 480
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 488
+      },
+      "name": "CBaseEditorSeparateWindowApp",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 480
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlStringToken",
+          "name": "m_Token",
+          "offset": 0,
+          "rust_type": "CUtlStringToken",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pszName",
+          "offset": 8,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/toolnodetypename.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Token",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszName",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Token",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszName",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "CToolNodeTypeName",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 16,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[80]",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "[u8; 80]",
+          "size": 80
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CFrustum",
+          "name": "m_Frustum",
+          "offset": 80,
+          "rust_type": "CFrustum",
+          "size": 1056
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/itoolrenderableviewhost.h",
+      "itanium": {
+        "align": 16,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 80
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Frustum",
+            "offset": 80,
+            "size": 1056
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1136
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 16,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 80
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Frustum",
+            "offset": 80,
+            "size": 1056
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 1136
+      },
+      "name": "ToolCameraUnk_t",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 1136
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "u64",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/toolutils2/itoolrenderableviewhost.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "ToolRenderableViewHostUnk8_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/itoolrenderableviewhost.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IToolRenderableViewHost",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [],
+      "has_vptr": true,
+      "header": "public/toolutils2/ibindablecamerascene.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 8
+      },
+      "name": "IBindableCameraScene",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CTier3AppSystem<IToolSystem2>",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/toolutils2/baseeditorapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 48
+      },
+      "name": "CBaseToolSystem2",
+      "opaque": true,
+      "pass_in_registers": false,
+      "size": 40
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IBindTarget",
+      "header": "public/toolutils2/ibindtarget.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~IBindTarget",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "unk104",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget) -> i32"
+        },
+        {
+          "cxx_signature": "CBaseBindTargetDescriptor *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IBindTarget *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 6,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget) -> *mut IBindTarget"
+        },
+        {
+          "cxx_signature": "IBindTarget *()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 7,
+          "name": "unk107",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget) -> *mut IBindTarget"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 8,
+          "name": "unk108",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindTarget) -> i32"
+        }
+      ],
+      "msvc": {
+        "length": 9,
+        "own_entries": 9
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolsResourceListener",
+      "header": "public/toolutils2/itoolsresourcelistener.h",
+      "methods": [
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolsResourceListener) -> i32"
+        },
+        {
+          "cxx_signature": "void (const void *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolsResourceListener, pResources: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 2,
+        "own_entries": 2
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IUndoable",
+      "header": "public/toolutils2/undohistory.h",
+      "methods": [
+        {
+          "cxx_signature": "IUndoable *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable) -> *mut IUndoable"
+        },
+        {
+          "cxx_signature": "void (IUndoable *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable, pSource: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable, arg0: bool)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk007",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk008",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "unk009",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk0010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable, arg0: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "unk0011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk0012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoable)"
+        }
+      ],
+      "msvc": {
+        "length": 12,
+        "own_entries": 12
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IUndoListener",
+      "header": "public/toolutils2/undohistory.h",
+      "methods": [
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IUndoListener, arg0: i32)"
+        }
+      ],
+      "msvc": {
+        "length": 1,
+        "own_entries": 1
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CBaseUndoable",
+      "header": "public/toolutils2/undohistory.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "~CBaseUndoable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseUndoable)"
+        }
+      ],
+      "msvc": {
+        "length": 13,
+        "own_entries": 1
+      },
+      "primary_base": "IUndoable",
+      "secondary_bases": []
+    },
+    {
+      "class": "CUndoHistory",
+      "header": "public/toolutils2/undohistory.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~CUndoHistory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CUndoHistory)"
+        },
+        {
+          "cxx_signature": "void (IUndoable *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CUndoHistory, pUndoable: *mut IUndoable)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "Undo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CUndoHistory)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "HasEntries",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CUndoHistory) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 4,
+        "own_entries": 4
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolAttr_Table",
+      "header": "public/toolutils2/toolattr.h",
+      "methods": [
+        {
+          "cxx_signature": "void (const ToolAttrUnk_t &, CUtlVector<IBaseToolAttr *> *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t, pAttrs: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const ToolAttrUnk_t &, CUtlString *, CUtlString *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t, arg1: *mut CUtlString, arg2: *mut CUtlString)"
+        },
+        {
+          "cxx_signature": "bool (void *, CUtlString *, void *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, arg0: *mut ::core::ffi::c_void, arg1: *mut CUtlString, arg2: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const ToolAttrUnk_t &, void *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk007",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk008",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table) -> bool"
+        },
+        {
+          "cxx_signature": "ToolAttrUnk_t (const ToolAttrUnk_t &)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, ret: *mut ToolAttrUnk_t, key: *const ToolAttrUnk_t) -> *mut ToolAttrUnk_t",
+          "msvc_slot": 8,
+          "name": "unk009",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "memory",
+              "size": 40,
+              "sret": true
+            },
+            "msvc": {
+              "size": 40,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t) -> ToolAttrUnk_t"
+        },
+        {
+          "cxx_signature": "void (const ToolAttrUnk_t &, void *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk0010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const ToolAttrUnk_t &, void *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "unk0011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttr_Table, key: *const ToolAttrUnk_t, arg1: *mut ::core::ffi::c_void)"
+        }
+      ],
+      "msvc": {
+        "length": 11,
+        "own_entries": 11
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolAttrNotifyRoot",
+      "header": "public/toolutils2/toolattr.h",
+      "methods": [
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolAttrNotifyRoot) -> i32"
+        }
+      ],
+      "msvc": {
+        "length": 6,
+        "own_entries": 6
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CBaseKV3DataWithFGDClass",
+      "header": "public/toolutils2/toolattr.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "~CBaseKV3DataWithFGDClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass)"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 12,
+          "name": "unk111",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "unk112",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "KeyValues3 *()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 14,
+          "name": "unk113",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "KeyValues3 *()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 15,
+          "name": "unk114",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "KeyValues3 *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 16,
+          "name": "unk115",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseKV3DataWithFGDClass) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 17,
+        "own_entries": 6
+      },
+      "primary_base": "IToolAttr_Table",
+      "secondary_bases": []
+    },
+    {
+      "class": "CBaseEditorSession",
+      "header": "public/toolutils2/baseeditorsession.h",
+      "methods": [
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 0,
+          "is_dtor": true,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "~CBaseEditorSession",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "int (bool)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 1,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, arg0: bool) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 2,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> i32"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 3,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 4,
+          "name": "unk104",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 5,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszName: *const ::core::ffi::c_char, arg1: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "int (const char *, CUtlString *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 6,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszFileName: *const ::core::ffi::c_char, pErrors: *mut CUtlString) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 7,
+          "name": "ReloadDocument",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 8,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 9,
+          "name": "unk202",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 10,
+          "name": "unk203",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 11,
+          "name": "IsModified",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 12,
+          "name": "SetModified",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, bModified: bool)"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "GetPath",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (CUtlString *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 14,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pOut: *mut CUtlString) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 15,
+          "name": "unk302",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, arg0: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 16,
+          "name": "unk303",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 17,
+          "name": "unk304",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *, bool, bool)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 18,
+          "name": "Save",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszOldPath: *const ::core::ffi::c_char, pszNewPath: *const ::core::ffi::c_char, arg2: bool, arg3: bool) -> bool"
+        },
+        {
+          "cxx_signature": "void (CUtlString *)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 19,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pOut: *mut CUtlString)"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 20,
+          "name": "unk402",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 21,
+          "name": "unk403",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "QWidget *()",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 22,
+          "name": "unk404",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "unk405",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "unk406",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "unk407",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSession)"
+        }
+      ],
+      "msvc": {
+        "length": 26,
+        "own_entries": 26
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CBaseEditorApp",
+      "header": "public/toolutils2/baseeditorapp.h",
+      "methods": [
+        {
+          "cxx_signature": "CBaseEditorSession *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "unk071",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *mut CBaseEditorSession"
+        },
+        {
+          "cxx_signature": "CBaseEditorSession *(const char *, uint32)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "OpenFile",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pszFileName: *const ::core::ffi::c_char, nFlags: u32) -> *mut CBaseEditorSession"
+        },
+        {
+          "cxx_signature": "QWidget *()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "unk171",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "unk172",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "unk173",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "unk174",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "unk175",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "unk176",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "unk177",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "unk178",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "unk179",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp)"
+        },
+        {
+          "cxx_signature": "CBaseEditorSession *()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "unk1710",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> *mut CBaseEditorSession"
+        },
+        {
+          "cxx_signature": "void (CBaseEditorSession *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "unk1711",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSession: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "void (CBaseEditorSession *, CBaseEditorSession *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "unk1712",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pPrevious: *mut CBaseEditorSession, pNew: *mut CBaseEditorSession)"
+        },
+        {
+          "cxx_signature": "bool (CBaseEditorSession *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "unk1713",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSession: *mut CBaseEditorSession) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "unk1714",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "unk1715",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "unk1716",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "bool (CBaseEditorSession *, const char *)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "unk1717",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSession: *mut CBaseEditorSession, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "unk1718",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "unk1719",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSettings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "unk1720",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "unk1721",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "bool (const char *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "unk1722",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pszFileName: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "void (CBaseEditorSession *, const char *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "unk1723",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSession: *mut CBaseEditorSession, pszFileName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "AppRestoreToolSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSettings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "AppSaveToolSettings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSettings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "unk271",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "CBaseEditorSession *(CBaseEditorSession *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "unk272",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp, pSession: *mut CBaseEditorSession) -> *mut CBaseEditorSession"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "unk273",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "unk274",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "unk275",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorApp)"
+        }
+      ],
+      "msvc": {
+        "length": 49,
+        "own_entries": 32
+      },
+      "primary_base": "IToolSystem2",
+      "secondary_bases": [
+        {
+          "msvc_offset": 48,
+          "name": "IBindTarget",
+          "offset": 40
+        }
+      ]
+    },
+    {
+      "class": "CBaseEditorSharedWindowApp",
+      "header": "public/toolutils2/baseeditorapp.h",
+      "methods": [
+        {
+          "cxx_signature": "QWidget *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 49,
+          "name": "unk081",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBaseEditorSharedWindowApp) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 50,
+        "own_entries": 1
+      },
+      "primary_base": "CBaseEditorApp",
+      "secondary_bases": []
+    },
+    {
+      "class": "IToolRenderableViewHost",
+      "header": "public/toolutils2/itoolrenderableviewhost.h",
+      "methods": [
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> bool"
+        },
+        {
+          "cxx_signature": "ToolCameraUnk_t *()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> *mut ToolCameraUnk_t"
+        },
+        {
+          "cxx_signature": "ToolCameraUnk_t *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "GetCamera",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> *mut ToolCameraUnk_t"
+        },
+        {
+          "cxx_signature": "bool (float *, void *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut f32, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost)"
+        },
+        {
+          "cxx_signature": "void (int *)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut i32)"
+        },
+        {
+          "cxx_signature": "ToolRenderableViewHostUnk8_t ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, ret: *mut ToolRenderableViewHostUnk8_t) -> *mut ToolRenderableViewHostUnk8_t",
+          "msvc_slot": 10,
+          "name": "unk104",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> ToolRenderableViewHostUnk8_t"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk105",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "unk106",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (float *, int *, int, int, int *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "unk107",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut f32, arg1: *mut i32, arg2: i32, arg3: i32, arg4: *mut i32) -> i32"
+        },
+        {
+          "cxx_signature": "bool (void *, void *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "unk108",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (uint64, void *)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "unk109",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost, nTag: u64, pOut: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "unk1010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> i32"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "unk1011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IToolRenderableViewHost) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 18,
+        "own_entries": 18
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "IBindableCameraScene",
+      "header": "public/toolutils2/ibindablecamerascene.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "unk001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "unk002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "unk003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene)"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "unk004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene, arg0: f32)"
+        },
+        {
+          "cxx_signature": "bool (float *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "unk005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene, arg0: *mut f32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void *, void *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "unk006",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene, arg0: *mut ::core::ffi::c_void, arg1: *mut ::core::ffi::c_void, arg2: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "unk007",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "unk008",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> bool"
+        },
+        {
+          "cxx_signature": "Vector2D ()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene, ret: *mut Vector2D) -> *mut Vector2D",
+          "msvc_slot": 8,
+          "name": "unk009",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> Vector2D"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "unk0010",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> f32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "unk0011",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "unk0012",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> i32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "unk0013",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> f32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "unk0014",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> f32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "unk0015",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> f32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "unk0016",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> f32"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "unk0017",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "unk0018",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IBindableCameraScene) -> *mut ::core::ffi::c_void"
+        }
+      ],
+      "msvc": {
+        "length": 18,
+        "own_entries": 18
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

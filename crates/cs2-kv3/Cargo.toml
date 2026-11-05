@@ -1,0 +1,10 @@
+[package]
+name = "cs2-kv3"
+version = "0.0.1"
+description = "KV3 text (Valve KeyValues3) parser and Valve-style writer used by the ModelDoc .vmdl tooling"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde_json.workspace = true

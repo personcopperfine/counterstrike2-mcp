@@ -1,0 +1,105 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for libparticles.so of build 2000930 (the build the Windows particles.dll in the",
+  "database is, ClientVersion 2000930; staged with `stagebins.py --linux`). The module exports no `_ZTV` symbol for its",
+  "own classes, so the CParticleSystemMgr vtable is located by the destructor-shaped function that stores its address",
+  "point as the object's first qword and then fills in the two secondary-base vptrs (+0x28), the way",
+  "librendersystemvulkan.json's CRenderDeviceVulkan is. The Itanium primary table is 63 entries: the interface's 61 slots",
+  "plus GCC's copies of the two secondary-base overrides (ISceneObjectListener 1 slot, IToolsResourceListener 2 slots,",
+  "s2sdk-types RE7 section 4); sdkcheck.py compares VTLEN_CParticleSystemMgr with the generated IParticleSystemMgr (61 + 2).",
+  "",
+  "Not located (left out rather than guessed): a vtable for IParticleFunctionDefinition. The concrete tables",
+  "(CParticleFunctionDefinitionTyped<T>) are exported by neither symbol nor an own constructor; their only reference is the",
+  "static-initializer that registers every function class, whose bytes repeat for each class, so no unique pattern",
+  "reaches one table. The Windows lane checks the 3-entry table (particles.json).",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only."
+ ],
+ "module": "libparticles.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000930": {
+   "sha256": "1f03592091917f64"
+  },
+  "2000933": {
+   "sha256": "ab9c8a80a18b6971"
+  },
+  "2000940": {
+   "sha256": "bf933e095fd11e0d"
+  }
+ },
+ "entries": {
+  "CParticleSystemMgr": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 55 41 54 49 89 FC 53 48 83 EC 08 48 89 07 48 05 ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libparticles.so 0x2d9a70: the function that begins with push rbp, lea rax,[rip+vtable] (the CParticleSystemMgr vtable address point), stores it as the object's first qword, then stores two secondary vptrs at +0x28 / +0x30 (a pointer loaded from .data.rel.ro, and the address point + 0x220; the 0x220 is masked in the pattern because it moves with the primary table's length). No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IParticleSystemMgr implementation (the ParticleSystemMgr003 interface), primary table, offset-to-top 0; the Windows build's primary table has 61 entries (s2sdk-types RE7 section 4)",
+   "expect": {
+    "2000930": 8024040,
+    "2000933": 8024040,
+    "2000940": 8024040
+   }
+  },
+  "VTLEN_CParticleSystemMgr": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CParticleSystemMgr"
+   },
+   "via": "libparticles.so address point 0x7a6fe8: 63 .text slot pointers up to the first secondary table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IParticleSystemMgr's implementation, compared by sdkcheck.py with the interface's 61 slots plus the 2 entries GCC adds to the primary table for CParticleSystemMgr's overrides of its secondary bases (RE7 section 4)",
+   "expect": {
+    "2000930": 63,
+    "2000933": 63,
+    "2000940": 63
+   }
+  },
+  "PMGR_SLOT_FUNC_COUNT": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CParticleSystemMgr",
+    "slot": 24
+   },
+   "via": "libparticles.so CParticleSystemMgr primary vtable slot 24 (the same index as the Windows pet pin PETOFF_PMGR_FUNC_COUNT / 8)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IParticleSystemMgr::GetFunctionDefinitionCount: reads the count at [this + 0x38 + 24*type], no bounds check; body 0x2d15c0",
+   "expect": {
+    "2000930": 2954688,
+    "2000933": 2954688,
+    "2000940": 2954688
+   }
+  },
+  "PMGR_SLOT_FUNC_GET": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "CParticleSystemMgr",
+    "slot": 25
+   },
+   "via": "libparticles.so CParticleSystemMgr primary vtable slot 25 (the same index as the Windows pet pin PETOFF_PMGR_FUNC_GET / 8)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IParticleSystemMgr::GetFunctionDefinition: reads the definition at [[this + 0x40 + 24*type] + 8*index], no bounds check; body 0x2d15d0",
+   "expect": {
+    "2000930": 2954704,
+    "2000933": 2954704,
+    "2000940": 2954704
+   }
+  }
+ }
+}

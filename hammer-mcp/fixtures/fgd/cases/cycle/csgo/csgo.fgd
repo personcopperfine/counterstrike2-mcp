@@ -1,0 +1,5 @@
+// Fixture: an @include cycle. csgo.fgd includes cycle.fgd (resolved in this directory), which
+// includes csgo.fgd again -> FgdError::IncludeCycle.
+@include "cycle.fgd"
+
+@PointClass base(Targetname) = never_reached : "This class is never parsed." []

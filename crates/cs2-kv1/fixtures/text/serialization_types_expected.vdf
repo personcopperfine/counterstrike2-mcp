@@ -1,0 +1,17 @@
+﻿"test data"
+{
+	"0"
+	{
+		"VString"	"Test String"
+		"VInt"	"270544960"
+		"VLong"	"72623859790382856"
+		"VULong"	"9833440827789222417"
+		"VFloat"	"1234.5677"
+		"VEnum"	"1337"
+		"VFlags"	"10"
+		"VByteEnum"	"255"
+		"VShortEnum"	"-1"
+		"VLongEnum"	"72623859790382856"
+		"VULongEnum"	"9833440827789222417"
+	}
+}

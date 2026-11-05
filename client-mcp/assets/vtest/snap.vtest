@@ -1,0 +1,3 @@
+// snap.vtest <tag>: png screenshot, block until engine2 signals Wrote_Screenshot.
+png_screenshot vtest_$1
+Test_WaitForCheckPoint Wrote_Screenshot

@@ -1,0 +1,79 @@
+[package]
+name = "cs2-bridge"
+version = "0.0.1"
+description = "Rust port of the Windows C bridge (bridge/mcp_bridge.c): one exported CreateInterface plus the workshop tools' tool-plugin object"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+# The game (Linux dedicated server / Wine tools) loads the cdylib; the rlib half is what the
+# host tests link against (`cargo test -p cs2-bridge` on Linux).
+[lib]
+name = "cs2_bridge"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Every vtable slot, vtable length and ABI constant comes from here; nothing in this crate is
+# hand-computed.
+s2sdk-sys = { workspace = true }
+# `s2sdk::hook`: the `KHookApi` trait the Metamod plugin's `IKHook` adapter implements, and the
+# `remove_all_blocking` drain `Unload` runs. Same path dependency as `s2sdk-probe`, but without
+# its default `proto` feature: this crate needs `hook` only, and that feature compiles the
+# upstream `.proto` set into the DLL (a build-time `protoc` and ~80 messages nothing here uses).
+s2sdk = { path = "../s2sdk/s2sdk", default-features = false }
+# `job.start`'s params (an object with a flags array) and every `job.*` reply object. Already in
+# Cargo.lock (cs2-kv3, the MCP servers); the older ops build their JSON by hand.
+serde_json = { workspace = true }
+
+# Same versions and the same target-specific style as `crates/s2sdk/s2sdk/Cargo.toml`. The
+# features listed are the ones that file pins; this crate needs none of them yet.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", default-features = false, features = [
+    "Win32_Foundation",
+    # `job.start`: `CreateProcessW` / `CreateJobObjectW` take `SECURITY_ATTRIBUTES`.
+    "Win32_Security",
+    "Win32_Security_Cryptography",
+    # `pet.*`'s host file facts: `CreateFileA` / `GetFileType` / `GetFileSize` with the C's
+    # flags, so a game path's raw ANSI bytes reach the file exactly as `mcp_bridge_pet.inc` does.
+    "Win32_Storage_FileSystem",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_Environment",
+    # `job.start`: the Job Object that owns the resourcecompiler tree (`KILL_ON_JOB_CLOSE`).
+    "Win32_System_JobObjects",
+    "Win32_System_LibraryLoader",
+    # The default render name's tick (`GetTickCount64`, `mcp_bridge.c:2645`): ms since boot, the
+    # value hammer-mcp needs to stay unique across bridge restarts.
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+# The tests hold the KV3 gate to the workspace reader: every case runs against both, and the
+# disagreement table in `tests/kv3_check.rs` is asserted, not just documented. The gate itself
+# (`src/kv3_check.rs`) deliberately does not call it - see that module's docs.
+cs2-kv3 = { path = "../cs2-kv3" }
+
+# The render lane's PNG encoder is held to a real decoder: every host test decodes the bytes
+# `png_encode` produced (and the decoder verifies each chunk's CRC). Already in Cargo.lock.
+png = { workspace = true }
+
+# Gate 1 of WP1.G: load the built cdylib and call the exported `CreateInterface` through the
+# dynamic loader, so the test sees the same symbol the game resolves. Already in Cargo.lock (a
+# transitive dependency of `ash`, via cs2-vk-capture), so this adds no download.
+libloading = "0.8"
+
+# Needs the installed workshop content tree, so `cargo test --workspace` (no game needed) must not run
+# it: explicit `cargo test -p cs2-bridge --test kv3_corpus`.
+[[test]]
+name = "kv3_corpus"
+test = false
+
+# The module identity gate over the real game DLLs, plus the negative (a copied DLL with one
+# byte flipped). Needs `target/game-bins` (sigs/README.md "Binaries"), so `cargo test --workspace`
+# (no game needed) must not run it: explicit `cargo test -p cs2-bridge --test modules_real`.
+[[test]]
+name = "modules_real"
+test = false

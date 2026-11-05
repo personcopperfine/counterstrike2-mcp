@@ -1,0 +1,694 @@
+{
+ "module": "rendersystemvulkan.dll",
+ "image_base": 6442450944,
+ "_doc": "rendersystemvulkan.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "builds": {
+  "2000921": {
+   "sha256": "8a7eb13b49f59d65",
+   "timestamp": 1790794641
+  },
+  "2000930": {
+   "sha256": "915d106ee0c8580d",
+   "timestamp": 1791234137
+  },
+  "2000933": {
+   "sha256": "2febd86471b9ed19",
+   "timestamp": 1792003145
+  },
+  "2000940": {
+   "sha256": "2693b2557af64363",
+   "timestamp": 1793662348
+  }
+ },
+ "entries": {
+  "RV_RENDERDEVICE_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderDeviceVulkan"
+   },
+   "via": "pins.py VTABLES: .?AVCRenderDeviceVulkan@@ primary vtable",
+   "tag": "RTTI",
+   "bridge": "RV_RENDERDEVICE_VT",
+   "expect": {
+    "2000921": 5727720,
+    "2000930": 5727624,
+    "2000933": 5727688,
+    "2000940": 5727752
+   },
+   "status": "verified"
+  },
+  "RVS_READ_TEXTURE_PIXELS": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "RV_RENDERDEVICE_VT",
+    "slot": 74
+   },
+   "via": "pins.py VSLOTS: IRenderDevice::ReadTexturePixels",
+   "tag": "V",
+   "bridge": "RVS_READ_TEXTURE_PIXELS",
+   "sdk": "S2_SLOT_IRenderDevice_ReadTexturePixels",
+   "expect": {
+    "2000921": 709936,
+    "2000930": 709920,
+    "2000933": 709952,
+    "2000940": 710192
+   },
+   "notes": "IRenderDevice::ReadTexturePixels",
+   "status": "verified"
+  },
+  "RVS_DEPTH_FMT_QUERY": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "RV_RENDERDEVICE_VT",
+    "slot": 168
+   },
+   "via": "pins.py VSLOTS: IRenderDevice::IsUsingReverseDepth (first named PreferDepthFormat48)",
+   "tag": "V",
+   "bridge": "RVS_DEPTH_FMT_QUERY",
+   "sdk": "S2_SLOT_IRenderDevice_IsUsingReverseDepth",
+   "expect": {
+    "2000921": 601936,
+    "2000930": 601936,
+    "2000933": 601968,
+    "2000940": 602208
+   },
+   "notes": "IRenderDevice::IsUsingReverseDepth: returns the RenderSystem/UseReverseDepth flag (this+8; s2sdk-types RE6 section 5). The pin was first called PreferDepthFormat48 after how the bridge uses it (nonzero picks the 48 depth format, zero 42)",
+   "status": "verified"
+  },
+  "sub_180001E70": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8B C4"
+   },
+   "via": "rendersystemvulkan!0x180001E70 (dq 480056E589058D4Ch)",
+   "tag": "V",
+   "expect": {
+    "2000921": 7792,
+    "2000930": 7792,
+    "2000933": 7792,
+    "2000940": 7984
+   },
+   "status": "verified"
+  },
+  "sub_1800968D0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 57 48 83 EC 20 48 8B DA 48 8B F9 48 85 D2 74 ?? C7 02 00 00 00 00"
+   },
+   "via": "rendersystemvulkan!0x1800968D0 (RenderDeviceCreateInterfaceFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 616656,
+    "2000930": 616656,
+    "2000933": 616688,
+    "2000940": 616928
+   },
+   "status": "verified"
+  },
+  "sub_1800989B0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "40 53 48 83 EC 20 33 DB C7 05 ?? ?? ?? ?? FF FF FF FF"
+   },
+   "via": "rendersystemvulkan!0x1800989B0 (CRenderDeviceMgrVulkan::StaticInit)",
+   "tag": "V",
+   "expect": {
+    "2000921": 625072,
+    "2000930": 625072,
+    "2000933": 625104,
+    "2000940": 625344
+   },
+   "status": "verified"
+  },
+  "sub_18009E230": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 60"
+   },
+   "via": "rendersystemvulkan!0x18009E230 (CRenderDeviceVulkan_StaticInit)",
+   "tag": "V",
+   "expect": {
+    "2000921": 647728,
+    "2000930": 647728,
+    "2000933": 647760,
+    "2000940": 648000
+   },
+   "status": "verified"
+  },
+  "sub_18009F480": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 48 8D 05 ?? ?? ?? ?? 48 8B F9"
+   },
+   "via": "rendersystemvulkan!0x18009F480 (CRenderDeviceVulkan::_CRenderDeviceVulkan)",
+   "tag": "V",
+   "expect": {
+    "2000921": 652416,
+    "2000930": 652416,
+    "2000933": 652448,
+    "2000940": 652688
+   },
+   "status": "verified"
+  },
+  "sub_1800A530A": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "FF 50 18 48 8B 0D ?? ?? ?? ?? BF 00 00 10 00"
+   },
+   "via": "rendersystemvulkan!0x1800A530A (call    qword ptr [rax+18h])",
+   "tag": "V",
+   "expect": {
+    "2000921": 676618,
+    "2000930": 676595,
+    "2000933": 676627,
+    "2000940": 676867
+   },
+   "status": "verified"
+  },
+  "InterfaceReg::InterfaceReg": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 89 41 08 48 89 11 48 8B 05 ?? ?? ?? ??"
+   },
+   "via": "rendersystemvulkan!0x180240F30 (mov     [rcx+8], r8)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2363184,
+    "2000930": 2363168,
+    "2000933": 2362784,
+    "2000940": 2363136
+   },
+   "status": "verified"
+  },
+  "sub_18056F4F0": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": "RenderDevice003"
+   },
+   "via": "rendersystemvulkan!0x18056F4F0 (string)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5698800,
+    "2000930": 5698800,
+    "2000933": 5698976,
+    "2000940": 5699040
+   },
+   "status": "verified"
+  },
+  "sub_18056FA38": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderDeviceMgrBase"
+   },
+   "via": "rendersystemvulkan!0x18056FA38 (??_7CRenderDeviceMgrBase@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5700152,
+    "2000930": 5700152,
+    "2000933": 5700200,
+    "2000940": 5700264
+   },
+   "status": "verified"
+  },
+  "sub_180570400": {
+   "kind": "global",
+   "locator": {
+    "type": "string",
+    "string": "RenderDeviceMgr001"
+   },
+   "via": "rendersystemvulkan!0x180570400 (string)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5702656,
+    "2000930": 5702656,
+    "2000933": 5702920,
+    "2000940": 5702984
+   },
+   "status": "verified"
+  },
+  "sub_180571450": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderDeviceMgrVulkan"
+   },
+   "via": "rendersystemvulkan!0x180571450 (??_7CRenderDeviceMgrVulkan@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5706832,
+    "2000930": 5706832,
+    "2000933": 5706904,
+    "2000940": 5706968
+   },
+   "status": "verified"
+  },
+  "sub_1805C8840": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 0F B6 80 E8 2D 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x18000BDA0 (sub_18000BDA0 reads off_1805C8840)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6064192,
+    "2000930": 6064192
+   },
+   "status": "stale"
+  },
+  "s_pInterfaceRegs": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? 48 89 41 10",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180240F37 (sub_180003030 reads qword_180629C30)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6462512,
+    "2000930": 6462512,
+    "2000933": 6462512,
+    "2000940": 6462512
+   },
+   "status": "verified"
+  },
+  "g_pRenderDevice": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8B 05 ?? ?? ?? ?? C7 45 1C 00 00 00 00",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x1800170A9 (sub_180017040 reads qword_18062B960)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6469984,
+    "2000930": 6469984,
+    "2000933": 6469984,
+    "2000940": 6469984
+   },
+   "status": "verified"
+  },
+  "sub_18062C030": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 8B C4",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180097E20 (CreateRenderDeviceMgr_createFn reads qword_18062C030)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6471728,
+    "2000930": 6471728,
+    "2000933": 6471728,
+    "2000940": 6471744
+   },
+   "status": "verified"
+  },
+  "sub_18062C1B0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 89 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 4C 8D 3D ?? ?? ?? ??",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180085F08 (sub_180085EE0 reads qword_18062C1B0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6472112,
+    "2000930": 6472112,
+    "2000933": 6472112,
+    "2000940": 6472128
+   },
+   "status": "verified"
+  },
+  "sub_180097E20": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8B C4",
+    "steps": [
+     {
+      "rip": 2,
+      "next": 6
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180001E78 (? references CreateRenderDeviceMgr_createFn (prologue not unique): lea     edx, CreateRenderDeviceMgr_createFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 622112,
+    "2000930": 622112,
+    "2000933": 622144,
+    "2000940": 622384
+   },
+   "status": "verified"
+  },
+  "sub_18062C170": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 8B C4",
+    "steps": [
+     {
+      "rip": 17,
+      "next": 21
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180001E7E (RenderDeviceMgr init thunk: lea rcx -> InterfaceReg slot)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6472048,
+    "2000930": 6472048,
+    "2000933": 6472048,
+    "2000940": 6472064
+   },
+   "status": "verified"
+  },
+  "sub_180003030": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8D 05 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28"
+   },
+   "via": "rendersystemvulkan!0x180003030 (sub_180003030 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 12336,
+    "2000930": 12336,
+    "2000933": 12336,
+    "2000940": 12528
+   },
+   "status": "verified"
+  },
+  "sub_1800EEDF0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 15 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x180003037 (sub_180003030 references CreateRenderUtils_createFn (prologue not unique): lea     rdx, CreateRenderUtils_createFn)",
+   "tag": "V",
+   "expect": {
+    "2000921": 978416,
+    "2000930": 978400,
+    "2000933": 978016,
+    "2000940": 978256
+   },
+   "status": "verified"
+  },
+  "sub_18062F1E0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC CC CC 48 83 EC 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x18000303E (sub_180003030 reads unk_18062F1E0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6484448,
+    "2000930": 6484448,
+    "2000933": 6484432,
+    "2000940": 6484448
+   },
+   "status": "verified"
+  },
+  "sub_1805C9EC0": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 48 89 5C 24 08 48 89 6C 24 18",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "rendersystemvulkan!0x1800EEDF0 (CreateRenderUtils_createFn reads off_1805C9EC0)",
+   "tag": "V",
+   "expect": {
+    "2000921": 6069952,
+    "2000930": 6069952,
+    "2000933": 6069952,
+    "2000940": 6069952
+   },
+   "status": "verified"
+  },
+  "sub_1805788E8": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "RenderUtils_001"
+   },
+   "via": "rendersystemvulkan!0x1805788E8 (string)",
+   "tag": "V",
+   "expect": {
+    "2000921": 5736680,
+    "2000930": 5736600,
+    "2000933": 5736824,
+    "2000940": 5736888
+   },
+   "status": "verified"
+  },
+  "sub_1805765D0": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderDeviceVulkan",
+    "col_offset": 3408
+   },
+   "via": "rendersystemvulkan!0x1805765D0 (??_7CRenderDeviceVulkan@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5727696,
+    "2000930": 5727600,
+    "2000933": 5727664,
+    "2000940": 5727728
+   },
+   "notes": "secondary vftable ??_7CRenderDeviceVulkan@@6B@_0; COL 0x180588C18 offset field = 3408",
+   "status": "verified"
+  },
+  "sub_180578900": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderUtils"
+   },
+   "via": "rendersystemvulkan!0x180578900 (??_7CRenderUtils@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5736704,
+    "2000930": 5736624,
+    "2000933": 5736848,
+    "2000940": 5736912
+   },
+   "status": "verified"
+  },
+  "sub_180001CD0": {
+   "kind": "function",
+   "locator": {
+    "type": "sig",
+    "sig": "48 83 EC 28 E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 83 C4 28 E9 ?? ?? ?? ?? CC CC CC CC CC CC CC 4C 8B DC 48 81 EC B8 00 00 00 33 C0 48 8D 0D ?? ?? ?? ?? 89 44 24 30 0F 57 C0 66 89 44 24 35 0F 57 C9 0F 11 44 24 37 BA FF FF FF FF 45 33 C0 0F 11 4C 24 47 0F 11 44 24 57 49 89 43 C0"
+   },
+   "via": "rendersystemvulkan!0x180001CD0 (sub_180001CD0 (pattern runs into the following code))",
+   "tag": "V",
+   "expect": {
+    "2000921": 7376,
+    "2000930": 7376,
+    "2000933": 7376,
+    "2000940": 7568
+   },
+   "status": "verified"
+  },
+  "CRenderDeviceVulkan::Present": {
+   "kind": "function",
+   "locator": {
+    "type": "vslot",
+    "vtable": "RV_RENDERDEVICE_VT",
+    "slot": 16
+   },
+   "via": "rendersystemvulkan!0x1800ADA90 (RV_RENDERDEVICE_VT slot 16 -> CRenderDeviceVulkan::Present)",
+   "tag": "V",
+   "expect": {
+    "2000921": 711312,
+    "2000930": 711296,
+    "2000933": 711328,
+    "2000940": 711568
+   },
+   "status": "verified"
+  },
+  "CreateInterface": {
+   "kind": "function",
+   "locator": {
+    "type": "export",
+    "name": "CreateInterface"
+   },
+   "via": "rendersystemvulkan!0x180240F50 (export CreateInterface)",
+   "tag": "V",
+   "expect": {
+    "2000921": 2363216,
+    "2000930": 2363200,
+    "2000933": 2362816,
+    "2000940": 2363168
+   },
+   "status": "verified"
+  },
+  "IRenderContext": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "IRenderContext"
+   },
+   "via": "rendersystemvulkan!0x18056ADA8 (??_7IRenderContext@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5680552,
+    "2000930": 5680552,
+    "2000933": 5680552,
+    "2000940": 5680616
+   },
+   "status": "verified"
+  },
+  "CRenderContextVulkan": {
+   "kind": "vtable",
+   "locator": {
+    "type": "rtti",
+    "class": "CRenderContextVulkan"
+   },
+   "via": "rendersystemvulkan!0x18056C400 (??_7CRenderContextVulkan@@6B@)",
+   "tag": "RTTI",
+   "expect": {
+    "2000921": 5686272,
+    "2000930": 5686272,
+    "2000933": 5686288,
+    "2000940": 5686352
+   },
+   "status": "verified"
+  },
+  "str_RenderHardwareConfig002": {
+   "kind": "string",
+   "locator": {
+    "type": "string",
+    "string": "RenderHardwareConfig002"
+   },
+   "via": "rendersystemvulkan!0x18056F500 (string)",
+   "tag": "S",
+   "expect": {
+    "2000921": 5698816,
+    "2000930": 5698816,
+    "2000933": 5698992,
+    "2000940": 5699056
+   },
+   "status": "verified"
+  },
+  "RSC_IMAGE_FMT_COLOR_SCRATCH": {
+   "kind": "const",
+   "sdk": "S2_CONST_IMAGE_FORMAT_BGRA8888",
+   "via": "bridge/mcp_bridge.c:1771 (WR_COLOR_FMT 9, \"Hammer's offscreen colour scratch format\"; used in fmts[0] at :1878)",
+   "tag": "V",
+   "expect": {
+    "2000930": 9,
+    "2000933": 9,
+    "2000940": 9
+   },
+   "status": "verified",
+   "value": 9,
+   "notes": "stays literal: the value is a member of the game's ImageFormat enum (upstream public/bitmap/imageformat_declarations.h, read from the engine's format name table in s2sdk-types RE6; sdkcheck.py and the bridge's C tie compare the generated IMAGE_FORMAT_* constant with it). rendersystemvulkan.dll never *chooses* these formats - it only consumes them: the selection lives in scenesystem.dll's scratch-target creation (branch on IRenderDevice::IsUsingReverseDepth) and in Hammer, both outside this entry's module, and a locator must resolve in the entry's own module. In-module the members appear as switch/map inputs (the format-conversion function at 0x18029F230) with no unique, order-independent anchor; the constant-returning stubs at 0x18001AAD2/0x18001AAD8 are not referenced by any data table."
+  },
+  "RSC_IMAGE_FMT_DEPTH48": {
+   "kind": "const",
+   "sdk": "S2_CONST_IMAGE_FORMAT_D32FS8",
+   "via": "bridge/mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is nonzero; the reverse-depth flag (RenderSystem/UseReverseDepth): depth-stencil creation swaps LESS/GREATER on it)",
+   "tag": "V",
+   "expect": {
+    "2000930": 48,
+    "2000933": 48,
+    "2000940": 48
+   },
+   "status": "verified",
+   "value": 48,
+   "notes": "stays literal: the value is a member of the game's ImageFormat enum (upstream public/bitmap/imageformat_declarations.h, read from the engine's format name table in s2sdk-types RE6; sdkcheck.py and the bridge's C tie compare the generated IMAGE_FORMAT_* constant with it). rendersystemvulkan.dll never *chooses* these formats - it only consumes them: the selection lives in scenesystem.dll's scratch-target creation (branch on IRenderDevice::IsUsingReverseDepth) and in Hammer, both outside this entry's module, and a locator must resolve in the entry's own module. In-module the members appear as switch/map inputs (the format-conversion function at 0x18029F230) with no unique, order-independent anchor; the constant-returning stubs at 0x18001AAD2/0x18001AAD8 are not referenced by any data table."
+  },
+  "RSC_IMAGE_FMT_DEPTH42": {
+   "kind": "const",
+   "sdk": "S2_CONST_IMAGE_FORMAT_D24S8",
+   "via": "bridge/mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is zero)",
+   "tag": "V",
+   "expect": {
+    "2000930": 42,
+    "2000933": 42,
+    "2000940": 42
+   },
+   "status": "verified",
+   "value": 42,
+   "notes": "stays literal: the value is a member of the game's ImageFormat enum (upstream public/bitmap/imageformat_declarations.h, read from the engine's format name table in s2sdk-types RE6; sdkcheck.py and the bridge's C tie compare the generated IMAGE_FORMAT_* constant with it). rendersystemvulkan.dll never *chooses* these formats - it only consumes them: the selection lives in scenesystem.dll's scratch-target creation (branch on IRenderDevice::IsUsingReverseDepth) and in Hammer, both outside this entry's module, and a locator must resolve in the entry's own module. In-module the members appear as switch/map inputs (the format-conversion function at 0x18029F230) with no unique, order-independent anchor; the constant-returning stubs at 0x18001AAD2/0x18001AAD8 are not referenced by any data table."
+  },
+  "RSC_IMAGE_FMT_RGBA8888": {
+   "kind": "const",
+   "sdk": "S2_CONST_IMAGE_FORMAT_RGBA8888",
+   "via": "bridge/s2sdk.h:226 (S2_IMAGE_RGBA8888 0; used by mcp_bridge.c:1924 ReadTexturePixels, \"format 0 (RGBA8888)\")",
+   "tag": "V",
+   "expect": {
+    "2000930": 0,
+    "2000933": 0,
+    "2000940": 0
+   },
+   "status": "verified",
+   "value": 0
+  }
+ }
+}

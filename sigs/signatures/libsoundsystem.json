@@ -1,0 +1,170 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for soundsystem: the same facts as soundsystem.json, located in",
+  "libsoundsystem.so of builds 2000908 and 2000930 (steam.inf ClientVersion; staged with `stagebins.py --linux`).",
+  "The interface vtables are reached through the game's own interface registry, not through a symbol:",
+  "`CreateInterface` walks a list of InterfaceReg {m_CreateFn, m_pName, m_pNext} objects, the",
+  "registration call for \"SoundOpSystem001\" (build 2000908: helper 0x460200, site 0x34cd8b-0x34cda0) passes the",
+  "factory 0x31b630, which is `lea rax,[0x82bb40]; ret` - the CSoundOpSystem singleton in .bss. Its",
+  "constructor (called with rdi = 0x82bb40 at 0x34cd74) is 0x3299f0: it stores the vptr pair",
+  "[vptr = *(u64*)0x7b3308][+8 = 0x7b2dd8] into the object. No `_ZTV` symbol and no MSVC-style RTTI",
+  "exists for the class, so the locators below pin the constructor/implementation instructions.",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only.",
+  "",
+  "Not located (left out rather than copied from Windows): `SNOFF_SEP_FLAGS`. The Windows entry",
+  "reads a byte at params+0x22; here the slot-11 wrapper 0x3560d0 writes a byte at params+0x22 from",
+  "its 4th argument, but the implementation sub_355c90 reads no byte at +0x22 - it compares the byte",
+  "at params+0x24 (`cmpb $0x0,0x24(%r14)`). Which of the two is the flags field is unresolved, and a",
+  "guess would be a wrong offset. `SN_SEP_MIN_BYTES` (the bridge's own readable-bound constant) and",
+  "`SNVS_LISTENER_ON_START` (bridge-owned vtable shape, not a game fact) are Windows-side facts with",
+  "no Linux locator."
+ ],
+ "module": "libsoundsystem.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000908": {
+   "sha256": "5889212ea5800412"
+  },
+  "2000930": {
+   "sha256": "cec03881ee583141"
+  },
+  "2000933": {
+   "sha256": "92011b55c7fbc3f6"
+  },
+  "2000940": {
+   "sha256": "1f404b64816294f5"
+  }
+ },
+ "entries": {
+  "SNV_SOUNDOPSYSTEM_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "F3 0F 7E 05 ?? ?? ?? ?? 48 C7 47 E0 00 00 00 00 66 48 0F 3A 22 C0 01",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     },
+     {
+      "deref": 0
+     }
+    ]
+   },
+   "via": "libsoundsystem.so!0x329a0f (movq xmm0,[rip+0x4898f1] = the .data.rel.ro word 0x7b3308 holding the address point 0x7b28b8; the next instruction pinsrq $1,%rax,%xmm0 folds in 0x7b2dd8) in CSoundOpSystem's constructor 0x3299f0, which is called with rdi = the SoundOpSystem001 singleton 0x82bb40 (registration site 0x34cd8b; the factory 0x31b630 returns 0x82bb40). The copy `movups %xmm0,-0x38(%rdi)` at 0x329a2d writes object+0 = vptr",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISoundOpSystem primary vtable address point (the `via` on SNC_SOS_VT_SLOTS records what the table is and how long it is). The constructor's second word (object+8) is the address point of the ISoundEventManager secondary table, SNV_SOUNDEVENTMGR_VT",
+   "expect": {
+    "2000908": 8071352,
+    "2000930": 7595960,
+    "2000933": 7595960,
+    "2000940": 7588344
+   }
+  },
+  "SNV_SOUNDEVENTMGR_VT": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 48 89 E5 53 48 89 FB 48 8D 7F 38 48 83 EC 08",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "libsoundsystem.so!0x3299f1 (lea rax,[rip+0x4893e0] = 0x7b2dd8) in the same constructor: the word is stored at object+8, so it is the vtable of the ISoundEventManager subobject. The table's header is {offset-to-top = -8, typeinfo = 0x7b2188} at 0x7b2dc8, i.e. that base sits at object+8 (the Windows SNOFF_SOS_EVENTMGR_BASE = 8, soundsystem.json) and its 63 slots match the Windows SNV_SOUNDEVENTMGR_VT (63)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "ISoundEventManager (secondary base of CSoundOpSystem) vtable address point; measured length 63, equal to the Windows build's 63 - the one vtable length that agrees across the two ABIs, which is what makes the length measurement credible",
+   "expect": {
+    "2000908": 8072664,
+    "2000930": 7597304,
+    "2000933": 7597304,
+    "2000940": 7589688
+   }
+  },
+  "SNC_SOS_VT_SLOTS": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "SNV_SOUNDOPSYSTEM_VT"
+   },
+   "via": "libsoundsystem.so (CSoundOpSystem primary vtable, found through the constructor as in SNV_SOUNDOPSYSTEM_VT): .text slot pointers from the address point to the header of the ISoundEventManager table ({offset-to-top = -8, typeinfo}). Build 2000908: 0x7b28b8, 162 slots, header at 0x7b2dc8. Build 2000930: 0x73e7b8, 166 slots, header at 0x73ecf8. Every slot points at a distinct function",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Explained (RE4, build 2000930): 166 = 101 (the ISoundOpSystem interface: 11 IAppSystem + 90 own) + 63 (GCC's own primary-table entries for CSoundOpSystem's overrides of its secondary base ISoundEventManager, each with a this-adjusting thunk in the secondary table) + 2 (CSoundOpSystem's own LoadManifestStacksForParsing overloads). MSVC gives those 63 overrides no slot, so Windows is 101 + 2 = 103 (soundsystem.json SNC_SOS_VT_SLOTS). The 2000908 value 162 is the same sum with a 97-slot interface (4 fewer slots). sdkcheck ties it as the generated Itanium length of ISoundOpSystem + ISoundEventManager + 2. Still not an ABI-independent number: consume it only through that sum",
+   "expect": {
+    "2000908": 162,
+    "2000930": 166,
+    "2000933": 166,
+    "2000940": 166
+   }
+  },
+  "SNOFF_SEP_HASH": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "41 8B 46 10 66 41 83 7E ?? FF 41 89 87 BC 00 00 00",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "libsoundsystem.so!0x355d85 (mov 0x10(%r14),%eax) in sub_355c90, the implementation ISoundOpSystem slot 11 calls: the slot-11 wrapper 0x356720 -> 0x3560d0 builds a SosStartParams_t on its stack (`mov %r14d,-0x50(%rbp)`, `mov %r15d,-0x4c(%rbp)`, `mov %r13b,-0x3e(%rbp)` = struct+0x10/+0x14/+0x22) and calls 0x355c90 this,&params at 0x356207. The implementation copies params+0x10 -> internal+0xBC (the hash field), exactly the relation the Windows SNOFF_SEP_HASH reads (params+0x10 -> internal+0xAC). 2000940: the same copy at libsoundsystem.so!0x32f001/0x32f012; the seed compare moved to 0x24(%r14) behind the new 4-byte field at +0x1C, so its operand is masked",
+   "tag": "V",
+   "status": "verified",
+   "notes": "SosStartParams_t::hash at +0x10 - the same offset as Windows (soundsystem.json SNOFF_SEP_HASH = 16); only the *internal* object's field offsets differ between the ABIs (Linux +0xBC vs Windows +0xAC). Past the params pointer, not a bridge entry",
+   "expect": {
+    "2000908": 16,
+    "2000930": 16,
+    "2000933": 16,
+    "2000940": 16
+   }
+  },
+  "SNOFF_SEP_ENTINDEX": {
+   "kind": "offset",
+   "locator": {
+    "type": "sig",
+    "sig": "41 8B 46 14 41 89 87 C0 00 00 00 41 8B 46 ??",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "libsoundsystem.so!0x355d96 (mov 0x14(%r14),%eax) in sub_355c90, the same implementation as SNOFF_SEP_HASH: params+0x14 -> internal+0xC0 (the entindex field), the Windows SNOFF_SEP_ENTINDEX relation (params+0x14 -> internal+0xB0). 2000940: the same copy at libsoundsystem.so!0x32f001/0x32f012; the seed compare moved to 0x24(%r14) behind the new 4-byte field at +0x1C, so its operand is masked",
+   "tag": "V",
+   "status": "verified",
+   "notes": "SosStartParams_t::entindex at +0x14 - the same offset as Windows (soundsystem.json SNOFF_SEP_ENTINDEX = 20)",
+   "expect": {
+    "2000908": 20,
+    "2000930": 20,
+    "2000933": 20,
+    "2000940": 20
+   }
+  },
+  "VTLEN_ISoundEventManager": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "SNV_SOUNDEVENTMGR_VT"
+   },
+   "via": "libsoundsystem.so address point 0x73ecf8 (CSoundOpSystem's ISoundEventManager subobject, offset-to-top -8): the code-pointer run up to the next table's header = 63 slots",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of the ISoundEventManager interface (63, equal to the Windows 63), compared by sdkcheck.py with upstream's Itanium vtable length of ISoundEventManager",
+   "expect": {
+    "2000908": 63,
+    "2000930": 63,
+    "2000933": 63,
+    "2000940": 63
+   }
+  }
+ }
+}

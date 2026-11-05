@@ -1,0 +1,16 @@
+// setup_player.vtest: no freeze time / warmup / team intro, no bots, join CT, wait for the spawn.
+// No mp_restartgame: a restart right before `record` left client prediction stuck ("Prediction time ... less
+// than sim time ... Clamping" forever, input ignored, demo never started).
+// ($0 is this fragment's name; arguments start at $1.) mp_team_intro_time 0: the post-restart
+// team intro camera ignores input and makes getpos report the camera, not the player.
+mp_freezetime 0
+mp_team_intro_time 0
+mp_warmup_end
+mp_ignore_round_win_conditions 1
+mp_roundtime 60
+mp_round_restart_delay 0
+bot_quota 0
+bot_kick
+jointeam 3 1
+Test_Wait 4
+Test_Run mark VTEST_SPAWNED

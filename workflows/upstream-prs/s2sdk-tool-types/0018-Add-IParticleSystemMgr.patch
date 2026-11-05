@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 06:29:26 -0500
+Subject: [PATCH 18/47] Add IParticleSystemMgr
+
+Ported from Wend4r/sourcesdk s2/restore-scenesystem
+public/particles/iparticlesystemmgr.h, verified against CS2 2000930 (win64
+and linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/particles/iparticlesystemmgr.h | 96 +++++++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
+
+diff --git a/public/particles/iparticlesystemmgr.h b/public/particles/iparticlesystemmgr.h
+index 33e6b0b1..562cc225 100644
+--- a/public/particles/iparticlesystemmgr.h
++++ b/public/particles/iparticlesystemmgr.h
+@@ -10,7 +10,41 @@
+ #pragma once
+ #endif
+ 
++#include "appframework/iappsystem.h"
++#include "mathlib/vector.h"
+ #include "schemasystem/minschema.h"
++#include "tier0/utlleanvector.h"
++#include "tier0/utlsoacontainer.h"
++#include "tier0/utlstring.h"
++#include "tier0/utlvector.h"
++
++class CSceneObject;
++class IParticleCollection;
++class IParticleSystemQuery;
++class IRenderContext;
++class ISceneWorld;
++class KeyValues3;
++struct ParticleSnapshotAttributeData_t;
++
++// AMNOTE: Weak handles to a resource binding; must stay trivially copyable.
++class HParticleSystemDefinition
++{
++public:
++	const void *m_pBinding;
++};
++
++class HParticleSnapshot
++{
++public:
++	const void *m_pBinding;
++};
++
++// AMNOTE: Maps a snapshot container attribute to a particle attribute; each side may be mapped once
++struct ParticleSnapshotAttributeMap_t
++{
++	int m_nContainerAttribute;
++	int m_nParticleAttribute;
++};
+ 
+ //-----------------------------------------------------------------------------
+ // A particle system can only have 1 operator using a particular ID
+@@ -30,4 +64,66 @@ public:
+ 	virtual SchemaMetaInfoHandle_t< CSchemaClassInfo > GetSchemaBinding() const = 0;
+ };
+ 
++abstract_class IParticleSystemMgr : public IAppSystem
++{
++public:
++	virtual void SetFallbackParameters( float flBase, float flMultiplier, float flSimFallbackBaseMultiplier, float flSimThresholdMs ) = 0;
++	virtual void SetSystemLevel( int nCPULevel, int nGPULevel ) = 0;
++	virtual void SetLowViolence( bool bLowViolence ) = 0;
++	virtual bool IsLowViolence() = 0;
++	virtual HParticleSystemDefinition FindParticleSystem( const char *pszName, bool bWarnIfNotPrecached ) = 0;
++	virtual SchemaMetaInfoHandle_t< CSchemaClassInfo > GetParticleSystemDefinitionClass() = 0;
++	virtual IParticleCollection *CreateParticleCollection( const char *pszName, void *pOwner, IParticleSystemQuery *pQuery, bool bCheckSystemLevel, float flDelay, int nRandomSeed ) = 0;
++	virtual IParticleCollection *CreateParticleCollection( HParticleSystemDefinition hDefinition, void *pOwner, IParticleSystemQuery *pQuery, bool bCheckSystemLevel, float flDelay, int nRandomSeed ) = 0;
++	virtual void DestroyParticleCollection( IParticleCollection *pCollection ) = 0;
++	virtual bool unk101() = 0;
++	virtual bool unk102() = 0;
++	virtual void unk103() = 0;
++	virtual const char *GetParticleAttributeFriendlyName( int nAttribute ) = 0;
++	// AMNOTE: nFunctionType: 0 pre-emission operators, 1 emitters, 2 initializers, 3 operators, 4 force generators, 5 constraints, 6 renderers; no bounds check on nFunctionType
++	virtual int GetFunctionDefinitionCount( int nFunctionType ) = 0;
++	// AMNOTE: nFunctionType as for GetFunctionDefinitionCount; no bounds check on nFunctionType or nIndex
++	virtual IParticleFunctionDefinition *GetFunctionDefinition( int nFunctionType, int nIndex ) = 0;
++	virtual void SetLastSimulationDuration( float flDuration ) = 0;
++	virtual float GetLastSimulationDuration() = 0;
++	virtual void DumpParticleSystems( const char *pszFilter, bool bUnk ) = 0;
++	virtual CSceneObject *CreateParticleSceneObject( const char *pszName, ISceneWorld *pWorld, IParticleSystemQuery *pQuery, float flDelay, int nRandomSeed ) = 0;
++	virtual CSceneObject *CreateParticleSceneObject( HParticleSystemDefinition hDefinition, ISceneWorld *pWorld, IParticleSystemQuery *pQuery, float flDelay, int nRandomSeed ) = 0;
++	virtual CSceneObject *CreateParticleSceneObject( IParticleCollection *pCollection, ISceneWorld *pWorld, bool bUnk ) = 0;
++	virtual void unk201( Vector vecUnk, void *pUnk1, void *pUnk2, void *pUnk3, bool bUnk1, void *pUnk4, void *pUnk5, int nUnk1, bool bUnk2, int nUnk2 ) = 0;
++	virtual int RandomInt( IParticleCollection *pCollection, int nMin, int nMax ) = 0;
++	virtual float RandomFloat( IParticleCollection *pCollection, float flMin, float flMax ) = 0;
++	// AMNOTE: Returns "unknown" outside 0..48
++	virtual const char *GetParticleAttributeName( int nAttribute ) = 0;
++	virtual EAttributeDataType GetParticleAttributeDataType( int nAttribute ) = 0;
++	virtual void RestartParticleSystem( HParticleSystemDefinition hDefinition ) = 0;
++	virtual void SetDisabledRendererTypes( int nRendererTypes ) = 0;
++	// AMNOTE: Loads a particle function from pKV and writes its attribute masks to pOut
++	virtual bool unk301( const KeyValues3 *pKV, void *pOut ) = 0;
++	virtual void PurgeRenderObjects() = 0;
++	virtual HParticleSnapshot CreateProceduralSnapshot( CUtlString sName ) = 0;
++	virtual bool InitSnapshotFromAttributeData( HParticleSnapshot hSnapshot, int nCount, const ParticleSnapshotAttributeData_t *pData ) = 0;
++	virtual bool InitSnapshot( HParticleSnapshot hSnapshot, int nX, int nY, int nZ, const CUtlVector< ParticleSnapshotAttributeMap_t > &attributeMaps ) = 0;
++	virtual HParticleSnapshot CopySnapshot( HParticleSnapshot hSnapshot, const CUtlString &sName ) = 0;
++	virtual void SetSnapshotVector( HParticleSnapshot hSnapshot, int nX, int nY, int nZ, const int &nContainerAttribute, Vector vecValue ) = 0;
++	virtual Vector GetSnapshotVector( HParticleSnapshot hSnapshot, int nParticleAttribute, int nX, int nY, int nZ ) = 0;
++	virtual int GetSnapshotParticleCount( HParticleSnapshot hSnapshot ) = 0;
++	virtual bool SnapshotHasAttribute( HParticleSnapshot hSnapshot, int nParticleAttribute, EAttributeDataType nDataType ) = 0;
++	virtual void SetSnapshotSubset( HParticleSnapshot hSnapshot, const char *pszSubsetName, const CUtlVector< int > &indices ) = 0;
++	virtual void ClearSnapshot( HParticleSnapshot hSnapshot ) = 0;
++	virtual int GetParticleSystemVersion() = 0;
++	virtual const char *GetParticleSystemVersionChangeDescription( int nVersion ) = 0;
++	virtual void SetHoveredParticleSystem( HParticleSystemDefinition hDefinition ) = 0;
++	virtual bool HasFeatureFlags( int nFlags ) = 0;
++	// AMNOTE: pInstances holds nCount 100-byte records
++	virtual void AddInstancedMeshes( ISceneWorld *pWorld, uint64 nFlags, uint64 nTypeFlagsMask, uint64 nTypeFlags, const void *pKey, const void *pInstances, uint32 nCount, bool bUnk ) = 0;
++	// AMNOTE: Adds sName to the list unk402 returns unless it is already there
++	virtual void unk401( CUtlString sName ) = 0;
++	virtual CUtlVector< CUtlString > *unk402() = 0;
++	// AMNOTE: Empties the list unk402 returns
++	virtual void unk403() = 0;
++	virtual void unk404() = 0;
++	virtual void SimulateGPUParticles( CUtlLeanVector< IParticleCollection * > collections, IRenderContext *pRenderContext ) = 0;
++};
++
+ #endif // IPARTICLESYSTEMMGR_H

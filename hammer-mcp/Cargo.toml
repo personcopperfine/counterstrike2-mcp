@@ -1,0 +1,48 @@
+[package]
+name = "hammer-mcp"
+version = "0.0.1"
+description = "MCP server (stdio) for the CS2 Workshop Tools: Hammer, ModelDoc, pet, asset browser"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "hammer_mcp"
+path = "src/lib.rs"
+
+[[bin]]
+name = "hammer-mcp"
+path = "src/main.rs"
+
+[dependencies]
+cs2-mcp-common.workspace = true
+cs2-vtm = { path = "../crates/cs2-vtm" }
+cs2-kv3 = { path = "../crates/cs2-kv3" }
+cs2-dmx = { path = "../crates/cs2-dmx" }
+cs2-kv1 = { path = "../crates/cs2-kv1" }
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+clap.workspace = true
+# src/resource (compiled .vmdl_c): block LZ4 (KV3 buffers and blob frames, incl. the chained frames)
+# and a pure-Rust ZSTD decoder (KV3 compression 2).
+lz4_flex.workspace = true
+ruzstd.workspace = true
+# src/import: glTF/GLB reader (MIT/Apache-2.0, pure Rust). `import` is off on purpose: it pulls the
+# `image` crate to decode pixels, but texture bytes are passed through to the compiler as they are,
+# and buffers/data: URIs are resolved in import/gltf_read.rs. `names` keeps mesh/material names.
+gltf = { version = "1.4", default-features = false, features = ["utils", "names"] }
+
+[dev-dependencies]
+# The job.start flag allowlist (a test pins every flag compile_map emits is in it).
+cs2-bridge = { path = "../crates/cs2-bridge" }
+cs2-mcp-common = { path = "../crates/cs2-mcp-common", features = ["mock"] }
+
+[features]
+default = []
+# Live tests against a real bridge/runtime (opt-in; also needs CS2_MCP_LIVE=1).
+live = []

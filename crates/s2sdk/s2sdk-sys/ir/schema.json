@@ -1,0 +1,2232 @@
+{
+  "enums": [
+    {
+      "fixed_underlying": true,
+      "header": "public/schemalib/schematype.h",
+      "itanium": {
+        "fixed": true,
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "msvc": {
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "name": "SchemaTypeCategory_t",
+      "rust_repr": "u8",
+      "underlying": "unsigned char",
+      "values": [
+        {
+          "name": "SCHEMA_TYPE_BUILTIN",
+          "value": 0
+        },
+        {
+          "name": "SCHEMA_TYPE_POINTER",
+          "value": 1
+        },
+        {
+          "name": "SCHEMA_TYPE_BITFIELD",
+          "value": 2
+        },
+        {
+          "name": "SCHEMA_TYPE_FIXED_ARRAY",
+          "value": 3
+        },
+        {
+          "name": "SCHEMA_TYPE_ATOMIC",
+          "value": 4
+        },
+        {
+          "name": "SCHEMA_TYPE_DECLARED_CLASS",
+          "value": 5
+        },
+        {
+          "name": "SCHEMA_TYPE_DECLARED_ENUM",
+          "value": 6
+        },
+        {
+          "name": "SCHEMA_TYPE_INVALID",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "fixed_underlying": true,
+      "header": "public/schemasystem/minschema.h",
+      "itanium": {
+        "fixed": true,
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "msvc": {
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "name": "SchemaAtomicCategory_t",
+      "rust_repr": "u8",
+      "underlying": "unsigned char",
+      "values": [
+        {
+          "name": "SCHEMA_ATOMIC_PLAIN",
+          "value": 0
+        },
+        {
+          "name": "SCHEMA_ATOMIC_T",
+          "value": 1
+        },
+        {
+          "name": "SCHEMA_ATOMIC_COLLECTION_OF_T",
+          "value": 2
+        },
+        {
+          "name": "SCHEMA_ATOMIC_TT",
+          "value": 3
+        },
+        {
+          "name": "SCHEMA_ATOMIC_I",
+          "value": 4
+        },
+        {
+          "name": "SCHEMA_ATOMIC_INVALID",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "fixed_underlying": true,
+      "header": "public/schemasystem/minschema.h",
+      "itanium": {
+        "fixed": true,
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "msvc": {
+        "size": 1,
+        "underlying": "unsigned char"
+      },
+      "name": "SchemaTypeScope_t",
+      "rust_repr": "u8",
+      "underlying": "unsigned char",
+      "values": [
+        {
+          "name": "SCHEMA_GLOBAL_TYPE_SCOPE",
+          "value": 0
+        },
+        {
+          "name": "SCHEMA_MODULE_LOCAL_TYPE_SCOPE",
+          "value": 1
+        },
+        {
+          "name": "SCHEMA_DEFAULT_TYPE_SCOPE",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "fixed_underlying": false,
+      "header": "public/schemasystem/baseschema.h",
+      "itanium": {
+        "fixed": false,
+        "size": 4,
+        "underlying": "int"
+      },
+      "msvc": {
+        "size": 4,
+        "underlying": "int"
+      },
+      "name": "SchemaBuiltinType_t",
+      "rust_repr": "i32",
+      "underlying": "int",
+      "values": [
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_INVALID",
+          "value": 0
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_VOID",
+          "value": 1
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_CHAR",
+          "value": 2
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_INT8",
+          "value": 3
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_UINT8",
+          "value": 4
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_INT16",
+          "value": 5
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_UINT16",
+          "value": 6
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_INT32",
+          "value": 7
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_UINT32",
+          "value": 8
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_INT64",
+          "value": 9
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_UINT64",
+          "value": 10
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_FLOAT32",
+          "value": 11
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_FLOAT64",
+          "value": 12
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_BOOL",
+          "value": 13
+        },
+        {
+          "name": "SCHEMA_BUILTIN_TYPE_COUNT",
+          "value": 14
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_sTypeName",
+          "offset": 8,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaSystemTypeScope *",
+          "name": "m_pTypeScope",
+          "offset": 16,
+          "rust_type": "*mut CSchemaSystemTypeScope",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaTypeCategory_t",
+          "name": "m_eTypeCategory",
+          "offset": 24,
+          "rust_type": "SchemaTypeCategory_t",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaAtomicCategory_t",
+          "name": "m_eAtomicCategory",
+          "offset": 25,
+          "rust_type": "SchemaAtomicCategory_t",
+          "size": 1
+        }
+      ],
+      "has_vptr": true,
+      "header": "public/schemalib/schematype.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_sTypeName",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pTypeScope",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eTypeCategory",
+            "offset": 24,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eAtomicCategory",
+            "offset": 25,
+            "size": 1
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 32
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_sTypeName",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pTypeScope",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eTypeCategory",
+            "offset": 24,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eAtomicCategory",
+            "offset": 25,
+            "size": 1
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 32
+      },
+      "name": "CSchemaType",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 32
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaClassInfo *",
+          "name": "m_pPrimaryBinding",
+          "offset": 0,
+          "rust_type": "*mut CSchemaClassInfo",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pName",
+          "offset": 8,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pProjectName",
+          "offset": 16,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pszCPPName",
+          "offset": 24,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nSizeOf",
+          "offset": 32,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_nNumFields",
+          "offset": 36,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_nNumMetadata",
+          "offset": 38,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8",
+          "name": "m_nAlignOf",
+          "offset": 40,
+          "rust_type": "u8",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8",
+          "name": "m_nNumBaseClasses",
+          "offset": 41,
+          "rust_type": "u8",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int16",
+          "name": "m_nMultipleInheritanceDepth",
+          "offset": 42,
+          "rust_type": "i16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int16",
+          "name": "m_nSingleInheritanceDepth",
+          "offset": 44,
+          "rust_type": "i16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaClassFieldData_t *",
+          "name": "m_pFields",
+          "offset": 48,
+          "rust_type": "*mut SchemaClassFieldData_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaBaseClassInfoData_t *",
+          "name": "m_pBaseClasses",
+          "offset": 56,
+          "rust_type": "*mut SchemaBaseClassInfoData_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "datamap_t *",
+          "name": "m_pDataDesc",
+          "offset": 64,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaMetadataEntryData_t *",
+          "name": "m_pMetadata",
+          "offset": 72,
+          "rust_type": "*mut SchemaMetadataEntryData_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaSystemTypeScope *",
+          "name": "m_pOuterTypeScope",
+          "offset": 80,
+          "rust_type": "*mut CSchemaSystemTypeScope",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaType_DeclaredClass *",
+          "name": "m_pTypeOf",
+          "offset": 88,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_nClassFlags1",
+          "offset": 96,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_nClassFlags2",
+          "offset": 100,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaGenClassOpsFn_t",
+          "name": "m_pClassOpsFn",
+          "offset": 104,
+          "rust_type": "*const ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/schemalib/schemaclassinfo_data.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pPrimaryBinding",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pProjectName",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszCPPName",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSizeOf",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumFields",
+            "offset": 36,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 38,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nAlignOf",
+            "offset": 40,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumBaseClasses",
+            "offset": 41,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nMultipleInheritanceDepth",
+            "offset": 42,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSingleInheritanceDepth",
+            "offset": 44,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pFields",
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBaseClasses",
+            "offset": 56,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDataDesc",
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pOuterTypeScope",
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pTypeOf",
+            "offset": 88,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nClassFlags1",
+            "offset": 96,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nClassFlags2",
+            "offset": 100,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pClassOpsFn",
+            "offset": 104,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 112
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pPrimaryBinding",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pProjectName",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszCPPName",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSizeOf",
+            "offset": 32,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumFields",
+            "offset": 36,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 38,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nAlignOf",
+            "offset": 40,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumBaseClasses",
+            "offset": 41,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nMultipleInheritanceDepth",
+            "offset": 42,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSingleInheritanceDepth",
+            "offset": 44,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pFields",
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBaseClasses",
+            "offset": 56,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDataDesc",
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pOuterTypeScope",
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pTypeOf",
+            "offset": 88,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nClassFlags1",
+            "offset": 96,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nClassFlags2",
+            "offset": 100,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pClassOpsFn",
+            "offset": 104,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 112
+      },
+      "name": "SchemaClassInfoData_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 112
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pName",
+          "offset": 0,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaType *",
+          "name": "m_pType",
+          "offset": 8,
+          "rust_type": "*mut CSchemaType",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nSingleInheritanceOffset",
+          "offset": 16,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_nNumMetadata",
+          "offset": 20,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaMetadataEntryData_t *",
+          "name": "m_pMetadata",
+          "offset": 24,
+          "rust_type": "*mut SchemaMetadataEntryData_t",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/schemalib/schemaclassinfo_data.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pType",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSingleInheritanceOffset",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 20,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 24,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 32
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pType",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nSingleInheritanceOffset",
+            "offset": 16,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 20,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 24,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 32
+      },
+      "name": "SchemaClassFieldData_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 32
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pName",
+          "offset": 0,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaType *",
+          "name": "m_pType",
+          "offset": 8,
+          "rust_type": "*mut CSchemaType",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "void *",
+          "name": "m_pInstance",
+          "offset": 16,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_nNumMetadata",
+          "offset": 24,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "SchemaMetadataEntryData_t *",
+          "name": "m_pMetadata",
+          "offset": 32,
+          "rust_type": "*mut SchemaMetadataEntryData_t",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/schemalib/schemaclassinfo_data.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pType",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pInstance",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 24,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 32,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 40
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pType",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pInstance",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nNumMetadata",
+            "offset": 24,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pMetadata",
+            "offset": 32,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 40
+      },
+      "name": "SchemaStaticFieldData_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 40
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pName",
+          "offset": 0,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "void *",
+          "name": "m_pData",
+          "offset": 8,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/schemalib/schemametadata_data.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pData",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pData",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "SchemaMetadataEntryData_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint",
+          "name": "m_nOffset",
+          "offset": 0,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CSchemaClassInfo *",
+          "name": "m_pClass",
+          "offset": 8,
+          "rust_type": "*mut CSchemaClassInfo",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/schemalib/schemaclassinfo_data.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nOffset",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pClass",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nOffset",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pClass",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "SchemaBaseClassInfoData_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "SchemaClassInfoData_t",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "public/schemalib/schemaclassinfo.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": true,
+        "size": 112
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 112
+      },
+      "name": "CSchemaClassInfo",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 112
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "ISchemaSystem",
+      "header": "public/schemasystem/ischemasystem.h",
+      "methods": [
+        {
+          "cxx_signature": "CSchemaSystemTypeScope *()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "GlobalTypeScope",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem) -> *mut CSchemaSystemTypeScope"
+        },
+        {
+          "cxx_signature": "CSchemaSystemTypeScope *(const char *, const char **)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "FindOrCreateTypeScopeForModule",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char, ppszBindingName: *mut *const ::core::ffi::c_char) -> *mut CSchemaSystemTypeScope"
+        },
+        {
+          "cxx_signature": "CSchemaSystemTypeScope *(const char *, const char **)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "FindTypeScopeForModule",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char, ppszBindingName: *mut *const ::core::ffi::c_char) -> *mut CSchemaSystemTypeScope"
+        },
+        {
+          "cxx_signature": "CSchemaSystemTypeScope *(SchemaTypeScope_t, const char *, const char **)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "GetTypeScopeForBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, eTypeScope: SchemaTypeScope_t, pszModuleName: *const ::core::ffi::c_char, ppszBindingName: *mut *const ::core::ffi::c_char) -> *mut CSchemaSystemTypeScope"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "DefaultTypeScopeIsLocal",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem) -> bool"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaClassInfo> (const char *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, ret: *mut *mut CSchemaClassInfo, pszScopedName: *const ::core::ffi::c_char) -> *mut *mut CSchemaClassInfo",
+          "msvc_slot": 16,
+          "name": "FindClassByScopedName",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszScopedName: *const ::core::ffi::c_char) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "void (const CSchemaClassInfo *, CBufferString &)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "ScopedNameForClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pClassInfo: *const CSchemaClassInfo, scopedName: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaEnumInfo> (const char *)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, ret: *mut *mut ::core::ffi::c_void, pszScopedName: *const ::core::ffi::c_char) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 18,
+          "name": "FindEnumByScopedName",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszScopedName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (const CSchemaEnumInfo *, CBufferString &)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "ScopedNameForEnum",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pEnumInfo: *mut ::core::ffi::c_void, scopedName: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "void (const CSchemaClassInfo *, SchemaSubclassTraversalDepth_t, CUtlVector<const CSchemaClassInfo *> *, bool)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "FindDescendentsOfClass",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (const char **, int)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "LoadSchemaDataForModules",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, ppszModules: *mut *const ::core::ffi::c_char, nModules: i32)"
+        },
+        {
+          "cxx_signature": "const char *(const CSchemaClassInfo *)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "GetClassModuleName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pClassInfo: *const CSchemaClassInfo) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *(const CSchemaClassInfo *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetClassProjectName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pClassInfo: *const CSchemaClassInfo) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *(const CSchemaEnumInfo *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetEnumModuleName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pEnumInfo: *mut ::core::ffi::c_void) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "const char *(const CSchemaEnumInfo *)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "GetEnumProjectName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pEnumInfo: *mut ::core::ffi::c_void) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "SchemaSystemIsReady",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "VerifySchemaBindingConsistency",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, bIsConsoleModeApp: bool)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "CompleteModuleRegistration",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const SchemaAtomicTypeInfo_t *)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "RegisterAtomicType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pAtomicType: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "PrintSchemaStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszOptions: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "PrintSchemaMetaStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszOptions: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *, CSchemaType **, int, SchemaAtomicTypeInfo_t **)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "RegisterAtomics",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char, pszProjectName: *const ::core::ffi::c_char, ppSchemaTypes: *mut *mut CSchemaType, nTypeTableSize: i32, ppAtomicTypes: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *, const char *, CSchemaType **, int, CSchemaEnumInfo **)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "RegisterEnums",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char, pszProjectName: *const ::core::ffi::c_char, ppSchemaTypes: *mut *mut CSchemaType, nTypeTableSize: i32, ppEnumInfos: *mut *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (const char *, const char *, CSchemaType **, int, CSchemaClassInfo **, CBufferString *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "RegisterClasses",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pszModuleName: *const ::core::ffi::c_char, pszProjectName: *const ::core::ffi::c_char, ppSchemaTypes: *mut *mut CSchemaType, nTypeTableSize: i32, ppClassInfos: *mut *mut CSchemaClassInfo, pErrorStr: *mut CBufferString) -> bool"
+        },
+        {
+          "cxx_signature": "void (CSchemaClassInfo **)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "ValidateClasses",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, ppClassInfos: *mut *mut CSchemaClassInfo)"
+        },
+        {
+          "cxx_signature": "bool (const void *, size_t, const ResourceFileHeader_t *, CKV3Arena *, const char *)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "ConvertOldIntrospectedResourceDataToKV3",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, pData: *mut ::core::ffi::c_void, nDataSize: usize, pHeader: *mut ::core::ffi::c_void, arg3: *mut ::core::ffi::c_void, pszOverrideRootStruct: *const ::core::ffi::c_char) -> bool"
+        },
+        {
+          "cxx_signature": "void (const char *, SchemaHierarchyIteration_t, CUtlVector<const CSchemaClassInfo *> *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "FindClassesByMeta",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Builtin> (SchemaBuiltinType_t)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, ret: *mut *mut ::core::ffi::c_void, eBuiltinType: SchemaBuiltinType_t) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 38,
+          "name": "GetSchemaBuiltinType",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem, eBuiltinType: SchemaBuiltinType_t) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void () noexcept",
+          "decl_index": 28,
+          "is_dtor": true,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "~ISchemaSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystem)"
+        }
+      ],
+      "msvc": {
+        "length": 40,
+        "own_entries": 29
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "ISchemaSystemTypeScope",
+      "header": "public/schemasystem/minschema.h",
+      "methods": [
+        {
+          "cxx_signature": "CSchemaClassInfo *(const char *, CSchemaClassInfo *)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "InstallSchemaClassBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszModuleName: *const ::core::ffi::c_char, pClassInfo: *mut CSchemaClassInfo) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "CSchemaEnumInfo *(const char *, CSchemaEnumInfo *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "InstallSchemaEnumBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszModuleName: *const ::core::ffi::c_char, pEnumInfo: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaClassInfo> (const char *)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut CSchemaClassInfo, pszClassName: *const ::core::ffi::c_char) -> *mut *mut CSchemaClassInfo",
+          "msvc_slot": 2,
+          "name": "FindDeclaredClass",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszClassName: *const ::core::ffi::c_char) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaEnumInfo> (const char *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszEnumName: *const ::core::ffi::c_char) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 3,
+          "name": "FindDeclaredEnum",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszEnumName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Builtin> (const char *)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszBuiltinName: *const ::core::ffi::c_char) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 4,
+          "name": "FindBuiltinTypeByName",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszBuiltinName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Builtin> (SchemaBuiltinType_t)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, eBuiltinType: SchemaBuiltinType_t) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 5,
+          "name": "Type_Builtin",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, eBuiltinType: SchemaBuiltinType_t) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Ptr> (CSchemaType *)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pObjectType: *mut CSchemaType) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 6,
+          "name": "Type_Ptr",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pObjectType: *mut CSchemaType) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic> (const char *, uint16, uint8)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 7,
+          "name": "Type_Atomic",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_T> (const char *, uint16, uint8, CSchemaType *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, pTemplateType: *mut CSchemaType) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 8,
+          "name": "Type_Atomic_T",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, pTemplateType: *mut CSchemaType) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_CollectionOfT> (const char *, uint16, uint8, uint16, CSchemaType *, uint64, SchemaCollectionManipulatorFn_t)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, nElementSize: u16, pTemplateType: *mut CSchemaType, nFixedBufferCount: u64, manipulator: *const ::core::ffi::c_void) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 9,
+          "name": "Type_Atomic_CollectionOfT",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, nElementSize: u16, pTemplateType: *mut CSchemaType, nFixedBufferCount: u64, manipulator: *const ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_TT> (const char *, uint16, uint8, CSchemaType *, CSchemaType *)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, pTemplateType: *mut CSchemaType, pTemplateType2: *mut CSchemaType) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 10,
+          "name": "Type_Atomic_TT",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, pTemplateType: *mut CSchemaType, pTemplateType2: *mut CSchemaType) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_I> (const char *, uint16, uint8, int)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, nInteger: i32) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 11,
+          "name": "Type_Atomic_I",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszAtomicName: *const ::core::ffi::c_char, nSize: u16, nAlignment: u8, nInteger: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_DeclaredClass> (const char *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszClassName: *const ::core::ffi::c_char) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 12,
+          "name": "Type_DeclaredClass",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszClassName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_DeclaredEnum> (const char *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pszEnumName: *const ::core::ffi::c_char) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 13,
+          "name": "Type_DeclaredEnum",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszEnumName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_FixedArray> (CSchemaType *, int, uint16, uint8)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, pElementType: *mut CSchemaType, nElementCount: i32, nElementSize: u16, nElementAlignment: u8) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 14,
+          "name": "Type_FixedArray",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pElementType: *mut CSchemaType, nElementCount: i32, nElementSize: u16, nElementAlignment: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_FixedArray> (CSchemaType *, uint16, uint8, ...)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "Type_FixedArray_Multidimensional",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Bitfield> (int)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nSize: i32) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 16,
+          "name": "Type_Bitfield",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nSize: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic> (int)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nAtomicID: i32) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 17,
+          "name": "FindType_Atomic",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nAtomicID: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_T> (int, CSchemaType *)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nAtomicID: i32, pTemplateType: *mut CSchemaType) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 18,
+          "name": "FindType_Atomic_T",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nAtomicID: i32, pTemplateType: *mut CSchemaType) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_CollectionOfT> (int, CSchemaType *, uint64, SchemaCollectionManipulatorFn_t)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nAtomicID: i32, pTemplateType: *mut CSchemaType, nFixedBufferCount: u64, manipulator: *const ::core::ffi::c_void) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 19,
+          "name": "FindType_Atomic_CollectionOfT",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nAtomicID: i32, pTemplateType: *mut CSchemaType, nFixedBufferCount: u64, manipulator: *const ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_TT> (int, CSchemaType *, CSchemaType *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nAtomicID: i32, pTemplateType: *mut CSchemaType, pTemplateType2: *mut CSchemaType) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 20,
+          "name": "FindType_Atomic_TT",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nAtomicID: i32, pTemplateType: *mut CSchemaType, pTemplateType2: *mut CSchemaType) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaType_Atomic_I> (int, int)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ret: *mut *mut ::core::ffi::c_void, nAtomicID: i32, nInteger: i32) -> *mut *mut ::core::ffi::c_void",
+          "msvc_slot": 21,
+          "name": "FindType_Atomic_I",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nAtomicID: i32, nInteger: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSchemaType_DeclaredClass *(const char *)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "FindType_DeclaredClass",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszClassName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSchemaType_DeclaredEnum *(const char *)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "FindType_DeclaredEnum",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszEnumName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSchemaClassInfo *(const char *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 25,
+          "name": "FindRawClassBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszClassName: *const ::core::ffi::c_char) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "CSchemaClassInfo *(uint)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "FindRawClassBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nClassID: u32) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "CSchemaEnumInfo *(const char *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 27,
+          "name": "FindRawEnumBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pszEnumName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSchemaEnumInfo *(uint)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "FindRawEnumBinding",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, nEnumID: u32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "GetScopeName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "IsGlobalScope",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope) -> bool"
+        },
+        {
+          "cxx_signature": "void (const CSchemaClassInfo *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "MarkClassAsRequiringGlobalPromotion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pClassInfo: *const CSchemaClassInfo)"
+        },
+        {
+          "cxx_signature": "void (const CSchemaEnumInfo *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "MarkEnumAsRequiringGlobalPromotion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, pEnumInfo: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const SchemaAtomicTypeInfo_t **, const char *, int)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "ResolveAtomicInfoThreadsafe",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ppAtomicInfo: *mut *mut ::core::ffi::c_void, pszAtomicName: *const ::core::ffi::c_char, nAtomicID: i32)"
+        },
+        {
+          "cxx_signature": "void (const CSchemaEnumInfo **, const char *)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "ResolveEnumInfoThreadsafe",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ppEnumInfo: *mut *mut ::core::ffi::c_void, pszEnumName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "void (const CSchemaClassInfo **, const char *)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "ResolveClassInfoThreadsafe",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISchemaSystemTypeScope, ppClassInfo: *mut *const CSchemaClassInfo, pszClassName: *const ::core::ffi::c_char)"
+        }
+      ],
+      "msvc": {
+        "length": 35,
+        "own_entries": 35
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    },
+    {
+      "class": "CSchemaSystemTypeScope",
+      "header": "public/schemasystem/schemasystem.h",
+      "methods": [],
+      "msvc": {
+        "length": null,
+        "own_entries": 0
+      },
+      "primary_base": "ISchemaSystemTypeScope",
+      "secondary_bases": []
+    }
+  ]
+}

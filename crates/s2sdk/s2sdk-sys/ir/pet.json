@@ -1,0 +1,765 @@
+{
+  "enums": [],
+  "platforms": [
+    "windows"
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseKV3DataWithFGDClass",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IToolAttrNotifyRoot",
+          "offset": 8,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CPetDoc *",
+          "name": "m_unk001",
+          "offset": 16,
+          "rust_type": "*mut CPetDoc",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_unk002",
+          "offset": 24,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "KeyValues3",
+          "name": "m_unk003",
+          "offset": 32,
+          "rust_type": null,
+          "size": 16
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/petdoc_lib/petdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 32,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 48
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 32,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 48
+      },
+      "name": "CBasePetNode",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 48
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_unk002",
+          "offset": 4,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/petdoc_lib/petdoc.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "PetDocSelection_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CBaseUndoable",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IUndoListener",
+          "offset": 8,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[88]",
+          "name": "m_unk001",
+          "offset": 16,
+          "rust_type": "[u8; 88]",
+          "size": 88
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlVector<PetDocSelection_t>",
+          "name": "m_Selection",
+          "offset": 104,
+          "rust_type": null,
+          "size": 24
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CPetRootNode *",
+          "name": "m_pRoot",
+          "offset": 128,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUndoHistory *",
+          "name": "m_pUndoHistory",
+          "offset": 136,
+          "rust_type": "*mut CUndoHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUndoHistory *",
+          "name": "m_unk101",
+          "offset": 144,
+          "rust_type": "*mut CUndoHistory",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[56]",
+          "name": "m_unk102",
+          "offset": 152,
+          "rust_type": "[u8; 56]",
+          "size": 56
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/petdoc_lib/petdoc.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 16,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Selection",
+            "offset": 104,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRoot",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pUndoHistory",
+            "offset": 136,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 144,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 152,
+            "size": 56
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 208
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 16,
+            "size": 88
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Selection",
+            "offset": 104,
+            "size": 24
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pRoot",
+            "offset": 128,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pUndoHistory",
+            "offset": 136,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk101",
+            "offset": 144,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk102",
+            "offset": 152,
+            "size": 56
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 208
+      },
+      "name": "CPetDoc",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 208
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CSimpleSharedWindowEditorSession",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IBindTarget",
+          "offset": 112,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[136]",
+          "name": "m_unk031",
+          "offset": 124,
+          "rust_type": "[u8; 136]",
+          "size": 136
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CPetDoc *",
+          "name": "m_pDoc",
+          "offset": 264,
+          "rust_type": "*mut CPetDoc",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[432]",
+          "name": "m_unk131",
+          "offset": 272,
+          "rust_type": "[u8; 432]",
+          "size": 432
+        }
+      ],
+      "has_vptr": false,
+      "header": "tools/pet/petapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk031",
+            "offset": 124,
+            "size": 136
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 264,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk131",
+            "offset": 272,
+            "size": 432
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 704
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk031",
+            "offset": 128,
+            "size": 136
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pDoc",
+            "offset": 264,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk131",
+            "offset": 272,
+            "size": 432
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 704
+      },
+      "name": "CPetSession",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 704
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "CSimpleEditorSharedWindowApp<CPetSession, CQPetMainWnd>",
+          "offset": 0,
+          "virtual": false
+        },
+        {
+          "name": "IToolsResourceListener",
+          "offset": 488,
+          "virtual": false
+        }
+      ],
+      "fields": [],
+      "has_vptr": false,
+      "header": "tools/pet/petapp.h",
+      "itanium": {
+        "align": 8,
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 552
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "base_offsets": [
+          0,
+          496
+        ],
+        "fields": [],
+        "pass_in_registers": false,
+        "size": 560
+      },
+      "name": "CPetApp",
+      "opaque": true,
+      "pass_in_registers": false,
+      "size": 552
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "CBasePetNode",
+      "header": "public/petdoc_lib/petdoc.h",
+      "methods": [
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 17,
+          "name": "unk021",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> i32"
+        },
+        {
+          "cxx_signature": "const char *()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_name": "GetClassNameA",
+          "msvc_slot": 18,
+          "name": "GetClassName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 19,
+          "name": "unk121",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 20,
+          "name": "unk122",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 21,
+          "name": "unk123",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 22,
+          "name": "unk124",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> bool"
+        },
+        {
+          "cxx_signature": "CPetChildNode *()",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 23,
+          "name": "unk125",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CPetRootNode *()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 24,
+          "name": "unk126",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CPetFunctionNode *()",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 25,
+          "name": "unk127",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CPetVariableNode *()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "unk128",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "KeyValues3 *()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 27,
+          "name": "unk129",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "KeyValues3 *()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 28,
+          "name": "unk1210",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (KeyValues3 *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 29,
+          "name": "unk1211",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode, pOut: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const KeyValues3 *)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 30,
+          "name": "unk1212",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode, pIn: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 31,
+          "name": "unk1213",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 32,
+          "name": "unk1214",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode, arg0: bool)"
+        },
+        {
+          "cxx_signature": "void (CBufferString *, CBufferString *, CBufferString *)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 33,
+          "name": "unk1215",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CBasePetNode, arg0: *mut CBufferString, arg1: *mut CBufferString, arg2: *mut CBufferString)"
+        }
+      ],
+      "msvc": {
+        "length": 34,
+        "own_entries": 17
+      },
+      "primary_base": "CBaseKV3DataWithFGDClass",
+      "secondary_bases": [
+        {
+          "msvc_offset": 8,
+          "name": "IToolAttrNotifyRoot",
+          "offset": 8
+        }
+      ]
+    },
+    {
+      "class": "CPetDoc",
+      "header": "public/petdoc_lib/petdoc.h",
+      "methods": [
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 13,
+          "name": "unk021",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CPetDoc)"
+        }
+      ],
+      "msvc": {
+        "length": 14,
+        "own_entries": 1
+      },
+      "primary_base": "CBaseUndoable",
+      "secondary_bases": [
+        {
+          "msvc_offset": 8,
+          "name": "IUndoListener",
+          "offset": 8
+        }
+      ]
+    },
+    {
+      "class": "CPetSession",
+      "header": "tools/pet/petapp.h",
+      "methods": [
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 26,
+          "name": "unk031",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut CPetSession) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 27,
+        "own_entries": 1
+      },
+      "primary_base": "CBaseEditorSession",
+      "secondary_bases": [
+        {
+          "msvc_offset": 112,
+          "name": "IBindTarget",
+          "offset": 112
+        }
+      ]
+    }
+  ]
+}

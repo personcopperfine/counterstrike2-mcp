@@ -1,0 +1,61 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:11:04 -0500
+Subject: [PATCH 47/47] Add CMapViewMgr
+
+Verified against CS2 2000930 (win64).
+---
+ tools/hammer/mapviewmgr.h | 45 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 tools/hammer/mapviewmgr.h
+
+diff --git a/tools/hammer/mapviewmgr.h b/tools/hammer/mapviewmgr.h
+new file mode 100644
+index 00000000..00cf1cf2
+--- /dev/null
++++ b/tools/hammer/mapviewmgr.h
+@@ -0,0 +1,45 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: The views of a Hammer session
++//
++//===========================================================================//
++
++#ifndef MAPVIEWMGR_H
++#define MAPVIEWMGR_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "hammer/mapview.h"
++#include "tier0/utlvector.h"
++#include "tier0/platform.h"
++
++abstract_class ITagVisualizationListener
++{
++public:
++	virtual void unk001() = 0;
++};
++
++abstract_class IShaderReloadListener
++{
++public:
++	virtual void unk001() = 0;
++	virtual void unk002() = 0;
++};
++
++abstract_class IBoundingBoxChangeListener
++{
++public:
++	virtual void unk001( void * ) = 0;
++	virtual void unk002( void * ) = 0;
++};
++
++class CMapViewMgr : public ITagVisualizationListener, public IShaderReloadListener, public IBoundingBoxChangeListener
++{
++public:
++	uint8 m_unk001[64];
++	CUtlVector< CMapView * > m_Views;
++	uint8 m_unk101[256];
++};
++
++#endif // MAPVIEWMGR_H

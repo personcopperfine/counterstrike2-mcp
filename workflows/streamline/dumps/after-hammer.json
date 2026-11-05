@@ -1,0 +1,4150 @@
+{
+ "initialize": {
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+   "prompts": {},
+   "tools": {}
+  },
+  "serverInfo": {
+   "name": "hammer-mcp",
+   "version": "0.0.1"
+  },
+  "instructions": "Purpose: drives a live CS2 Hammer session (the map editor) and the workshop tools (ModelDoc models, the particle editor, soundevents) through an in-process bridge, and play-tests the map you compiled in the tools engine. It is not a general game client and not an offline file editor.\n\nFirst call: session_status. It shows liveness, the active document, unsaved edits, the addon and `next`. With no document open: an addon with no map -> new_map; an addon with maps -> open_map. A blocked or dead bridge means Hammer is not ready: tell the user, do not retry in a loop.\n\nIntent: if the user asks a question, answer it with read-only tools (annotations carry readOnlyHint) and change nothing. Call a mutating tool only when asked to change something.\n\nTraps:\n- Nothing auto-saves. save_map is the only writer; compile_map refuses UnsavedChanges until you save.\n- Compiles are jobs. compile_map {waitMs:30000} starts and waits; repeat compile_map {jobId, waitMs:30000} while done is false. Never busy-poll.\n- new_map's template already has meshes and spawns: remove them (delete_nodes, or new_map clear) or reuse them.\n- Document reads vs game reads: get_entity, find_entities, get_scene_info read the Hammer document (source live) or the saved file (source saved); entity_find, game_state, game_rules read the running game.\n- To see the map use look (framed views of an entity, point, box or the whole map; it moves no camera). Describe what the images show before judging.\n- run_map loads the COMPILED map (unsaved edits are not in it). The player starts dead on team 0: use run_map {team:\"ct\"} or \"t\" to spawn alive.\n- logic_auto OnMapSpawn fires at map load, not at round start. To act when play begins use a logic_eventlistener on round_freeze_end. Freeze time blocks movement (game_rules shows it).\n- BridgeBusy: another call holds the bridge. Wait for it; do not retry in a loop.\n- Errors: read next, useInstead, didYouMean, retrySafe (false = it may have run: check state before repeating). Switch on the error type, not the code. NotImplemented with data.missing: the bridge lacks that method; nothing was sent.\n- ModelDoc and particles: edit the .vmdl/.vpcf on disk (model_edit, particle_edit), then model_reload/particle_reload; compile with model_compile/particle_compile (each waits for its result).\n\nFor a whole task (a blockout, the edit-compile-test loop, a script, particles, a release) read the matching playbook first: get_playbook {name}, or the MCP prompt of the same name.\n\nNever step outside the tools: if a task needs something no tool does, tell the user and stop. Do not write scripts or reach the bridge another way.\n\nDone means: saved, compiled with 0 failed, loaded with run_map, the requested behaviour checked live with play_test or entity_find, and report_ready passes (or you explain every non-pass). Report with that evidence."
+ },
+ "tools": [
+  {
+   "name": "session_status",
+   "description": "Bridge/session status: build, liveness (mainThreadAgeMs), capabilities, active document + host path, unsaved bridge edits, jobs. Never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_entities",
+   "description": "Create entities in one undo group (never saves). Keyvalues are checked against the FGD; an unknown class, a `classname` key or a strict FGD issue refuses with nothing sent. An unknown soundevent name is refused unless allowUnknownSoundEvent.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUnknownSoundEvent": {
+      "default": false,
+      "description": "write unknown soundevent names (warning only)",
+      "type": "boolean"
+     },
+     "entities": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "pitch, yaw, roll",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "class": {
+         "description": "FGD classname, e.g. info_target",
+         "type": "string"
+        },
+        "keyValues": {
+         "additionalProperties": {
+          "type": [
+           "string",
+           "number",
+           "boolean"
+          ]
+         },
+         "description": "max 32 keys, values max 511 bytes; not classname/origin/angles/scales",
+         "type": "object"
+        },
+        "origin": {
+         "description": "world units",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        }
+       },
+       "required": [
+        "class",
+        "origin"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "strict": {
+      "default": false,
+      "description": "FGD errors refuse instead of warn",
+      "type": "boolean"
+     },
+     "undoLabel": {
+      "description": "echoed only; the bridge labels the group itself",
+      "type": "string"
+     }
+    },
+    "required": [
+     "entities"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "undo_last",
+   "description": "Undo one MCP-created undo group. Keyvalue changes are not always reverted; check the result notes. Refuses a user group unless acceptUserEdits.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "acceptUserEdits": {
+      "default": false,
+      "description": "allow undoing a group not created by this server",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "save_map",
+   "description": "Save the live map to its path (the only tool that writes the .vmap). Refuses a read-only file. Check saved:true.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "reload_map",
+   "description": "Reload the live map from disk, discarding unsaved edits and the undo history. Refuses an untitled document, and a dirty one unless force.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "force": {
+      "description": "discard unsaved edits",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "run_map",
+   "description": "Load the COMPILED map in the tools session's engine and wait for its load signal. Not for: compiling (compile_map first; a .vpk older than the .vmap is staleCompile). An already-mounted map is unmounted first. path (maps/<x>.vmap) or the active document; unsaved edits are not included. gameType/gameMode are posted first (defuse: 0/1). unload:true only unmounts. state ok|failed|timeout|unknown|unconfirmed (a timeout is not an error). One load at a time (EngineBusy). The player starts on team 0 and dead: pass team \"ct\"|\"t\" to join and wait until alive (team.skipped: load unconfirmed, no join).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "gameMode": {
+      "description": "posted as game_mode M (0..=255; 1 = competitive)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "gameType": {
+      "description": "posted as game_type N (0..=255)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "ignoreRunningCompile": {
+      "description": "load even though a compile_map job for this map is running",
+      "type": "boolean"
+     },
+     "path": {
+      "description": "maps/<x>.vmap; default the active document. Not with unload",
+      "type": "string"
+     },
+     "restartIfDead": {
+      "default": true,
+      "description": "with team: send mp_restartgame 1 if joined but dead (restarts the match score); false never restarts",
+      "type": "boolean"
+     },
+     "team": {
+      "description": "join this team and wait until alive (without it the player is on team 0, dead)",
+      "enum": [
+       "ct",
+       "t"
+      ],
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "load-signal watch, default 60000, max 600000; clamped to the tool budget",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "unload": {
+      "description": "unmount the current map instead of loading; no-op outside a map",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "open_map",
+   "description": "Open a .vmap in Hammer. Path must be a canonical maps/... .vmap of the addon that parses as binary v9 (else InvalidMapFile). Already open = existing:true, not an error; if it is in a background tab the reply says active:false (no tool switches tabs).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "path": {
+      "description": "addon-relative, e.g. maps/de_probe.vmap",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_entities",
+   "description": "Entities from the saved .vmap on disk (not unsaved edits; see find_entities).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "classnames": {
+      "description": "only a per-classname histogram",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "max entities returned",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "path": {
+      "description": ".vmap, addon-relative; default = active doc",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_entities",
+   "description": "Find entities by classname/targetname/sphere. source live = Hammer document, saved = .vmap on disk. Not for: the running game (use entity_find).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "limit": {
+      "description": "max returned",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "nameContains": {
+      "description": "saved only (live: get_scene_info query)",
+      "minLength": 1,
+      "type": "string"
+     },
+     "path": {
+      "description": "saved only; default = active doc",
+      "type": "string"
+     },
+     "source": {
+      "description": "default live if a document is open",
+      "enum": [
+       "live",
+       "saved"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "withKeyvalues": {
+      "description": "saved only: include each entity's keyvalues",
+      "type": "boolean"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "sphere on the node origin",
+      "properties": {
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "radius": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+       }
+      },
+      "required": [
+       "origin",
+       "radius"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_entity",
+   "description": "One entity (keyvalues, I/O connections) by nodeID or targetname. source live = Hammer document (unsaved edits), saved = .vmap on disk.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "wins over targetname",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "saved only; default = active doc",
+      "type": "string"
+     },
+     "source": {
+      "description": "default live if a document is open",
+      "enum": [
+       "live",
+       "saved"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "case-insensitive; 2+ matches = AmbiguousTargetname",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "render_view",
+   "description": "Render the LIVE map (unsaved edits included) from a camera with Hammer's offscreen renderer: PNG under <app>/renders/ plus an inline image (downscaled above 1920x1080; inline:false skips). Shows editor helpers/gizmos/grid (hideToolMaterials hides trigger/clip/tools volumes). Not for: the compiled game world (render_world). Camera: none = current 3D viewport; origin+angles; origin+lookAt; or lookAt alone to orbit (distance/pitch/yaw). angles [pitch,yaw,roll] degrees, pitch>0 looks down, yaw 0 = +X, 90 = +Y; fov is HORIZONTAL degrees.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "distance": {
+      "default": 256,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "fov": {
+      "description": "default: the viewport's",
+      "exclusiveMaximum": 179,
+      "exclusiveMinimum": 1,
+      "type": "number"
+     },
+     "height": {
+      "default": 360,
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "hideToolMaterials": {
+      "default": false,
+      "type": "boolean"
+     },
+     "inline": {
+      "default": true,
+      "type": "boolean"
+     },
+     "lookAt": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "name": {
+      "description": "file stem under renders/",
+      "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}$",
+      "type": "string"
+     },
+     "origin": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pitch": {
+      "default": 30,
+      "maximum": 89,
+      "minimum": -89,
+      "type": "number"
+     },
+     "width": {
+      "default": 640,
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "yaw": {
+      "default": 45,
+      "type": "number"
+     },
+     "zfar": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "znear": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "render_world",
+   "description": "Render the map loaded in the ENGINE (compiled .vpk: game lighting, sky, entities, no editor helpers) from a required camera, without Hammer. Not for: the live editor view (render_view). Camera: origin+angles, origin+lookAt, or lookAt alone to orbit (distance/pitch/yaw). angles [pitch,yaw,roll] degrees, pitch>0 looks down, yaw 0 = +X; fov is HORIZONTAL degrees. Up to 8192 px per side and 33554432 pixels, independent of the window; image block inline by default only up to 1920x1080 (inline:true forces, false refuses). No map loaded renders a black empty scene (blank note).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "required",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "distance": {
+      "default": 256,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "fov": {
+      "default": 90,
+      "exclusiveMaximum": 179,
+      "exclusiveMinimum": 1,
+      "type": "number"
+     },
+     "height": {
+      "default": 1080,
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "default: only if width*height <= 1920*1080",
+      "type": "boolean"
+     },
+     "lookAt": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "name": {
+      "description": "file stem under renders/",
+      "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}$",
+      "type": "string"
+     },
+     "origin": {
+      "description": "required",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pitch": {
+      "default": 30,
+      "maximum": 89,
+      "minimum": -89,
+      "type": "number"
+     },
+     "width": {
+      "default": 1920,
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "yaw": {
+      "default": 45,
+      "type": "number"
+     },
+     "zfar": {
+      "default": 30000,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "znear": {
+      "default": 4,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_meshes",
+   "description": "List mesh (brush) nodes of a .vmap: nodeID, origin, bounds, vertex/face counts, materials. Reads the SAVED file (reports staleRead if unsaved edits). Filter with within={min,max} (bounds overlap).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "maximum": 5000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap path (addon-relative or absolute); omitted = active document",
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "meshes whose bounds overlap this box",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_mesh",
+   "description": "Full geometry of one mesh by nodeID: WORLD vertices, faces (counter-clockwise loops), faceMaterials, faceInfo (centre/normal), bounds. Without `path` reads the live document (source \"live\", unsaved edits included; face order matches the mesh edit tools), else the saved file. A very large live mesh is refused with MeshTooLarge: save_map and retry.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap path (addon-relative or absolute); omitted = active document",
+      "type": "string"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_mesh",
+   "description": "Create a mesh in the LIVE map from WORLD-space vertices and faces (vertex-index loops). orientOutward=true auto-fixes the winding of a closed convex solid. Undoable; not saved (save_map).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faceMaterials": {
+      "description": "material path or null (= base material) per face",
+      "items": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "type": "array"
+     },
+     "faces": {
+      "description": "vertex-index loops, counter-clockwise seen from the visible side",
+      "items": {
+       "items": {
+        "minimum": 0,
+        "type": "integer"
+       },
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "type": "string"
+     },
+     "orientOutward": {
+      "default": false,
+      "description": "flip faces pointing at the centroid (closed convex solid)",
+      "type": "boolean"
+     },
+     "vertices": {
+      "description": "WORLD-space [x, y, z] points",
+      "items": {
+       "items": {
+        "type": "number"
+       },
+       "maxItems": 3,
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "vertices",
+     "faces"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_block",
+   "description": "Create a box, wedge (ramp) or cylinder mesh in the LIVE map. box/wedge: min,max; wedge reaches full height at riseToward; cylinder: center (bottom centre), radius, height, sides. top/bottom/sideMaterial override material per face by normal z. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "bottomMaterial": {
+      "description": "faces with normal z < -0.5",
+      "type": "string"
+     },
+     "center": {
+      "description": "bottom centre",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "height": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "type": "string"
+     },
+     "max": {
+      "description": "box/wedge: high corner",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "min": {
+      "description": "box/wedge: low corner",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "radius": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "riseToward": {
+      "default": "+x",
+      "description": "end that reaches max.z",
+      "enum": [
+       "+x",
+       "-x",
+       "+y",
+       "-y"
+      ],
+      "type": "string"
+     },
+     "shape": {
+      "default": "box",
+      "enum": [
+       "box",
+       "wedge",
+       "cylinder"
+      ],
+      "type": "string"
+     },
+     "sideMaterial": {
+      "description": "vertical faces",
+      "type": "string"
+     },
+     "sides": {
+      "default": 16,
+      "maximum": 64,
+      "minimum": 3,
+      "type": "integer"
+     },
+     "topMaterial": {
+      "description": "faces with normal z > 0.5",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_mesh_geometry",
+   "description": "Replace ALL polygons of a LIVE mesh (nodeID) with new WORLD-space vertices and faces. The node keeps its id. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faceMaterials": {
+      "description": "material path or null (= base material) per face",
+      "items": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "type": "array"
+     },
+     "faces": {
+      "description": "vertex-index loops, counter-clockwise seen from the visible side",
+      "items": {
+       "items": {
+        "minimum": 0,
+        "type": "integer"
+       },
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "type": "string"
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "vertices": {
+      "description": "WORLD-space [x, y, z] points",
+      "items": {
+       "items": {
+        "type": "number"
+       },
+       "maxItems": 3,
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID",
+     "vertices",
+     "faces"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "transform_mesh",
+   "description": "Translate, yaw-rotate (degrees about the pivot) and/or scale a LIVE mesh (nodeID). Works from the geometry this server wrote this session, else the SAVED .vmap (refused while the live document is dirty: save_map first); `geometrySource` says which. An odd number of negative scale axes mirrors the mesh. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "pivot": {
+      "description": "scale/rotate centre; default bounds centre",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "rotateYaw": {
+      "description": "degrees, counter-clockwise seen from above",
+      "type": "number"
+     },
+     "scale": {
+      "description": "uniform factor or [sx, sy, sz]; zero refused",
+      "oneOf": [
+       {
+        "type": "number"
+       },
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      ]
+     },
+     "translate": {
+      "description": "world-space [dx, dy, dz]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "move_mesh_vertices",
+   "description": "Offset vertices (indices from get_mesh) of a LIVE mesh by [dx, dy, dz], e.g. to make a slope. Faces must stay planar; a move that flattens a face is refused. Geometry source as transform_mesh (own writes, else saved .vmap; dirty document refused). Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "offset": {
+      "description": "world-space [dx, dy, dz]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "vertices": {
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID",
+     "vertices",
+     "offset"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "extrude_mesh_face",
+   "description": "Push one face (index from get_mesh) of a LIVE mesh out along its normal by `distance` (negative = recess), adding side quads. Geometry source as transform_mesh. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "distance": {
+      "description": "negative = inward; zero refused",
+      "type": "number"
+     },
+     "face": {
+      "minimum": 0,
+      "type": "integer"
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "sideMaterial": {
+      "description": "default: the cap's",
+      "type": "string"
+     }
+    },
+    "required": [
+     "nodeID",
+     "face",
+     "distance"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_mesh_faces",
+   "description": "Remove faces (indices from get_mesh) of a LIVE mesh; remaining indices are renumbered, so call get_mesh again. Not for: removing the whole mesh (delete_nodes). Geometry source as transform_mesh. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "faces"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_mesh_material",
+   "description": "Assign a material to a LIVE mesh's faces (all faces if `faces` omitted). With `faces` the mesh is rebuilt from geometry this server wrote this session (live geometry can't be read), so use it on meshes created or rewritten here. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "description": "face indices from get_mesh; omit for all",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     },
+     "material": {
+      "type": "string"
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "material"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "delete_nodes",
+   "description": "Delete meshes/entities/groups by nodeID in the live document (one undo group, undo_last restores; never saves).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeIDs": {
+      "description": "unique node ids; world cannot be deleted",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     }
+    },
+    "required": [
+     "nodeIDs"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "compile_map",
+   "description": "Compile a Hammer map headless; starts a background job ({jobId, state}). Wait with waitMs (here, or compile_map {jobId, waitMs:30000}) until done:true; success only if state is ok (running|ok|failed|timeout|cancelled; failLines/logTail say why not). {jobId, cancel:true} ends it. path: maps/<x>.vmap, default the active document. mode (exclusive with stages): \"full\" (default), \"novis\" (all but VIS, fast), \"nav\" (-nav only). stages: subset of world, phys, vis, bakelighting, nav; without world it builds on the existing .vpk. UnsavedChanges if the document is unsaved (save_map first); EngineBusy if the engine is in this map (run_map {unload:true}) or another compile runs.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cancel": {
+      "description": "with jobId: end the job instead of polling",
+      "type": "boolean"
+     },
+     "jobId": {
+      "description": "poll this job instead of starting one (no path/mode/stages)",
+      "type": "string"
+     },
+     "mode": {
+      "description": "full: all stages; nav: -nav only (needs .vpk); novis: all but VIS",
+      "enum": [
+       "full",
+       "nav",
+       "novis"
+      ],
+      "type": "string"
+     },
+     "path": {
+      "description": "maps/<x>.vmap; default the active document",
+      "type": "string"
+     },
+     "stages": {
+      "description": "stage subset; without world needs the existing .vpk. Exclusive with mode",
+      "items": {
+       "enum": [
+        "world",
+        "phys",
+        "vis",
+        "bakelighting",
+        "nav"
+       ],
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "timeoutMs": {
+      "description": "compile deadline, default 1500000",
+      "maximum": 3600000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitMs": {
+      "description": "wait for the job up to this long (default 30000, 0 = answer now); reply has done; repeat while done is false",
+      "maximum": 600000,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_entity_keyvalues",
+   "description": "Set keyvalues on an existing entity by nodeID (live, not saved; returns previous values). Values are checked against the FGD; an unknown sound or model name is refused unless force.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "force": {
+      "default": false,
+      "description": "skip the model/soundevent name checks (warning only)",
+      "type": "boolean"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "max 32 keys, values max 511 bytes; not classname/origin/angles/scales",
+      "type": "object"
+     },
+     "nodeID": {
+      "description": "node id from find_entities",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "strict": {
+      "default": false,
+      "description": "FGD errors refuse instead of warn; unchanged values are exempt",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "nodeID",
+     "keyValues"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_entity_classes",
+   "description": "Entity classes from the game's FGD files (filter by substring/kind/tag). logic_auto, logic_eventlistener, func_movelinear carry a playNote on round-start timing.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "filter": {
+      "description": "substring, case-insensitive",
+      "type": "string"
+     },
+     "kind": {
+      "description": "default: point + solid",
+      "enum": [
+       "point",
+       "solid",
+       "base",
+       "all"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "description": "max classes returned",
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tag": {
+      "description": "FGD tags() helper argument, e.g. Sound, PropStatic, Logic",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_entity_class",
+   "description": "One entity class from the FGD: resolved keyvalues (type, default, choices, flags), inputs, outputs, bases. playNote (round-start timing: what fires at load vs when play begins) present for logic_auto, logic_eventlistener, func_movelinear.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "case-insensitive",
+      "type": "string"
+     },
+     "includeBases": {
+      "description": "false = only what the class itself declares",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "class"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_scene_info",
+   "description": "Overview of the map: entity counts per class, mesh count, bounds, spawns, and the first `limit` entities whose classname/targetname contains `query`. Start here; find_entities/get_entity/list_meshes for detail. source live = Hammer document, saved = .vmap on disk.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "fields": {
+      "description": "columns",
+      "items": {
+       "enum": [
+        "nodeID",
+        "classname",
+        "targetname",
+        "origin"
+       ],
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "limit": {
+      "description": "max items",
+      "maximum": 500,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "path": {
+      "description": "saved only; default = active doc",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring of classname/targetname",
+      "minLength": 1,
+      "type": "string"
+     },
+     "source": {
+      "description": "default live if a document is open",
+      "enum": [
+       "live",
+       "saved"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_entity_live",
+   "description": "Deprecated: use `get_entity` {\"source\":\"live\"}.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_entities_live",
+   "description": "Deprecated: use `find_entities` {\"source\":\"live\"}.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_status",
+   "description": "ModelDoc editor status: whether modeldoc_editor.dll is loaded, missing capabilities, the active document (+ host path, inAddon) and a launch/open hint. Never errors.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_read",
+   "description": "Read a .vmdl from disk: one node subtree as JSON (_class, name, attrs, children). Path: host, Z:\\app\\..., or csgo_addons/<addon>/models/x.vmdl.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_list_nodes",
+   "description": "Flat node list of a .vmdl on disk (path /i/j, _class, name, childCount, attrKeys), filterable by class/name.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_edit",
+   "description": "Edit a .vmdl in the active addon: ops add_node/remove_node/move_node/set_attr/remove_attr, all-or-nothing, validated, backup + atomic write. Does not touch the editor: model_reload afterwards.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_create",
+   "description": "Create a new .vmdl in the active addon from a template (static_prop, skeletal). Refuses an existing file unless overwrite.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_compile",
+   "description": "Compile a .vmdl to .vmdl_c. route resourcecompiler (default; works for new files) or editor (needs hasAsset; refuses a dirty document unless saveFirst). ok = .vmdl_c updated.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_open",
+   "description": "Open a .vmdl of the active addon in the running ModelDoc. Refuses while the live document is dirty unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_reload",
+   "description": "Reload the active ModelDoc document from disk (after model_edit); discards editor undo history. Refuses while dirty unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_save",
+   "description": "Save the active ModelDoc document to its own path (never Save As: refuses untitled documents and files outside the addon).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_node_types",
+   "description": "Every ModelDoc node class name (_class) the running editor knows, sorted; writeSnapshot stores them under hammer-mcp/research/.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "model_render",
+   "description": "Render ModelDoc's main 3D viewport to a PNG under <app>/renders/ and attach it as an image (downscaled above 1920x1080). Needs an open .vmdl tab in the running ModelDoc. Uses the viewport's own camera.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "height": {
+      "description": "default 768; width*height <= 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "false = path only (reports inline:null)",
+      "type": "boolean"
+     },
+     "name": {
+      "description": "file stem [A-Za-z0-9._-], max 64; default render_<tick>_<seq>",
+      "type": "string"
+     },
+     "width": {
+      "description": "default 1024",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_read",
+   "description": "Read a .vpcf from disk: the kv3 header, root non-array fields, per-array entry counts; function:\"m_Operators/2\" returns that entry's fields. Path: host, Z:\\app\\..., or csgo_addons/<addon>/particles/x.vpcf.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_list",
+   "description": "Flat list of a .vpcf's function entries from disk (array, type, index, class, fieldKeys), filterable by array and class; counts gives entries per array.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_validate",
+   "description": "Validate a .vpcf on disk against the particle schema snapshot (structure, classes, fields); returns ok, errors, warnings. No usable snapshot is SchemaUnavailable, never ok:true.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_edit",
+   "description": "Edit a .vpcf in the active addon: ops add_function/remove_function/move_function/set_field/remove_field/set_root_field/remove_root_field/add_child/remove_child/add_variable/remove_variable, all-or-nothing, schema-checked (skipSchema skips only that), backup + atomic write. Does not touch the editor: particle_reload afterwards.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_create",
+   "description": "Create a new .vpcf in the active addon from the minimal template (maxParticles, renderer). Refuses an existing file unless overwrite.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_compile",
+   "description": "Compile a .vpcf (or a folder; recursive) to .vpcf_c with resourcecompiler. children (default true) also compiles m_ChildRef files, children first; stock/external children are reported, not compiled. ok only if every file is.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "children": {
+      "description": "also compile m_ChildRef children (default true)",
+      "type": "boolean"
+     },
+     "force": {
+      "description": "recompile even when the compiler thinks the output is current",
+      "type": "boolean"
+     },
+     "path": {
+      "description": "a .vpcf or folder of the active addon: addon-relative `particles/x.vpcf`",
+      "type": "string"
+     },
+     "recursive": {
+      "description": "folder: descend into sub-folders",
+      "type": "boolean"
+     },
+     "timeoutMs": {
+      "description": "whole-run deadline in ms (default 120000, max 600000)",
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_status",
+   "description": "Particle editor (pet) status: whether pet.dll is loaded, missing capabilities, the active .vpcf document (+ host path, inAddon) and a launch/load hint. Never errors.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_types",
+   "description": "Every particle function class the running pet registers, grouped by array. writeSnapshot stores the full schema snapshot under hammer-mcp/research/.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_schema",
+   "description": "Schema (bases, flattened fields, metadata) of one particle class, from the running pet if available, else the local snapshot.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_load",
+   "description": "Load the particle editor tool into the running tools session and wait for pet.dll to verify. One shot: loaded:false means a modal may be up (restart the session).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_open",
+   "description": "Open a .vpcf of the active addon in the running pet. Refuses while the live document is dirty unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_reload",
+   "description": "Reload the active pet document from disk after a file edit. A malformed file would crash pet, so it is validated first and nothing is sent if invalid. Refuses while dirty unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_save",
+   "description": "Save the active pet document to its own path (never Save As: refuses untitled documents and files outside the addon). force re-saves a clean document in pet's own form.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "force": {
+      "description": "re-save a clean document too (pet re-serializes it)",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_live_read",
+   "description": "Read the live pet document as pet serialized it: path, dirty/canUndo/canRedo, kv3 header, root non-array fields, per-array entry counts; function:\"m_Operators/2\" returns that entry.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "function": {
+      "description": "\"<array>/<index>\", e.g. m_Operators/2; \"/\" = the root object",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_live_edit",
+   "description": "Edit the live pet document in-editor with undo: ops add_function/remove_function/move_function/set_field/remove_field/set_root_field/remove_root_field/add_child/remove_child/add_variable/remove_variable, all-or-nothing, schema-checked (skipSchema skips only that). The document is dirty afterwards: particle_save, or force on reload/open.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "allowObsolete": {
+      "description": "obsolete classes warn instead of error (default true)",
+      "type": "boolean"
+     },
+     "label": {
+      "description": "undo label, 1..64 printable ASCII; default \"MCP: <ops>\"",
+      "type": "string"
+     },
+     "ops": {
+      "description": "applied in order (the particle_edit op set)",
+      "minItems": 1,
+      "type": "array"
+     },
+     "skipSchema": {
+      "description": "default false",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "ops"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_undo",
+   "description": "Undo the last live pet edit (same history as the editor's Ctrl+Z). Nothing to undo is a retry-safe error.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_redo",
+   "description": "Redo the last undone live pet edit. Nothing to redo is a retry-safe error.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "particle_render",
+   "description": "Render the particle editor's preview viewport to a PNG under <app>/renders/ and attach it as an image (downscaled above 1920x1080). Uses pet's own preview camera; no document needed.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "height": {
+      "description": "default 768; width*height <= 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "false = path only (reports inline:null)",
+      "type": "boolean"
+     },
+     "name": {
+      "description": "file stem [A-Za-z0-9._-], max 64; default render_<tick>_<seq>",
+      "type": "string"
+     },
+     "width": {
+      "description": "default 1024",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_models",
+   "description": "List .vmdl models in the game VPKs and the current addon. Use an entry's `model` value verbatim as a prop's `model` keyvalue.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "compiledOnly": {
+      "type": "boolean"
+     },
+     "limit": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "offset": {
+      "minimum": 0,
+      "type": "integer"
+     },
+     "prefix": {
+      "description": "lowercase path prefix, e.g. 'models/props/'",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring; '*' or '?' makes it a glob",
+      "type": "string"
+     },
+     "source": {
+      "enum": [
+       "any",
+       "addon",
+       "game"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "find_assets",
+   "description": "Find assets in the addon and the game paks by kind: material, model, particle, sound (.vsnd), texture. Hits: `path` (use verbatim), `source` (addon|content=uncompiled source|csgo|core), `compiled`; materials add `renders`: ok | missing_textures (+missingTextures, renders magenta) | unknown (+reason). Sorted by path; limit default 25; pass `nextCursor` as `cursor` for more; `total` counts every match. Prefer renders:ok. Models: get_model_info next.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cursor": {
+      "description": "the previous reply's nextCursor",
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "material",
+       "model",
+       "particle",
+       "sound",
+       "texture"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "maximum": 200,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "prefix": {
+      "description": "path prefix, e.g. 'materials/dev/'",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring of the path",
+      "type": "string"
+     },
+     "source": {
+      "enum": [
+       "all",
+       "addon",
+       "game"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_model_info",
+   "description": "Compiled-model facts for placing a prop: render/physics bounds, `facing` (forward +x/-x/+y/-y from front/rear attachments, else unknown + longAxis), `placement` (floorOffset lifts the origin so the model rests on a floor; footprint = x/y box size), skins, bodygroups, sequences, attachments, keyvalues. An uncompiled addon model is refused (ModelNotCompiled). Unknown name: up to 5 suggestions.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "include": {
+      "description": "default: sequences, attachments, bodygroups; keyvalues only when named",
+      "items": {
+       "enum": [
+        "sequences",
+        "attachments",
+        "bodygroups",
+        "keyvalues"
+       ],
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "limit": {
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "model": {
+      "description": "any spelling: case, backslashes, .vmdl_c form all accepted",
+      "type": "string"
+     }
+    },
+    "required": [
+     "model"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_props",
+   "description": "Prop entities of a map, from the saved .vmap (source file) or the live document (source live). Kind comes from FGD tags(Prop*).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "includeKeyValues": {
+      "description": "include keyvalues",
+      "type": "boolean"
+     },
+     "includeOtherModelEntities": {
+      "description": "include non-prop classes with a model keyvalue (kind other/unknown)",
+      "type": "boolean"
+     },
+     "kind": {
+      "description": "other/unknown need includeOtherModelEntities",
+      "enum": [
+       "any",
+       "static",
+       "dynamic",
+       "physics",
+       "other",
+       "unknown"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "description": "max props returned",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "model": {
+      "description": "case-insensitive substring of model",
+      "minLength": 1,
+      "type": "string"
+     },
+     "offset": {
+      "description": "skip this many matches",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "file source only; addon-relative or host path",
+      "type": "string"
+     },
+     "source": {
+      "description": "default: file if `path` given, else live",
+      "enum": [
+       "file",
+       "live"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "axis-aligned box on the node origin; max >= min on every axis",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_props",
+   "description": "Place prop entities in one undo group (never saves). Each prop: `kind` static|dynamic|physics, or an explicit prop-tagged FGD `class` (exactly one). `model` is catalog-checked (unknown -> ModelNotFound with suggestions; uncompiled addon model refused unless allowUncompiled). `scales` need a bridge with node.setTransform, else the whole call is refused (BridgeTooOld).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUncompiled": {
+      "default": false,
+      "description": "place props whose model has no compiled .vmdl_c (they do not draw until compiled)",
+      "type": "boolean"
+     },
+     "props": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "pitch, yaw, roll",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "class": {
+         "description": "FGD class carrying a prop tag, else NotAPropClass",
+         "type": "string"
+        },
+        "keyValues": {
+         "additionalProperties": {
+          "type": [
+           "string",
+           "number",
+           "boolean"
+          ]
+         },
+         "description": "other keyvalues, FGD-checked; not model/classname/origin/angles/scales/skin/targetname",
+         "type": "object"
+        },
+        "kind": {
+         "description": "prop_static / prop_dynamic / prop_physics",
+         "enum": [
+          "static",
+          "dynamic",
+          "physics"
+         ],
+         "type": "string"
+        },
+        "model": {
+         "description": "models/**.vmdl",
+         "type": "string"
+        },
+        "origin": {
+         "description": "world units",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "scales": {
+         "description": "each in (0, 1000]",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "skin": {
+         "description": "skin name from get_model_info",
+         "type": "string"
+        },
+        "snapToFloor": {
+         "description": "lift origin.z by the model floorOffset (get_model_info), scaled by scales.z",
+         "type": "boolean"
+        },
+        "targetname": {
+         "description": "prop_static ignores it at runtime",
+         "type": "string"
+        }
+       },
+       "required": [
+        "model",
+        "origin"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "props"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_node_transform",
+   "description": "Move/rotate/scale one live node (entity or mesh) by nodeID. Give at least one of origin/angles/scales; relative=true makes origin/angles deltas and scales factors (needs a readable current value; refused for mesh scales). A moved prop_static changes the editor only until compile_map. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch, yaw, roll] degrees; a delta if relative",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "origin": {
+      "description": "world units; a delta if relative",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "relative": {
+      "default": false,
+      "type": "boolean"
+     },
+     "scales": {
+      "description": "each in (0, 1000]; a factor if relative",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "add_entity_connections",
+   "description": "Add I/O connections to a live entity by nodeID (one undo group, never saves). Output, target input and prop_static targets are checked against the FGD (force skips the FGD checks, never the prop_static refusal). An entry the bridge could not confirm comes back under `unconfirmed` with outcomeUnknown: read it back, do not retry. Example: trigger_multiple OnStartTouch -> door SetAnimationLooping.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "connections": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "delay": {
+         "description": "seconds",
+         "maximum": 3600.0,
+         "minimum": 0,
+         "type": "number"
+        },
+        "input": {
+         "description": "FGD input name, e.g. SetAnimationLooping",
+         "minLength": 1,
+         "type": "string"
+        },
+        "output": {
+         "description": "FGD output name, e.g. OnStartTouch",
+         "minLength": 1,
+         "type": "string"
+        },
+        "param": {
+         "description": "override parameter, e.g. animation name",
+         "type": "string"
+        },
+        "target": {
+         "description": "targetname; `!activator`/`!self`/`!player` or a name not yet in the document are allowed",
+         "minLength": 1,
+         "type": "string"
+        },
+        "timesToFire": {
+         "description": "-1 (default) = every time; 0 refused",
+         "minimum": -1,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "output",
+        "target",
+        "input"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "force": {
+      "default": false,
+      "description": "skip the FGD output/input checks",
+      "type": "boolean"
+     },
+     "nodeID": {
+      "description": "source entity node id",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "connections"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "remove_entity_connections",
+   "description": "Remove live entity I/O connections by nodeID, by `indices` or `match` (output/target/input; safer, indices shift with every edit). One undo group, never saves. `remaining` is what is left; the bridge `count` is the number removed.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "indices": {
+      "description": "0-based, as get_entity lists them; max 512; out-of-range or duplicates refused",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 512,
+      "minItems": 1,
+      "type": "array"
+     },
+     "match": {
+      "additionalProperties": false,
+      "description": "all connections matching these fields; at least one key",
+      "properties": {
+       "input": {
+        "minLength": 1,
+        "type": "string"
+       },
+       "output": {
+        "minLength": 1,
+        "type": "string"
+       },
+       "target": {
+        "minLength": 1,
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "nodeID": {
+      "description": "entity node id",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_triggers",
+   "description": "List brush entities (triggers, or every @SolidClass with kind \"solid\") from the SAVED .vmap (source \"file\", reports staleRead) or the LIVE document (source \"live\"). Volumes are the union of the mesh children's bounds. Filter by class, targetname or a `within` box.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "exact classname, case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "includeConnections": {
+      "description": "default true",
+      "type": "boolean"
+     },
+     "includeKeyValues": {
+      "description": "default false",
+      "type": "boolean"
+     },
+     "kind": {
+      "description": "trigger (default) = trigger classes; solid = every @SolidClass",
+      "enum": [
+       "trigger",
+       "solid"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "default": 200,
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "offset": {
+      "default": 0,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "file route only: addon-relative (maps/x.vmap) or absolute .vmap",
+      "type": "string"
+     },
+     "source": {
+      "description": "default: file when `path` is given, else live",
+      "enum": [
+       "file",
+       "live"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "exact targetname, case-insensitive",
+      "minLength": 1,
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "axis-aligned box matched against the volume (origin if the volume is unknown)",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "withinMode": {
+      "description": "contains (default) = volume entirely inside; intersects = overlaps",
+      "enum": [
+       "contains",
+       "intersects"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_trigger",
+   "description": "Create a trigger brush entity in the LIVE map from exactly one volume (`box`, `geometry` or `meshNodeIDs`) and tie it to the new entity. Class must be an FGD @SolidClass. `spawnflags` is the COMPLETE flag set (omit for FGD defaults). `connections` are checked against the FGD before anything is sent. Several undo groups; a failure after the volume exists is PartialFailure (not retry-safe). Never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowRetie": {
+      "default": false,
+      "description": "meshNodeIDs only: move meshes that belong to another brush entity",
+      "type": "boolean"
+     },
+     "box": {
+      "additionalProperties": false,
+      "description": "axis-aligned box; exactly one of box, geometry, meshNodeIDs",
+      "properties": {
+       "max": {
+        "description": "high corner; each side at least 1 unit",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "description": "low corner [x, y, z]",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "class": {
+      "default": "trigger_multiple",
+      "description": "FGD @SolidClass",
+      "type": "string"
+     },
+     "connections": {
+      "description": "I/O added to the new entity (as add_entity_connections)",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "delay": {
+         "maximum": 3600,
+         "minimum": 0,
+         "type": "number"
+        },
+        "input": {
+         "minLength": 1,
+         "type": "string"
+        },
+        "output": {
+         "minLength": 1,
+         "type": "string"
+        },
+        "param": {
+         "type": "string"
+        },
+        "target": {
+         "description": "targetname or !activator/!self",
+         "minLength": 1,
+         "type": "string"
+        },
+        "timesToFire": {
+         "description": "-1 = every time",
+         "minimum": -1,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "output",
+        "target",
+        "input"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "force": {
+      "default": false,
+      "description": "skip the FGD output/input checks",
+      "type": "boolean"
+     },
+     "geometry": {
+      "additionalProperties": false,
+      "description": "WORLD-space mesh; faces counter-clockwise seen from the visible side",
+      "properties": {
+       "faces": {
+        "description": "vertex-index loops",
+        "items": {
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "vertices": {
+        "description": "world-space [x, y, z] points",
+        "items": {
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "vertices",
+       "faces"
+      ],
+      "type": "object"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "other FGD keyvalues; not classname/spawnflags/targetname/origin/angles/scales",
+      "type": "object"
+     },
+     "material": {
+      "description": "default: the class's auto_apply_material, else toolstrigger",
+      "type": "string"
+     },
+     "meshNodeIDs": {
+      "description": "existing live world meshes to tie",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "retexture": {
+      "default": false,
+      "description": "also apply `material` to the meshes in `meshNodeIDs`",
+      "type": "boolean"
+     },
+     "spawnflags": {
+      "description": "COMPLETE set: labels or bit numbers; unlisted bits OFF; omit = FGD defaults",
+      "items": {
+       "type": [
+        "string",
+        "integer"
+       ]
+      },
+      "type": "array"
+     },
+     "targetname": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "tie_to_entity",
+   "description": "Tie existing live world meshes to a brush entity: a NEW one (`class`) or an existing one (`entityID`). Already-tied meshes are skipped; `material` retextures the tied meshes. Not for: making a volume from scratch (create_trigger). Never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowRetie": {
+      "default": false,
+      "description": "move meshes that belong to another brush entity",
+      "type": "boolean"
+     },
+     "class": {
+      "description": "FGD @SolidClass of a new entity; exactly one of class, entityID",
+      "type": "string"
+     },
+     "entityID": {
+      "description": "existing live brush entity; refuses class/targetname/spawnflags/keyValues",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "other FGD keyvalues; not classname/spawnflags/targetname/origin/angles/scales",
+      "type": "object"
+     },
+     "material": {
+      "description": "retexture every tied mesh (default: keep their own)",
+      "type": "string"
+     },
+     "meshNodeIDs": {
+      "description": "live world meshes to tie",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "spawnflags": {
+      "description": "COMPLETE set: labels or bit numbers; unlisted bits OFF; omit = FGD defaults",
+      "items": {
+       "type": [
+        "string",
+        "integer"
+       ]
+      },
+      "type": "array"
+     },
+     "targetname": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "meshNodeIDs"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "move_to_world",
+   "description": "Move a brush entity's meshes back under its parent (world/group) and delete the entity. One undo group; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "deleteEntity": {
+      "default": true,
+      "description": "false is refused",
+      "type": "boolean"
+     },
+     "nodeID": {
+      "description": "brush entity node id (list_triggers / get_entity)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_trigger_volume",
+   "description": "Replace a LIVE brush entity's volume with a new `box` or explicit `geometry` (WORLD coordinates), rebuilding one of its tied meshes in place. Several tied meshes: name one with `meshNodeID`. Material defaults to the mesh's own, else the trigger default. One undo group; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "box": {
+      "additionalProperties": false,
+      "description": "axis-aligned box; exactly one of box, geometry",
+      "properties": {
+       "max": {
+        "description": "high corner; each side at least 1 unit",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "description": "low corner [x, y, z], world space",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "geometry": {
+      "additionalProperties": false,
+      "description": "WORLD-space mesh; faces counter-clockwise seen from the visible side",
+      "properties": {
+       "faces": {
+        "description": "vertex-index loops",
+        "items": {
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "vertices": {
+        "description": "world-space [x, y, z] points",
+        "items": {
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "vertices",
+       "faces"
+      ],
+      "type": "object"
+     },
+     "material": {
+      "description": "default: the mesh's own material, else the trigger default",
+      "type": "string"
+     },
+     "meshNodeID": {
+      "description": "which tied mesh to rebuild; required if the entity has several",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "nodeID": {
+      "description": "brush entity node id (list_triggers / get_entity)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "list_soundevents",
+   "description": "List soundevents available to the game and the active addon (game VPKs + addon files; no bridge). Use an entry's `name` verbatim as a sound event keyvalue. Pass `name` for one event's full properties and base chain; the other filters apply to the list only.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "file": {
+      "description": "substring of the holding file path",
+      "type": "string"
+     },
+     "hasPosition": {
+      "description": "only events with a `position`",
+      "type": "boolean"
+     },
+     "includeProperties": {
+      "description": "include raw `properties` per listed event",
+      "type": "boolean"
+     },
+     "limit": {
+      "default": 100,
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "description": "exact name (case-sensitive): detail route for ONE event; ignores list filters",
+      "minLength": 1,
+      "type": "string"
+     },
+     "offset": {
+      "default": 0,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "prefix": {
+      "description": "name prefix, case-insensitive (e.g. 'mcp.')",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring of the name; '*'/'?' make it a glob",
+      "type": "string"
+     },
+     "source": {
+      "description": "default any",
+      "enum": [
+       "any",
+       "addon",
+       "game"
+      ],
+      "type": "string"
+     },
+     "type": {
+      "description": "exact event `type` (e.g. 'csgo_mega')",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "edit_soundevents",
+   "description": "Edit a .vsndevts (default: the addon's soundevents_addon.vsndevts) keeping comments. Args: path?, ops[] of {op:\"set\",name,properties,merge?} | {op:\"remove\",name} | {op:\"rename\",name,to}, dryRun?, createFile?, overwrite? (set replaces an existing event), force? (remove a referenced event), validate?=true. Checked before writing. Compile with compile_soundevents.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "compile_soundevents",
+   "description": "Compile a .vsndevts to <file>_c (args: path?, timeoutMs?). Needs a running tools container. ok:false is a result with `errors`. Loaded at the next map load (run_map).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "create_sound_entities",
+   "description": "Create sound entities in the LIVE map: `kind` point|sphere|alignedbox|orientedbox|soundscape|soundscape_proxy, or any FGD tags(Sound) `class`. The soundevent name is checked against the index first (a misspelt event is silent at runtime). Engine key spellings are written for you; `schedule` builds a logic_auto (startDelay/stopDelay) and/or a logic_timer (repeatEvery; first fire at repeatInitialDelay + repeatEvery). Needs targetname with schedule/connections; soundscapes refuse schedule. Never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUnknownSoundEvent": {
+      "default": false,
+      "description": "warn instead of refusing unknown soundevents",
+      "type": "boolean"
+     },
+     "entities": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "[pitch, yaw, roll]",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "box": {
+         "additionalProperties": false,
+         "description": "box kinds only; default -64..64",
+         "properties": {
+          "max": {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          },
+          "min": {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        },
+        "class": {
+         "description": "FGD tags(Sound) class (snd_event_path, ambient_generic, ...)",
+         "type": "string"
+        },
+        "connections": {
+         "description": "I/O on this entity, checked against its FGD outputs",
+         "items": {
+          "additionalProperties": false,
+          "properties": {
+           "delay": {
+            "type": "number"
+           },
+           "input": {
+            "type": "string"
+           },
+           "output": {
+            "type": "string"
+           },
+           "param": {
+            "type": "string"
+           },
+           "target": {
+            "type": "string"
+           },
+           "timesToFire": {
+            "minimum": -1,
+            "type": "integer"
+           }
+          },
+          "required": [
+           "output",
+           "target",
+           "input"
+          ],
+          "type": "object"
+         },
+         "maxItems": 16,
+         "minItems": 1,
+         "type": "array"
+        },
+        "keyValues": {
+         "description": "other FGD keyvalues; fields above are refused here",
+         "type": "object"
+        },
+        "kind": {
+         "description": "exactly one of kind and class",
+         "enum": [
+          "point",
+          "sphere",
+          "alignedbox",
+          "orientedbox",
+          "soundscape",
+          "soundscape_proxy"
+         ],
+         "type": "string"
+        },
+        "legacySoundscape": {
+         "description": "legacy .vsc name (soundscape family), unvalidated",
+         "type": "string"
+        },
+        "origin": {
+         "description": "[x, y, z], required",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "positions": {
+         "description": "soundscape family: targetnames for position0..7",
+         "items": {
+          "type": "string"
+         },
+         "maxItems": 8,
+         "minItems": 1,
+         "type": "array"
+        },
+        "radius": {
+         "description": "only if the class has a radius key; soundscapes: integer >= 1 or -1",
+         "type": "number"
+        },
+        "schedule": {
+         "additionalProperties": false,
+         "description": "timing helpers; needs targetname",
+         "properties": {
+          "repeatEvery": {
+           "type": "number"
+          },
+          "repeatInitialDelay": {
+           "type": "number"
+          },
+          "startDelay": {
+           "minimum": 0,
+           "type": "number"
+          },
+          "stopDelay": {
+           "type": "number"
+          }
+         },
+         "type": "object"
+        },
+        "soundEvent": {
+         "description": "soundevent name; required for point/soundscape kinds",
+         "type": "string"
+        },
+        "sourceEntityName": {
+         "type": "string"
+        },
+        "startOnSpawn": {
+         "type": "boolean"
+        },
+        "stopOnNew": {
+         "type": "boolean"
+        },
+        "targetname": {
+         "type": "string"
+        },
+        "toLocalPlayer": {
+         "type": "boolean"
+        }
+       },
+       "type": "object"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+     },
+     "strict": {
+      "default": false,
+      "description": "refuse on FGD keyvalue errors",
+      "type": "boolean"
+     },
+     "undoLabel": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "entities"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "drain_sounds",
+   "description": "Read AND consume the sound events started since the last drain (name, entity, ageMs, decoded params and world position). The ring holds 256 entries: drain promptly and repeat while truncated is true. The local `filter` runs AFTER the drain, so filtered-out events are still consumed (counted in unmatched). `installOnly:true` arms the capture without draining: do it before run_map to catch startOnSpawn events.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "filter": {
+      "additionalProperties": false,
+      "properties": {
+       "namePrefix": {
+        "type": "string"
+       },
+       "names": {
+        "description": "exact, case-sensitive",
+        "items": {
+         "type": "string"
+        },
+        "maxItems": 32,
+        "minItems": 1,
+        "type": "array"
+       },
+       "within": {
+        "additionalProperties": false,
+        "description": "sphere, matched on the decoded position, else origin",
+        "properties": {
+         "center": {
+          "items": {
+           "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+         },
+         "radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+         }
+        },
+        "required": [
+         "center",
+         "radius"
+        ],
+        "type": "object"
+       }
+      },
+      "type": "object"
+     },
+     "installOnly": {
+      "description": "arm without draining; refuses filter",
+      "type": "boolean"
+     },
+     "max": {
+      "default": 256,
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "resolve": {
+      "description": "default true; false skips the entity lookup (no origin)",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "compile_asset",
+   "description": "Start the resource compiler on ONE asset of the active addon (vmap vmdl vpcf vsndevts vmat vtex vsnd vsmart vanim vmks); returns {jobId, state:\"running\"} at once. Poll with job_status {jobId, waitMs} until done:true; success only if state is ok (failLines/logTail say why not). Not for: maps (compile_map adds the dirty/in-game gates and the vpk verdict). path: addon-relative, content-relative (csgo_addons/<addon>/...) or a host/Windows path inside the addon. One compile at a time (EngineBusy names the running job).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "flags": {
+      "description": "allowlist: -nav -fshallow -quiet -unbufferedio -noassert -nop4 -f; -maxtextureres N / -threads N as two tokens",
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "game": {
+      "description": "pass -game <gamedir>/csgo; default false for .vmap, else true",
+      "type": "boolean"
+     },
+     "path": {
+      "description": "addon-relative, content-relative or absolute path inside the addon",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "job deadline (state timeout); default 1500000",
+      "maximum": 3600000,
+      "minimum": 1000,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "job_status",
+   "description": "Status of a compile job (compile_asset or compile_map): state running|ok|failed|cancelled|timeout, elapsedMs, summary, failLines, logTail. jobId c<N> is a compile_map job (same answer as compile_map {jobId}); any other id is a bridge job id, pass it verbatim. No jobId lists both. waitMs waits for the end instead of polling; repeat while done is false; ok only if state is ok.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "jobId": {
+      "description": "bridge job id (verbatim) or c<N>; omit to list",
+      "type": "string"
+     },
+     "waitMs": {
+      "description": "wait for the job up to this long (default 30000, 0 = answer now); reply has done; repeat while done is false",
+      "maximum": 600000,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "job_cancel",
+   "description": "End a compile job (bridge job id or c<N>) and its whole process tree. Returns the final state; cancelled:false if it had already finished.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "jobId": {
+      "description": "bridge job id or c<N>",
+      "type": "string"
+     }
+    },
+    "required": [
+     "jobId"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_selection",
+   "description": "What is selected in the live Hammer document: `mode`, `nodeIDs`, `count`, and in faces mode `faces: [{nodeID, faces:[i]}]` per mesh (indices as get_mesh reports). Other modes report only the count. `truncated:true` = lists cut at 16384 (count is still true). Read-only.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_selection",
+   "description": "Change the selection in the live Hammer document so the user sees what you work on. `op` replace|add|remove|clear; give exactly one of `nodeIDs` or `faces` ([{nodeID, faces:[i]}], switches to faces mode); clear takes neither. After a mode switch add/remove start empty (`modeChanged`). Not an edit or undo step. `applied` can be below `requested` (locked/hidden nodes; see `notApplied`); unknown nodes or bad face indices refuse with nothing changed. Max 4096 nodeIDs, 65536 face indices.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "description": "per mesh; not with `nodeIDs` or op clear",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "faces": {
+         "description": "as get_mesh reports",
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 1,
+         "type": "array"
+        },
+        "nodeID": {
+         "maximum": 2147483647,
+         "minimum": 0,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "nodeID",
+        "faces"
+       ],
+       "type": "object"
+      },
+      "maxItems": 4096,
+      "minItems": 1,
+      "type": "array"
+     },
+     "nodeIDs": {
+      "description": "not with `faces` or op clear",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 4096,
+      "minItems": 1,
+      "type": "array"
+     },
+     "op": {
+      "description": "clear takes no nodeIDs/faces",
+      "enum": [
+       "replace",
+       "add",
+       "remove",
+       "clear"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "op"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_state",
+   "description": "The local player in the tools session's engine: inGame, map, player {team, alive, origin, velocity, eye angles, flags, active weapon}. samples > 1 re-reads every intervalMs and adds originStepStats (smooth ride = steady steps; jitter = spikes). A dead or team-0 player gets a `hint` with the fix. NoMapLoaded (useInstead run_map) when no map is up. Same as client-mcp's game_state.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "intervalMs": {
+      "default": 16,
+      "description": "ms between reads (16 = one frame); 0 = back to back",
+      "maximum": 1000,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "samples": {
+      "default": 1,
+      "description": "number of reads",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_set",
+   "description": "Press/release/tap virtual buttons for the local player and set the view-angle override (usercmd level). press holds until released; tap holds `frames` input frames. Buttons: forward, back, left, right, moveleft, moveright, jump, duck, attack, attack2, use, reload, ... angles [pitch, yaw, roll] is absolute and wins over console setang until null/input_clear. release + tap of the same key in one call re-presses it.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch, yaw, roll]; null clears, absent keeps",
+      "oneOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "frames": {
+      "description": "tap hold length; needs tap",
+      "maximum": 10000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "press": {
+      "items": {
+       "maxLength": 64,
+       "minLength": 1,
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "release": {
+      "items": {
+       "maxLength": 64,
+       "minLength": 1,
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "tap": {
+      "items": {
+       "maxLength": 64,
+       "minLength": 1,
+       "type": "string"
+      },
+      "type": "array"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_clear",
+   "description": "Release every virtual button and drop the view-angle override.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "console_exec",
+   "description": "Run one console line in the tools session's engine; returns the console.log lines it produced (the last maxLines). Works at the idle level and in a running map; EngineBusy while a level loads. Not for: loading a map (run_map; map/changelevel/connect are refused with useInstead), reading cvars (cvar_get). Session-ending or crashing lines (quit, exit, disconnect, ...) are ConsoleCommandRefused; nothing is sent. In a -tools session `echo` and cvar prints are not logged, so waitFor cannot see them. Limits: line 1023 bytes, `;`-chained command 510, command name 128. The wait ends (`endedBy`) at a waitFor regex match, else the end-of-output marker, else waitMs.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "command": {
+      "description": "one line; `;` chains commands",
+      "minLength": 1,
+      "type": "string"
+     },
+     "maxLines": {
+      "description": "default 200; the LAST ones kept (truncated=true)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "waitFor": {
+      "description": "regex; stop at the first matching output line",
+      "type": "string"
+     },
+     "waitMs": {
+      "description": "default 1500",
+      "maximum": 10000,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "cvar_get",
+   "description": "Read console variables: per name {found, value (text), type, default, flags}. devonly cvars read as not found; protected/secret ones (*password*, *token*) are redacted:true. Not for: setting (console_exec `<name> <value>`).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "names": {
+      "description": "cvar names",
+      "items": {
+       "maxLength": 128,
+       "minLength": 1,
+       "type": "string"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "names"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "input_sequence",
+   "description": "Run up to 32 input_set steps in order in one call. Each step takes the input_set fields plus turn, and holds holdTicks game ticks (default 1, max 640). Presses persist across steps. Budget about 100 ms per step + ticks/64 s + 1.5 s, checked up front (ToolBudgetExceeded, maxTotalTicks says what fits). Input is cleared at the end and after any error. Not for: holding keys across waits/checks (play_test). Returns steps (startTick, endTick, origin, viewAngles), totals, start, final, inputCleared. NoMapLoaded (useInstead run_map) when no map is up.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "steps": {
+      "description": "run in order; each takes the input_set fields",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "[pitch, yaw, roll] override; null clears it, absent leaves it",
+         "oneOf": [
+          {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "frames": {
+         "default": 1,
+         "description": "hold length for tap, with tap only",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "holdTicks": {
+         "default": 1,
+         "description": "ticks the step lasts",
+         "maximum": 640,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "label": {
+         "description": "echoed in the result",
+         "maxLength": 64,
+         "type": "string"
+        },
+        "press": {
+         "description": "buttons held until released (forward, back, jump, duck, attack, use, reload, ...)",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "release": {
+         "description": "buttons to release",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "tap": {
+         "description": "buttons held for `frames` input frames",
+         "items": {
+          "maxLength": 47,
+          "minLength": 1,
+          "pattern": "^[^\\s\"\\\\]+$",
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "turn": {
+         "additionalProperties": false,
+         "description": "relative to the active override; not with angles",
+         "properties": {
+          "dpitch": {
+           "description": "degrees",
+           "type": "number"
+          },
+          "dyaw": {
+           "description": "degrees",
+           "type": "number"
+          }
+         },
+         "type": "object"
+        }
+       },
+       "type": "object"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "steps"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "play_test",
+   "description": "Run steps against the local player in the running map; stops at the first failure. Step kinds: input {steps:[as input_sequence]} (keys stay held); wait_ms {ms}; wait_state / expect_state {path, op} on game_state (wait polls, timeoutMs); wait_log {pattern (regex), timeoutMs?, since?: step|start}; wait_entity / expect_entity {class?, name?, index?, path, op} on RUNNING-game entities. op: eq|ne|gt|ge|lt|le|near(+tolerance)|contains|exists, value under that key: {kind:'wait_entity',class:'func_movelinear',path:'origin[0]',gt:1500,timeoutMs:20000}. path: player.alive / player.origin[0]; entity: origin[0], health. Returns passed and endedBy complete|failed|budget (budget = the 45 s call budget ran out: not a pass). Keys wait out freeze (lockWaitMs); still locked then: step fails with movementLocked:true (raise lockWaitMs or lower mp_freezetime). wait_log since:start for a line that can appear during an earlier step. Needs a map (run_map).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "keepInput": {
+      "description": "keep keys/view override after a pass",
+      "type": "boolean"
+     },
+     "steps": {
+      "items": {
+       "properties": {
+        "class": {
+         "description": "wait_entity/expect_entity: designer class",
+         "pattern": "^[A-Za-z0-9_]{1,64}$",
+         "type": "string"
+        },
+        "contains": {
+         "type": "string"
+        },
+        "eq": {},
+        "exists": {
+         "type": "boolean"
+        },
+        "ge": {
+         "type": "number"
+        },
+        "gt": {
+         "type": "number"
+        },
+        "index": {
+         "description": "wait_entity/expect_entity: nth match (default 0)",
+         "maximum": 255,
+         "minimum": 0,
+         "type": "integer"
+        },
+        "kind": {
+         "enum": [
+          "input",
+          "wait_ms",
+          "wait_state",
+          "wait_log",
+          "expect_state",
+          "wait_entity",
+          "expect_entity"
+         ],
+         "type": "string"
+        },
+        "label": {
+         "maxLength": 64,
+         "type": "string"
+        },
+        "le": {
+         "type": "number"
+        },
+        "lockWaitMs": {
+         "description": "input: max wait for freeze/intro to end (default 20000 or freezetime+5 s); 0 = none",
+         "maximum": 60000,
+         "minimum": 0,
+         "type": "integer"
+        },
+        "lt": {
+         "type": "number"
+        },
+        "ms": {
+         "description": "kind wait_ms",
+         "maximum": 120000,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "name": {
+         "description": "wait_entity/expect_entity: targetname",
+         "maxLength": 127,
+         "minLength": 1,
+         "type": "string"
+        },
+        "ne": {},
+        "near": {
+         "type": "number"
+        },
+        "path": {
+         "description": "game_state field (state kinds) or entity field (entity kinds), e.g. origin[0]",
+         "type": "string"
+        },
+        "pattern": {
+         "description": "kind wait_log: regex",
+         "maxLength": 512,
+         "type": "string"
+        },
+        "pollMs": {
+         "description": "default 100",
+         "maximum": 1000,
+         "minimum": 20,
+         "type": "integer"
+        },
+        "since": {
+         "description": "kind wait_log: default step",
+         "enum": [
+          "step",
+          "start"
+         ],
+         "type": "string"
+        },
+        "steps": {
+         "description": "kind input: input_sequence steps",
+         "type": "array"
+        },
+        "timeoutMs": {
+         "description": "wait kinds, default 5000; cut to the call budget",
+         "maximum": 120000,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "tolerance": {
+         "minimum": 0,
+         "type": "number"
+        }
+       },
+       "required": [
+        "kind"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "steps"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "entity_find",
+   "description": "Find entities in the RUNNING game by class (designer name) and/or name (targetname): entindex, class, name, origin, angles, health, toggleState. Not for: the Hammer document (find_entities). Use it to check where a mover or door is while the map runs. Needs class or name; truncated is true when more matched. NoMapLoaded (useInstead run_map) when no map is running. In play_test use wait_entity / expect_entity.",
+   "inputSchema": {
+    "properties": {
+     "class": {
+      "pattern": "^[A-Za-z0-9_]{1,64}$",
+      "type": "string"
+     },
+     "max": {
+      "default": 64,
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "maxLength": 127,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_rules",
+   "description": "Round and warmup state of the RUNNING game: warmup, freeze, team intro, restart, round times, win status, bomb planted. Use it to check the freeze period (play_test waits for it before pressing keys). A null field did not resolve (see schemaMissing). NoMapLoaded (useInstead run_map) when no map is running.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "game_local",
+   "description": "Deprecated: use `game_state`.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "set_addon",
+   "description": "Choose the addon the file tools work in (compile_map, run_map, list_models, soundevents, model_*, particle_*, map file reads). Default: the active Hammer document's addon, else --addon. {addon:\"x\"} pins x (must exist under content/csgo_addons); {addon:null} follows the document again; no argument reports the selection and available addons. Server state only. A running ModelDoc stays on its addon: model_open refuses while it differs.",
+   "inputSchema": {
+    "properties": {
+     "addon": {
+      "description": "addon name; null = follow the active document",
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "align_texture",
+   "description": "Set the texture mapping (UV) of a LIVE mesh's faces. mode world = snap to the world grid; face = align to each face's plane; justify = fit to the face (needs `justify`); set = only shift/scale/rotate. shift/scale/rotate apply after world/face/set, not with justify. Answers each face's axisU/axisV [x,y,z,offset] and scale. Undoable; not saved.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     },
+     "justify": {
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "bottom",
+       "center",
+       "fit",
+       "fitU",
+       "fitV"
+      ],
+      "type": "string"
+     },
+     "keepScale": {
+      "description": "world/face: keep the current scale",
+      "type": "boolean"
+     },
+     "mode": {
+      "enum": [
+       "world",
+       "face",
+       "justify",
+       "set"
+      ],
+      "type": "string"
+     },
+     "nodeID": {
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "rotate": {
+      "description": "degrees added to the current orientation",
+      "type": "number"
+     },
+     "scale": {
+      "description": "[u, v] world units per texel, absolute",
+      "items": {
+       "exclusiveMinimum": 0,
+       "type": "number"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+     },
+     "shift": {
+      "description": "[u, v] texels, absolute",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+     },
+     "texSet": {
+      "default": 0,
+      "enum": [
+       0,
+       1
+      ],
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "mode"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "apply_layout",
+   "description": "Build many meshes and entities in the LIVE map from ONE JSON layout: path (a .json inside the project) or layout (inline), exactly one. Format: {\"meshes\":[{\"kind\":\"block\"|\"mesh\", ...create_block / create_mesh args}], \"entities\":[create_entities items]}; any item may carry an `id` that the result maps to its nodeID. Everything is validated first (errors list index/id; nothing is sent on any error); dryRun returns counts and bounds only. Max 32 meshes, 64 entities, 4 MiB mesh parameters per call. Each mesh is its own undo group plus one for the entities (result undoGroups = undo_last calls to remove it). A mid-way failure reports what was created. Never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUnknownSoundEvent": {
+      "default": false,
+      "type": "boolean"
+     },
+     "dryRun": {
+      "default": false,
+      "description": "validate only",
+      "type": "boolean"
+     },
+     "layout": {
+      "additionalProperties": false,
+      "description": "the same JSON inline",
+      "properties": {
+       "entities": {
+        "items": {
+         "description": "create_entities item; optional `id`",
+         "type": "object"
+        },
+        "maxItems": 64,
+        "type": "array"
+       },
+       "meshes": {
+        "items": {
+         "description": "kind block|mesh plus its create_* args; optional `id`",
+         "type": "object"
+        },
+        "maxItems": 32,
+        "type": "array"
+       }
+      },
+      "type": "object"
+     },
+     "name": {
+      "default": "MCP: apply layout",
+      "description": "echoed as requestedUndoLabel",
+      "type": "string"
+     },
+     "path": {
+      "description": "a .json layout inside the project (absolute, or relative to the addon / project root)",
+      "type": "string"
+     },
+     "strict": {
+      "default": false,
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "new_map",
+   "description": "Create a .vmap in the active addon from a template and (default) open it. Use when the addon has no map yet (Hammer loads only with a document open). Not for: opening an existing file (open_map). template: addon_template (default; a ready CS2 map with spawns, bomb sites, buy zones, sky, light) or another .vmap of the addon. Refuses an existing target unless overwrite:true (old file kept as .bak-<seconds>). clear:\"gameplay\" deletes meshes (toolsskybox too), spawns, buy/bomb zones, worldtext (keeps sky, light, fog); clear:\"all\" keeps only worldspawn; both need open. Not saved: save_map.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "clear": {
+      "description": "delete the template's nodes after opening; default none; needs open",
+      "enum": [
+       "none",
+       "gameplay",
+       "all"
+      ],
+      "type": "string"
+     },
+     "open": {
+      "description": "default true",
+      "type": "boolean"
+     },
+     "overwrite": {
+      "description": "default false: an existing file is refused",
+      "type": "boolean"
+     },
+     "path": {
+      "description": "maps/<name>.vmap",
+      "type": "string"
+     },
+     "template": {
+      "description": "\"addon_template\" (default) or a .vmap of the addon, e.g. maps/base.vmap",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "look",
+   "description": "See the map: framed images of a target from poses it computes (no camera maths). Changes nothing; the Hammer camera is never moved (cameraRestored). target: entity (targetname or nodeID), point [x,y,z], box {min,max} or \"map\" (saved mesh extents, else entity origins). mode: viewport (no target: the Hammer viewport as is); angles (with target: two corners and top); tour (count views around it); frames (count images of one pose over time; needs a running game, run_map first); player_eye (the player's eye, or pose). Engine renders show the COMPILED map; source editor renders the live document. Describe what you see in writing, then fix what is wrong.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "count": {
+      "description": "tour views (6) or frames (4)",
+      "maximum": 8,
+      "minimum": 2,
+      "type": "integer"
+     },
+     "intervalMs": {
+      "default": 500,
+      "description": "frames: pause between images",
+      "maximum": 5000,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "maxSize": {
+      "default": 640,
+      "description": "longest image side in px",
+      "maximum": 1920,
+      "minimum": 64,
+      "type": "integer"
+     },
+     "mode": {
+      "enum": [
+       "viewport",
+       "angles",
+       "tour",
+       "frames",
+       "player_eye"
+      ],
+      "type": "string"
+     },
+     "name": {
+      "description": "file stem; each view appends its label",
+      "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}$",
+      "type": "string"
+     },
+     "pose": {
+      "additionalProperties": false,
+      "description": "frames/player_eye: camera {origin:[x,y,z], angles:[pitch,yaw,roll]}",
+      "properties": {
+       "angles": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "origin",
+       "angles"
+      ],
+      "type": "object"
+     },
+     "source": {
+      "default": "engine",
+      "enum": [
+       "engine",
+       "editor"
+      ],
+      "type": "string"
+     },
+     "target": {
+      "description": "targetname or nodeID, [x,y,z], {min:[..],max:[..]}, or \"map\""
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "report_ready",
+   "description": "Ship check: runs the checks and answers verdict pass|warn|fail|incomplete, each check pass|warn|fail|skipped with detail and fix. profile map (default): saved, compiled (vpk current), materials (incl. textures), spawns, spawn_in_mover_path, objectives (informational unless mode defuse|hostage). release adds loose_compiled, debug_patterns, no_metamod_load (always skipped), test_cvars. Reads the saved .vmap, the vpk and the addon tree; never saves, compiles or loads. incomplete = a check could not run: not done. Not for: seeing the map (render_world). Next: apply each failing check's fix, then call again.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "checks": {
+      "description": "run only these checks (names as in the result)",
+      "items": {
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "debugPatterns": {
+      "description": "extra regexes for debug_patterns (added to the built-in list)",
+      "items": {
+       "minLength": 1,
+       "type": "string"
+      },
+      "maxItems": 20,
+      "type": "array"
+     },
+     "map": {
+      "description": "maps/x.vmap, addon-relative; default = active doc, else the addon's only map",
+      "type": "string"
+     },
+     "mode": {
+      "description": "objectives: defuse needs bomb sites + buy zones, hostage needs hostages + rescue zone; else informational",
+      "enum": [
+       "defuse",
+       "hostage",
+       "none"
+      ],
+      "type": "string"
+     },
+     "profile": {
+      "description": "map (default) or release (adds the shipping checks)",
+      "enum": [
+       "map",
+       "release"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "get_playbook",
+   "description": "Step-by-step procedure for a whole task, as text (the same as the MCP prompt): blockout_map, iterate_loop, cs_script, particle_set, release. No name lists them. Pass map, script or folder to fill in the calls (else they use the active document). Read the matching one before such a task.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "folder": {
+      "description": "particles/<set> (particle_set)",
+      "type": "string"
+     },
+     "map": {
+      "description": "maps/x.vmap (blockout_map, iterate_loop, release)",
+      "type": "string"
+     },
+     "name": {
+      "description": "playbook; omit to list",
+      "type": "string"
+     },
+     "script": {
+      "description": "script file stem (cs_script)",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  }
+ ]
+}

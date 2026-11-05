@@ -1,0 +1,113 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:11:04 -0500
+Subject: [PATCH 40/47] Add CMapEntityIONode, CMapGameDataNode & CMapEntity
+
+Verified against CS2 2000930 (win64).
+---
+ public/mapdoclib/mapentity.h | 97 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 public/mapdoclib/mapentity.h
+
+diff --git a/public/mapdoclib/mapentity.h b/public/mapdoclib/mapentity.h
+new file mode 100644
+index 00000000..c31a8d4e
+--- /dev/null
++++ b/public/mapdoclib/mapentity.h
+@@ -0,0 +1,97 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Entities of a Hammer map document
++//
++//===========================================================================//
++
++#ifndef MAPENTITY_H
++#define MAPENTITY_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "mapdoclib/mapnode.h"
++#include "toolutils2/itoolsresourcelistener.h"
++#include "tier0/keyvalues3.h"
++#include "tier0/utlstring.h"
++#include "tier0/utlvector.h"
++#include "tier0/platform.h"
++
++// AMNOTE: Name not known. An output connection of an entity, 80 bytes
++struct MapEntityConnection_t
++{
++	CUtlString m_unk001;
++	CUtlString m_unk002;
++	CUtlString m_unk003;
++	CUtlString m_unk004;
++	CUtlString m_unk005;
++	int m_unk006;
++	KeyValues3 m_unk007;
++	uint32 m_unk008;
++	int m_unk009;
++	uint8 m_unk0010;
++	// AMNOTE: Taken from a global counter when the connection is created or copied
++	int m_unk0011;
++};
++
++abstract_class IVDataLookupListener
++{
++public:
++	virtual void unk001() = 0;
++};
++
++// AMNOTE: Incomplete class, only the connections are known
++class CMapEntityIONode : public CMapNode
++{
++public:
++	virtual const void *unk041() = 0;
++	virtual void unk042( const char *, bool ) = 0;
++	virtual void unk043( void * ) = 0;
++	virtual void unk044( void *, int ) = 0;
++	virtual int unk045( void * ) = 0;
++	virtual MapNodeUnk4_t unk046( int, int ) = 0;
++	virtual void unk047( void *, void * ) = 0;
++	virtual void unk048( void *, void * ) = 0;
++	virtual int unk049( void * ) = 0;
++	virtual void unk0410( void * ) = 0;
++	virtual void *unk0411( void * ) = 0;
++	virtual void unk0412( void * ) = 0;
++	virtual void *unk0413( void * ) = 0;
++	virtual void unk0414( void * ) = 0;
++	virtual bool unk0415() = 0;
++
++public:
++	int m_unk041;
++	CUtlVector< MapEntityConnection_t > m_Connections;
++	uint8 m_unk141[112];
++};
++
++// AMNOTE: Incomplete class, only the FGD class is known
++class CMapGameDataNode : public CMapEntityIONode, public IVDataLookupListener, public IToolsResourceListener
++{
++public:
++	virtual const char *unk051( const char *, void * ) = 0;
++	// AMNOTE: Looks up the FGD class of the entity class name and stores it
++	virtual void unk052( void *, bool, bool ) = 0;
++	virtual void unk053() = 0;
++	virtual void unk054() = 0;
++	virtual bool unk055( void *, void * ) = 0;
++	virtual bool unk056( void *, void * ) = 0;
++
++public:
++	uint8 m_unk051[24];
++	// AMNOTE: FGD class of the entity class name
++	void *m_pGameDataClass;
++	uint8 m_unk151[4808];
++};
++
++class CMapEntity : public CMapGameDataNode
++{
++public:
++	virtual bool unk061() = 0;
++
++public:
++	uint8 m_unk061[56];
++};
++
++#endif // MAPENTITY_H

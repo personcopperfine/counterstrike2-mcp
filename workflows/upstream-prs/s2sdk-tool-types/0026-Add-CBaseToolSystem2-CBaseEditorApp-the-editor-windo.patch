@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 07:34:52 -0500
+Subject: [PATCH 26/47] Add CBaseToolSystem2, CBaseEditorApp & the editor
+ window apps
+
+Verified against CS2 2000930 (win64).
+---
+ public/toolutils2/baseeditorapp.h | 110 ++++++++++++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
+ create mode 100644 public/toolutils2/baseeditorapp.h
+
+diff --git a/public/toolutils2/baseeditorapp.h b/public/toolutils2/baseeditorapp.h
+new file mode 100644
+index 00000000..845d0059
+--- /dev/null
++++ b/public/toolutils2/baseeditorapp.h
+@@ -0,0 +1,110 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Base classes of the Workshop Tools editor applications (one tool module, several open documents)
++//
++//===========================================================================//
++
++#ifndef BASEEDITORAPP_H
++#define BASEEDITORAPP_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "tier3/tier3.h"
++#include "tier0/keyvalues3.h"
++#include "tier0/utlstring.h"
++#include "tier0/utlvector.h"
++#include "toolframework2/itoolframework2.h"
++#include "toolutils2/ibindtarget.h"
++
++class CBaseEditorSession;
++class QWidget;
++
++class CBaseToolSystem2 : public CTier3AppSystem< IToolSystem2 >
++{
++public:
++	// AMNOTE: Index of the tool in the tool framework
++	uint8 m_nToolIndex;
++};
++
++// AMNOTE: Incomplete class, only the session members are known
++class CBaseEditorApp : public CBaseToolSystem2, public IBindTarget
++{
++public:
++	// AMNOTE: Creates an untitled session and makes it the active one
++	virtual CBaseEditorSession *unk071() = 0;
++	// AMNOTE: Returns the session of the file, NULL if it can't be opened. Ignored while another OpenFile runs
++	virtual CBaseEditorSession *OpenFile( const char *pszFileName, uint32 nFlags ) = 0;
++	// AMNOTE: The tool's main window
++	virtual QWidget *unk171() = 0;
++	virtual bool unk172() = 0;
++	virtual void *unk173() = 0;
++	virtual const char *unk174() = 0;
++	virtual const char *unk175() = 0;
++	// AMNOTE: Tool specific part of the tool system initialization; false fails it
++	virtual bool unk176() = 0;
++	// AMNOTE: Tool specific part of the frame
++	virtual void unk177() = 0;
++	// AMNOTE: Tool specific part of the shutdown, in this order
++	virtual void unk178() = 0;
++	virtual void unk179() = 0;
++	// AMNOTE: Allocates a session of the tool's own class
++	virtual CBaseEditorSession *unk1710() = 0;
++	// AMNOTE: Destroys a session unk1710 created
++	virtual void unk1711( CBaseEditorSession *pSession ) = 0;
++	// AMNOTE: Called when the active session changes
++	virtual void unk1712( CBaseEditorSession *pPrevious, CBaseEditorSession *pNew ) = 0;
++	virtual bool unk1713( CBaseEditorSession *pSession ) = 0;
++	virtual void unk1714() = 0;
++	virtual bool unk1715() = 0;
++	virtual bool unk1716() = 0;
++	virtual bool unk1717( CBaseEditorSession *pSession, const char *pszFileName ) = 0;
++	virtual bool unk1718( const char *pszFileName ) = 0;
++	virtual void unk1719( KeyValues3 *pSettings ) = 0;
++	virtual bool unk1720() = 0;
++	virtual bool unk1721( const char *pszFileName ) = 0;
++	virtual bool unk1722( const char *pszFileName ) = 0;
++	virtual void unk1723( CBaseEditorSession *pSession, const char *pszFileName ) = 0;
++	virtual void AppRestoreToolSettings( KeyValues3 *pSettings ) = 0;
++	virtual void AppSaveToolSettings( KeyValues3 *pSettings ) = 0;
++	virtual bool unk271() = 0;
++	// AMNOTE: Returns the session after pSession
++	virtual CBaseEditorSession *unk272( CBaseEditorSession *pSession ) = 0;
++	virtual bool unk273() = 0;
++	// AMNOTE: Size of the recent files list
++	virtual int unk274() = 0;
++	virtual void unk275() = 0;
++
++public:
++	uint64 m_unk001;
++	// AMNOTE: "All Files (*)" by default
++	CUtlString m_unk002;
++	CBaseEditorSession *m_pActiveSession;
++	CUtlVector< CBaseEditorSession * > m_Sessions;
++	uint8 m_unk101[307];
++	// AMNOTE: Set while OpenFile runs
++	bool m_bInOpenFile;
++	uint8 m_unk201[68];
++};
++
++// AMNOTE: Editor app whose sessions share one main window
++class CBaseEditorSharedWindowApp : public CBaseEditorApp
++{
++public:
++	// AMNOTE: The main window
++	virtual QWidget *unk081() = 0;
++};
++
++// AMNOTE: Editor app that shows every session in its own main window
++class CBaseEditorSeparateWindowApp : public CBaseEditorApp
++{
++};
++
++template < class TSession, class TMainWnd >
++class CSimpleEditorSharedWindowApp : public CBaseEditorSharedWindowApp
++{
++public:
++	TMainWnd *m_pMainWnd;
++};
++
++#endif // BASEEDITORAPP_H

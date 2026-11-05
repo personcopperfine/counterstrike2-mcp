@@ -1,0 +1,886 @@
+{
+  "enums": [
+    {
+      "fixed_underlying": false,
+      "header": "public/particles/iparticlesystemmgr.h",
+      "itanium": {
+        "fixed": false,
+        "size": 4,
+        "underlying": "int"
+      },
+      "msvc": {
+        "size": 4,
+        "underlying": "int"
+      },
+      "name": "ParticleOperatorId_t",
+      "rust_repr": "i32",
+      "underlying": "int",
+      "values": [
+        {
+          "name": "OPERATOR_GENERIC",
+          "value": -2
+        },
+        {
+          "name": "OPERATOR_SINGLETON",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "fixed_underlying": false,
+      "header": "public/tier0/utlsoacontainer.h",
+      "itanium": {
+        "fixed": false,
+        "size": 4,
+        "underlying": "int"
+      },
+      "msvc": {
+        "size": 4,
+        "underlying": "int"
+      },
+      "name": "EAttributeDataType",
+      "rust_repr": "i32",
+      "underlying": "int",
+      "values": [
+        {
+          "name": "ATTRDATATYPE_NONE",
+          "value": -1
+        },
+        {
+          "name": "ATTRDATATYPE_FLOAT",
+          "value": 0
+        },
+        {
+          "name": "ATTRDATATYPE_4V",
+          "value": 1
+        },
+        {
+          "name": "ATTRDATATYPE_INT",
+          "value": 2
+        },
+        {
+          "name": "ATTRDATATYPE_POINTER",
+          "value": 3
+        },
+        {
+          "name": "ATTRDATATYPE_UNK001",
+          "value": 4
+        },
+        {
+          "name": "ATTRDATATYPE_COUNT",
+          "value": 5
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const void *",
+          "name": "m_pBinding",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/particles/iparticlesystemmgr.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "HParticleSystemDefinition",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const void *",
+          "name": "m_pBinding",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/particles/iparticlesystemmgr.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "HParticleSnapshot",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nContainerAttribute",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_nParticleAttribute",
+          "offset": 4,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/particles/iparticlesystemmgr.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nContainerAttribute",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nParticleAttribute",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nContainerAttribute",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nParticleAttribute",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "ParticleSnapshotAttributeMap_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IParticleSystemMgr",
+      "header": "public/particles/iparticlesystemmgr.h",
+      "methods": [
+        {
+          "cxx_signature": "void (float, float, float, float)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "SetFallbackParameters",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, flBase: f32, flMultiplier: f32, flSimFallbackBaseMultiplier: f32, flSimThresholdMs: f32)"
+        },
+        {
+          "cxx_signature": "void (int, int)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "SetSystemLevel",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nCPULevel: i32, nGPULevel: i32)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "SetLowViolence",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, bLowViolence: bool)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "IsLowViolence",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> bool"
+        },
+        {
+          "cxx_signature": "HParticleSystemDefinition (const char *, bool)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, ret: *mut HParticleSystemDefinition, pszName: *const ::core::ffi::c_char, bWarnIfNotPrecached: bool) -> *mut HParticleSystemDefinition",
+          "msvc_slot": 15,
+          "name": "FindParticleSystem",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pszName: *const ::core::ffi::c_char, bWarnIfNotPrecached: bool) -> HParticleSystemDefinition"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaClassInfo> ()",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, ret: *mut *mut CSchemaClassInfo) -> *mut *mut CSchemaClassInfo",
+          "msvc_slot": 16,
+          "name": "GetParticleSystemDefinitionClass",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> *mut CSchemaClassInfo"
+        },
+        {
+          "cxx_signature": "IParticleCollection *(const char *, void *, IParticleSystemQuery *, bool, float, int)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 18,
+          "name": "CreateParticleCollection",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pszName: *const ::core::ffi::c_char, pOwner: *mut ::core::ffi::c_void, pQuery: *mut ::core::ffi::c_void, bCheckSystemLevel: bool, flDelay: f32, nRandomSeed: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "IParticleCollection *(HParticleSystemDefinition, void *, IParticleSystemQuery *, bool, float, int)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 17,
+          "name": "CreateParticleCollection",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hDefinition: HParticleSystemDefinition, pOwner: *mut ::core::ffi::c_void, pQuery: *mut ::core::ffi::c_void, bCheckSystemLevel: bool, flDelay: f32, nRandomSeed: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IParticleCollection *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "DestroyParticleCollection",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pCollection: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "unk102",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "unk103",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr)"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetParticleAttributeFriendlyName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nAttribute: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "int (int)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "GetFunctionDefinitionCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nFunctionType: i32) -> i32"
+        },
+        {
+          "cxx_signature": "IParticleFunctionDefinition *(int, int)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "GetFunctionDefinition",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nFunctionType: i32, nIndex: i32) -> *mut IParticleFunctionDefinition"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "SetLastSimulationDuration",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, flDuration: f32)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "GetLastSimulationDuration",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> f32"
+        },
+        {
+          "cxx_signature": "void (const char *, bool)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "DumpParticleSystems",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pszFilter: *const ::core::ffi::c_char, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "CSceneObject *(const char *, ISceneWorld *, IParticleSystemQuery *, float, int)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 31,
+          "name": "CreateParticleSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pszName: *const ::core::ffi::c_char, pWorld: *mut ::core::ffi::c_void, pQuery: *mut ::core::ffi::c_void, flDelay: f32, nRandomSeed: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(HParticleSystemDefinition, ISceneWorld *, IParticleSystemQuery *, float, int)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "CreateParticleSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hDefinition: HParticleSystemDefinition, pWorld: *mut ::core::ffi::c_void, pQuery: *mut ::core::ffi::c_void, flDelay: f32, nRandomSeed: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "CSceneObject *(IParticleCollection *, ISceneWorld *, bool)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 29,
+          "name": "CreateParticleSceneObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pCollection: *mut ::core::ffi::c_void, pWorld: *mut ::core::ffi::c_void, bUnk: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (Vector, void *, void *, void *, bool, void *, void *, int, bool, int)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, vecUnk: Vector, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void, bUnk1: bool, pUnk4: *mut ::core::ffi::c_void, pUnk5: *mut ::core::ffi::c_void, nUnk1: i32, bUnk2: bool, nUnk2: i32)"
+        },
+        {
+          "cxx_signature": "int (IParticleCollection *, int, int)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "RandomInt",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pCollection: *mut ::core::ffi::c_void, nMin: i32, nMax: i32) -> i32"
+        },
+        {
+          "cxx_signature": "float (IParticleCollection *, float, float)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "RandomFloat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pCollection: *mut ::core::ffi::c_void, flMin: f32, flMax: f32) -> f32"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "GetParticleAttributeName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nAttribute: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "EAttributeDataType (int)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "GetParticleAttributeDataType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nAttribute: i32) -> EAttributeDataType"
+        },
+        {
+          "cxx_signature": "void (HParticleSystemDefinition)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "RestartParticleSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hDefinition: HParticleSystemDefinition)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "SetDisabledRendererTypes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nRendererTypes: i32)"
+        },
+        {
+          "cxx_signature": "bool (const KeyValues3 *, void *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pKV: *mut ::core::ffi::c_void, pOut: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "PurgeRenderObjects",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr)"
+        },
+        {
+          "cxx_signature": "HParticleSnapshot (CUtlString)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "CreateProceduralSnapshot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (HParticleSnapshot, int, const ParticleSnapshotAttributeData_t *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "InitSnapshotFromAttributeData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, nCount: i32, pData: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (HParticleSnapshot, int, int, int, const CUtlVector<ParticleSnapshotAttributeMap_t> &)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "InitSnapshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, nX: i32, nY: i32, nZ: i32, attributeMaps: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "HParticleSnapshot (HParticleSnapshot, const CUtlString &)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, ret: *mut HParticleSnapshot, hSnapshot: HParticleSnapshot, sName: *const CUtlString) -> *mut HParticleSnapshot",
+          "msvc_slot": 44,
+          "name": "CopySnapshot",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, sName: *const CUtlString) -> HParticleSnapshot"
+        },
+        {
+          "cxx_signature": "void (HParticleSnapshot, int, int, int, const int &, Vector)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "SetSnapshotVector",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, nX: i32, nY: i32, nZ: i32, nContainerAttribute: *const i32, vecValue: Vector)"
+        },
+        {
+          "cxx_signature": "Vector (HParticleSnapshot, int, int, int, int)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, ret: *mut Vector, hSnapshot: HParticleSnapshot, nParticleAttribute: i32, nX: i32, nY: i32, nZ: i32) -> *mut Vector",
+          "msvc_slot": 46,
+          "name": "GetSnapshotVector",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 12,
+              "sret": false
+            },
+            "msvc": {
+              "size": 12,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, nParticleAttribute: i32, nX: i32, nY: i32, nZ: i32) -> Vector"
+        },
+        {
+          "cxx_signature": "int (HParticleSnapshot)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "GetSnapshotParticleCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot) -> i32"
+        },
+        {
+          "cxx_signature": "bool (HParticleSnapshot, int, EAttributeDataType)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "SnapshotHasAttribute",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, nParticleAttribute: i32, nDataType: EAttributeDataType) -> bool"
+        },
+        {
+          "cxx_signature": "void (HParticleSnapshot, const char *, const CUtlVector<int> &)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "SetSnapshotSubset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot, pszSubsetName: *const ::core::ffi::c_char, indices: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (HParticleSnapshot)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "ClearSnapshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hSnapshot: HParticleSnapshot)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "GetParticleSystemVersion",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> i32"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_slot": 52,
+          "name": "GetParticleSystemVersionChangeDescription",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nVersion: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void (HParticleSystemDefinition)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "SetHoveredParticleSystem",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, hDefinition: HParticleSystemDefinition)"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "HasFeatureFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, nFlags: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (ISceneWorld *, uint64, uint64, uint64, const void *, const void *, uint32, bool)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 55,
+          "name": "AddInstancedMeshes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr, pWorld: *mut ::core::ffi::c_void, nFlags: u64, nTypeFlagsMask: u64, nTypeFlags: u64, pKey: *mut ::core::ffi::c_void, pInstances: *mut ::core::ffi::c_void, nCount: u32, bUnk: bool)"
+        },
+        {
+          "cxx_signature": "void (CUtlString)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "CUtlVector<CUtlString> *()",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "unk402",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "unk403",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "unk404",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleSystemMgr)"
+        },
+        {
+          "cxx_signature": "void (CUtlLeanVector<IParticleCollection *>, IRenderContext *)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "SimulateGPUParticles",
+          "overrides": null,
+          "rust_fn": null
+        }
+      ],
+      "msvc": {
+        "length": 61,
+        "own_entries": 50
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    },
+    {
+      "class": "IParticleFunctionDefinition",
+      "header": "public/particles/iparticlesystemmgr.h",
+      "methods": [
+        {
+          "cxx_signature": "const char *() const",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "GetName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleFunctionDefinition) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "ParticleOperatorId_t () const",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "GetId",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleFunctionDefinition) -> ParticleOperatorId_t"
+        },
+        {
+          "cxx_signature": "SchemaMetaInfoHandle_t<CSchemaClassInfo> () const",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleFunctionDefinition, ret: *mut *mut CSchemaClassInfo) -> *mut *mut CSchemaClassInfo",
+          "msvc_slot": 2,
+          "name": "GetSchemaBinding",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IParticleFunctionDefinition) -> *mut CSchemaClassInfo"
+        }
+      ],
+      "msvc": {
+        "length": 3,
+        "own_entries": 3
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

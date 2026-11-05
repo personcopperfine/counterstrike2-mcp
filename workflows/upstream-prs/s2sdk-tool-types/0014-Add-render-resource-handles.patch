@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 06:03:38 -0500
+Subject: [PATCH 14/47] Add render resource handles
+
+Ported from Wend4r/sourcesdk s2/restore-rendersystem
+public/rendersystem/rendersystemtypes.h, verified against CS2 2000930 (win64
+and linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+---
+ public/rendersystem/rendersystemtypes.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/public/rendersystem/rendersystemtypes.h b/public/rendersystem/rendersystemtypes.h
+index 5d8e46e3..18d8549c 100644
+--- a/public/rendersystem/rendersystemtypes.h
++++ b/public/rendersystem/rendersystemtypes.h
+@@ -31,6 +31,23 @@ enum RenderMultisampleType_t : uint8
+ DECLARE_POINTER_HANDLE(SwapChainHandle_t);
+ DECLARE_POINTER_HANDLE(VertexBufferHandle_t);
+ DECLARE_POINTER_HANDLE(IndexBufferHandle_t);
++DECLARE_POINTER_HANDLE(OsSpecificWindowHandle_t);
++DECLARE_POINTER_HANDLE(RenderQueryHandle_t);
++DECLARE_POINTER_HANDLE(RsRasterizerStateHandle_t);
++DECLARE_POINTER_HANDLE(RsDepthStencilStateHandle_t);
++DECLARE_POINTER_HANDLE(RsBlendStateHandle_t);
++DECLARE_POINTER_HANDLE(RenderInputLayout_t);
++DECLARE_POINTER_HANDLE(RenderResourceHandle_t);
++DECLARE_POINTER_HANDLE(RenderBufferHandle_t);
++DECLARE_POINTER_HANDLE(PooledIndexBufferHandle_t);
++DECLARE_POINTER_HANDLE(ConstantBufferHandle_t);
++DECLARE_POINTER_HANDLE(RenderShaderHandle_t);
++DECLARE_POINTER_HANDLE(RenderSemaphoreHandle_t);
++DECLARE_POINTER_HANDLE(RenderDescriptorSetHandle_t);
++DECLARE_POINTER_HANDLE(SamplerStateHandle_t);
++DECLARE_POINTER_HANDLE(RenderBLASHandle_t);
++DECLARE_POINTER_HANDLE(RenderTLASHandle_t);
++DECLARE_POINTER_HANDLE(RenderRayTracePipelineHandle_t);
+ 
+ // AMNOTE: Weak handle to a resource binding; must stay trivially copyable.
+ class HRenderTexture

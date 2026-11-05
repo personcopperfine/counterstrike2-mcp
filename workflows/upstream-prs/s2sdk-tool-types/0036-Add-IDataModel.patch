@@ -1,0 +1,252 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:10:57 -0500
+Subject: [PATCH 36/47] Add IDataModel
+
+Adapted from Wend4r/sourcesdk s2/restore-tools public/datamodel/idatamodel.h
+(the Source 1 interface).
+Verified against CS2 2000930 (win64).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+---
+ public/datamodel/idatamodel.h | 232 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 232 insertions(+)
+ create mode 100644 public/datamodel/idatamodel.h
+
+diff --git a/public/datamodel/idatamodel.h b/public/datamodel/idatamodel.h
+new file mode 100644
+index 00000000..6e12cbff
+--- /dev/null
++++ b/public/datamodel/idatamodel.h
+@@ -0,0 +1,232 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: The datamodel: elements, attributes, files, undo and serialization
++//
++//===========================================================================//
++
++#ifndef IDATAMODEL_H
++#define IDATAMODEL_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "appframework/iappsystem.h"
++#include "datamodel/dmattributetypes.h"
++#include "datamodel/dmelementhandle.h"
++#include "tier0/utlsymbollarge.h"
++#include "tier0/utlvector.h"
++#include "tier0/platform.h"
++
++class CDmElement;
++class CDmAttribute;
++class CDmElementFactoryHelper;
++class IDmElementFactory;
++class IDmSerializer;
++class IDmLegacyUpdater;
++class IDmFormatUpdater;
++class IElementForKeyValueCallback;
++class IUndoElement;
++class IClipboardCleanup;
++class IDmNotify;
++class IDmeElementCreated;
++class CElementIdHash;
++class CUtlBuffer;
++class CUtlCharConversion;
++class KeyValues;
++struct DmAttributeList_t;
++struct UndoInfo_t;
++
++enum DmAttributeHandle_t : uint32
++{
++	DMATTRIBUTE_HANDLE_INVALID = 0xffffffff
++};
++
++enum DmFileId_t : uint32
++{
++	DMFILEID_INVALID = 0xffffffff
++};
++
++// AMNOTE: Points at a DmAttributeList_t node (a pointer, not an int as in Source 1)
++typedef DmAttributeList_t *DmAttributeReferenceIterator_t;
++
++// AMNOTE: Values not verified
++enum DmConflictResolution_t : int;
++
++// AMNOTE: Values not verified
++enum TraversalDepth_t : int;
++
++abstract_class IDataModel : public CBaseAppSystem< IAppSystem >
++{
++public:
++	virtual void AddElementFactory( CDmElementFactoryHelper *pFactoryHelper ) = 0;
++	virtual CDmElementFactoryHelper *GetElementFactoryHelper( const char *pClassName ) = 0;
++	virtual void SetDefaultElementFactory( IDmElementFactory *pFactory, bool ) = 0;
++	virtual int GetFirstFactory() const = 0;
++	virtual int GetNextFactory( int index ) const = 0;
++	virtual bool IsValidFactory( int index ) const = 0;
++	virtual const char *GetFactoryName( int index ) const = 0;
++
++	virtual DmElementHandle_t CreateElement( const CUtlSymbolLarge &typeSymbol, const char *pElementName, DmFileId_t fileid, const DmObjectId_t *pObjectID = NULL ) = 0;
++	virtual DmElementHandle_t CreateElement( const char *pTypeName, const char *pElementName, DmFileId_t fileid, const DmObjectId_t *pObjectID = NULL ) = 0;
++	virtual void DestroyElement( DmElementHandle_t hElement ) = 0;
++
++	virtual CDmElement *GetElement( DmElementHandle_t hElement ) const = 0;
++	virtual CUtlSymbolLarge GetElementType( DmElementHandle_t hElement ) const = 0;
++	virtual const char *GetElementName( DmElementHandle_t hElement ) const = 0;
++	virtual const DmObjectId_t &GetElementId( DmElementHandle_t hElement ) const = 0;
++
++	virtual const char *GetAttributeNameForType( DmAttributeType_t attType ) const = 0;
++	virtual DmAttributeType_t GetAttributeTypeForName( const char *name ) const = 0;
++
++	virtual void AddSerializer( IDmSerializer *pSerializer ) = 0;
++	virtual void AddLegacyUpdater( IDmLegacyUpdater *pUpdater ) = 0;
++	virtual void AddFormatUpdater( IDmFormatUpdater *pUpdater ) = 0;
++
++	virtual const char *GetFormatExtension( const char *pFormatName ) = 0;
++	virtual const char *GetFormatDescription( const char *pFormatName ) = 0;
++	virtual int GetFormatCount() const = 0;
++	virtual const char *GetFormatName( int i ) const = 0;
++	virtual const char *GetDefaultEncoding( const char *pFormatName ) = 0;
++
++	virtual int GetEncodingCount() const = 0;
++	virtual const char *GetEncodingName( int i ) const = 0;
++	virtual bool IsEncodingBinary( const char *pEncodingName ) const = 0;
++	virtual bool DoesEncodingStoreVersionInFile( const char *pEncodingName ) const = 0;
++
++	virtual void SetSerializationDelimiter( CUtlCharConversion *pConv ) = 0;
++	virtual void SetSerializationArrayDelimiter( const char *pDelimiter ) = 0;
++
++	virtual bool IsUnserializing() = 0;
++
++	// AMNOTE: The versions are -1 for the current ones
++	virtual bool Serialize( CUtlBuffer &outBuf, const char *pEncodingName, const char *pFormatName, DmElementHandle_t hRoot, int nFormatVersion, int nEncodingVersion, const char *pEncodingHeaderName ) = 0;
++	virtual bool Unserialize( CUtlBuffer &inBuf, const char *pEncodingName, const char *pSourceFormatName, int, const char *pFileName, DmConflictResolution_t idConflictResolution, DmElementHandle_t &hRoot, int nFlags ) = 0;
++	virtual bool UpdateUnserializedElements( const char *pSourceFormatName, int nSourceFormatVersion, DmFileId_t fileid, DmConflictResolution_t idConflictResolution, CDmElement **ppRoot ) = 0;
++	virtual void OnlyCreateUntypedElements( bool bEnable, bool ) = 0;
++
++	virtual IDmSerializer *FindSerializer( const char *pEncodingName ) const = 0;
++	virtual IDmLegacyUpdater *FindLegacyUpdater( const char *pLegacyFormatName ) const = 0;
++	virtual IDmFormatUpdater *FindFormatUpdater( const char *pFormatName ) const = 0;
++
++	virtual bool SaveToFile( const char *pFileName, const char *pPathID, const char *pEncodingName, const char *pFormatName, CDmElement *pRoot, int nFormatVersion, int nEncodingVersion, const char *pEncodingHeaderName ) = 0;
++	// AMNOTE: pEncodingOut receives the file's encoding name (64 bytes)
++	virtual DmFileId_t RestoreFromFile( const char *pFileName, const char *pPathID, const char *pEncodingHint, CDmElement **ppRoot, DmConflictResolution_t idConflictResolution, char *pEncodingOut, int ) = 0;
++
++	virtual void SetKeyValuesElementCallback( IElementForKeyValueCallback *pCallbackInterface ) = 0;
++	virtual const char *GetKeyValuesElementName( const char *pszKeyName, int iNestingLevel ) = 0;
++
++	virtual CUtlSymbolLarge GetSymbol( const char *pString ) = 0;
++	// AMNOTE: Forwards to the symbol table
++	virtual void unk101() = 0;
++	// AMNOTE: Forwards to the symbol table
++	virtual void unk102() = 0;
++
++	virtual int GetMaxNumberOfElements() = 0;
++	virtual int GetElementsAllocatedSoFar() = 0;
++	virtual int GetAllocatedAttributeCount() = 0;
++	virtual int GetAllocatedElementCount() = 0;
++	virtual DmElementHandle_t FirstAllocatedElement() = 0;
++	virtual DmElementHandle_t NextAllocatedElement( DmElementHandle_t it ) = 0;
++
++	virtual int EstimateMemoryUsage( DmElementHandle_t hElement, TraversalDepth_t depth ) = 0;
++
++	virtual void SetUndoEnabled( bool enable ) = 0;
++	virtual bool IsUndoEnabled() const = 0;
++	virtual bool UndoEnabledForElement( const CDmElement *pElement ) const = 0;
++	virtual bool IsDirty() const = 0;
++	virtual bool CanUndo() const = 0;
++	virtual bool CanRedo() const = 0;
++	virtual void StartUndo( char const *undodesc, char const *redodesc, int nChainingID = 0 ) = 0;
++	virtual void FinishUndo() = 0;
++	virtual void AbortUndoableOperation() = 0;
++	virtual void ClearRedo() = 0;
++	virtual const char *GetUndoDesc() = 0;
++	virtual const char *GetRedoDesc() = 0;
++	virtual void Undo() = 0;
++	virtual void Redo() = 0;
++	virtual void TraceUndo( bool state ) = 0;
++	virtual void ClearUndo() = 0;
++	virtual void GetUndoInfo( CUtlVector< UndoInfo_t > &list ) = 0;
++	virtual int unk201() = 0;
++	// AMNOTE: Returns entry nIndex of the undo stack
++	virtual IUndoElement *unk202( int nIndex ) = 0;
++	virtual void AddUndoElement( IUndoElement *pElement ) = 0;
++	virtual CUtlSymbolLarge GetUndoDescInternal( const char *context ) = 0;
++	virtual CUtlSymbolLarge GetRedoDescInternal( const char *context ) = 0;
++	virtual bool unk301() = 0;
++	virtual void unk302() = 0;
++
++	virtual void EmptyClipboard() = 0;
++	virtual void SetClipboardData( CUtlVector< KeyValues * > &data, IClipboardCleanup *pfnOptionalCleanuFunction = 0 ) = 0;
++	virtual void AddToClipboardData( KeyValues *add ) = 0;
++	virtual void GetClipboardData( CUtlVector< KeyValues * > &data ) = 0;
++	virtual bool HasClipboardData() const = 0;
++
++	virtual CDmAttribute *GetAttribute( DmAttributeHandle_t h ) = 0;
++	virtual bool IsAttributeHandleValid( DmAttributeHandle_t h ) const = 0;
++
++	virtual int NumFileIds() = 0;
++	virtual DmFileId_t GetFileId( int i ) = 0;
++	virtual DmFileId_t FindOrCreateFileId( const char *pFilename ) = 0;
++	virtual void RemoveFileId( DmFileId_t fileid ) = 0;
++	virtual DmFileId_t GetFileId( const char *pFilename ) = 0;
++	virtual const char *GetFileName( DmFileId_t fileid ) = 0;
++	virtual void SetFileName( DmFileId_t fileid, const char *pFileName ) = 0;
++	virtual const char *GetFileFormat( DmFileId_t fileid ) = 0;
++	virtual void SetFileFormat( DmFileId_t fileid, const char *pFormat ) = 0;
++	virtual DmElementHandle_t GetFileRoot( DmFileId_t fileid ) = 0;
++	virtual void SetFileRoot( DmFileId_t fileid, DmElementHandle_t hRoot ) = 0;
++	virtual int GetFileModificationUTCTime( DmFileId_t fileid ) = 0;
++	virtual time_t GetCurrentUTCTime() = 0;
++	virtual void UTCTimeToString( char *pString, int maxChars, int fileTime ) = 0;
++	virtual bool IsFileLoaded( DmFileId_t fileid ) = 0;
++	virtual void MarkFileLoaded( DmFileId_t fileid ) = 0;
++	virtual void UnloadFile( DmFileId_t fileid ) = 0;
++	virtual int NumElementsInFile( DmFileId_t fileid ) = 0;
++
++	virtual void DontAutoDelete( DmElementHandle_t hElement, bool ) = 0;
++	// AMNOTE: Adds a reference to hElement (the second 10-bit count of its DmElementReference_t)
++	virtual void unk401( DmElementHandle_t hElement ) = 0;
++
++	virtual void MarkHandleInvalid( DmElementHandle_t hElement ) = 0;
++	virtual void MarkHandleValid( DmElementHandle_t hElement ) = 0;
++
++	virtual DmElementHandle_t FindElement( const DmObjectId_t &id ) = 0;
++	virtual void GetExistingElements( CElementIdHash &hash ) const = 0;
++
++	virtual DmAttributeReferenceIterator_t FirstAttributeReferencingElement( DmElementHandle_t hElement ) = 0;
++	virtual DmAttributeReferenceIterator_t NextAttributeReferencingElement( DmAttributeReferenceIterator_t hAttrIter ) = 0;
++	virtual CDmAttribute *GetAttribute( DmAttributeReferenceIterator_t hAttrIter ) = 0;
++
++	virtual bool InstallNotificationCallback( IDmNotify *pNotify ) = 0;
++	virtual void RemoveNotificationCallback( IDmNotify *pNotify ) = 0;
++	virtual bool IsSuppressingNotify() const = 0;
++	virtual void SetSuppressingNotify( bool bSuppress ) = 0;
++	virtual void PushNotificationScope( const char *pReason, int nNotifySource, int nNotifyFlags ) = 0;
++	virtual void PopNotificationScope( bool bAbort = false ) = 0;
++	virtual const char *GetUndoString( const CUtlSymbolLarge &sym ) = 0;
++	// AMNOTE: Forwards to the undo manager
++	virtual void unk501() = 0;
++	// AMNOTE: Forwards to the undo manager
++	virtual void unk502() = 0;
++	virtual void unk503() = 0;
++
++	virtual bool HasElementFactory( const char *pElementType ) const = 0;
++
++	virtual void SetUndoDepth( int nSize ) = 0;
++
++	virtual void DisplayMemoryStats( DmElementHandle_t hElement = DMELEMENT_HANDLE_INVALID ) = 0;
++	virtual bool unk601() = 0;
++
++	virtual bool IsDMXFormat( CUtlBuffer &buf ) const = 0;
++
++	virtual void AddOnElementCreatedCallback( const char *pElementType, IDmeElementCreated *callback ) = 0;
++	virtual void RemoveOnElementCreatedCallback( const char *pElementType, IDmeElementCreated *callback ) = 0;
++
++	// AMNOTE: Reads the DMX header of buf; copies its format and encoding names (nMaxChars each)
++	virtual bool unk701( CUtlBuffer &buf, char *pFormatName, void *, char *pEncodingName, int nMaxChars ) = 0;
++	// AMNOTE: Opens the file and checks its DMX header against the format updaters; "File format newer than executable's!"
++	virtual bool unk702( const char *pFileName, const char *pPathID ) = 0;
++};
++
++#endif // IDATAMODEL_H

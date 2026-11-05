@@ -1,0 +1,65 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries for librendersystemvulkan.so of build 2000930 (the build the Windows",
+  "rendersystemvulkan.dll in the database is, ClientVersion 2000930). The module exports no `_ZTV` symbol for its",
+  "own classes, so the vtable is located by its complete-object destructor, which begins with `push rbp; lea",
+  "rax,[rip+vtable]` and stores the address point as the object's first qword, the way libengine2.json's",
+  "CRenderService is. VTLEN_CRenderDeviceVulkan is the `vtlen` scan of that table; sdkcheck.py compares it with the",
+  "Itanium vtable length of the generated IRenderDevice (LINUX_VT_PAIRS).",
+  "Nothing here has a `bridge` macro: the bridge gate covers the Windows entries only."
+ ],
+ "module": "librendersystemvulkan.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000930": {
+   "sha256": "faf2aaadddaac6e5"
+  },
+  "2000933": {
+   "sha256": "7b02b2ef83ef383b"
+  },
+  "2000940": {
+   "sha256": "5a7269e2854e485f"
+  }
+ },
+ "entries": {
+  "CRenderDeviceVulkan": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 57 41 56 41 55 41 54 53 48 89 FB 48 83 EC 18 48 89 07 48 05 48 09 00 00",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "librendersystemvulkan.so 0x5b0100: the complete-object destructor, which begins with push rbp, lea rax,[rip+vtable] (the CRenderDeviceVulkan vtable address point), stores it as the object's first qword and a secondary table (address point + 0x948) at +0x1120. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "IRenderDevice implementation (the RenderDevice003 interface), primary table, offset-to-top 0; the Windows build's table has 292 entries (s2sdk-types RE6 section 4)",
+   "expect": {
+    "2000930": 9032072,
+    "2000933": 9032328,
+    "2000940": 9032776
+   }
+  },
+  "VTLEN_CRenderDeviceVulkan": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CRenderDeviceVulkan"
+   },
+   "via": "librendersystemvulkan.so address point 0x89d188: 295 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IRenderDevice's implementation, compared by sdkcheck.py with upstream's Itanium vtable length of IRenderDevice (255): the interface's 255 slots, then the two destructor entries and 35 virtuals of CRenderDeviceBase, then 3 of CRenderDeviceVulkan's own (RE6 section 4)",
+   "expect": {
+    "2000930": 295,
+    "2000933": 295,
+    "2000940": 295
+   }
+  }
+ }
+}

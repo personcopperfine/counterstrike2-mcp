@@ -1,0 +1,3183 @@
+{
+  "enums": [
+    {
+      "fixed_underlying": false,
+      "header": "public/bitmap/imageformat_declarations.h",
+      "itanium": {
+        "fixed": false,
+        "size": 4,
+        "underlying": "int"
+      },
+      "msvc": {
+        "size": 4,
+        "underlying": "int"
+      },
+      "name": "ImageFormat",
+      "rust_repr": "i32",
+      "underlying": "int",
+      "values": [
+        {
+          "name": "IMAGE_FORMAT_UNKNOWN",
+          "value": -1
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA8888",
+          "value": 0
+        },
+        {
+          "name": "IMAGE_FORMAT_ABGR8888",
+          "value": 1
+        },
+        {
+          "name": "IMAGE_FORMAT_RGB888",
+          "value": 2
+        },
+        {
+          "name": "IMAGE_FORMAT_BGR888",
+          "value": 3
+        },
+        {
+          "name": "IMAGE_FORMAT_RGB565",
+          "value": 4
+        },
+        {
+          "name": "IMAGE_FORMAT_I8",
+          "value": 5
+        },
+        {
+          "name": "IMAGE_FORMAT_IA88",
+          "value": 6
+        },
+        {
+          "name": "IMAGE_FORMAT_A8",
+          "value": 7
+        },
+        {
+          "name": "IMAGE_FORMAT_ARGB8888",
+          "value": 8
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRA8888",
+          "value": 9
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRX8888",
+          "value": 10
+        },
+        {
+          "name": "IMAGE_FORMAT_BGR565",
+          "value": 11
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRA4444",
+          "value": 12
+        },
+        {
+          "name": "IMAGE_FORMAT_UV88",
+          "value": 13
+        },
+        {
+          "name": "IMAGE_FORMAT_UVWQ8888",
+          "value": 14
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA16161616F",
+          "value": 15
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA16161616",
+          "value": 16
+        },
+        {
+          "name": "IMAGE_FORMAT_R32F",
+          "value": 17
+        },
+        {
+          "name": "IMAGE_FORMAT_RGB323232F",
+          "value": 18
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA32323232F",
+          "value": 19
+        },
+        {
+          "name": "IMAGE_FORMAT_DXT1",
+          "value": 20
+        },
+        {
+          "name": "IMAGE_FORMAT_DXT1_ONEBITALPHA",
+          "value": 21
+        },
+        {
+          "name": "IMAGE_FORMAT_DXT3",
+          "value": 22
+        },
+        {
+          "name": "IMAGE_FORMAT_DXT5",
+          "value": 23
+        },
+        {
+          "name": "IMAGE_FORMAT_ATI1N",
+          "value": 24
+        },
+        {
+          "name": "IMAGE_FORMAT_ATI2N",
+          "value": 25
+        },
+        {
+          "name": "IMAGE_FORMAT_BC6H",
+          "value": 26
+        },
+        {
+          "name": "IMAGE_FORMAT_BC7",
+          "value": 27
+        },
+        {
+          "name": "IMAGE_FORMAT_DXT5_NM",
+          "value": 28
+        },
+        {
+          "name": "IMAGE_FORMAT_R8G8B8_ETC2",
+          "value": 29
+        },
+        {
+          "name": "IMAGE_FORMAT_R8G8B8A8_ETC2_EAC",
+          "value": 30
+        },
+        {
+          "name": "IMAGE_FORMAT_R11_EAC",
+          "value": 31
+        },
+        {
+          "name": "IMAGE_FORMAT_RG11_EAC",
+          "value": 32
+        },
+        {
+          "name": "IMAGE_FORMAT_RG1616F",
+          "value": 33
+        },
+        {
+          "name": "IMAGE_FORMAT_RG3232F",
+          "value": 34
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBX8888",
+          "value": 35
+        },
+        {
+          "name": "IMAGE_FORMAT_NV_NULL",
+          "value": 36
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA1010102",
+          "value": 37
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRA1010102",
+          "value": 38
+        },
+        {
+          "name": "IMAGE_FORMAT_R16F",
+          "value": 39
+        },
+        {
+          "name": "IMAGE_FORMAT_D16",
+          "value": 40
+        },
+        {
+          "name": "IMAGE_FORMAT_D32",
+          "value": 41
+        },
+        {
+          "name": "IMAGE_FORMAT_D24S8",
+          "value": 42
+        },
+        {
+          "name": "IMAGE_FORMAT_LINEAR_D24S8",
+          "value": 43
+        },
+        {
+          "name": "IMAGE_FORMAT_D24X8",
+          "value": 44
+        },
+        {
+          "name": "IMAGE_FORMAT_D24FS8",
+          "value": 45
+        },
+        {
+          "name": "IMAGE_FORMAT_D16_SHADOW",
+          "value": 46
+        },
+        {
+          "name": "IMAGE_FORMAT_D24X8_SHADOW",
+          "value": 47
+        },
+        {
+          "name": "IMAGE_FORMAT_D32FS8",
+          "value": 48
+        },
+        {
+          "name": "IMAGE_FORMAT_RG1616",
+          "value": 49
+        },
+        {
+          "name": "IMAGE_FORMAT_R16",
+          "value": 50
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA8888_LINEAR",
+          "value": 51
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRA8888_LINEAR",
+          "value": 52
+        },
+        {
+          "name": "IMAGE_FORMAT_BGRX8888_LINEAR",
+          "value": 53
+        },
+        {
+          "name": "IMAGE_FORMAT_R32_UINT",
+          "value": 54
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA32323232_UINT",
+          "value": 55
+        },
+        {
+          "name": "IMAGE_FORMAT_R8_UINT",
+          "value": 56
+        },
+        {
+          "name": "IMAGE_FORMAT_R8G8_UINT",
+          "value": 57
+        },
+        {
+          "name": "IMAGE_FORMAT_R32G32_UINT",
+          "value": 58
+        },
+        {
+          "name": "IMAGE_FORMAT_R16_UINT",
+          "value": 59
+        },
+        {
+          "name": "IMAGE_FORMAT_R16G16_UINT",
+          "value": 60
+        },
+        {
+          "name": "IMAGE_FORMAT_R11G11B10_FLOAT",
+          "value": 61
+        },
+        {
+          "name": "IMAGE_FORMAT_R9G9B9E5_FLOAT",
+          "value": 62
+        },
+        {
+          "name": "IMAGE_FORMAT_R32_SINT",
+          "value": 63
+        },
+        {
+          "name": "IMAGE_FORMAT_RGBA8888_UINT",
+          "value": 64
+        },
+        {
+          "name": "IMAGE_FORMAT_IMC2",
+          "value": 65
+        },
+        {
+          "name": "IMAGE_FORMAT_NV12",
+          "value": 66
+        },
+        {
+          "name": "IMAGE_FORMAT_R8_UNORM",
+          "value": 67
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const void *",
+          "name": "m_pBinding",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/rendersystem/rendersystemtypes.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "HRenderTexture",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk001",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk002",
+          "offset": 4,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk003",
+          "offset": 8,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float",
+          "name": "m_unk004",
+          "offset": 12,
+          "rust_type": "f32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/rendersystem/irenderdevice.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 12,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 16
+      },
+      "kind": "struct",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk001",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk002",
+            "offset": 4,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk003",
+            "offset": 8,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_unk004",
+            "offset": 12,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "RenderDeviceUnkVector4_t",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 16
+    }
+  ],
+  "specs": [
+    {
+      "align": 8,
+      "bases": [],
+      "cxx_name": "CStrongHandle<InfoForResourceTypeCTextureBase>",
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "ResourceHandle_t",
+          "name": "m_pBinding",
+          "offset": 0,
+          "rust_type": "*mut ::core::ffi::c_void",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "size": 8
+      },
+      "kind": "class",
+      "members": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "level": 1,
+          "name": "m_pBinding",
+          "offset": 0,
+          "type": "ResourceHandle_t"
+        }
+      ],
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pBinding",
+            "offset": 0,
+            "size": 8
+          }
+        ],
+        "members": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "level": 1,
+            "name": "m_pBinding",
+            "offset": 0
+          }
+        ],
+        "size": 8
+      },
+      "name": "CStrongHandle<InfoForResourceTypeCTextureBase>",
+      "opaque": false,
+      "pass_in_registers": false,
+      "rust_name": "CStrongHandle_InfoForResourceTypeCTextureBase",
+      "size": 8,
+      "template": "CStrongHandle"
+    }
+  ],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "IRenderDevice",
+      "header": "public/rendersystem/irenderdevice.h",
+      "methods": [
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 0,
+          "msvc_slot": 0,
+          "name": "GetDeviceAPI",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "SwapChainHandle_t (PlatWindow_t, OsSpecificWindowHandle_t, const RenderDeviceInfo_t &, const char *)",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 1,
+          "msvc_slot": 1,
+          "name": "CreateSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPlatWnd: *mut ::core::ffi::c_void, hOsWnd: *mut ::core::ffi::c_void, info: *mut ::core::ffi::c_void, pDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 2,
+          "msvc_slot": 2,
+          "name": "DestroySwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (SwapChainHandle_t, const RenderDeviceInfo_t &)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 3,
+          "msvc_slot": 3,
+          "name": "UpdateSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, mode: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "const RenderDeviceInfo_t &(SwapChainHandle_t)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 4,
+          "msvc_slot": 4,
+          "name": "GetSwapChainInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "OsSpecificWindowHandle_t (SwapChainHandle_t)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 5,
+          "msvc_slot": 5,
+          "name": "GetSwapChainOsSpecificWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "PlatWindow_t (SwapChainHandle_t)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 6,
+          "msvc_slot": 6,
+          "name": "GetSwapChainPlatWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "ImageFormat (SwapChainHandle_t)",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 7,
+          "msvc_slot": 7,
+          "name": "GetBackBufferFormat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> ImageFormat"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, int *, int *)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 8,
+          "msvc_slot": 8,
+          "name": "GetBackBufferDimensions",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, pWidth: *mut i32, pHeight: *mut i32)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 9,
+          "msvc_slot": 9,
+          "name": "GetCurrentAdapter",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 10,
+          "msvc_slot": 10,
+          "name": "IsUsingGraphics",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_slot": 11,
+          "name": "SpewDriverInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_slot": 12,
+          "name": "IsWindowResizingEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "const char *(int)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_slot": 13,
+          "name": "GetShaderModelString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nShaderType: i32) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "BeginRendering",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "BeginSubmittingDisplayLists",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (SwapChainHandle_t, IRenderDevicePresentCallback *, uint32, RenderSemaphoreHandle_t)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "Present",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, pCallback: *mut ::core::ffi::c_void, nRenderContextFlags: u32, hWaitSemaphore: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "Flush",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "ForceFlushGPU",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, float)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "SetHardwareGammaRamp",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, flGamma: f32)"
+        },
+        {
+          "cxx_signature": "std::unique_ptr<IRenderShaderByteCode> (const char *, uint32, const char *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "CompileShader",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "RenderShaderHandle_t (int, std::unique_ptr<IRenderShaderByteCode>, const char *, int, const void *)",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "CreateShader",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (int, RenderShaderHandle_t)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "DestroyShader",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nShaderType: i32, hShader: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderShaderStats_t *, int, RenderShaderHandle_t)",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "GetShaderStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pOutStats: *mut ::core::ffi::c_void, nType: i32, hShader: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "RenderInputLayout_t (const char *, int, const RenderInputLayoutField_t *)",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "CreateInputLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pName: *const ::core::ffi::c_char, nFields: i32, pFields: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderInputLayout_t)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "AddRefInputLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hLayout: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderInputLayout_t)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "ReleaseInputLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hLayout: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int, RenderInputLayout_t *, int, const RenderInputLayout_t *)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "ConcatentateInputLayouts",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nOutputLayoutVariations: i32, pOutputLayouts: *mut *mut ::core::ffi::c_void, nInputLayouts: i32, pInputLayouts: *const *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int (RenderInputLayout_t, const RenderInputLayoutField_t **, int *)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "GetInputLayoutFields",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hLayout: *mut ::core::ffi::c_void, ppFields: *mut *mut ::core::ffi::c_void, pCount: *mut i32) -> i32"
+        },
+        {
+          "cxx_signature": "CThreadFastMutex &()",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "GetInputLayoutMutex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RsRasterizerStateHandle_t (const RsRasterizerStateDesc_t *)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "FindOrCreateRasterizerState",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pDesc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RsDepthStencilStateHandle_t (const RsDepthStencilStateDesc_t *)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "FindOrCreateDepthStencilState",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pDesc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RsBlendStateHandle_t (const RsBlendStateDesc_t *)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "FindOrCreateBlendState",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pDesc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "VertexBufferHandle_t (int, const BufferDesc_t &, int)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 35,
+          "name": "CreateVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, nExtraUsageFlags: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "VertexBufferHandle_t (int, const BufferDesc_t &, int, const RenderInputLayoutField_t *, int)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "CreateVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, nLayoutFields: i32, pLayoutFields: *mut ::core::ffi::c_void, nExtraUsageFlags: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "VertexBufferHandle_t (int, const BufferDesc_t &, RenderInputLayout_t, int)",
+          "decl_index": 35,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 33,
+          "name": "CreateVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, hLayout: *mut ::core::ffi::c_void, nExtraUsageFlags: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (VertexBufferHandle_t)",
+          "decl_index": 36,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "DestroyVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hVertexBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "IndexBufferHandle_t (int, const BufferDesc_t &, int)",
+          "decl_index": 37,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "CreateIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, nExtraUsageFlags: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IndexBufferHandle_t)",
+          "decl_index": 38,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "DestroyIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndexBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (VertexBufferHandle_t, BufferDesc_t *)",
+          "decl_index": 39,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "GetVertexBufferDesc",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, pDesc: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IndexBufferHandle_t, BufferDesc_t *)",
+          "decl_index": 40,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "GetIndexBufferDesc",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, pDesc: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderBufferHandle_t, BufferDesc_t *)",
+          "decl_index": 41,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "GetGPUBufferDesc",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, pDesc: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "RenderInputLayout_t (VertexBufferHandle_t)",
+          "decl_index": 42,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "GetVertexBufferInputLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hVertexBuffer: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderBufferHandle_t (int, const BufferDesc_t &, int, const void *)",
+          "decl_index": 43,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "CreateGPUBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, nFlags: i32, pInitialData: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderBufferHandle_t (int, const BufferDesc_t &, int, ImageFormat, const void *)",
+          "decl_index": 44,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "CreateGPUBufferFormatted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, desc: *mut ::core::ffi::c_void, nFlags: i32, nFormat: ImageFormat, pInitialData: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "uint64 (RenderBufferHandle_t)",
+          "decl_index": 45,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "GetGPUBufferDeviceAddress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hGPUBuffer: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "void (RenderBufferHandle_t)",
+          "decl_index": 46,
+          "is_dtor": false,
+          "itanium_slot": 46,
+          "msvc_slot": 46,
+          "name": "DestroyGPUBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hGPUBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint64 (VertexBufferHandle_t)",
+          "decl_index": 47,
+          "is_dtor": false,
+          "itanium_slot": 47,
+          "msvc_slot": 47,
+          "name": "GetVertexBufferDeviceAddress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hVertexBuffer: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "uint64 (IndexBufferHandle_t)",
+          "decl_index": 48,
+          "is_dtor": false,
+          "itanium_slot": 48,
+          "msvc_slot": 48,
+          "name": "GetIndexBufferDeviceAddress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndexBuffer: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "uint64 (RenderResourceHandle_t)",
+          "decl_index": 49,
+          "is_dtor": false,
+          "itanium_slot": 49,
+          "msvc_slot": 49,
+          "name": "GetPooledVertexBufferDeviceAddress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPooledVertexBuffer: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "uint64 (PooledIndexBufferHandle_t)",
+          "decl_index": 50,
+          "is_dtor": false,
+          "itanium_slot": 50,
+          "msvc_slot": 50,
+          "name": "GetPooledIndexBufferDeviceAddress",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPooledIndexBuffer: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "CStrongHandle<InfoForResourceTypeCTextureBase> (const char *, bool, const CTextureCreationDesc *, const CTextureDesc *, const void *, int, bool)",
+          "decl_index": 51,
+          "is_dtor": false,
+          "itanium_slot": 51,
+          "msvc_slot": 51,
+          "name": "FindOrCreateTexture",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "HRenderTexture (int8)",
+          "decl_index": 52,
+          "is_dtor": false,
+          "itanium_slot": 52,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut HRenderTexture, nDimension: i8) -> *mut HRenderTexture",
+          "msvc_slot": 52,
+          "name": "GetErrorTexture",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nDimension: i8) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "CStrongHandle<InfoForResourceTypeCTextureBase> (const char *, int)",
+          "decl_index": 53,
+          "is_dtor": false,
+          "itanium_slot": 53,
+          "msvc_slot": 53,
+          "name": "FindOrCreateFileTexture",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "CStrongHandle<InfoForResourceTypeCTextureBase> (ResourceId_t, int)",
+          "decl_index": 54,
+          "is_dtor": false,
+          "itanium_slot": 54,
+          "msvc_slot": 54,
+          "name": "FindFileTexture",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "CStrongHandle<InfoForResourceTypeCTextureBase> (const char *, uint64)",
+          "decl_index": 55,
+          "is_dtor": false,
+          "itanium_slot": 55,
+          "msvc_slot": 55,
+          "name": "FindOrCreateExternalTexture",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, uint64)",
+          "decl_index": 56,
+          "is_dtor": false,
+          "itanium_slot": 56,
+          "msvc_slot": 56,
+          "name": "UpdateExternalTexture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, hSharedTexture: u64) -> bool"
+        },
+        {
+          "cxx_signature": "SamplerStateHandle_t (const CSamplerStateDesc &, const char *)",
+          "decl_index": 57,
+          "is_dtor": false,
+          "itanium_slot": 57,
+          "msvc_slot": 57,
+          "name": "FindOrCreateSamplerState",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, samplerState: *mut ::core::ffi::c_void, pDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderQueryHandle_t (int)",
+          "decl_index": 58,
+          "is_dtor": false,
+          "itanium_slot": 58,
+          "msvc_slot": 58,
+          "name": "CreateQueryObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "int (RenderQueryHandle_t, uint64 *)",
+          "decl_index": 59,
+          "is_dtor": false,
+          "itanium_slot": 59,
+          "msvc_slot": 59,
+          "name": "GetQueryObjectData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hQuery: *mut ::core::ffi::c_void, pData: *mut u64) -> i32"
+        },
+        {
+          "cxx_signature": "void (RenderQueryHandle_t)",
+          "decl_index": 60,
+          "is_dtor": false,
+          "itanium_slot": 60,
+          "msvc_slot": 60,
+          "name": "DeleteQueryObject",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hQuery: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "IRenderContext *(uint32, const char *, ...)",
+          "decl_index": 61,
+          "is_dtor": false,
+          "itanium_slot": 61,
+          "msvc_slot": 61,
+          "name": "CreateRenderContext",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "IRenderContext *(uint32, const char *, va_list *)",
+          "decl_index": 62,
+          "is_dtor": false,
+          "itanium_slot": 62,
+          "msvc_slot": 62,
+          "name": "VaCreateRenderContext",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nRenderContextFlags: u32, pDebugStringFmt: *const ::core::ffi::c_char, pArgList: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IRenderContext *)",
+          "decl_index": 63,
+          "is_dtor": false,
+          "itanium_slot": 63,
+          "msvc_slot": 63,
+          "name": "ReleaseRenderContext",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pRenderContext: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const DisplayListToSubmit_t *, int)",
+          "decl_index": 64,
+          "is_dtor": false,
+          "itanium_slot": 64,
+          "msvc_slot": 64,
+          "name": "SubmitDisplayLists",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pLists: *mut ::core::ffi::c_void, nCount: i32)"
+        },
+        {
+          "cxx_signature": "void (CDisplayList *)",
+          "decl_index": 65,
+          "is_dtor": false,
+          "itanium_slot": 65,
+          "msvc_slot": 65,
+          "name": "DiscardDisplayList",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pCommandList: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "CDependencyDescriptor *(int, const char *)",
+          "decl_index": 66,
+          "is_dtor": false,
+          "itanium_slot": 66,
+          "msvc_slot": 66,
+          "name": "GetDependencyDescriptor",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nNumBatchesWhichWillBeSubmitted: i32, pDebugString: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "ConstantBufferHandle_t (int, uint32, void *, const char *)",
+          "decl_index": 67,
+          "is_dtor": false,
+          "itanium_slot": 67,
+          "msvc_slot": 67,
+          "name": "CreateConstantBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, nNumBytes: u32, pData: *mut ::core::ffi::c_void, pDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "ConstantBufferHandle_t (int, uint32, uint32, uint32, const char *)",
+          "decl_index": 68,
+          "is_dtor": false,
+          "itanium_slot": 68,
+          "msvc_slot": 68,
+          "name": "CreateMultiViewConstantBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32, nNumBytes: u32, nViews: u32, nCreateFlags: u32, pDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ConstantBufferHandle_t)",
+          "decl_index": 69,
+          "is_dtor": false,
+          "itanium_slot": 69,
+          "msvc_slot": 69,
+          "name": "DestroyConstantBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hConstantBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 (ConstantBufferHandle_t)",
+          "decl_index": 70,
+          "is_dtor": false,
+          "itanium_slot": 70,
+          "msvc_slot": 70,
+          "name": "GetConstantBufferSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hConstantBuffer: *mut ::core::ffi::c_void) -> u32"
+        },
+        {
+          "cxx_signature": "uint32 (ConstantBufferHandle_t, uint32 *, uint32 *)",
+          "decl_index": 71,
+          "is_dtor": false,
+          "itanium_slot": 71,
+          "msvc_slot": 71,
+          "name": "GetMultiViewConstantBufferSizes",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hConstantBuffer: *mut ::core::ffi::c_void, pViewBytes: *mut u32, pNumViews: *mut u32) -> u32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 72,
+          "is_dtor": false,
+          "itanium_slot": 72,
+          "msvc_slot": 72,
+          "name": "ForceDeviceLost",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, Rect_t *, int, int, Rect_t *, void *, ImageFormat, int)",
+          "decl_index": 73,
+          "is_dtor": false,
+          "itanium_slot": 73,
+          "msvc_slot": 74,
+          "name": "ReadTexturePixels",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, pSrcRect: *mut ::core::ffi::c_void, nSrcSlice: i32, nSrcMip: i32, pDstRect: *mut ::core::ffi::c_void, pData: *mut ::core::ffi::c_void, dstFormat: ImageFormat, nDstStride: i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (FloatBitMap_t *, HRenderTexture, uint8)",
+          "decl_index": 74,
+          "is_dtor": false,
+          "itanium_slot": 74,
+          "msvc_slot": 73,
+          "name": "ReadTexturePixels",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pBitmap: *mut ::core::ffi::c_void, hTexture: HRenderTexture, nGammaType: u8) -> bool"
+        },
+        {
+          "cxx_signature": "bool (RenderBufferHandle_t, uint32, void *, uint32)",
+          "decl_index": 75,
+          "is_dtor": false,
+          "itanium_slot": 75,
+          "msvc_slot": 75,
+          "name": "ReadBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, nOffsetInBytes: u32, pBuf: *mut ::core::ffi::c_void, nBytesToRead: u32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 76,
+          "is_dtor": false,
+          "itanium_slot": 76,
+          "msvc_slot": 76,
+          "name": "IsPolledBufferReadbackReady",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hRequest: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *, void **, int *)",
+          "decl_index": 77,
+          "is_dtor": false,
+          "itanium_slot": 77,
+          "msvc_slot": 77,
+          "name": "GetPolledBufferReadbackData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hRequest: *mut ::core::ffi::c_void, ppData: *mut *mut ::core::ffi::c_void, pSize: *mut i32) -> bool"
+        },
+        {
+          "cxx_signature": "bool (void *)",
+          "decl_index": 78,
+          "is_dtor": false,
+          "itanium_slot": 78,
+          "msvc_slot": 78,
+          "name": "ReleasePolledBufferReadback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hRequest: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "const Sheet_t *(HRenderTexture)",
+          "decl_index": 79,
+          "is_dtor": false,
+          "itanium_slot": 79,
+          "msvc_slot": 79,
+          "name": "GetTextureSheet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (uint32, bool)",
+          "decl_index": 80,
+          "is_dtor": false,
+          "itanium_slot": 80,
+          "msvc_slot": 80,
+          "name": "SetRenderDebugFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: u32, bSet: bool)"
+        },
+        {
+          "cxx_signature": "bool (uint32)",
+          "decl_index": 81,
+          "is_dtor": false,
+          "itanium_slot": 81,
+          "msvc_slot": 81,
+          "name": "IsRenderDebugFlagSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: u32) -> bool"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 82,
+          "is_dtor": false,
+          "itanium_slot": 82,
+          "msvc_slot": 82,
+          "name": "GetRenderDebugFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> u32"
+        },
+        {
+          "cxx_signature": "void (double)",
+          "decl_index": 83,
+          "is_dtor": false,
+          "itanium_slot": 83,
+          "msvc_slot": 83,
+          "name": "SetFramePacingTargetFPS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, flFPS: f64)"
+        },
+        {
+          "cxx_signature": "double ()",
+          "decl_index": 84,
+          "is_dtor": false,
+          "itanium_slot": 84,
+          "msvc_slot": 84,
+          "name": "GetFramePacingTargetFPS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> f64"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture, int32)",
+          "decl_index": 85,
+          "is_dtor": false,
+          "itanium_slot": 85,
+          "msvc_slot": 85,
+          "name": "PreloadTextureBits",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nRequiredMipSize: i32)"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture)",
+          "decl_index": 86,
+          "is_dtor": false,
+          "itanium_slot": 86,
+          "msvc_slot": 86,
+          "name": "UnloadTextureBits",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 87,
+          "is_dtor": false,
+          "itanium_slot": 87,
+          "msvc_slot": 87,
+          "name": "AreTextureBitsLoaded",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture, int)",
+          "decl_index": 88,
+          "is_dtor": false,
+          "itanium_slot": 88,
+          "msvc_slot": 88,
+          "name": "SetTextureStreamingPriority",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nPriority: i32)"
+        },
+        {
+          "cxx_signature": "const CTextureDesc *(HRenderTexture)",
+          "decl_index": 89,
+          "is_dtor": false,
+          "itanium_slot": 89,
+          "msvc_slot": 89,
+          "name": "GetOnDiskTextureDesc",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "const CTextureDesc *(HRenderTexture)",
+          "decl_index": 90,
+          "is_dtor": false,
+          "itanium_slot": 90,
+          "msvc_slot": 90,
+          "name": "GetTextureDesc",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "Vector (HRenderTexture)",
+          "decl_index": 91,
+          "is_dtor": false,
+          "itanium_slot": 91,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut Vector, hTexture: HRenderTexture) -> *mut Vector",
+          "msvc_slot": 91,
+          "name": "GetTextureAverageColor",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 12,
+              "sret": false
+            },
+            "msvc": {
+              "size": 12,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> Vector"
+        },
+        {
+          "cxx_signature": "RenderDeviceUnkVector4_t (HRenderTexture)",
+          "decl_index": 92,
+          "is_dtor": false,
+          "itanium_slot": 92,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut RenderDeviceUnkVector4_t, hTexture: HRenderTexture) -> *mut RenderDeviceUnkVector4_t",
+          "msvc_slot": 92,
+          "name": "GetTextureAverageColorRGBA",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "sse",
+              "size": 16,
+              "sret": false
+            },
+            "msvc": {
+              "size": 16,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> RenderDeviceUnkVector4_t"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, int, CUtlVector<float> &)",
+          "decl_index": 93,
+          "is_dtor": false,
+          "itanium_slot": 93,
+          "msvc_slot": 93,
+          "name": "GetCubemapRadianceSHConstants",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nArrayIndex: i32, outConstants: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture, int, const CUtlVector<float> &)",
+          "decl_index": 94,
+          "is_dtor": false,
+          "itanium_slot": 94,
+          "msvc_slot": 94,
+          "name": "SetCubemapRadianceSHConstants",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nArrayIndex: i32, constants: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "size_t (HRenderTexture)",
+          "decl_index": 95,
+          "is_dtor": false,
+          "itanium_slot": 95,
+          "msvc_slot": 95,
+          "name": "GetTextureStreamingDataOffset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> usize"
+        },
+        {
+          "cxx_signature": "RenderMultisampleType_t (HRenderTexture)",
+          "decl_index": 96,
+          "is_dtor": false,
+          "itanium_slot": 96,
+          "msvc_slot": 96,
+          "name": "GetTextureMultisampleType",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> u8"
+        },
+        {
+          "cxx_signature": "ImageFormat (SwapChainHandle_t)",
+          "decl_index": 97,
+          "is_dtor": false,
+          "itanium_slot": 97,
+          "msvc_slot": 97,
+          "name": "GetSwapChainDepthStencilFormat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> ImageFormat"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 98,
+          "is_dtor": false,
+          "itanium_slot": 98,
+          "msvc_slot": 98,
+          "name": "IsTextureSampleableRenderTarget",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "const char *(RenderMultisampleType_t)",
+          "decl_index": 99,
+          "is_dtor": false,
+          "itanium_slot": 99,
+          "msvc_slot": 99,
+          "name": "MultisampleTypeToString",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: u8) -> *const ::core::ffi::c_char"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 100,
+          "is_dtor": false,
+          "itanium_slot": 100,
+          "msvc_slot": 100,
+          "name": "IsTextureRenderTarget",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture)",
+          "decl_index": 101,
+          "is_dtor": false,
+          "itanium_slot": 101,
+          "msvc_slot": 101,
+          "name": "PinTextureInGPUMemory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture)"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture)",
+          "decl_index": 102,
+          "is_dtor": false,
+          "itanium_slot": 102,
+          "msvc_slot": 102,
+          "name": "UnpinTextureInGPUMemory",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 103,
+          "is_dtor": false,
+          "itanium_slot": 103,
+          "msvc_slot": 103,
+          "name": "IsTextureCubeMap",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 104,
+          "is_dtor": false,
+          "itanium_slot": 104,
+          "msvc_slot": 104,
+          "name": "IsTextureFullyResident",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 105,
+          "is_dtor": false,
+          "itanium_slot": 105,
+          "msvc_slot": 105,
+          "name": "IsTextureStandIn",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 106,
+          "is_dtor": false,
+          "itanium_slot": 106,
+          "msvc_slot": 106,
+          "name": "unk101",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "void (ITextureResidencyListener *)",
+          "decl_index": 107,
+          "is_dtor": false,
+          "itanium_slot": 107,
+          "msvc_slot": 107,
+          "name": "AddTextureResidencyListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ITextureResidencyListener *)",
+          "decl_index": 108,
+          "is_dtor": false,
+          "itanium_slot": 108,
+          "msvc_slot": 108,
+          "name": "RemoveTextureResidencyListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IRenderAsyncShaderCompileListener *)",
+          "decl_index": 109,
+          "is_dtor": false,
+          "itanium_slot": 109,
+          "msvc_slot": 109,
+          "name": "AddAsyncShaderCompileListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IRenderAsyncShaderCompileListener *)",
+          "decl_index": 110,
+          "is_dtor": false,
+          "itanium_slot": 110,
+          "msvc_slot": 110,
+          "name": "RemoveAsyncShaderCompileListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pListener: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "HRenderTexture (SwapChainHandle_t, int)",
+          "decl_index": 111,
+          "is_dtor": false,
+          "itanium_slot": 111,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut HRenderTexture, hSwapChain: *mut ::core::ffi::c_void, nBuffer: i32) -> *mut HRenderTexture",
+          "msvc_slot": 111,
+          "name": "GetSwapChainTexture",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, nBuffer: i32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "void (const RenderTargetDesc_t &, int *, int *, RenderMultisampleType_t *)",
+          "decl_index": 112,
+          "is_dtor": false,
+          "itanium_slot": 112,
+          "msvc_slot": 112,
+          "name": "GetRenderTargetDescDimensions",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void, pWidthOut: *mut i32, pHeightOut: *mut i32, pMultisampleTypeOut: *mut u8)"
+        },
+        {
+          "cxx_signature": "bool (CRenderPipelineFrameStats &)",
+          "decl_index": 113,
+          "is_dtor": false,
+          "itanium_slot": 113,
+          "msvc_slot": 113,
+          "name": "GetPipelineFrameStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, frameStats: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (CRenderPipelineFrameStats &)",
+          "decl_index": 114,
+          "is_dtor": false,
+          "itanium_slot": 114,
+          "msvc_slot": 114,
+          "name": "ReleasePipelineFrameStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, frameStats: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture)",
+          "decl_index": 115,
+          "is_dtor": false,
+          "itanium_slot": 115,
+          "msvc_slot": 115,
+          "name": "IsTextureSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, SwapChainHandle_t *, int *)",
+          "decl_index": 116,
+          "is_dtor": false,
+          "itanium_slot": 116,
+          "msvc_slot": 116,
+          "name": "GetSwapChainFromTexture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, pSwapChain: *mut *mut ::core::ffi::c_void, pBuffer: *mut i32) -> bool"
+        },
+        {
+          "cxx_signature": "ImageFormat (ImageFormat, bool)",
+          "decl_index": 117,
+          "is_dtor": false,
+          "itanium_slot": 117,
+          "msvc_slot": 117,
+          "name": "GetNearestSupportedColorFormat",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFormat: ImageFormat, bIsRenderTarget: bool) -> ImageFormat"
+        },
+        {
+          "cxx_signature": "uint32 (const CTextureDesc &)",
+          "decl_index": 118,
+          "is_dtor": false,
+          "itanium_slot": 118,
+          "msvc_slot": 118,
+          "name": "ComputeTextureMemorySize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void) -> u32"
+        },
+        {
+          "cxx_signature": "void (CUtlVector<TextureResidencyInfo_t> &, TextureResidencyStats_t &)",
+          "decl_index": 119,
+          "is_dtor": false,
+          "itanium_slot": 119,
+          "msvc_slot": 119,
+          "name": "GetTextureResidencyInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, textures: *mut ::core::ffi::c_void, textureResidencyStats: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, HRenderTexture *, Vector2D *, int *)",
+          "decl_index": 120,
+          "is_dtor": false,
+          "itanium_slot": 120,
+          "msvc_slot": 120,
+          "name": "GetSheetSequenceTextureData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, pTextureOut: *mut HRenderTexture, pvecUVOut: *mut Vector2D, pSequenceCount: *mut i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (int &, int &)",
+          "decl_index": 121,
+          "is_dtor": false,
+          "itanium_slot": 121,
+          "msvc_slot": 121,
+          "name": "GetSheetCacheTextureSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nWidth: *mut i32, nHeight: *mut i32)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 122,
+          "is_dtor": false,
+          "itanium_slot": 122,
+          "msvc_slot": 122,
+          "name": "CommitSheetCacheData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "HRenderTexture ()",
+          "decl_index": 123,
+          "is_dtor": false,
+          "itanium_slot": 123,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut HRenderTexture) -> *mut HRenderTexture",
+          "msvc_slot": 123,
+          "name": "GetSheetMetaDataTexture",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "void (uint32)",
+          "decl_index": 124,
+          "is_dtor": false,
+          "itanium_slot": 124,
+          "msvc_slot": 124,
+          "name": "UnThrottleTextureStreamingForNFrames",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nNumberOfFramesForUnthrottledTextureLoading: u32)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 125,
+          "is_dtor": false,
+          "itanium_slot": 125,
+          "msvc_slot": 125,
+          "name": "GetNumTextureLoadsInFlight",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 126,
+          "is_dtor": false,
+          "itanium_slot": 126,
+          "msvc_slot": 126,
+          "name": "OnBeginningOfClientShutdown",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (CBufferString *)",
+          "decl_index": 127,
+          "is_dtor": false,
+          "itanium_slot": 127,
+          "msvc_slot": 127,
+          "name": "AppendResourceStats",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pOut: *mut CBufferString)"
+        },
+        {
+          "cxx_signature": "void *(int)",
+          "decl_index": 128,
+          "is_dtor": false,
+          "itanium_slot": 128,
+          "msvc_slot": 128,
+          "name": "GetDeviceSpecificInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nInfo: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (SwapChainHandle_t)",
+          "decl_index": 129,
+          "is_dtor": false,
+          "itanium_slot": 129,
+          "msvc_slot": 129,
+          "name": "CanRenderToSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void *(HRenderTexture, int8)",
+          "decl_index": 130,
+          "is_dtor": false,
+          "itanium_slot": 130,
+          "msvc_slot": 130,
+          "name": "GetDeviceSpecificTexture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nDimension: i8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(HRenderTexture, int8, uint8)",
+          "decl_index": 131,
+          "is_dtor": false,
+          "itanium_slot": 131,
+          "msvc_slot": 131,
+          "name": "GetDeviceSpecificImageView",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nDimension: i8, nColorSpace: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(RenderBufferHandle_t)",
+          "decl_index": 132,
+          "is_dtor": false,
+          "itanium_slot": 132,
+          "msvc_slot": 134,
+          "name": "GetDeviceSpecificBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(IndexBufferHandle_t)",
+          "decl_index": 133,
+          "is_dtor": false,
+          "itanium_slot": 133,
+          "msvc_slot": 133,
+          "name": "GetDeviceSpecificBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(VertexBufferHandle_t)",
+          "decl_index": 134,
+          "is_dtor": false,
+          "itanium_slot": 134,
+          "msvc_slot": 132,
+          "name": "GetDeviceSpecificBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(RenderDescriptorSetHandle_t)",
+          "decl_index": 135,
+          "is_dtor": false,
+          "itanium_slot": 135,
+          "msvc_slot": 135,
+          "name": "GetDeviceSpecificDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(RenderRayTracePipelineHandle_t)",
+          "decl_index": 136,
+          "is_dtor": false,
+          "itanium_slot": 136,
+          "msvc_slot": 136,
+          "name": "GetDeviceSpecificRayTracePipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hRayTracePipeline: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(IRenderContext *)",
+          "decl_index": 137,
+          "is_dtor": false,
+          "itanium_slot": 137,
+          "msvc_slot": 137,
+          "name": "GetDeviceSpecificCommandBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pRenderContext: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IMaxSwapChainDimensionsChangedListener *)",
+          "decl_index": 138,
+          "is_dtor": false,
+          "itanium_slot": 138,
+          "msvc_slot": 138,
+          "name": "RegisterMaxSwapChainDimensionsChangedListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pCallback: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IMaxSwapChainDimensionsChangedListener *)",
+          "decl_index": 139,
+          "is_dtor": false,
+          "itanium_slot": 139,
+          "msvc_slot": 139,
+          "name": "UnregisterMaxSwapChainDimensionsChangedListener",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pCallback: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (int *, int *)",
+          "decl_index": 140,
+          "is_dtor": false,
+          "itanium_slot": 140,
+          "msvc_slot": 140,
+          "name": "GetCurrentMaxSwapChainDimensions",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pWidthOut: *mut i32, pHeightOut: *mut i32)"
+        },
+        {
+          "cxx_signature": "ThreadHandle_t ()",
+          "decl_index": 141,
+          "is_dtor": false,
+          "itanium_slot": 141,
+          "msvc_slot": 141,
+          "name": "GetRenderThreadHandle",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "ThreadId_t ()",
+          "decl_index": 142,
+          "is_dtor": false,
+          "itanium_slot": 142,
+          "msvc_slot": 142,
+          "name": "GetRenderThreadId",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> u64"
+        },
+        {
+          "cxx_signature": "bool (SwapChainHandle_t)",
+          "decl_index": 143,
+          "is_dtor": false,
+          "itanium_slot": 143,
+          "msvc_slot": 143,
+          "name": "HasOutstandingPresents",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 144,
+          "is_dtor": false,
+          "itanium_slot": 144,
+          "msvc_slot": 144,
+          "name": "WaitForOutstandingPresents",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, PlatWindow_t, int, const RenderDeviceInfo_t &)",
+          "decl_index": 145,
+          "is_dtor": false,
+          "itanium_slot": 145,
+          "msvc_slot": 145,
+          "name": "ResizeEngineWindow",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, hEngineWindow: *mut ::core::ffi::c_void, nMonitorIndex: i32, actualMode: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 146,
+          "is_dtor": false,
+          "itanium_slot": 146,
+          "msvc_slot": 146,
+          "name": "GetLastValidSheetCacheFrame",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "int (HRenderTexture)",
+          "decl_index": 147,
+          "is_dtor": false,
+          "itanium_slot": 147,
+          "msvc_slot": 147,
+          "name": "GetTexturePinCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> i32"
+        },
+        {
+          "cxx_signature": "RenderDescriptorSetHandle_t (const char *, int32, const RenderDescriptorDesc_t *, int32, const RenderDescriptorBinding_t *, uint8)",
+          "decl_index": 148,
+          "is_dtor": false,
+          "itanium_slot": 148,
+          "msvc_slot": 148,
+          "name": "CreateDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pName: *const ::core::ffi::c_char, nNumDescriptors: i32, pDescriptorDescs: *mut ::core::ffi::c_void, nNumBindings: i32, pDescriptorBindings: *mut ::core::ffi::c_void, nFlags: u8) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderDescriptorSetHandle_t, int32, const RenderDescriptorBinding_t *)",
+          "decl_index": 149,
+          "is_dtor": false,
+          "itanium_slot": 149,
+          "msvc_slot": 149,
+          "name": "UpdateDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void, nNumBindings: i32, pDescriptorBindings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderDescriptorSetHandle_t)",
+          "decl_index": 150,
+          "is_dtor": false,
+          "itanium_slot": 150,
+          "msvc_slot": 150,
+          "name": "AllocateUpdateAfterBindDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderDescriptorSetHandle_t, int32, const RenderDescriptorBinding_t *)",
+          "decl_index": 151,
+          "is_dtor": false,
+          "itanium_slot": 151,
+          "msvc_slot": 151,
+          "name": "unk201",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void, nNumBindings: i32, pDescriptorBindings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (RenderDescriptorSetHandle_t)",
+          "decl_index": 152,
+          "is_dtor": false,
+          "itanium_slot": 152,
+          "msvc_slot": 152,
+          "name": "DestroyDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (RenderDescriptorSetHandle_t, CUtlVector<RenderDescriptorDesc_t> &)",
+          "decl_index": 153,
+          "is_dtor": false,
+          "itanium_slot": 153,
+          "msvc_slot": 153,
+          "name": "GetDescriptorSetDescs",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hDescriptorSet: *mut ::core::ffi::c_void, descriptorDescs: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (int32, const RenderDescriptorDesc_t *)",
+          "decl_index": 154,
+          "is_dtor": false,
+          "itanium_slot": 154,
+          "msvc_slot": 154,
+          "name": "AddDescriptorsToGlobalPerFrameDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nNumDescriptors: i32, pDescriptorDescs: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (int32, const RenderDescriptorBinding_t *)",
+          "decl_index": 155,
+          "is_dtor": false,
+          "itanium_slot": 155,
+          "msvc_slot": 155,
+          "name": "UpdateGlobalPerFrameDescriptorBindings",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nNumBindings: i32, pDescriptorBindings: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 156,
+          "is_dtor": false,
+          "itanium_slot": 156,
+          "msvc_slot": 156,
+          "name": "IsMultiGPUEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 157,
+          "is_dtor": false,
+          "itanium_slot": 157,
+          "msvc_slot": 157,
+          "name": "GetMultiGPUCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "uint32 ()",
+          "decl_index": 158,
+          "is_dtor": false,
+          "itanium_slot": 158,
+          "msvc_slot": 158,
+          "name": "GetMultiGPUDeviceMask",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> u32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 159,
+          "is_dtor": false,
+          "itanium_slot": 159,
+          "msvc_slot": 159,
+          "name": "unk301",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> f32"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 160,
+          "is_dtor": false,
+          "itanium_slot": 160,
+          "msvc_slot": 160,
+          "name": "GetLastPresentTime",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> f32"
+        },
+        {
+          "cxx_signature": "void (HRenderTexture, const CTextureDesc *, const void *, int, bool, int, const Rect3D_t *, uint32, const DataRecycleDelegate_t *, uint32)",
+          "decl_index": 161,
+          "is_dtor": false,
+          "itanium_slot": 161,
+          "msvc_slot": 161,
+          "name": "AsyncSetTextureData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, pDataDesc: *mut ::core::ffi::c_void, pData: *mut ::core::ffi::c_void, nDataSize: i32, bUnk: bool, nSpecificMipLevelToSet: i32, pSubRectToUpdate: *mut ::core::ffi::c_void, nTextureUpdateFlags: u32, pDataRecycleDelegate: *mut ::core::ffi::c_void, nAsyncTextureUpdateFlags: u32)"
+        },
+        {
+          "cxx_signature": "void *(HRenderTexture)",
+          "decl_index": 162,
+          "is_dtor": false,
+          "itanium_slot": 162,
+          "msvc_slot": 162,
+          "name": "GetGraphicsAPISpecificTextureHandle",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (int *, int *)",
+          "decl_index": 163,
+          "is_dtor": false,
+          "itanium_slot": 163,
+          "msvc_slot": 163,
+          "name": "GetLargestMonitorDimensions",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pWidth: *mut i32, pHeight: *mut i32)"
+        },
+        {
+          "cxx_signature": "void (uintp)",
+          "decl_index": 164,
+          "is_dtor": false,
+          "itanium_slot": 164,
+          "msvc_slot": 164,
+          "name": "PushRenderDeviceFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: usize)"
+        },
+        {
+          "cxx_signature": "void (uintp)",
+          "decl_index": 165,
+          "is_dtor": false,
+          "itanium_slot": 165,
+          "msvc_slot": 165,
+          "name": "PopRenderDeviceFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: usize)"
+        },
+        {
+          "cxx_signature": "bool (SwapChainHandle_t, float *, uint32 *)",
+          "decl_index": 166,
+          "is_dtor": false,
+          "itanium_slot": 166,
+          "msvc_slot": 166,
+          "name": "GetGPUFrameTimeMS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, pGPUFrameTimeMSOut: *mut f32, pFrameNumberOut: *mut u32) -> bool"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 167,
+          "is_dtor": false,
+          "itanium_slot": 167,
+          "msvc_slot": 167,
+          "name": "GetPresentCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 168,
+          "is_dtor": false,
+          "itanium_slot": 168,
+          "msvc_slot": 168,
+          "name": "IsUsingReverseDepth",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 169,
+          "is_dtor": false,
+          "itanium_slot": 169,
+          "msvc_slot": 169,
+          "name": "LowLatencySleep",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (uint32)",
+          "decl_index": 170,
+          "is_dtor": false,
+          "itanium_slot": 170,
+          "msvc_slot": 170,
+          "name": "SetLatencyMarker",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nMarker: u32)"
+        },
+        {
+          "cxx_signature": "bool (uint32)",
+          "decl_index": 171,
+          "is_dtor": false,
+          "itanium_slot": 171,
+          "msvc_slot": 171,
+          "name": "IsLatencyStatsPingMessage",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nWindowMessage: u32) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 172,
+          "is_dtor": false,
+          "itanium_slot": 172,
+          "msvc_slot": 172,
+          "name": "IsFramePacingSupported",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "double (uint64)",
+          "decl_index": 173,
+          "is_dtor": false,
+          "itanium_slot": 173,
+          "msvc_slot": 173,
+          "name": "ConvertTimestampToSeconds",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nTimestamp: u64) -> f64"
+        },
+        {
+          "cxx_signature": "void (int32, const HRenderTexture *)",
+          "decl_index": 174,
+          "is_dtor": false,
+          "itanium_slot": 174,
+          "msvc_slot": 174,
+          "name": "FreeTextureGPUResources",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nTextureCount: i32, pTextures: *const HRenderTexture)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 175,
+          "is_dtor": false,
+          "itanium_slot": 175,
+          "msvc_slot": 175,
+          "name": "IsProfilerAttached",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "void (float)",
+          "decl_index": 176,
+          "is_dtor": false,
+          "itanium_slot": 176,
+          "msvc_slot": 176,
+          "name": "SetTextureGlobalMipLODBias",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, flMipLODBias: f32)"
+        },
+        {
+          "cxx_signature": "float ()",
+          "decl_index": 177,
+          "is_dtor": false,
+          "itanium_slot": 177,
+          "msvc_slot": 177,
+          "name": "GetTextureGlobalMipLODBias",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> f32"
+        },
+        {
+          "cxx_signature": "void (uint32)",
+          "decl_index": 178,
+          "is_dtor": false,
+          "itanium_slot": 178,
+          "msvc_slot": 178,
+          "name": "UnThrottlePipelineCreationForNFrames",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nNumberOfFramesForUnthrottledPipelineCreation: u32)"
+        },
+        {
+          "cxx_signature": "RenderDescriptorSetHandle_t (CUtlStringToken)",
+          "decl_index": 179,
+          "is_dtor": false,
+          "itanium_slot": 179,
+          "msvc_slot": 179,
+          "name": "GetRegisteredDescriptorSetLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, descriptorSetName: CUtlStringToken) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderBLASHandle_t (const BLASCreateDesc_t &, uint32 *)",
+          "decl_index": 180,
+          "is_dtor": false,
+          "itanium_slot": 180,
+          "msvc_slot": 180,
+          "name": "CreateBLAS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void, pSizeCounter: *mut u32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (RenderBLASHandle_t)",
+          "decl_index": 181,
+          "is_dtor": false,
+          "itanium_slot": 181,
+          "msvc_slot": 181,
+          "name": "IsCompactible",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBLAS: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "uint64 (RenderBLASHandle_t)",
+          "decl_index": 182,
+          "is_dtor": false,
+          "itanium_slot": 182,
+          "msvc_slot": 182,
+          "name": "GetBLASUpdateScratchSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBLAS: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "int (RenderBLASHandle_t)",
+          "decl_index": 183,
+          "is_dtor": false,
+          "itanium_slot": 183,
+          "msvc_slot": 183,
+          "name": "IsReadyToCompact",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBLAS: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "void (RenderBLASHandle_t)",
+          "decl_index": 184,
+          "is_dtor": false,
+          "itanium_slot": 184,
+          "msvc_slot": 184,
+          "name": "DestroyBLAS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBLAS: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "RenderTLASHandle_t (const TLASCreateDesc_t &, TLASInstance_t *, int)",
+          "decl_index": 185,
+          "is_dtor": false,
+          "itanium_slot": 185,
+          "msvc_slot": 185,
+          "name": "CreateTLAS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void, pInstances: *mut ::core::ffi::c_void, nInstanceCount: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderTLASHandle_t)",
+          "decl_index": 186,
+          "is_dtor": false,
+          "itanium_slot": 186,
+          "msvc_slot": 186,
+          "name": "DestroyTLAS",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTLAS: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint64 (RenderResourceHandle_t)",
+          "decl_index": 187,
+          "is_dtor": false,
+          "itanium_slot": 187,
+          "msvc_slot": 187,
+          "name": "GetAccelerationStructureUpdateScratchSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hAccelerationStructure: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "RenderRayTracePipelineHandle_t (const RayTracePipelineStateCreateDesc_t &)",
+          "decl_index": 188,
+          "is_dtor": false,
+          "itanium_slot": 188,
+          "msvc_slot": 188,
+          "name": "CreateRayTracePipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderRayTracePipelineHandle_t)",
+          "decl_index": 189,
+          "is_dtor": false,
+          "itanium_slot": 189,
+          "msvc_slot": 189,
+          "name": "DestroyRayTracePipeline",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPipeline: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 190,
+          "is_dtor": false,
+          "itanium_slot": 190,
+          "msvc_slot": 190,
+          "name": "IsCreatingRayTracePipelines",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "IRaytraceShaderBindingTable *(const ShaderBindingTableCreateDesc_t &)",
+          "decl_index": 191,
+          "is_dtor": false,
+          "itanium_slot": 191,
+          "msvc_slot": 191,
+          "name": "CreateRayTraceShaderBindingTable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (IRaytraceShaderBindingTable *)",
+          "decl_index": 192,
+          "is_dtor": false,
+          "itanium_slot": 192,
+          "msvc_slot": 192,
+          "name": "DestroyRayTraceShaderBindingTable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pSBT: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "RenderResourceHandle_t (const void *)",
+          "decl_index": 193,
+          "is_dtor": false,
+          "itanium_slot": 193,
+          "msvc_slot": 193,
+          "name": "CreateOpacityMicromap",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pDesc: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderResourceHandle_t)",
+          "decl_index": 194,
+          "is_dtor": false,
+          "itanium_slot": 194,
+          "msvc_slot": 194,
+          "name": "DestroyOpacityMicromap",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hOpacityMicromap: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint64 (RenderResourceHandle_t)",
+          "decl_index": 195,
+          "is_dtor": false,
+          "itanium_slot": 195,
+          "msvc_slot": 195,
+          "name": "unk401",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hOpacityMicromap: *mut ::core::ffi::c_void) -> u64"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 196,
+          "is_dtor": false,
+          "itanium_slot": 196,
+          "msvc_slot": 196,
+          "name": "IsRayTracingSupported",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 197,
+          "is_dtor": false,
+          "itanium_slot": 197,
+          "msvc_slot": 197,
+          "name": "IsAsyncPresentEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 198,
+          "is_dtor": false,
+          "itanium_slot": 198,
+          "msvc_slot": 198,
+          "name": "EnableAsyncPresent",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, bEnable: bool)"
+        },
+        {
+          "cxx_signature": "bool (PlatWindow_t)",
+          "decl_index": 199,
+          "is_dtor": false,
+          "itanium_slot": 199,
+          "msvc_slot": 199,
+          "name": "StartRenderDocCapture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hWnd: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (PlatWindow_t, RenderDocCaptureCallbackFn_t, void *)",
+          "decl_index": 200,
+          "is_dtor": false,
+          "itanium_slot": 200,
+          "msvc_slot": 200,
+          "name": "EndRenderDocCapture",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hWnd: *mut ::core::ffi::c_void, pfnCaptureCallback: *const ::core::ffi::c_void, pContext: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (int, const void *)",
+          "decl_index": 201,
+          "is_dtor": false,
+          "itanium_slot": 201,
+          "msvc_slot": 201,
+          "name": "RequestTextureMipLevels",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nCount: i32, pTextureRequests: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 (HRenderTexture, uint8, int8)",
+          "decl_index": 202,
+          "is_dtor": false,
+          "itanium_slot": 202,
+          "msvc_slot": 202,
+          "name": "GetTextureViewIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nColorSpace: u8, nDimension: i8) -> u32"
+        },
+        {
+          "cxx_signature": "HRenderTexture (uint32)",
+          "decl_index": 203,
+          "is_dtor": false,
+          "itanium_slot": 203,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, ret: *mut HRenderTexture, nTextureViewIndex: u32) -> *mut HRenderTexture",
+          "msvc_slot": 203,
+          "name": "GetTextureFromViewIndex",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nTextureViewIndex: u32) -> HRenderTexture"
+        },
+        {
+          "cxx_signature": "uint32 (SamplerStateHandle_t)",
+          "decl_index": 204,
+          "is_dtor": false,
+          "itanium_slot": 204,
+          "msvc_slot": 204,
+          "name": "GetSamplerIndex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSamplerState: *mut ::core::ffi::c_void) -> u32"
+        },
+        {
+          "cxx_signature": "RenderDescriptorSetHandle_t ()",
+          "decl_index": 205,
+          "is_dtor": false,
+          "itanium_slot": 205,
+          "msvc_slot": 205,
+          "name": "GetGlobalLateBoundBindlessDescriptorSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "PooledIndexBufferHandle_t (uint32, uint32, const void *, uint32 *)",
+          "decl_index": 206,
+          "is_dtor": false,
+          "itanium_slot": 206,
+          "msvc_slot": 206,
+          "name": "AllocatePooledIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nIndexCount: u32, nIndexSize: u32, pIndices: *mut ::core::ffi::c_void, pOutStartIndex: *mut u32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (PooledIndexBufferHandle_t)",
+          "decl_index": 207,
+          "is_dtor": false,
+          "itanium_slot": 207,
+          "msvc_slot": 207,
+          "name": "FreePooledIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 (PooledIndexBufferHandle_t, uint32 *, uint32 *)",
+          "decl_index": 208,
+          "is_dtor": false,
+          "itanium_slot": 208,
+          "msvc_slot": 208,
+          "name": "GetPooledIndexBufferOffset",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, pIndexSizeOut: *mut u32, pIndexCountOut: *mut u32) -> u32"
+        },
+        {
+          "cxx_signature": "IndexBufferHandle_t ()",
+          "decl_index": 209,
+          "is_dtor": false,
+          "itanium_slot": 209,
+          "msvc_slot": 209,
+          "name": "GetPooledIndexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "RenderResourceHandle_t (uint32, uint32, const void *, uint32, const char *)",
+          "decl_index": 210,
+          "is_dtor": false,
+          "itanium_slot": 210,
+          "msvc_slot": 210,
+          "name": "AllocatePooledVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nVertexCount: u32, nVertexSize: u32, pVertices: *mut ::core::ffi::c_void, nUnk: u32, pDebugName: *const ::core::ffi::c_char) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (RenderResourceHandle_t)",
+          "decl_index": 211,
+          "is_dtor": false,
+          "itanium_slot": 211,
+          "msvc_slot": 211,
+          "name": "FreePooledVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "uint32 (RenderResourceHandle_t)",
+          "decl_index": 212,
+          "is_dtor": false,
+          "itanium_slot": 212,
+          "msvc_slot": 212,
+          "name": "GetPooledVertexBufferBaseVertex",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPooledVertexBuffer: *mut ::core::ffi::c_void) -> u32"
+        },
+        {
+          "cxx_signature": "uint32 (RenderResourceHandle_t, uint32 *)",
+          "decl_index": 213,
+          "is_dtor": false,
+          "itanium_slot": 213,
+          "msvc_slot": 213,
+          "name": "GetPooledVertexBufferVertexCount",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPooledVertexBuffer: *mut ::core::ffi::c_void, pVertexSizeOut: *mut u32) -> u32"
+        },
+        {
+          "cxx_signature": "VertexBufferHandle_t ()",
+          "decl_index": 214,
+          "is_dtor": false,
+          "itanium_slot": 214,
+          "msvc_slot": 214,
+          "name": "GetPooledVertexBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 215,
+          "is_dtor": false,
+          "itanium_slot": 215,
+          "msvc_slot": 215,
+          "name": "unk501",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "IUpscaler *(int)",
+          "decl_index": 216,
+          "is_dtor": false,
+          "itanium_slot": 216,
+          "msvc_slot": 216,
+          "name": "CreateUpscaler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (int)",
+          "decl_index": 217,
+          "is_dtor": false,
+          "itanium_slot": 217,
+          "msvc_slot": 217,
+          "name": "IsSuperSamplingAvailable",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (IUpscaler *)",
+          "decl_index": 218,
+          "is_dtor": false,
+          "itanium_slot": 218,
+          "msvc_slot": 218,
+          "name": "DestroyUpscaler",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pUpscaler: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (bool, bool)",
+          "decl_index": 219,
+          "is_dtor": false,
+          "itanium_slot": 219,
+          "msvc_slot": 219,
+          "name": "unk601",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, bUnk1: bool, bUnk2: bool)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t)",
+          "decl_index": 220,
+          "is_dtor": false,
+          "itanium_slot": 220,
+          "msvc_slot": 220,
+          "name": "BeginRenderingToSwapChain",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (void *, void *, void *)",
+          "decl_index": 221,
+          "is_dtor": false,
+          "itanium_slot": 221,
+          "msvc_slot": 221,
+          "name": "unk701",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pUnk1: *mut ::core::ffi::c_void, pUnk2: *mut ::core::ffi::c_void, pUnk3: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void *(uint64)",
+          "decl_index": 222,
+          "is_dtor": false,
+          "itanium_slot": 222,
+          "msvc_slot": 222,
+          "name": "CreateDeviceMemoryPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nMinBlockSize: u64) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 223,
+          "is_dtor": false,
+          "itanium_slot": 223,
+          "msvc_slot": 223,
+          "name": "DestroyDeviceMemoryPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPool: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (void *, HRenderTexture)",
+          "decl_index": 224,
+          "is_dtor": false,
+          "itanium_slot": 224,
+          "msvc_slot": 224,
+          "name": "AllocateTextureInPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPool: *mut ::core::ffi::c_void, hTexture: HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, HRenderTexture)",
+          "decl_index": 225,
+          "is_dtor": false,
+          "itanium_slot": 225,
+          "msvc_slot": 225,
+          "name": "FreeTextureFromPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPool: *mut ::core::ffi::c_void, hTexture: HRenderTexture)"
+        },
+        {
+          "cxx_signature": "bool (void *, RenderBufferHandle_t)",
+          "decl_index": 226,
+          "is_dtor": false,
+          "itanium_slot": 226,
+          "msvc_slot": 226,
+          "name": "AllocateBufferInPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPool: *mut ::core::ffi::c_void, hBuffer: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *, RenderBufferHandle_t)",
+          "decl_index": 227,
+          "is_dtor": false,
+          "itanium_slot": 227,
+          "msvc_slot": 227,
+          "name": "FreeBufferFromPool",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hPool: *mut ::core::ffi::c_void, hBuffer: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, void *)",
+          "decl_index": 228,
+          "is_dtor": false,
+          "itanium_slot": 228,
+          "msvc_slot": 228,
+          "name": "GetDeviceMemoryTextureAllocationInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, pInfoOut: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (RenderBufferHandle_t, void *)",
+          "decl_index": 229,
+          "is_dtor": false,
+          "itanium_slot": 229,
+          "msvc_slot": 229,
+          "name": "GetDeviceMemoryBufferAllocationInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hBuffer: *mut ::core::ffi::c_void, pInfoOut: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, int, const HRenderTexture *)",
+          "decl_index": 230,
+          "is_dtor": false,
+          "itanium_slot": 230,
+          "msvc_slot": 230,
+          "name": "unk801",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture, nCount: i32, pTextures: *const HRenderTexture) -> bool"
+        },
+        {
+          "cxx_signature": "uint32 (ImageFormat)",
+          "decl_index": 231,
+          "is_dtor": false,
+          "itanium_slot": 231,
+          "msvc_slot": 231,
+          "name": "CheckFormatSupport",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFormat: ImageFormat) -> u32"
+        },
+        {
+          "cxx_signature": "int (SwapChainHandle_t)",
+          "decl_index": 232,
+          "is_dtor": false,
+          "itanium_slot": 232,
+          "msvc_slot": 232,
+          "name": "unk901",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void) -> i32"
+        },
+        {
+          "cxx_signature": "void *(IRenderContext *, uint32, const void *, uint32, bool)",
+          "decl_index": 233,
+          "is_dtor": false,
+          "itanium_slot": 233,
+          "msvc_slot": 233,
+          "name": "CreateIndirectCommandsLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pRenderContext: *mut ::core::ffi::c_void, nTokenCount: u32, pTokens: *mut ::core::ffi::c_void, nIndirectStride: u32, bExplicitPreprocess: bool) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 234,
+          "is_dtor": false,
+          "itanium_slot": 234,
+          "msvc_slot": 234,
+          "name": "DestroyIndirectCommandsLayout",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndirectCommandsLayout: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "RenderBufferHandle_t (void *, void *, uint32)",
+          "decl_index": 235,
+          "is_dtor": false,
+          "itanium_slot": 235,
+          "msvc_slot": 235,
+          "name": "CreateIndirectCommandsPreprocessBuffer",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndirectCommandsLayout: *mut ::core::ffi::c_void, hIndirectExecutionSet: *mut ::core::ffi::c_void, nMaxSequenceCount: u32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void *(IRenderContext *, int)",
+          "decl_index": 236,
+          "is_dtor": false,
+          "itanium_slot": 236,
+          "msvc_slot": 236,
+          "name": "CreateIndirectExecutionSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pRenderContext: *mut ::core::ffi::c_void, nMaxPipelineCount: i32) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "bool (void *, IRenderContext *, int)",
+          "decl_index": 237,
+          "is_dtor": false,
+          "itanium_slot": 237,
+          "msvc_slot": 237,
+          "name": "UpdateIndirectExecutionSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndirectExecutionSet: *mut ::core::ffi::c_void, pRenderContext: *mut ::core::ffi::c_void, nPipelineIndex: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 238,
+          "is_dtor": false,
+          "itanium_slot": 238,
+          "msvc_slot": 238,
+          "name": "DestroyIndirectExecutionSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hIndirectExecutionSet: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 239,
+          "is_dtor": false,
+          "itanium_slot": 239,
+          "msvc_slot": 239,
+          "name": "unk1001",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pName: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 240,
+          "is_dtor": false,
+          "itanium_slot": 240,
+          "msvc_slot": 240,
+          "name": "unk1002",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 241,
+          "is_dtor": false,
+          "itanium_slot": 241,
+          "msvc_slot": 241,
+          "name": "unk1003",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> i32"
+        },
+        {
+          "cxx_signature": "void *()",
+          "decl_index": 242,
+          "is_dtor": false,
+          "itanium_slot": 242,
+          "msvc_slot": 242,
+          "name": "unk1004",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (void *)",
+          "decl_index": 243,
+          "is_dtor": false,
+          "itanium_slot": 243,
+          "msvc_slot": 243,
+          "name": "unk1005",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pObject: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (HRenderTexture, int, int, int, ImageFormat, std::shared_ptr<IReadTexturePixelsCallback>)",
+          "decl_index": 244,
+          "is_dtor": false,
+          "itanium_slot": 244,
+          "msvc_slot": 244,
+          "name": "ReadCompiledTextureMips",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 245,
+          "is_dtor": false,
+          "itanium_slot": 245,
+          "msvc_slot": 245,
+          "name": "OnPresentSubmitted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (CPipelineFence *)",
+          "decl_index": 246,
+          "is_dtor": false,
+          "itanium_slot": 246,
+          "msvc_slot": 246,
+          "name": "QueueFencedRecycling",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, pFence: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 247,
+          "is_dtor": false,
+          "itanium_slot": 247,
+          "msvc_slot": 247,
+          "name": "OnFlushSubmitted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "void (SwapChainHandle_t, int, CDeviceFence *, IRenderDevicePresentCallback *)",
+          "decl_index": 248,
+          "is_dtor": false,
+          "itanium_slot": 248,
+          "msvc_slot": 248,
+          "name": "OnPresentCompleted",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hSwapChain: *mut ::core::ffi::c_void, nPresentId: i32, pDeviceFence: *mut ::core::ffi::c_void, pCallback: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uintp)",
+          "decl_index": 249,
+          "is_dtor": false,
+          "itanium_slot": 249,
+          "msvc_slot": 249,
+          "name": "OnRenderDeviceFlagsEnabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: usize)"
+        },
+        {
+          "cxx_signature": "void (uintp)",
+          "decl_index": 250,
+          "is_dtor": false,
+          "itanium_slot": 250,
+          "msvc_slot": 250,
+          "name": "OnRenderDeviceFlagsDisabled",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFlags: usize)"
+        },
+        {
+          "cxx_signature": "bool (int, int, int)",
+          "decl_index": 251,
+          "is_dtor": false,
+          "itanium_slot": 251,
+          "msvc_slot": 251,
+          "name": "InitDevice",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nAdapter: i32, nFlags: i32, nDXLevel: i32) -> bool"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 252,
+          "is_dtor": false,
+          "itanium_slot": 252,
+          "msvc_slot": 252,
+          "name": "ShutdownDevice",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice)"
+        },
+        {
+          "cxx_signature": "bool ()",
+          "decl_index": 253,
+          "is_dtor": false,
+          "itanium_slot": 253,
+          "msvc_slot": 253,
+          "name": "IsDeactivated",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice) -> bool"
+        },
+        {
+          "cxx_signature": "bool (ImageFormat, RenderMultisampleType_t)",
+          "decl_index": 254,
+          "is_dtor": false,
+          "itanium_slot": 254,
+          "msvc_slot": 254,
+          "name": "IsMultisampleTypeSupported",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFormat: ImageFormat, nType: u8) -> bool"
+        }
+      ],
+      "msvc": {
+        "length": 255,
+        "own_entries": 255
+      },
+      "primary_base": null,
+      "secondary_bases": []
+    }
+  ]
+}

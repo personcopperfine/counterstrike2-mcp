@@ -1,0 +1,17 @@
+{
+    "file_format_version": "1.2.0",
+    "layer": {
+        "name": "VK_LAYER_CS2MCP_capture",
+        "type": "GLOBAL",
+        "library_path": "../libcs2_vk_capture.so",
+        "api_version": "1.4.0",
+        "implementation_version": "1",
+        "description": "cs2-mcp: copies presented swapchain images to CS2MCP_CAPTURE_DIR on request (implicit: enabled by CS2MCP_CAPTURE=1)",
+        "enable_environment": {
+            "CS2MCP_CAPTURE": "1"
+        },
+        "disable_environment": {
+            "CS2MCP_CAPTURE_DISABLE": "1"
+        }
+    }
+}

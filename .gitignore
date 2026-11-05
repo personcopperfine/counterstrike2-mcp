@@ -1,0 +1,23 @@
+# Rust
+/target/
+**/target/
+Cargo.lock.bak
+# local runtime state (never commit sessions, renders, logs)
+**/run/
+**/artifacts/
+.podman/
+*.log
+*.png.tmp
+.env
+# editors
+.idea/
+.vscode/
+*.swp
+# python research scratch
+__pycache__/
+*.pyc
+.venv/
+# agent worktrees
+.claude/worktrees/
+!/client-mcp/fixtures/testscript/*.console.log
+!/client-mcp/fixtures/video/*.console.log

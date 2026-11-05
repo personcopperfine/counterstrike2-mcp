@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 11:42:19 -0500
+Subject: [PATCH 33/47] Add CModelDocEditorApp & CModelDocEditorSession
+
+Verified against CS2 2000930 (win64).
+---
+ tools/modeldoc_editor/modeldoc_editor_app.h | 48 +++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 tools/modeldoc_editor/modeldoc_editor_app.h
+
+diff --git a/tools/modeldoc_editor/modeldoc_editor_app.h b/tools/modeldoc_editor/modeldoc_editor_app.h
+new file mode 100644
+index 00000000..b4863654
+--- /dev/null
++++ b/tools/modeldoc_editor/modeldoc_editor_app.h
+@@ -0,0 +1,48 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: The model editor tool (ModelDoc): application and document session
++//
++//===========================================================================//
++
++#ifndef MODELDOC_EDITOR_APP_H
++#define MODELDOC_EDITOR_APP_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "toolutils2/baseeditorapp.h"
++#include "toolutils2/baseeditorsession.h"
++#include "toolutils2/ibindtarget.h"
++#include "toolutils2/itoolsresourcelistener.h"
++
++class CModelDoc;
++class CQModelDocEditorWnd;
++
++abstract_class IAssetFingerprintListener
++{
++public:
++	virtual void unk001() = 0;
++};
++
++// AMNOTE: Incomplete class, only the window, document and asset members are known
++class CModelDocEditorSession : public CSimpleBaseEditorSession, public IBindTarget, public IAssetFingerprintListener, public IToolsResourceListener
++{
++public:
++	uint8 m_unk021[136];
++	CQModelDocEditorWnd *m_pMainWnd;
++	// AMNOTE: Replaced on every load and reload
++	CModelDoc *m_pDoc;
++	uint8 m_unk121[2776];
++	// AMNOTE: Asset system object of the session's file, NULL when the file has none
++	void *m_pAsset;
++	uint8 m_unk221[1160];
++};
++
++// AMNOTE: Incomplete class, its own members are not known
++class CModelDocEditorApp : public CBaseEditorSeparateWindowApp
++{
++public:
++	uint8 m_unk021[560];
++};
++
++#endif // MODELDOC_EDITOR_APP_H

@@ -1,0 +1,10 @@
+[package]
+name = "cs2-dmx"
+version = "0.0.1"
+description = "Valve Datamodel (DMX) reader and writer: binary 1-5/9 and keyvalues2 1-4 (a Rust port of ValveResourceFormat/Datamodel.NET)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror.workspace = true

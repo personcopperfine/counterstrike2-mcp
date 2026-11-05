@@ -1,0 +1,286 @@
+{
+ "_doc": [
+  "Linux (`platform: linux`) entries: the same game facts as the Windows files, located in the",
+  "ELF modules of the *other* build (steam.inf ClientVersion 2000908, staged with",
+  "`stagebins.py --linux --unshare` from the cs2-home podman volume into target/game-bins-linux).",
+  "Addresses are vaddrs (image_base 0). The game's own C++ symbols are hidden (.dynsym holds only",
+  "libstdc++/libc++/tier0-utility `_ZTV` symbols), so a vtable here is located through the code that",
+  "uses it, not through RTTI or a `_ZTV` symbol: sigs/README.md 'Linux binaries', 'itanium_vtable'.",
+  "The CClientInput / CCSGOInput entries are for build 2000930 only (libclient.so there, staged from the",
+  "client image's cache): the destructors that store the address points are the locators, the two secondary",
+  "tables are the CCSGOInput address point plus a displacement read from the binary (s2sdk-types RE8).",
+  "Nothing in this file has a `bridge` macro: the bridge is Windows-only and the gate ignores these."
+ ],
+ "module": "libclient.so",
+ "platform": "linux",
+ "image_base": 0,
+ "builds": {
+  "2000908": {
+   "sha256": "708200eadba165d4"
+  },
+  "2000930": {
+   "sha256": "eba5345cb05eb4a7"
+  },
+  "2000933": {
+   "sha256": "f5bc0f6f890f484f"
+  },
+  "2000940": {
+   "sha256": "1d55192d57c6f483"
+  }
+ },
+ "entries": {
+  "CG_ENTITY_CHUNKS": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "4C 8B 35 ?? ?? ?? ?? 41 83 F9 FE",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "libclient.so!0xf0cdc7 (mov r14,[rip+0x36cb932]) inside the entity-identity lookup at 0xf0cde1-0xf0ce05: movzwl (%rcx),%eax; shr $0x9,%r11; and $0x3f,%r11d; mov (%r14,%r11,8),%r11 (the chunk-pointer array); and $0x1ff,%eax; imul $0x70,%rax,%rax (CEntityIdentity stride 112); add %rax,%r11; cmp %r9d,0x10(%r11) (the handle at identity+0x10). Same geometry as the Windows entry (512 identities per chunk, 112-byte identity), reached from a different code path",
+   "tag": "V",
+   "status": "verified",
+   "notes": "pointer to the CEntityIdentity chunk-pointer array (512 identities per chunk = 1<<9, mask 0x1FF, stride 112 = 0x70); the lookup also clamps the chunk index with & 0x3F (64 chunks = 1<<15 identities, the 0x8000 index bound of the Windows notes). Not a bridge entry: the Linux consumer is s2sdk-probe, not the DLL",
+   "expect": {
+    "2000908": 73238272,
+    "2000930": 74150144,
+    "2000933": 74199040,
+    "2000940": 74217216
+   }
+  },
+  "CG_INPUT_PTR": {
+   "kind": "global",
+   "locator": {
+    "type": "sig",
+    "sig": "48 8D 05 ?? ?? ?? ?? 41 0F B6 D4 44 89 EE 4C 8D 35 ?? ?? ?? ?? F3 0F 10 45 CC 48 8B 38 41 C6 06 01 48 8B 07 FF 50 28",
+    "steps": [
+     {
+      "rip": 3,
+      "next": 7
+     }
+    ]
+   },
+   "via": "libclient.so!0x18f342d in CSource2Client::CreateMove (0x18f3340, entry 22 of the CSource2Client table at address point 0x44ecdc0, _ZTI14CSource2Client just before it; Windows twin client!0x180B7B980 = ??_7CSource2Client@@6B@ slot 22): lea rax,[rip+g_pInput]; ... mov rdi,[rax]; mov byte [r14],1; mov rax,[rdi]; call [rax+28h] (CCSGOInput entry 5, the Itanium twin of the Windows [rax+20h]); target 0x4682620, a .data qword initialised to the static CCSGOInput object 0x494a060 (constructed by 0x1ae6110, which stores the address point 0x4513600)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "g_pInput (pointer to the static CCSGOInput); Linux twin of client.json CG_INPUT_PTR (client!0x2233d10). PIC code loads it as lea+mov, so the locator resolves the lea. Not a bridge entry: the Linux consumer is the Rust plugin",
+   "expect": {
+    "2000930": 73934368,
+    "2000933": 73983232,
+    "2000940": 74001472
+   }
+  },
+  "CCONST_IDENTITY_CHUNK_BITS": {
+   "kind": "const",
+   "locator": {
+    "type": "sig",
+    "sig": "49 C1 EB 09 41 83 E3 3F 4F 8B 1C DE",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "libclient.so!0xf0cde7 (shr $0x9,%r11; and $0x3f,%r11d; mov (%r14,%r11,8),%r11) in the same identity lookup as CG_ENTITY_CHUNKS: the identity index is split into a chunk index (index >> bits) and an in-chunk offset (index & 0x1FF); the `disp` step reads the shift immediate (0x09) out of the instruction",
+   "tag": "V",
+   "status": "verified",
+   "notes": "CEntityIdentity chunk geometry on Linux: 512 identities per chunk = 1<<9, mask 0x1FF - the same value as CCONST_IDENTITY_CHUNK_BITS on Windows build 2000930 (bridge/mcp_bridge_game.inc:124-133). The stride multiply at 0xf0ce01 is imul 0x70 = 112, also the Windows identity size",
+   "expect": {
+    "2000908": 9,
+    "2000930": 9,
+    "2000933": 9,
+    "2000940": 9
+   }
+  },
+  "CCONST_IDENTITY_STRIDE": {
+   "kind": "const",
+   "locator": {
+    "type": "sig",
+    "sig": "48 6B C0 70 49 01 C3 45 39 4B 10",
+    "steps": [
+     {
+      "disp": 3,
+      "size": 1
+     }
+    ]
+   },
+   "via": "libclient.so!0xf0ce01 (imul rax, rax, 0x70) inside the entity-identity lookup at 0xf0cde1-0xf0ce0c - the same lookup as CG_ENTITY_CHUNKS / CCONST_IDENTITY_CHUNK_BITS: movzwl (%rcx),%eax; mov %rax,%r11; shr $0x9,%r11; and $0x3f,%r11d; mov (%r14,%r11,8),%r11; and $0x1ff,%eax; imul $0x70,%rax,%rax; add %rax,%r11; cmp %r9d,0x10(%r11) (the handle compare at identity+0x10). The sig is anchored on the imul and the `disp` step reads its immediate (0x70) out of the instruction, exactly as CCONST_IDENTITY_CHUNK_BITS reads the shr immediate",
+   "tag": "V",
+   "status": "verified",
+   "notes": "CEntityIdentity stride on Linux = 0x70 = 112 - the size the Windows identity lookups scale the in-chunk index by too (client.json CCONST_IDENTITY_STRIDE) and the IR's itanium sizeof(CEntityIdentity), the number sdkcheck.py --platform linux compares this entry against (row id:CEntityIdentity-stride). The `and $0x1ff,%eax; imul $0x70,%rax,%rax; add %rax,%r11; cmp %r9d,0x10(%r11)` byte sequence occurs once in the module (measured), so the sig is unique - resolve --strict proves it. Not a bridge entry: the Linux consumer is s2sdk-probe, not the DLL",
+   "expect": {
+    "2000908": 112,
+    "2000930": 112,
+    "2000933": 112,
+    "2000940": 112
+   }
+  },
+  "CClientInput": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 53 48 89 FB 48 83 EC 08 48 89 07 81 BF 7C 0B 00 00 FF FF FF 3F",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libclient.so 0x18f1fd0: the complete-object destructor, which begins with push rbp, lea rax,[rip+vtable] (the CClientInput vtable address point) and stores it as the object's first qword. No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "CClientInput, the base class of CCSGOInput: a single Itanium table, offset-to-top 0; the Windows build's table has 33 entries (s2sdk-types RE8 section 3.1)",
+   "expect": {
+    "2000930": 72276480,
+    "2000933": 72323072,
+    "2000940": 72340432
+   }
+  },
+  "VTLEN_CClientInput": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CClientInput"
+   },
+   "via": "libclient.so address point 0x44eda00: 34 .text slot pointers up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of CClientInput, compared by sdkcheck.py with the generated CClientInput (the destructor's two entries and 32 virtuals), RE8 section 4",
+   "expect": {
+    "2000930": 34,
+    "2000933": 34,
+    "2000940": 34
+   }
+  },
+  "CCSGOInput": {
+   "kind": "vtable",
+   "locator": {
+    "type": "sig",
+    "sig": "55 48 8D 05 ?? ?? ?? ?? 48 89 E5 41 55 49 89 FD 41 54 53 48 83 EC 08 48 89 07 48 05 ?? ?? ?? ?? 81 BF ?? ?? 00 00 FF FF FF 3F",
+    "steps": [
+     {
+      "rip": 4,
+      "next": 8
+     }
+    ]
+   },
+   "via": "libclient.so 0x1ace670: the complete-object destructor, which begins with push rbp, lea rax,[rip+vtable] (the CCSGOInput vtable address point), stores it as the object's first qword and the IInputHandler table (address point + a displacement that is masked in the pattern, 0x148 here) at +0xB88, then compares dword [rdi+disp] with 0x3FFFFFFF (disp masked: 0xBDC on 2000930, 0xBEC on 2000933). No `_ZTV` symbol is exported for the class",
+   "tag": "V",
+   "status": "verified",
+   "notes": "CCSGOInput primary table, offset-to-top 0; the Windows build's primary table has 33 entries (s2sdk-types RE8 section 3.1)",
+   "expect": {
+    "2000930": 72431104,
+    "2000933": 72478240,
+    "2000940": 72495584
+   }
+  },
+  "VTLEN_CCSGOInput": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CCSGOInput"
+   },
+   "via": "libclient.so address point 0x4513600: 36 .text slot pointers up to the first secondary table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of CCSGOInput's primary table, compared by sdkcheck.py with the generated CClientInput length (34) plus the 2 entries GCC adds for CCSGOInput's overrides of its secondary bases IKeybindChangeListener and IInputHandler (RE8 section 3.1)",
+   "expect": {
+    "2000930": 36,
+    "2000933": 36,
+    "2000940": 36
+   }
+  },
+  "CCSGOInput::IKeybindChangeListener": {
+   "kind": "vtable",
+   "locator": {
+    "type": "base",
+    "base": "CCSGOInput",
+    "steps": [
+     {
+      "add": 288
+     },
+     {
+      "check": "80 F4 FF FF FF FF FF FF"
+     },
+     {
+      "add": 16
+     }
+    ]
+   },
+   "via": "libclient.so 0x4513730: CCSGOInput's IKeybindChangeListener subobject table, the primary address point + 0x130 (the table follows the 36 primary entries; checked by its offset-to-top word, -0xB80)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "one-slot secondary table of CCSGOInput at object offset 0xB80 (RE8 section 3.2)",
+   "expect": {
+    "2000930": 72431408,
+    "2000933": 72478544,
+    "2000940": 72495888
+   }
+  },
+  "VTLEN_CCSGOInput_IKeybindChangeListener": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CCSGOInput::IKeybindChangeListener"
+   },
+   "via": "libclient.so address point 0x4513730: 1 .text slot pointer up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IKeybindChangeListener's subobject table in CCSGOInput, compared by sdkcheck.py with the generated IKeybindChangeListener (RE8 section 3.2)",
+   "expect": {
+    "2000930": 1,
+    "2000933": 1,
+    "2000940": 1
+   }
+  },
+  "CCSGOInput::IInputHandler": {
+   "kind": "vtable",
+   "locator": {
+    "type": "base",
+    "base": "CCSGOInput",
+    "steps": [
+     {
+      "add": 312
+     },
+     {
+      "check": "78 F4 FF FF FF FF FF FF"
+     },
+     {
+      "add": 16
+     }
+    ]
+   },
+   "via": "libclient.so 0x4513748: CCSGOInput's IInputHandler subobject table, the primary address point + 0x148 (checked by its offset-to-top word, -0xB88)",
+   "tag": "V",
+   "status": "verified",
+   "notes": "one-slot secondary table of CCSGOInput at object offset 0xB88 (RE8 section 3.2)",
+   "expect": {
+    "2000930": 72431432,
+    "2000933": 72478568,
+    "2000940": 72495912
+   }
+  },
+  "VTLEN_CCSGOInput_IInputHandler": {
+   "kind": "const",
+   "locator": {
+    "type": "vtlen",
+    "vtable": "CCSGOInput::IInputHandler"
+   },
+   "via": "libclient.so address point 0x4513748: 1 .text slot pointer up to the next table's header",
+   "tag": "V",
+   "status": "verified",
+   "notes": "Itanium length of IInputHandler's subobject table in CCSGOInput, compared by sdkcheck.py with the generated IInputHandler (RE8 section 3.2)",
+   "expect": {
+    "2000930": 1,
+    "2000933": 1,
+    "2000940": 1
+   }
+  }
+ }
+}

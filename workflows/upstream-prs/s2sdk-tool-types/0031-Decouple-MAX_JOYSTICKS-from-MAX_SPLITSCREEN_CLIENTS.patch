@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:42:42 -0500
+Subject: [PATCH 31/47] Decouple MAX_JOYSTICKS from MAX_SPLITSCREEN_CLIENTS
+
+---
+ public/inputsystem/inputenums.h | 3 ++-
+ public/tier0/basetypes.h        | 1 -
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/public/inputsystem/inputenums.h b/public/inputsystem/inputenums.h
+index 5383f2fa..977cf930 100644
+--- a/public/inputsystem/inputenums.h
++++ b/public/inputsystem/inputenums.h
+@@ -26,7 +26,8 @@ FORWARD_DECLARE_HANDLE( InputContextHandle_t );
+ 
+ enum
+ {
+-	MAX_JOYSTICKS = MAX_SPLITSCREEN_CLIENTS,
++	// AMNOTE: The engine supports 4 joysticks even though it has a single splitscreen slot
++	MAX_JOYSTICKS = 4,
+ 	MOUSE_BUTTON_COUNT = 5,
+ };
+ 
+diff --git a/public/tier0/basetypes.h b/public/tier0/basetypes.h
+index 14547609..27afe45a 100644
+--- a/public/tier0/basetypes.h
++++ b/public/tier0/basetypes.h
+@@ -494,7 +494,6 @@ protected:
+ 	inline Type  operator--( Type &a, int ) { Type t = a; --a; return t; }
+ 
+ #define MAX_SPLITSCREEN_CLIENT_BITS 0
+-// this should == MAX_JOYSTICKS in inputenums.h
+ #define MAX_SPLITSCREEN_CLIENTS	( 1 << MAX_SPLITSCREEN_CLIENT_BITS ) // 4
+ 
+ class CEntityIndex

@@ -1,0 +1,37 @@
+# Cross-build configuration for the Rust bridge (`crates/cs2-bridge`), the WP0.4/WP1.A half of
+# the C-to-Rust bridge port.
+#
+# Only the Windows/MSVC target is configured here: the Linux target needs nothing (the workspace
+# already builds it).
+#
+# Why the MSVC target at all: the game's tool plugin is only ever loaded by `cs2.exe -tools`
+# (Windows, under Wine), so the cdylib has to be MSVC-x64 ABI-compatible. The Microsoft headers
+# and libraries come from the `target/xwin` tree the s2sdk generator already uses
+# (`crates/s2sdk/s2sdk-sys/gen/fetch-xwin.sh` writes it; see `crates/s2sdk/s2sdk-sys/gen/README.md`).
+# The `-Lnative` paths are relative to the workspace root: rustc (and the linker it runs) works in
+# the workspace root for every workspace member, whatever directory cargo was started from, and
+# only workspace members (the cdylibs/binaries) link against these libraries. A sysroot elsewhere:
+# symlink it to `target/xwin`.
+#
+# `lld-link` is looked up on PATH (LLVM's lld, e.g. the `lld` package of your distribution; on
+# some distributions the binary is `lld-link-<version>`: symlink it as `lld-link`, or override
+# with `CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER=<path>`). Only the win64 build needs it.
+#
+# `+crt-static`: the DLL links the static CRT (`libcmt`) instead of depending on a
+# `vcruntime140.dll` that the Wine prefix does not necessarily carry. The tool plugin keeps
+# running while the tools framework does (it is never unloaded before the process exits), so a
+# statically linked CRT inside the DLL is exactly what the C bridge does with its freestanding
+# build (`bridge/build.sh`).
+[target.x86_64-pc-windows-msvc]
+linker = "lld-link"
+rustflags = [
+    "-Ctarget-feature=+crt-static",
+    # LNK4099: the xwin CRT/SDK .lib files name the Microsoft build machines' PDBs, which are not
+    # part of the xwin tree, so lld-link prints one "cannot use debug info for
+    # 'libcmt.lib(...)'" note per object. There is no debug info in this release DLL either way,
+    # and the noise would hide a real linker warning.
+    "-Clink-arg=/ignore:4099",
+    "-Lnative=target/xwin/crt/lib/x86_64",
+    "-Lnative=target/xwin/sdk/lib/um/x86_64",
+    "-Lnative=target/xwin/sdk/lib/ucrt/x86_64",
+]

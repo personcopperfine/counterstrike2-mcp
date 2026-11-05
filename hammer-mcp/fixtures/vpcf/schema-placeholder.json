@@ -1,0 +1,18 @@
+{
+  "build": null,
+  "placeholder": true,
+  "rootClass": "CParticleSystemDefinition",
+  "arrays": [
+    {"type": 0, "key": "m_PreEmissionOperators", "elementClass": null},
+    {"type": 1, "key": "m_Emitters", "elementClass": null},
+    {"type": 2, "key": "m_Initializers", "elementClass": null},
+    {"type": 3, "key": "m_Operators", "elementClass": null},
+    {"type": 4, "key": "m_ForceGenerators", "elementClass": null},
+    {"type": 5, "key": "m_Constraints", "elementClass": null},
+    {"type": 6, "key": "m_Renderers", "elementClass": null},
+    {"type": 7, "key": "m_Children", "elementClass": "ParticleChildrenInfo_t"},
+    {"type": 8, "key": "m_NamedValueLocals", "elementClass": "ParticleNamedValueSource_t"}
+  ],
+  "functions": [],
+  "classes": {}
+}

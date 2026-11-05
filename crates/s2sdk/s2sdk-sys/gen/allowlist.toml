@@ -1,0 +1,2026 @@
+# s2sdk-sys binding generator allowlist.
+#
+# What gets generated is exactly what this file lists: gen.py never walks the
+# SDK on its own. Growing the bindings = adding a name here (and, for a record
+# or interface, adding the matching S2SDK_FORCE_LAYOUT / S2SDK_FORCE_VTABLE row
+# to probe.cpp, which gen.py checks against this file), then regenerating.
+#
+# Per group:
+#   headers  SDK headers the group needs. probe.cpp includes exactly these, and
+#            every item's declaring header (clang's answer) must be one of them.
+#   records  complete types: size, alignment, bases and fields land in the IR.
+#   opaque   complete types with a size/alignment but no fields (the emitter
+#            emits a byte blob); used for types whose layout the flat IR cannot
+#            express, or whose contents are not part of the contract yet.
+#   enums    enumerators + underlying type.
+#   vtables  classes whose own virtuals land in the IR (Itanium slots).
+#   specs    class-template specializations (optional): the flat IR cannot name
+#            a template-id, so each one is emitted under a Rust-safe tag
+#            (`CUtlVector<CEntityHandle>` -> `CUtlVector_CEntityHandle`) and
+#            probe.cpp forces its definition with a S2SDK_FORCE_SPEC row.
+#
+# Optional per group: `platforms = ["windows"]` marks a group whose classes have no Linux
+# build (the tool modules). It is still measured under both ABIs (the header must compile
+# under both), but emitted for Windows only and never claimed on Linux; see gen/README.md,
+# "Windows-only groups". Absent means both platforms.
+#
+# Names are as upstream spells them (no `class`/`struct`, no namespaces). A name
+# that upstream dropped has to be removed here: gen.py fails the run instead of
+# silently emitting less.
+#
+# [consts] is the one table that is not a type table: it lists the macros /
+# constexprs the consumers keep re-spelling by hand, and their values are
+# *measured* by clang under both ABIs (see gen/README.md, "the consts kind").
+# An entry is either
+#   { name = "X", expr = "<C++ expression>", type = "u32" }         measured
+#   { name = "X", expr = "<macro>", kind = "string" }               measured
+#   { name = "X", derived = "<record>.<member>.<what>", type = "u32" }
+# where `derived` reads a number out of clang's record-layout dump (a bitfield
+# width, say) instead of evaluating an expression. `per_abi = true` allows the
+# two ABIs to disagree; without it a disagreement is a generator error.
+
+# tier0: the small value types every other group embeds or points at.
+[tier0]
+headers = [
+	"tier0/platform.h",
+	"appframework/iappsystem.h",
+	"tier0/utlstring.h",
+	"tier0/utlsymbollarge.h",
+	"tier0/buffer_string.h",
+	"mathlib/vector.h",
+	"color.h",
+	"mathlib/vector2d.h",
+	"mathlib/vector4d.h",
+	"tier0/utlstringtoken.h",
+	"tier0/keyvalues3.h",
+	"tier0/interface.h",
+	"tier0/utlvector.h",
+	"tier0/itestscriptmgr.h",
+	# CSplitScreenSlot (basetypes.h:579) is a [tier0] value type; the header is
+	# listed here and in [entity], whose clients include it first.
+	"tier0/basetypes.h",
+]
+records = [
+	"CUtlString",
+	"CUtlSymbolLarge",
+	"Vector",
+	"QAngle",
+	"Color",
+	"Vector2D",
+	"Vector4D",
+	"CUtlStringToken",
+	"CKV3MemberName",
+	# basetypes.h:579 - the split-screen slot index CClientInput's input
+	# virtuals take by value (clientinput.h:51ff); one int, `m_Data`.
+	"CSplitScreenSlot",
+]
+# CUtlVector has no data members of its own: `CUtlVectorBase` holds `m_Size`
+# and the allocator subobject, so only the specialization has a layout to
+# check. The bridge reads the entity list through it (`m_Size` at 0 and
+# `m_Memory.m_pMemory` at 8).
+specs = ["CUtlVector<CEntityHandle>"]
+# CBufferString has an anonymous union member, which the flat IR (one field
+# list, no nesting) cannot express; its size/alignment are all a caller needs.
+opaque = ["CBufferString"]
+enums = []
+# IBaseInterface is the primary base of IGameEventManager2 (and of every other
+# interface the bridge names), so it has to be in the IR: a VClass static names
+# its base by reference.
+vtables = ["IAppSystem", "IBaseInterface", "ITestScriptMgr"]
+
+# schema: the loader / introspector the safe layer talks to.
+[schema]
+headers = [
+	"schemasystem/minschema.h",
+	"schemasystem/baseschema.h",
+	"schemalib/schematype.h",
+	"schemalib/schemaclassinfo_data.h",
+	"schemalib/schemametadata_data.h",
+	"schemasystem/ischemasystem.h",
+	"schemasystem/schemasystem.h",
+	"schemalib/schemaclassinfo.h",
+]
+records = [
+	"CSchemaType",
+	"SchemaClassInfoData_t",
+	"SchemaClassFieldData_t",
+	"SchemaStaticFieldData_t",
+	"SchemaMetadataEntryData_t",
+	"SchemaBaseClassInfoData_t",
+	# The empty derived class ISchemaSystem hands out; it exists so
+	# `SchemaMetaInfoHandle_t<CSchemaClassInfo>` can name a type that is in the
+	# IR (the handle is a one-pointer wrapper around it).
+	"CSchemaClassInfo",
+]
+opaque = []
+# "type-category enums": the tags CSchemaType carries, the scope selector and
+# the builtin-type tag SchemaMetaInfoHandle_t<CSchemaType_Builtin> returns.
+enums = [
+	"SchemaTypeCategory_t",
+	"SchemaAtomicCategory_t",
+	"SchemaTypeScope_t",
+	"SchemaBuiltinType_t",
+]
+# CSchemaSystemTypeScope adds no virtual of its own (its vtable is
+# ISchemaSystemTypeScope's); it is listed so the binding covers the class
+# ISchemaSystem returns, and the other two so the vtable is actually described.
+vtables = ["ISchemaSystem", "ISchemaSystemTypeScope", "CSchemaSystemTypeScope"]
+
+# entity: the handles/identities a plugin gets from game events and the schema.
+[entity]
+headers = [
+	"tier0/basetypes.h",
+	"entityhandle.h",
+	"entity2/entityidentity.h",
+	"entity2/entityinstance.h",
+]
+records = ["CEntityIdentity", "CEntityIndex", "CEntityInstance"]
+# CEntityHandle is `class CEntityHandle { union { uint32 m_Index; struct {
+# uint32 m_EntityIndex : 15; uint32 m_Serial : 17; } m_Parts; }; }`: the only
+# member is anonymous, so there is no field name to emit and no way to measure
+# the unnamed union's size from C++ (the compiler, not the standard, owns the
+# anonymous-member rule). Size/alignment are exact; the bit view is not - the
+# `[consts]` ENTITY_INDEX_BITS/ENTITY_SERIAL_BITS read the widths out of clang's
+# layout dump instead.
+opaque = ["CEntityHandle"]
+enums = []
+# CEntityInstance is listed as a record too: the bridge reads its members
+# (`m_pEntity` at 0x10), not only its vtable.
+vtables = ["CEntityInstance"]
+
+# cvar: read/observe convars through the engine's own ICvar.
+[cvar]
+headers = ["tier0/convar.h", "tier0/icvar.h"]
+records = ["ConVarData", "CVValue_t", "ConVarRef", "ConVarRefAbstract"]
+opaque = []
+enums = ["EConVarType"]
+vtables = ["ICvar"]
+
+# events: the game-event listener a plugin registers with the engine.
+[events]
+headers = ["igameevents.h"]
+records = []
+opaque = []
+enums = []
+vtables = ["IGameEvent", "IGameEventListener2", "IGameEventManager2"]
+
+# engine: the server-side interface and the render types the bridge takes by
+# value. ISource2ServerConfig is the one engine interface whose vtable upstream
+# declares in full (11 IAppSystem slots + 18 of its own = the 29 the bridge
+# asserts as SRVCFG_VT_SLOTS); RenderViewport_t is the viewport S2Viewport
+# mirrors field for field. The engine services and the client's engine interface
+# are here too: IEngineService is the base of IRenderService / IInputService (the
+# render and input services the bridge calls through), ISource2Engine the base of
+# IVEngineClient2, and EngineClientUnk40_t the placeholder IVEngineClient2 returns
+# by value. All of them exist in the Linux libengine2.so as well.
+[engine]
+headers = [
+	"engine2/isource2serverconfig.h",
+	"playerslot.h",
+	"rendersystem/rendersystemtypes.h",
+	"engine2/iengineservicemgr.h",
+	"engine2/irenderservice.h",
+	"engine2/iinputservice.h",
+	"engine2/isource2engine.h",
+	"engine2/ivengineclient2.h",
+	"engine2/isource2server.h",
+]
+records = ["CPlayerSlot", "RenderViewport_t", "EngineClientUnk40_t", "IInputHandler", "IKeybindChangeListener"]
+opaque = []
+enums = []
+vtables = ["ISource2ServerConfig", "IEngineService", "IRenderService", "IInputService", "IInputHandler", "IKeybindChangeListener", "ISource2Engine", "IVEngineClient2", "ISource2Server"]
+
+# toolframework2: the Workshop Tools host and the interface of a tool module. The module
+# has no Linux build, so the group is Windows-only: measured under both ABIs (the header
+# has to compile under both), emitted and claimed for MSVC only.
+[toolframework2]
+platforms = ["windows"]
+headers = ["toolframework2/itoolframework2.h"]
+records = ["ToolActivationRequest_t", "ToolOpenAssetEntry_t", "MultiAxisControllerInput_t"]
+opaque = []
+enums = []
+vtables = ["IToolFramework2", "IToolSystem2", "IToolFrameListener"]
+
+# rendersystem: the render device the bridge reads textures back through. HRenderTexture is the
+# weak texture handle the scene system and the device share; ImageFormat is the engine's pixel
+# format enum (the bridge's four format values are ImageFormat constants); CStrongHandle<...> is
+# the reference-holding texture handle four IRenderDevice slots return by value, and the placeholder
+# the four floats GetTextureAverageColorRGBA returns. Both ABIs: librendersystemvulkan
+# exists on Linux.
+[rendersystem]
+headers = [
+	"bitmap/imageformat_declarations.h",
+	"rendersystem/rendersystemtypes.h",
+	"rendersystem/irenderdevice.h",
+]
+records = ["HRenderTexture", "RenderDeviceUnkVector4_t"]
+specs = ["CStrongHandle<InfoForResourceTypeCTextureBase>"]
+opaque = []
+enums = ["ImageFormat"]
+vtables = ["IRenderDevice"]
+
+# scenesystem: the scene system the renderer drives: the views a bridge adds, the layers and
+# pipelines it queues. CFrustum is the camera the views are built from (sizeof 0x420, the
+# bridge copies it whole); CViewId, the render handles and the two placeholders are the
+# by-value types the interfaces take and return. Both ABIs: libscenesystem exists on Linux.
+[scenesystem]
+headers = [
+	"mathlib/camera.h",
+	"scenesystem/iscenesystem.h",
+	"scenesystem/isceneutils.h",
+]
+records = [
+	"Camera_t",
+	"CFrustum",
+	"CViewId",
+	"CRenderAttributes",
+	"HMaterialWeak",
+	"SceneViewUnk16_t",
+	"SceneViewUnk4_t",
+]
+opaque = []
+enums = []
+vtables = ["ISceneSystem", "ISceneView", "IRenderingPipeline", "ISceneUtils"]
+
+# soundsystem: the sound operator system the engine plays and queries sound events through.
+# ISoundOpSystem is also the interface the bridge wraps (the start-event hooks and the
+# listener); SosStartSoundEventParams_t is the by-pointer params block those hooks read.
+# Both ABIs: libsoundsystem exists on Linux.
+[soundsystem]
+headers = ["soundsystem/isoundopsystem.h"]
+records = ["SoundEventGuid_t", "SoundGuid_t", "SosStartSoundEventParams_t"]
+opaque = []
+enums = []
+vtables = ["ISoundEventListener", "ISoundEventManager", "ISoundOpSystem"]
+
+# particles: the particle system manager and the registered particle function classes the particle
+# editor lists (its operator picker walks IParticleSystemMgr's function definitions by type).
+# HParticleSystemDefinition / HParticleSnapshot are the weak resource handles the manager hands
+# out, and ParticleSnapshotAttributeMap_t the element of the vector InitSnapshot takes.
+# EAttributeDataType is the attribute data type the manager reports (CS2 has a fifth type at 4).
+# Both ABIs: libparticles exists on Linux.
+[particles]
+headers = ["tier0/utlsoacontainer.h", "particles/iparticlesystemmgr.h"]
+records = ["HParticleSystemDefinition", "HParticleSnapshot", "ParticleSnapshotAttributeMap_t"]
+opaque = []
+enums = ["ParticleOperatorId_t", "EAttributeDataType"]
+vtables = ["IParticleSystemMgr", "IParticleFunctionDefinition"]
+
+# client: the client's input object (the bridge hooks three of its virtuals and walks its button table).
+# CCSGOInput derives CClientInput and the engine2 input callback interfaces IKeybindChangeListener and
+# IInputHandler (declared in engine2/iinputservice.h, listed in [engine]). Both ABIs: libclient exists on
+# Linux. The headers live under game/client, which the consumer puts on its include path (gen.py).
+[client]
+headers = ["clientinput.h", "cstrike15/cs_clientinput.h"]
+records = ["CInputValueBase", "ClientInputButton_t", "CClientInput", "CCSGOInput"]
+opaque = []
+enums = []
+vtables = ["CClientInput", "CCSGOInput"]
+
+# toolutils2: the base classes of the Workshop Tools editors (pet, modeldoc_editor and hammer link the same
+# code): the bind target interface, the editor app and session bases, the undo history and the attribute
+# table interfaces. Windows-only like the tool modules; no Itanium number is a claim about any binary.
+[toolutils2]
+platforms = ["windows"]
+headers = [
+	"toolutils2/ibindtarget.h",
+	"toolutils2/itoolsresourcelistener.h",
+	"toolutils2/undohistory.h",
+	"toolutils2/toolattr.h",
+	"toolutils2/baseeditorsession.h",
+	"toolutils2/baseeditorapp.h",
+	"toolutils2/toolnodetypename.h",
+	"toolutils2/itoolrenderableviewhost.h",
+	"toolutils2/ibindablecamerascene.h",
+]
+records = [
+	"IBindTarget",
+	"IToolsResourceListener",
+	"IUndoable",
+	"IUndoListener",
+	"CBaseUndoable",
+	"UndoGroup_t",
+	"CUndoHistory",
+	"ToolAttrUnk_t",
+	"IToolAttr_Table",
+	"IToolAttrNotifyRoot",
+	"CBaseKV3DataWithFGDClass",
+	"CBaseEditorSession",
+	"CSimpleBaseEditorSession",
+	"CSimpleSharedWindowEditorSession",
+	"CBaseEditorApp",
+	"CBaseEditorSharedWindowApp",
+	"CBaseEditorSeparateWindowApp",
+	"CToolNodeTypeName",
+	"ToolCameraUnk_t",
+	"ToolRenderableViewHostUnk8_t",
+	"IToolRenderableViewHost",
+	"IBindableCameraScene",
+]
+# CBaseToolSystem2 derives the polymorphic template chain CTier3AppSystem<IToolSystem2>, which the flat IR
+# cannot spell (a specialization with a vtable pointer); its only member, the tool index, is not pinned.
+opaque = ["CBaseToolSystem2"]
+enums = []
+vtables = [
+	"IBindTarget",
+	"IToolsResourceListener",
+	"IUndoable",
+	"IUndoListener",
+	"CBaseUndoable",
+	"CUndoHistory",
+	"IToolAttr_Table",
+	"IToolAttrNotifyRoot",
+	"CBaseKV3DataWithFGDClass",
+	"CBaseEditorSession",
+	"CBaseEditorApp",
+	"CBaseEditorSharedWindowApp",
+	"IToolRenderableViewHost",
+	"IBindableCameraScene",
+]
+
+# pet: the particle editor's document, session and application, on top of toolutils2. Windows-only (pet.dll).
+# The Qt widgets (CQPetMainWnd and the rest) are forward declarations: the SDK has no Qt.
+[pet]
+platforms = ["windows"]
+headers = ["petdoc_lib/petdoc.h", "pet/petapp.h"]
+records = ["CBasePetNode", "PetDocSelection_t", "CPetDoc", "CPetSession"]
+# CPetApp derives CSimpleEditorSharedWindowApp<CPetSession, CQPetMainWnd>, a polymorphic class template the
+# flat IR cannot spell; its own members are not known and its main window pointer is tied through the size of
+# CBaseEditorSharedWindowApp (the template's only member follows it).
+opaque = ["CPetApp"]
+enums = []
+vtables = ["CBasePetNode", "CPetDoc", "CPetSession"]
+
+# datamodel: the datamodel the Workshop Tools editors keep their documents in: the interface, the element base class
+# and the attribute (the element handles and the attribute handle are the enums the interface takes by value).
+# Windows-only like the tool modules (hammer.dll links it; the group is measured under both ABIs, claimed for MSVC).
+# CDmAttribute has no virtual; DmAttributeType_t is declared opaque upstream, so it is not listed.
+[datamodel]
+platforms = ["windows"]
+headers = [
+	"datamodel/dmelementhandle.h",
+	"datamodel/dmattributetypes.h",
+	"datamodel/idatamodel.h",
+	"datamodel/dmelement.h",
+	"datamodel/dmattribute.h",
+]
+records = ["DmAttributeList_t", "DmElementReference_t", "CDmElement", "CDmAttribute"]
+# IDataModel derives CBaseAppSystem<IAppSystem>, a polymorphic class template the flat IR cannot spell; it has
+# no data member, so its vtable is all that is claimed.
+opaque = ["IDataModel"]
+enums = ["DmElementHandle_t", "DmAttributeHandle_t", "DmFileId_t"]
+vtables = ["IDataModel", "CDmElement"]
+
+# mapdoclib: the Hammer map document: the node classes (atom, point, node, entity, mesh), the node interfaces,
+# the document with its root element, undo history and edit scopes. Windows-only (hammer.dll). The polygon mesh
+# inside CMapMeshBase, the FGD class of an entity and the selection are not declared; the document, the nodes and
+# the root element are the classes the bridge reads and calls.
+[mapdoclib]
+platforms = ["windows"]
+headers = [
+	"mapdoclib/mapnode.h",
+	"mapdoclib/mapentity.h",
+	"mapdoclib/mapmesh.h",
+	"mapdoclib/mapdoc.h",
+]
+records = [
+	"MapNodeUnk8_t",
+	"MapNodeUnk4_t",
+	"IToolRenderCallbacks",
+	"IHitTestable",
+	"ITransformable",
+	"IMapNodeToolAttrRoot",
+	"IRaytraceEnvironmentOwner",
+	"CMapAtom",
+	"CMapPoint",
+	"CMapNode",
+	"MapEntityConnection_t",
+	"FgdClass_t",
+	"IVDataLookupListener",
+	"CMapEntityIONode",
+	"CMapGameDataNode",
+	"CMapEntity",
+	"IHammerMeshChangeListener",
+	"CMapMeshBase",
+	"CMapMesh",
+	"IMapFileReference",
+	"IUndoDoc",
+	"CMapDocHistory",
+	"CMapRootElement",
+	"CEditScopeStack",
+	"CMapDoc",
+]
+opaque = []
+enums = []
+vtables = [
+	"IToolRenderCallbacks",
+	"IHitTestable",
+	"ITransformable",
+	"IMapNodeToolAttrRoot",
+	"IRaytraceEnvironmentOwner",
+	"CMapAtom",
+	"CMapPoint",
+	"CMapNode",
+	"IVDataLookupListener",
+	"CMapEntityIONode",
+	"CMapGameDataNode",
+	"IHammerMeshChangeListener",
+	"CMapMeshBase",
+	"CMapMesh",
+	"CMapEntity",
+	"IMapFileReference",
+	"IUndoDoc",
+]
+
+# hammer: the Hammer editor application's session, the session of its map document and the viewports. Windows-only
+# (hammer.dll). The application object itself is not declared: its pins are the shared editor base's (toolutils2).
+[hammer]
+platforms = ["windows"]
+headers = [
+	"hammer/hammereditorsession.h",
+	"hammer/mapview.h",
+	"hammer/mapviewmgr.h",
+]
+records = [
+	"HammerEditorSettings_t",
+	"IBindableCommandListener",
+	"IAssetFileListener",
+	"IMapDocSession",
+	"CMapDocSession",
+	"CHammerEditorSession",
+	"CMapView",
+	"ITagVisualizationListener",
+	"IShaderReloadListener",
+	"IBoundingBoxChangeListener",
+	"CMapViewMgr",
+]
+opaque = []
+enums = []
+vtables = [
+	"IBindableCommandListener",
+	"IAssetFileListener",
+	"IMapDocSession",
+	"CMapDocSession",
+	"CHammerEditorSession",
+	"ITagVisualizationListener",
+	"IShaderReloadListener",
+	"IBoundingBoxChangeListener",
+]
+
+# modeldoc_editor: the model editor's application and document session, on top of toolutils2. Windows-only
+# (modeldoc_editor.dll). The Qt main window and the document are forward declarations. The session and the
+# app declare no virtual of their own: their tables are CBaseEditorSession's and CBaseEditorApp's, so only
+# IAssetFingerprintListener names a method.
+[modeldoc_editor]
+platforms = ["windows"]
+headers = ["tier0/errorlistener.h", "modeldoc_editor/modeldoc_editor_app.h"]
+records = ["IAssetFingerprintListener", "IErrorListener", "CModelDocAnalysis", "CModelDocEditorSession", "CModelDocEditorApp"]
+opaque = []
+enums = []
+vtables = ["IAssetFingerprintListener", "IErrorListener"]
+
+# metamod: the *second* upstream - Metamod:Source 2.0-dev (crates/metamod/upstream,
+# pinned by METAMOD.lock) and its third_party/khook submodule, not crates/s2sdk/
+# upstream. The classes are the plugin-facing interfaces a Metamod plugin calls
+# through: the plugin callbacks the game calls (ISmmPlugin), the event listener
+# (IMetamodListener, declared in ISmmPlugin.h), the core API it is handed
+# (ISmmAPI) and KHook's detour interface (IKHook, in namespace KHook).
+#
+# Two things this group needs from the run rather than from the headers:
+#   * META_NO_HL2SDK + META_IS_SOURCE2 (ISmmAPI.h:40-61) skip the hl2sdk includes
+#     (`interfaces/interfaces.h`, `tier1/interface.h`, `convar.h`, `eiface.h`),
+#     which this repository does not have - but ISmmAPI.h:68-70 still constructs a
+#     `CPlayerSlot` (`MMSPlayer_t`), so `playerslot.h` is listed first: it is an
+#     s2sdk header (the class only exists there), included before ISmmAPI.h.
+#   * the metamod include dirs come before the s2sdk ones (gen.py,
+#     `metamod_first_includes`), and khook.hpp is reached through KHook's own
+#     `include/` (metamod's ISmmPlugin.h includes it bare).
+# `khook.hpp` is listed because IKHook is declared there; KHook spells its own
+# types qualified in a signature (`KHook::Action`, `std::size_t`), which gen.py
+# resolves by the bare name (see `TypeMapper.resolve_known`).
+[metamod]
+headers = [
+	"playerslot.h",
+	"core/ISmmAPI.h",
+	"core/IPluginManager.h",
+	"core/ISmmPlugin.h",
+	"khook.hpp",
+]
+records = [
+	"ISmmPlugin",
+	"IMetamodListener",
+	"ISmmAPI",
+	"ISmmPluginManager",
+	"IKHook",
+]
+opaque = []
+enums = ["Pl_Status"]
+vtables = [
+	"ISmmPlugin",
+	"IMetamodListener",
+	"ISmmAPI",
+	"ISmmPluginManager",
+	"IKHook",
+]
+
+# consts: the numbers and version strings a consumer would otherwise spell out
+# by hand. Every value here is produced by clang - the macro is expanded and
+# evaluated under both ABIs - never entered into this file. `headers` lists what
+# the expressions need, from either upstream (probe.cpp includes them in this
+# order; `core/ISmmPluginExt.h` is metamod's). A value measured from the second
+# upstream must also be listed in gen.py's C_HEADER_EXCLUDED_CONSTS: the frozen C
+# bridge cannot name it, so bridge/s2sdk_gen.h must not carry it.
+[consts]
+headers = [
+	"const.h",
+	"tier0/generichash.h",
+	"tier0/utlvectormemory.h",
+	"appframework/iappsystem.h",
+	"interfaces/interfaces.h",
+	"bitmap/imageformat_declarations.h",
+	"core/ISmmPluginExt.h",
+	"tier0/convar.h",
+]
+# `type` is the Rust spelling the value is emitted with (the width the C++
+# macro has: `MAX_EDICTS` is an `int`, but it is an entity count, so u32); the
+# generator checks the measured value fits it.
+entries = [
+	{ name = "MAX_EDICTS", expr = "MAX_EDICTS", type = "u32", doc = "public/const.h `MAX_EDICTS`: 1<<MAX_EDICT_BITS, the engine's entity count." },
+	{ name = "NUM_ENT_ENTRY_BITS", expr = "NUM_ENT_ENTRY_BITS", type = "u32", doc = "public/const.h: bits an ehandle index is encoded in." },
+	{ name = "NUM_ENT_ENTRIES", expr = "NUM_ENT_ENTRIES", type = "u32", doc = "public/const.h: 1<<NUM_ENT_ENTRY_BITS. NOT the identity index bound the client uses - see ENTITY_INDEX_BITS." },
+	{ name = "NUM_SERIAL_NUM_BITS", expr = "NUM_SERIAL_NUM_BITS", type = "u32", doc = "public/const.h: ehandle serial-number bits." },
+	{ name = "MAX_ENTITIES_IN_LIST", expr = "MAX_ENTITIES_IN_LIST", type = "u32", doc = "public/entity2/entityidentity.h: CEntityIdentity entries per identity chunk (512 = 1<<9). The bridge's client identity lookup splits an entity index at this boundary (chunk = index / 512, slot = index % 512)." },
+	{ name = "INVALID_EHANDLE_INDEX", expr = "INVALID_EHANDLE_INDEX", type = "u32", doc = "public/const.h: the all-ones ehandle index." },
+	{ name = "EXTERNAL_CONST_BUFFER_MARKER", expr = "CUtlVectorMemory_Growable<int>::EXTERNAL_CONST_BUFFER_MARKER", type = "u32", doc = "tier0/utlvectormemory.h: CUtlVector uses a const external buffer (never realloc, never free)." },
+	{ name = "EXTERNAL_BUFFER_MARKER", expr = "(uint32)CUtlVectorMemory_Growable<int>::EXTERNAL_BUFFER_MARKER", type = "u32", doc = "tier0/utlvectormemory.h: CUtlVector uses an external buffer it may reallocate. The enum is `int`, so 1<<31 is a negative int there and the entry reads it as the uint32 bit pattern 0x80000000 that the bridge's mask wants. The bridge's S2_UTLVEC_EXTERNAL comment names this marker for the 1<<30 value." },
+	{ name = "STRINGTOKEN_MURMURHASH_SEED", expr = "STRINGTOKEN_MURMURHASH_SEED", type = "u32", doc = "tier0/utlstringtoken.h: the seed every CUtlStringToken hash uses." },
+
+	# The interface versions the bridge asks CreateInterface for. Upstream spells
+	# them all in public/interfaces/interfaces.h (SCHEMASYSTEM_INTERFACE_VERSION
+	# also in schemasystem/ischemasystem.h). `ToolSystem2_001` has no upstream
+	# macro and stays bridge-owned.
+	{ name = "SCHEMASYSTEM_INTERFACE_VERSION", expr = "SCHEMASYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge_game.inc asks for it by hand today." },
+	{ name = "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION", expr = "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge*.c asks for Source2EngineToClient001." },
+	{ name = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", expr = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", kind = "string", doc = "bridge/mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h)." },
+	{ name = "INTERFACEVERSION_SERVERGAMEDLL", expr = "INTERFACEVERSION_SERVERGAMEDLL", kind = "string", doc = "engine2/isource2server.h:118: the server's ISource2Server (\"Source2Server001\"), the object whose GameFrame the bridge hooks for its tick on non-tools hosts." },
+	{ name = "TESTSCRIPTMANAGER_INTERFACE_VERSION", expr = "TESTSCRIPTMANAGER_INTERFACE_VERSION", kind = "string", doc = "bridge/mcp_bridge.c:2657 asks for TestScriptMgr001." },
+	{ name = "INPUTSERVICE_INTERFACE_VERSION", expr = "INPUTSERVICE_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge*.c asks for InputService_001." },
+	{ name = "SOUNDOPSYSTEM_INTERFACE_VERSION", expr = "SOUNDOPSYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge_game.inc asks for SoundOpSystem001." },
+	{ name = "TOOLFRAMEWORK2_INTERFACE_VERSION", expr = "TOOLFRAMEWORK2_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_TOOLFRAMEWORK2_VERSION." },
+	{ name = "SCENESYSTEM_INTERFACE_VERSION", expr = "SCENESYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_SCENESYSTEM_VERSION." },
+	{ name = "SCENEUTILS_INTERFACE_VERSION", expr = "SCENEUTILS_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_SCENEUTILS_VERSION." },
+	{ name = "RENDERSERVICE_INTERFACE_VERSION", expr = "RENDERSERVICE_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_RENDERSERVICE_VERSION." },
+	{ name = "RENDER_DEVICE_INTERFACE_VERSION", expr = "RENDER_DEVICE_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator)." },
+
+	# bitmap/imageformat_declarations.h (enum ImageFormat): the pixel formats the bridge hands
+	# IRenderDevice::ReadTexturePixels and the scratch render targets (RSC_IMAGE_FMT_* in the sigs DB).
+	{ name = "IMAGE_FORMAT_RGBA8888", expr = "IMAGE_FORMAT_RGBA8888", type = "u32", doc = "public/bitmap/imageformat_declarations.h: the format the bridge reads screenshots back in." },
+	{ name = "IMAGE_FORMAT_BGRA8888", expr = "IMAGE_FORMAT_BGRA8888", type = "u32", doc = "public/bitmap/imageformat_declarations.h: the bridge's colour scratch format." },
+	{ name = "IMAGE_FORMAT_D24S8", expr = "IMAGE_FORMAT_D24S8", type = "u32", doc = "public/bitmap/imageformat_declarations.h: the bridge's default depth format." },
+	{ name = "IMAGE_FORMAT_D32FS8", expr = "IMAGE_FORMAT_D32FS8", type = "u32", doc = "public/bitmap/imageformat_declarations.h: the bridge's depth format when the device uses reverse depth." },
+
+	# CUtlStringToken hashes: upstream's own constexpr hash evaluates these, so
+	# the seed and the folding are the engine's, not a Python reimplementation.
+	{ name = "TOKEN_TOOLS", expr = "MurmurHash2LowerCase(\"Tools\", STRINGTOKEN_MURMURHASH_SEED)", type = "u32", doc = "bridge IRenderingPipelineVtbl token S2_PIPELINE_TOKEN_TOOLS." },
+	{ name = "TOKEN_OUTPUT_COLOR", expr = "MurmurHash2LowerCase(\"OutputColor\", STRINGTOKEN_MURMURHASH_SEED)", type = "u32", doc = "bridge S2_ATTR_TOKEN_COLOR (226443304) source string." },
+	{ name = "TOKEN_OUTPUT_DEPTH", expr = "MurmurHash2LowerCase(\"OutputDepth\", STRINGTOKEN_MURMURHASH_SEED)", type = "u32", doc = "bridge S2_ATTR_TOKEN_DEPTH (1884464147) source string." },
+
+	# appframework/iappsystem.h (enums AppSystemTier_t / BuildType_t): the
+	# values the bridge's own IToolSystem2 stand-ins return - m0_GetTier and
+	# m0_GetBuildType in bridge/mcp_bridge.c. The slots themselves are bridge
+	# extensions with no upstream declaration (see build_vtable); only the
+	# enum values are upstream contract.
+	{ name = "APP_SYSTEM_TIER3", expr = "APP_SYSTEM_TIER3", type = "u32", doc = "public/appframework/iappsystem.h: AppSystemTier_t APP_SYSTEM_TIER3, the tier the bridge's m0_GetTier returns." },
+	{ name = "kBuildTypeRelease", expr = "kBuildTypeRelease", type = "u32", doc = "public/appframework/iappsystem.h: BuildType_t kBuildTypeRelease, the build type the bridge's m0_GetBuildType returns." },
+
+	# Derived from clang's layout dump instead of an expression, because a
+	# bitfield has no C++ expression that yields its width. Upstream's
+	# `ENT_ENTRY_MASK` is derived from NUM_SERIAL_NUM_BITS (17 bits, so
+	# 0x1FFFF), which contradicts `CEntityHandle::m_EntityIndex : 15`; the
+	# bitfield widths are what the game uses, so ENT_ENTRY_MASK is deliberately
+	# NOT exported (see the design's risk R2 / the upstream PR draft).
+	{ name = "ENTITY_INDEX_BITS", derived = "CEntityHandle.m_EntityIndex.bit_width", type = "u32", doc = "CEntityHandle::m_EntityIndex width: the identity index the entity list is indexed by." },
+	{ name = "ENTITY_SERIAL_BITS", derived = "CEntityHandle.m_Serial.bit_width", type = "u32", doc = "CEntityHandle::m_Serial width: the ehandle serial number." },
+	{ name = "ENTITY_INDEX_MASK", derived = "CEntityHandle.m_EntityIndex.bit_width", transform = "mask", type = "u32", doc = "(1<<ENTITY_INDEX_BITS)-1: the mask the bridge spells 0x7FFF. Not upstream's ENT_ENTRY_MASK." },
+
+	# metamod's plugin API (core/ISmmPluginExt.h:69-70) and KHook's "no hook"
+	# (third_party/khook/include/khook.hpp:116): what a Metamod plugin answers
+	# PLAPI_VERSION/PLAPI_NAME with, and the HookID_t a RemoveHook/Find* miss
+	# returns. Both upstreams' headers reach the probe TU, so clang measures them
+	# here rather than a Rust plugin re-spelling either.
+	{ name = "METAMOD_PLAPI_VERSION", expr = "METAMOD_PLAPI_VERSION", type = "u32", doc = "core/ISmmPluginExt.h:69: the plugin API version ISmmPlugin::GetApiVersion must return (18)." },
+	{ name = "METAMOD_PLAPI_NAME", expr = "METAMOD_PLAPI_NAME", kind = "string", doc = "core/ISmmPluginExt.h:70: the plugin interface name (\"ISmmPlugin\") Metamod looks the plugin up by." },
+	{ name = "MMIFACE_PLMANAGER", expr = "MMIFACE_PLMANAGER", kind = "string", doc = "core/ISmmAPI.h:64: the MetaFactory name (\"IPluginManager\") Metamod hands its ISmmPluginManager out under (core/IPluginManager.h)." },
+	{ name = "INVALID_HOOK", expr = "KHook::INVALID_HOOK", type = "u32", doc = "third_party/khook/include/khook.hpp:116: HookID_t INVALID_HOOK = -1, the uint32_t all-ones id IKHook::RemoveHook and the Find* calls return for a miss." },
+	# Pl_MinId is an enumerator of an UNNAMED enum (namespace SourceMM,
+	# core/IPluginManager.h:44-49, alongside Pl_BadLoad/Pl_Console/Pl_File). The
+	# enumerator is a plain namespace-scope name, so the consts route reaches it
+	# without a new unnamed-enum kind: clang evaluates `SourceMM::Pl_MinId` and the
+	# scan bound in cs2-bridge's plugin table uses the measured value.
+	{ name = "PL_MIN_ID", expr = "SourceMM::Pl_MinId", type = "i32", doc = "core/IPluginManager.h:48: Pl_MinId, the first plugin id Metamod hands out (the unnamed enum's other enumerators: Pl_BadLoad 0, Pl_Console -1, Pl_File -2)." },
+
+	# tier0/convar.h ConVar flag bits (`#define FCVAR_*`, uint64): the names the bridge's
+	# cvar.get reports for ConVarData::m_nFlags. Each is held to tier0.dll by a sigs `sdk` row.
+	{ name = "FCVAR_DEVELOPMENTONLY", expr = "FCVAR_DEVELOPMENTONLY", type = "u64", doc = "tier0/convar.h `FCVAR_DEVELOPMENTONLY`: devonly: hidden in released products." },
+	{ name = "FCVAR_HIDDEN", expr = "FCVAR_HIDDEN", type = "u64", doc = "tier0/convar.h `FCVAR_HIDDEN`: hidden from find/cvarlist and autocomplete." },
+	{ name = "FCVAR_PROTECTED", expr = "FCVAR_PROTECTED", type = "u64", doc = "tier0/convar.h `FCVAR_PROTECTED`: a server cvar whose value is not sent (passwords)." },
+	{ name = "FCVAR_ARCHIVE", expr = "FCVAR_ARCHIVE", type = "u64", doc = "tier0/convar.h `FCVAR_ARCHIVE`: saved to the config." },
+	{ name = "FCVAR_NOTIFY", expr = "FCVAR_NOTIFY", type = "u64", doc = "tier0/convar.h `FCVAR_NOTIFY`: players are told when it changes." },
+	{ name = "FCVAR_REPLICATED", expr = "FCVAR_REPLICATED", type = "u64", doc = "tier0/convar.h `FCVAR_REPLICATED`: server setting enforced on clients." },
+	{ name = "FCVAR_CHEAT", expr = "FCVAR_CHEAT", type = "u64", doc = "tier0/convar.h `FCVAR_CHEAT`: only usable with sv_cheats." },
+	{ name = "FCVAR_RELEASE", expr = "FCVAR_RELEASE", type = "u64", doc = "tier0/convar.h `FCVAR_RELEASE`: available to customers." },
+	# ConVarRef::kInvalidAccessIndex (tier0/convar.h, uint16): the access index FindConVar writes
+	# for "not found". Held to tier0.dll by the sigs `sdk` row on GetConVarData's `mov edx, 0FFFFh`.
+	{ name = "CONVARREF_INVALID_ACCESS_INDEX", expr = "ConVarRef::kInvalidAccessIndex", type = "u32", doc = "tier0/convar.h ConVarRef::kInvalidAccessIndex: the m_ConVarAccessIndex of a ConVarRef that names no cvar (FindConVar's not-found answer)." },
+]
+
+# Expectations taken from the work package's acceptance list. gen.py verifies
+# these on every run so an upstream bump that silently moves a field shows up
+# as a failed run instead of a wrong binding. Keys are
+# "<group>.<record>.<field>" for a field offset, "<group>.<record>" for a
+# record ({"size","align"}), "<group>.<vtable>.<method>" for a slot,
+# "<group>.<vtable>" for a vtable length ({"length" = the Itanium one,
+# "msvc_length" = the Windows one clang's vftable pass printed) and
+# "<group>.<const>" for a `[consts]` value (whose `value` may be a number or a
+# string).
+#
+# Both ABIs are checkable: "size"/"align"/"offset"/"bit_offset"/"bit_width" and
+# "itanium_slot" are the top-level (Itanium) numbers, their "msvc_*" twins come
+# from the "msvc" sub-object and the "msvc_slot" key. "<method>#k" addresses the
+# k-th declaration of an overloaded name in declaration order, the way
+# abi::slot does; a plain name means "#0" (the first declaration). "length" is
+# the Itanium vtable length the way abi::vtable_len computes it (a destructor
+# counts two entries there) and "msvc_length" the length clang's Windows vftable
+# pass printed; both are numbers a consumer pins, so an upstream bump that adds a
+# virtual fails this run instead of being regenerated into the IR. A method key
+# may also carry "last_slot = true": the method's slot is that vtable's last entry
+# on both ABIs (gen.py `_check_last_slot`; the generated tests assert both kinds,
+# gen.py `checks_pinned_vtable_test`).
+[checks]
+"schema.SchemaClassFieldData_t" = { size = 32, align = 8, msvc_size = 32, msvc_align = 8 }
+"schema.SchemaClassFieldData_t.m_pName" = { offset = 0, size = 8, msvc_offset = 0 }
+"schema.SchemaClassFieldData_t.m_pType" = { offset = 8, msvc_offset = 8 }
+"schema.SchemaClassFieldData_t.m_nSingleInheritanceOffset" = { offset = 16, msvc_offset = 16 }
+"schema.ISchemaSystem.FindTypeScopeForModule" = { itanium_slot = 13, msvc_slot = 13, decl_index = 2 }
+# The bridge pins FindRawClassBinding at slot 25 (Itanium: 24): upstream declares
+# the `const char *` overload first and MSVC packs an overload group in reverse,
+# so "#0" is one entry later there. The #1 check is the other half of the swap,
+# and CEntityInstance's const overload adds the one-slot-destructor shift
+# (Itanium 40 -> MSVC 38) on top of it.
+"schema.ISchemaSystemTypeScope.FindRawClassBinding#0" = { itanium_slot = 24, msvc_slot = 25 }
+"schema.ISchemaSystemTypeScope.FindRawClassBinding#1" = { itanium_slot = 25, msvc_slot = 24 }
+"entity.CEntityInstance.GetChangeAccessorPathInfo#1" = { itanium_slot = 40, msvc_slot = 38 }
+"tier0.Vector" = { size = 12, align = 4, msvc_size = 12, msvc_align = 4 }
+"entity.CEntityIdentity" = { size = 112, align = 8, msvc_size = 112, msvc_align = 8 }
+# CEntityHandle is one uint32 (the unsigned union of m_Index and the two
+# bitfields), so 4 bytes on both ABIs; the bridge passes it by value.
+"entity.CEntityHandle" = { size = 4, align = 4, msvc_size = 4, msvc_align = 4 }
+"cvar.CVValue_t" = { size = 16, align = 8, msvc_size = 16, msvc_align = 8 }
+
+# --------------------------------------------------------------------------- #
+# design §1.1/§1.2/§1.3 "class (a)" rows: the offsets/layouts
+# bridge/mcp_bridge_game.inc hardcodes as plain numbers today. Every one of
+# them is asserted on BOTH ABIs, because the bridge is compiled MSVC and the
+# Rust bindings are emitted from the Itanium side.
+# --------------------------------------------------------------------------- #
+# :48 cls+0x08 m_pName, :98 cls+0x20 m_nSizeOf, :56 cls+0x24 m_nNumFields,
+# :65 cls+0x29 m_nNumBaseClasses, :57 cls+0x30 m_pFields, :66 cls+0x38
+# m_pBaseClasses (the MS structure is 112 bytes, same as the Linux one).
+"schema.SchemaClassInfoData_t" = { size = 112, align = 8, msvc_size = 112, msvc_align = 8 }
+"schema.SchemaClassInfoData_t.m_pName" = { offset = 8, msvc_offset = 8 }
+"schema.SchemaClassInfoData_t.m_nSizeOf" = { offset = 32, msvc_offset = 32 }
+"schema.SchemaClassInfoData_t.m_nNumFields" = { offset = 36, size = 2, msvc_offset = 36, msvc_size = 2 }
+"schema.SchemaClassInfoData_t.m_nNumBaseClasses" = { offset = 41, size = 1, msvc_offset = 41, msvc_size = 1 }
+"schema.SchemaClassInfoData_t.m_pFields" = { offset = 48, msvc_offset = 48 }
+"schema.SchemaClassInfoData_t.m_pBaseClasses" = { offset = 56, msvc_offset = 56 }
+# :69,71 stride 0x10, b+8, b+0 (SchemaBaseClassInfoData_t {m_nOffset 0, m_pClass 8}).
+"schema.SchemaBaseClassInfoData_t" = { size = 16, align = 8, msvc_size = 16, msvc_align = 8 }
+"schema.SchemaBaseClassInfoData_t.m_nOffset" = { offset = 0, msvc_offset = 0 }
+"schema.SchemaBaseClassInfoData_t.m_pClass" = { offset = 8, msvc_offset = 8 }
+# :138,146,491 id+0 m_pInstance, :141-145 h & 0x7FFF / h >> 15, id+0x10 m_EHandle.
+"entity.CEntityIdentity.m_pInstance" = { offset = 0, msvc_offset = 0 }
+"entity.CEntityIdentity.m_EHandle" = { offset = 16, msvc_offset = 16, size = 4, msvc_size = 4 }
+# :182 ent+0x10 CEntityInstance::m_pEntity (vftable 0, m_iszPrivateVScripts 8).
+"entity.CEntityInstance.m_pEntity" = { offset = 16, msvc_offset = 16 }
+# :196-201 CUtlSymbolLarge::m_pString at 0.
+"tier0.CUtlSymbolLarge" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"tier0.CUtlSymbolLarge.m_pString" = { offset = 0, msvc_offset = 0 }
+"tier0.QAngle" = { size = 12, align = 4, msvc_size = 12, msvc_align = 4 }
+# :439-442,714-716 CUtlVector<CEntityHandle>: m_Size 0 (spelled `size` in the
+# bridge), m_Memory 8 and its m_pMemory 8 - the flat IR keeps m_Memory's leaves,
+# so the subobject itself only has an offset to check.
+"tier0.CUtlVector<CEntityHandle>" = { size = 24, align = 8, msvc_size = 24, msvc_align = 8 }
+"tier0.CUtlVector<CEntityHandle>.m_Size" = { offset = 0, size = 4, msvc_offset = 0 }
+"tier0.CUtlVector<CEntityHandle>.m_Memory" = { offset = 8, msvc_offset = 8 }
+"tier0.CUtlVector<CEntityHandle>.m_pMemory" = { offset = 8, size = 8, msvc_offset = 8 }
+"tier0.CUtlVector<CEntityHandle>.m_nAllocationCount" = { offset = 16, size = 4, msvc_offset = 16 }
+"tier0.CUtlVector<CEntityHandle>.m_nGrowSize" = { offset = 20, size = 4, msvc_offset = 20 }
+# design §1.3 S2Viewport == RenderViewport_t, field for field (28 bytes).
+"engine.RenderViewport_t" = { size = 28, align = 4, msvc_size = 28, msvc_align = 4 }
+"engine.RenderViewport_t.m_nVersion" = { offset = 0, msvc_offset = 0 }
+"engine.RenderViewport_t.m_nTopLeftX" = { offset = 4, msvc_offset = 4 }
+"engine.RenderViewport_t.m_nTopLeftY" = { offset = 8, msvc_offset = 8 }
+"engine.RenderViewport_t.m_nWidth" = { offset = 12, msvc_offset = 12 }
+"engine.RenderViewport_t.m_nHeight" = { offset = 16, msvc_offset = 16 }
+"engine.RenderViewport_t.m_flMinZ" = { offset = 20, msvc_offset = 20 }
+"engine.RenderViewport_t.m_flMaxZ" = { offset = 24, msvc_offset = 24 }
+# design §1.2 :2581-2585: SRVCFG_VT_SLOTS 29 = IAppSystem's 11 + 18 own, and
+# :2602 slot 21 AllowSaveRestore (the GSVS_ALLOW_SAVE_RESTORE pin). The length
+# is pinned here on both ABIs so an upstream bump that adds a virtual fails
+# this run instead of being regenerated into the IR *and* the layout test
+# (which compares two generated numbers against each other).
+"engine.ISource2ServerConfig" = { length = 29, msvc_length = 29 }
+"engine.ISource2ServerConfig.GetGameDescription" = { itanium_slot = 11, msvc_slot = 11, decl_index = 0 }
+"engine.ISource2ServerConfig.AllowSaveRestore" = { itanium_slot = 21, msvc_slot = 21, decl_index = 10 }
+
+# The engine services and the client's engine interface. IEngineService is 11 IAppSystem slots
+# + its 11 own virtuals + the destructor declared last (Itanium two slots, MSVC one): 24 / 23.
+# IRenderService and IInputService add their own virtuals after it (the implicit destructor
+# they inherit is IEngineService's, not a slot of theirs). EVS_RS_GAME_WORLD pins GetSceneWorld,
+# EVS_IS_ADD_COMMAND_TEXT AddCommandText, and the four EVS_EC_* pins GetLocalPlayer,
+# GetLastServerTick, IsInGame and GetLevelNameShort. The SetBinding / GetBinding overload pairs
+# are swapped on MSVC (MSVC lays an overload group out in reverse declaration order).
+"engine.IEngineService" = { length = 24, msvc_length = 23 }
+"engine.IEngineService.GetServiceDependencies" = { itanium_slot = 11, msvc_slot = 11, decl_index = 0 }
+"engine.IEngineService.SetServiceIndex" = { itanium_slot = 21, msvc_slot = 21, decl_index = 10 }
+"engine.IRenderService" = { length = 40, msvc_length = 39 }
+"engine.IRenderService.InstallRenderHandler" = { itanium_slot = 24, msvc_slot = 23, decl_index = 0 }
+"engine.IRenderService.GetSceneWorld" = { itanium_slot = 30, msvc_slot = 29, decl_index = 6 }
+"engine.IRenderService.unk101" = { itanium_slot = 39, msvc_slot = 38, decl_index = 15 }
+"engine.IInputService" = { length = 64, msvc_length = 63 }
+"engine.IInputService.InstallInputHandler" = { itanium_slot = 24, msvc_slot = 23, decl_index = 0 }
+"engine.IInputService.AddCommandText" = { itanium_slot = 26, msvc_slot = 25, decl_index = 2 }
+"engine.IInputService.SetBinding#0" = { itanium_slot = 30, msvc_slot = 30, decl_index = 6 }
+"engine.IInputService.SetBinding#1" = { itanium_slot = 32, msvc_slot = 29, decl_index = 8 }
+"engine.IInputService.GetBinding#0" = { itanium_slot = 31, msvc_slot = 32, decl_index = 7 }
+"engine.IInputService.GetBinding#1" = { itanium_slot = 33, msvc_slot = 31, decl_index = 9 }
+"engine.IInputService.unk501" = { itanium_slot = 63, msvc_slot = 62, decl_index = 39 }
+"engine.ISource2Engine" = { length = 18, msvc_length = 18 }
+"engine.ISource2Engine.IsPaused" = { itanium_slot = 11, msvc_slot = 11, decl_index = 0 }
+"engine.IVEngineClient2" = { length = 185, msvc_length = 185 }
+"engine.IVEngineClient2.GetSteamUniverse" = { itanium_slot = 18, msvc_slot = 18, decl_index = 0 }
+"engine.IVEngineClient2.GetLocalPlayer" = { itanium_slot = 34, msvc_slot = 34, decl_index = 16 }
+"engine.IVEngineClient2.GetLastServerTick" = { itanium_slot = 37, msvc_slot = 37, decl_index = 19 }
+"engine.IVEngineClient2.IsInGame" = { itanium_slot = 39, msvc_slot = 39, decl_index = 21 }
+"engine.IVEngineClient2.GetLevelNameShort" = { itanium_slot = 65, msvc_slot = 65, decl_index = 47 }
+"engine.IVEngineClient2.PrintNetworkSummaryReport" = { itanium_slot = 184, msvc_slot = 184, decl_index = 166 }
+# ISource2Server (Source2Server001, isource2server.h:123): IAppSystem's 11 + 92 own
+# virtuals, no destructor, no overloads - 103 on both ABIs, measured in server.dll
+# (CSource2Server_VT_SLOTS) and libserver.so (VTLEN_CSource2Server = 103 + 1 GCC entry).
+# The bridge KHooks GameFrame for its tick on non-tools hosts; slot 19 is the
+# function that opens the "CSource2Server::GameFrame" VProf scope in both binaries.
+"engine.ISource2Server" = { length = 103, msvc_length = 103 }
+"engine.ISource2Server.GameFrame" = { itanium_slot = 19, msvc_slot = 19, decl_index = 8 }
+"engine.ISource2Server.GetSteamGroupAccountID" = { itanium_slot = 102, msvc_slot = 102, decl_index = 91, last_slot = true }
+"consts.INTERFACEVERSION_SERVERGAMEDLL" = { value = "Source2Server001" }
+"engine.EngineClientUnk40_t" = { size = 40, align = 8, msvc_size = 40, msvc_align = 8 }
+"engine.EngineClientUnk40_t.m_unk001" = { offset = 0, msvc_offset = 0 }
+"engine.EngineClientUnk40_t.m_unk005" = { offset = 32, msvc_offset = 32 }
+
+# --------------------------------------------------------------------------- #
+# tier0 ITestScriptMgr: IAppSystem's 11 slots + 6 own virtuals (the destructor takes two
+# Itanium slots, one MSVC slot). T0VS_TS_CHECKPOINT = 12 and T0VS_TS_IS_ACTIVE = 13 pin
+# CheckPoint and IsRunningTestScript.
+# --------------------------------------------------------------------------- #
+"tier0.ITestScriptMgr" = { length = 19, msvc_length = 18 }
+"tier0.ITestScriptMgr.CheckPoint" = { itanium_slot = 12, msvc_slot = 12, decl_index = 1 }
+"tier0.ITestScriptMgr.IsRunningTestScript" = { itanium_slot = 13, msvc_slot = 13, decl_index = 2 }
+
+# toolframework2 is Windows-only: MSVC numbers only. TFVS_GET_TOOL_INDEX_BY_NAME,
+# TFVS_LOAD_TOOL_SYSTEM and TFVS_GET_TOOL_ENTRY_BY_INDEX pin FindTool, LoadTool and
+# GetToolSettings; 98 is the length of CToolFramework2's table.
+"toolframework2.IToolFramework2" = { msvc_length = 98 }
+"toolframework2.IToolFramework2.FindTool" = { msvc_slot = 22, decl_index = 11 }
+"toolframework2.IToolFramework2.LoadTool" = { msvc_slot = 24, decl_index = 13 }
+"toolframework2.IToolFramework2.GetToolSettings" = { msvc_slot = 81, decl_index = 70 }
+"toolframework2.IToolSystem2" = { msvc_length = 17 }
+"toolframework2.IToolFrameListener" = { msvc_length = 3 }
+"toolframework2.ToolActivationRequest_t" = { msvc_size = 64, msvc_align = 8 }
+"toolframework2.ToolOpenAssetEntry_t" = { msvc_size = 24, msvc_align = 8 }
+"toolframework2.MultiAxisControllerInput_t" = { msvc_size = 24, msvc_align = 4 }
+
+# rendersystem: IRenderDevice is 255 slots on both ABIs and declares no destructor (the engine's
+# CRenderDeviceBase destructor comes after slot 254). MSVC groups an overload group in reverse
+# declaration order, so three groups swap: CreateVertexBuffer (3), ReadTexturePixels (2) and
+# GetDeviceSpecificBuffer (3). RVS_READ_TEXTURE_PIXELS pins the Rect_t ReadTexturePixels overload (the
+# first declared) and RVS_DEPTH_FMT_QUERY slot 168, which is IsUsingReverseDepth.
+"rendersystem.IRenderDevice" = { length = 255, msvc_length = 255 }
+"rendersystem.IRenderDevice.GetDeviceAPI" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"rendersystem.IRenderDevice.CreateSwapChain" = { itanium_slot = 1, msvc_slot = 1, decl_index = 1 }
+"rendersystem.IRenderDevice.FindOrCreateTexture" = { itanium_slot = 51, msvc_slot = 51, decl_index = 51 }
+"rendersystem.IRenderDevice.GetErrorTexture" = { itanium_slot = 52, msvc_slot = 52, decl_index = 52 }
+"rendersystem.IRenderDevice.FindOrCreateFileTexture" = { itanium_slot = 53, msvc_slot = 53, decl_index = 53 }
+"rendersystem.IRenderDevice.FindFileTexture" = { itanium_slot = 54, msvc_slot = 54, decl_index = 54 }
+"rendersystem.IRenderDevice.FindOrCreateExternalTexture" = { itanium_slot = 55, msvc_slot = 55, decl_index = 55 }
+"rendersystem.IRenderDevice.CreateRenderContext" = { itanium_slot = 61, msvc_slot = 61, decl_index = 61 }
+"rendersystem.IRenderDevice.SubmitDisplayLists" = { itanium_slot = 64, msvc_slot = 64, decl_index = 64 }
+"rendersystem.IRenderDevice.GetTextureAverageColor" = { itanium_slot = 91, msvc_slot = 91, decl_index = 91 }
+"rendersystem.IRenderDevice.GetTextureAverageColorRGBA" = { itanium_slot = 92, msvc_slot = 92, decl_index = 92 }
+"rendersystem.IRenderDevice.unk101" = { itanium_slot = 106, msvc_slot = 106, decl_index = 106 }
+"rendersystem.IRenderDevice.GetNearestSupportedColorFormat" = { itanium_slot = 117, msvc_slot = 117, decl_index = 117 }
+"rendersystem.IRenderDevice.unk201" = { itanium_slot = 151, msvc_slot = 151, decl_index = 151 }
+"rendersystem.IRenderDevice.unk301" = { itanium_slot = 159, msvc_slot = 159, decl_index = 159 }
+"rendersystem.IRenderDevice.IsUsingReverseDepth" = { itanium_slot = 168, msvc_slot = 168, decl_index = 168 }
+"rendersystem.IRenderDevice.unk401" = { itanium_slot = 195, msvc_slot = 195, decl_index = 195 }
+"rendersystem.IRenderDevice.unk501" = { itanium_slot = 215, msvc_slot = 215, decl_index = 215 }
+"rendersystem.IRenderDevice.unk601" = { itanium_slot = 219, msvc_slot = 219, decl_index = 219 }
+"rendersystem.IRenderDevice.unk701" = { itanium_slot = 221, msvc_slot = 221, decl_index = 221 }
+"rendersystem.IRenderDevice.unk801" = { itanium_slot = 230, msvc_slot = 230, decl_index = 230 }
+"rendersystem.IRenderDevice.unk901" = { itanium_slot = 232, msvc_slot = 232, decl_index = 232 }
+"rendersystem.IRenderDevice.unk1001" = { itanium_slot = 239, msvc_slot = 239, decl_index = 239 }
+"rendersystem.IRenderDevice.unk1002" = { itanium_slot = 240, msvc_slot = 240, decl_index = 240 }
+"rendersystem.IRenderDevice.unk1003" = { itanium_slot = 241, msvc_slot = 241, decl_index = 241 }
+"rendersystem.IRenderDevice.unk1004" = { itanium_slot = 242, msvc_slot = 242, decl_index = 242 }
+"rendersystem.IRenderDevice.unk1005" = { itanium_slot = 243, msvc_slot = 243, decl_index = 243 }
+"rendersystem.IRenderDevice.InitDevice" = { itanium_slot = 251, msvc_slot = 251, decl_index = 251 }
+"rendersystem.IRenderDevice.IsMultisampleTypeSupported" = { itanium_slot = 254, msvc_slot = 254, decl_index = 254 }
+"rendersystem.IRenderDevice.CreateVertexBuffer#0" = { itanium_slot = 33, msvc_slot = 35, decl_index = 33 }
+"rendersystem.IRenderDevice.CreateVertexBuffer#1" = { itanium_slot = 34, msvc_slot = 34, decl_index = 34 }
+"rendersystem.IRenderDevice.CreateVertexBuffer#2" = { itanium_slot = 35, msvc_slot = 33, decl_index = 35 }
+"rendersystem.IRenderDevice.ReadTexturePixels#0" = { itanium_slot = 73, msvc_slot = 74, decl_index = 73 }
+"rendersystem.IRenderDevice.ReadTexturePixels#1" = { itanium_slot = 74, msvc_slot = 73, decl_index = 74 }
+"rendersystem.IRenderDevice.GetDeviceSpecificBuffer#0" = { itanium_slot = 132, msvc_slot = 134, decl_index = 132 }
+"rendersystem.IRenderDevice.GetDeviceSpecificBuffer#1" = { itanium_slot = 133, msvc_slot = 133, decl_index = 133 }
+"rendersystem.IRenderDevice.GetDeviceSpecificBuffer#2" = { itanium_slot = 134, msvc_slot = 132, decl_index = 134 }
+"rendersystem.CStrongHandle<InfoForResourceTypeCTextureBase>" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"rendersystem.CStrongHandle<InfoForResourceTypeCTextureBase>.m_pBinding" = { offset = 0, size = 8, msvc_offset = 0 }
+"rendersystem.HRenderTexture" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"rendersystem.RenderDeviceUnkVector4_t" = { size = 16, align = 4, msvc_size = 16, msvc_align = 4 }
+
+# scenesystem: both ABIs, 2000930. CFrustum is 0x420 bytes and 16-aligned; m_camera sits at 0,
+# so Camera_t's offsets are CFrustum's (S2OFF_FRUSTUM_FOV/ASPECT/ZNEAR = 0x18/0x1c/0x20) and
+# the clip rectangle is S2OFF_FRUSTUM_NDC = 0x170. The vtable lengths are the interfaces'
+# (ISceneSystem 11 + 187 slots, ISceneView 111 virtuals plus the inline destructor, which takes
+# two Itanium slots; ISceneUtils 11 + 51; IRenderingPipeline 14); the slots are the SVS_* pins,
+# the Itanium ones shifted by an overload group and ISceneView's destructor.
+"scenesystem.Camera_t" = { size = 48, align = 4, msvc_size = 48, msvc_align = 4 }
+"scenesystem.Camera_t.m_flFOVX" = { offset = 0x18, msvc_offset = 0x18 }
+"scenesystem.Camera_t.m_flAspect" = { offset = 0x1c, msvc_offset = 0x1c }
+"scenesystem.Camera_t.m_flZNear" = { offset = 0x20, msvc_offset = 0x20 }
+"scenesystem.CRenderAttributes" = { size = 0x3A0, align = 1, msvc_size = 0x3A0, msvc_align = 1 }
+"scenesystem.CFrustum" = { size = 0x420, align = 16, msvc_size = 0x420, msvc_align = 16 }
+"scenesystem.CFrustum.m_camera" = { offset = 0, msvc_offset = 0 }
+"scenesystem.CFrustum.m_frustumStruct" = { offset = 0x30, msvc_offset = 0x30 }
+"scenesystem.CFrustum.m_flClipSpaceBottomLeftX" = { offset = 0x170, msvc_offset = 0x170 }
+"scenesystem.CFrustum.m_forward" = { offset = 0x184, msvc_offset = 0x184 }
+"scenesystem.CFrustum.m_cameraToWorld" = { offset = 0x1a8, msvc_offset = 0x1a8 }
+"scenesystem.CFrustum.m_projection" = { offset = 0x208, msvc_offset = 0x208 }
+"scenesystem.CFrustum.m_unk201" = { offset = 0x308, msvc_offset = 0x308 }
+"scenesystem.CFrustum.m_unk209" = { offset = 0x418, msvc_offset = 0x418 }
+"scenesystem.CViewId" = { size = 16, align = 8, msvc_size = 16, msvc_align = 8 }
+"scenesystem.HMaterialWeak" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"scenesystem.SceneViewUnk16_t" = { size = 16, align = 8, msvc_size = 16, msvc_align = 8 }
+"scenesystem.SceneViewUnk4_t" = { size = 4, align = 4, msvc_size = 4, msvc_align = 4 }
+"scenesystem.ISceneSystem" = { length = 198, msvc_length = 198 }
+"scenesystem.ISceneSystem.BeginRenderingViews" = { itanium_slot = 20, msvc_slot = 20, decl_index = 9 }
+"scenesystem.ISceneSystem.AddView" = { itanium_slot = 21, msvc_slot = 21, decl_index = 10 }
+"scenesystem.ISceneSystem.FinishRenderingViews" = { itanium_slot = 25, msvc_slot = 25, decl_index = 14 }
+"scenesystem.ISceneSystem.WaitForRenderingToComplete" = { itanium_slot = 26, msvc_slot = 26, decl_index = 15 }
+"scenesystem.ISceneSystem.CreateViewId" = { itanium_slot = 95, msvc_slot = 95, decl_index = 84 }
+"scenesystem.ISceneView" = { length = 113, msvc_length = 112 }
+"scenesystem.ISceneView.BeginLayerGroup" = { itanium_slot = 22, msvc_slot = 21, decl_index = 21 }
+"scenesystem.ISceneView.EndLayerGroup" = { itanium_slot = 23, msvc_slot = 22, decl_index = 22 }
+"scenesystem.ISceneView.AddFlags" = { itanium_slot = 25, msvc_slot = 24, decl_index = 24 }
+"scenesystem.ISceneView.MarkRenderTargetForReadback" = { itanium_slot = 45, msvc_slot = 44, decl_index = 44 }
+"scenesystem.ISceneView.GetRenderTargetTexture" = { itanium_slot = 46, msvc_slot = 45, decl_index = 45 }
+"scenesystem.ISceneView.CreateScratchTargets" = { itanium_slot = 89, msvc_slot = 88, decl_index = 88 }
+"scenesystem.IRenderingPipeline" = { length = 14, msvc_length = 14 }
+"scenesystem.IRenderingPipeline.AddLayersToView" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"scenesystem.IRenderingPipeline.unk103" = { itanium_slot = 3, msvc_slot = 3, decl_index = 3 }
+"scenesystem.IRenderingPipeline.unk108" = { itanium_slot = 8, msvc_slot = 8, decl_index = 8 }
+"scenesystem.IRenderingPipeline.unk109" = { itanium_slot = 9, msvc_slot = 9, decl_index = 9 }
+"scenesystem.IRenderingPipeline.unk1010" = { itanium_slot = 10, msvc_slot = 10, decl_index = 10 }
+"scenesystem.ISceneUtils" = { length = 62, msvc_length = 62 }
+"scenesystem.ISceneUtils.FindRenderingPipeline" = { itanium_slot = 26, msvc_slot = 26, decl_index = 15 }
+
+# particles: both ABIs, 2000930. IParticleSystemMgr is the 11 IAppSystem slots + 50 own virtuals and declares no
+# destructor: 61 slots on both ABIs. PETOFF_PMGR_FUNC_COUNT / PETOFF_PMGR_FUNC_GET are the byte offsets of
+# GetFunctionDefinitionCount / GetFunctionDefinition (slots 24 / 25 times 8). The two overload groups are
+# swapped on MSVC (CreateParticleCollection 17/18, CreateParticleSceneObject 29/30/31); the nine unknowns are
+# pinned so a renumbering is a deliberate edit. IParticleFunctionDefinition is the 3 slots of a registered
+# function class; PETOFF_FACTORY_NAME / PETOFF_FACTORY_CLASSINFO are the byte offsets of GetName (0) and
+# GetSchemaBinding (2 times 8).
+"particles.IParticleSystemMgr" = { length = 61, msvc_length = 61 }
+"particles.IParticleSystemMgr.SetFallbackParameters" = { itanium_slot = 11, msvc_slot = 11, decl_index = 0 }
+"particles.IParticleSystemMgr.SetSystemLevel" = { itanium_slot = 12, msvc_slot = 12, decl_index = 1 }
+"particles.IParticleSystemMgr.SetLowViolence" = { itanium_slot = 13, msvc_slot = 13, decl_index = 2 }
+"particles.IParticleSystemMgr.IsLowViolence" = { itanium_slot = 14, msvc_slot = 14, decl_index = 3 }
+"particles.IParticleSystemMgr.FindParticleSystem" = { itanium_slot = 15, msvc_slot = 15, decl_index = 4 }
+"particles.IParticleSystemMgr.GetParticleSystemDefinitionClass" = { itanium_slot = 16, msvc_slot = 16, decl_index = 5 }
+"particles.IParticleSystemMgr.CreateParticleCollection#0" = { itanium_slot = 17, msvc_slot = 18, decl_index = 6 }
+"particles.IParticleSystemMgr.CreateParticleCollection#1" = { itanium_slot = 18, msvc_slot = 17, decl_index = 7 }
+"particles.IParticleSystemMgr.DestroyParticleCollection" = { itanium_slot = 19, msvc_slot = 19, decl_index = 8 }
+"particles.IParticleSystemMgr.unk101" = { itanium_slot = 20, msvc_slot = 20, decl_index = 9 }
+"particles.IParticleSystemMgr.unk102" = { itanium_slot = 21, msvc_slot = 21, decl_index = 10 }
+"particles.IParticleSystemMgr.unk103" = { itanium_slot = 22, msvc_slot = 22, decl_index = 11 }
+"particles.IParticleSystemMgr.GetParticleAttributeFriendlyName" = { itanium_slot = 23, msvc_slot = 23, decl_index = 12 }
+"particles.IParticleSystemMgr.GetFunctionDefinitionCount" = { itanium_slot = 24, msvc_slot = 24, decl_index = 13 }
+"particles.IParticleSystemMgr.GetFunctionDefinition" = { itanium_slot = 25, msvc_slot = 25, decl_index = 14 }
+"particles.IParticleSystemMgr.SetLastSimulationDuration" = { itanium_slot = 26, msvc_slot = 26, decl_index = 15 }
+"particles.IParticleSystemMgr.GetLastSimulationDuration" = { itanium_slot = 27, msvc_slot = 27, decl_index = 16 }
+"particles.IParticleSystemMgr.DumpParticleSystems" = { itanium_slot = 28, msvc_slot = 28, decl_index = 17 }
+"particles.IParticleSystemMgr.CreateParticleSceneObject#0" = { itanium_slot = 29, msvc_slot = 31, decl_index = 18 }
+"particles.IParticleSystemMgr.CreateParticleSceneObject#1" = { itanium_slot = 30, msvc_slot = 30, decl_index = 19 }
+"particles.IParticleSystemMgr.CreateParticleSceneObject#2" = { itanium_slot = 31, msvc_slot = 29, decl_index = 20 }
+"particles.IParticleSystemMgr.unk201" = { itanium_slot = 32, msvc_slot = 32, decl_index = 21 }
+"particles.IParticleSystemMgr.RandomInt" = { itanium_slot = 33, msvc_slot = 33, decl_index = 22 }
+"particles.IParticleSystemMgr.RandomFloat" = { itanium_slot = 34, msvc_slot = 34, decl_index = 23 }
+"particles.IParticleSystemMgr.GetParticleAttributeName" = { itanium_slot = 35, msvc_slot = 35, decl_index = 24 }
+"particles.IParticleSystemMgr.GetParticleAttributeDataType" = { itanium_slot = 36, msvc_slot = 36, decl_index = 25 }
+"particles.IParticleSystemMgr.RestartParticleSystem" = { itanium_slot = 37, msvc_slot = 37, decl_index = 26 }
+"particles.IParticleSystemMgr.SetDisabledRendererTypes" = { itanium_slot = 38, msvc_slot = 38, decl_index = 27 }
+"particles.IParticleSystemMgr.unk301" = { itanium_slot = 39, msvc_slot = 39, decl_index = 28 }
+"particles.IParticleSystemMgr.PurgeRenderObjects" = { itanium_slot = 40, msvc_slot = 40, decl_index = 29 }
+"particles.IParticleSystemMgr.CreateProceduralSnapshot" = { itanium_slot = 41, msvc_slot = 41, decl_index = 30 }
+"particles.IParticleSystemMgr.InitSnapshotFromAttributeData" = { itanium_slot = 42, msvc_slot = 42, decl_index = 31 }
+"particles.IParticleSystemMgr.InitSnapshot" = { itanium_slot = 43, msvc_slot = 43, decl_index = 32 }
+"particles.IParticleSystemMgr.CopySnapshot" = { itanium_slot = 44, msvc_slot = 44, decl_index = 33 }
+"particles.IParticleSystemMgr.SetSnapshotVector" = { itanium_slot = 45, msvc_slot = 45, decl_index = 34 }
+"particles.IParticleSystemMgr.GetSnapshotVector" = { itanium_slot = 46, msvc_slot = 46, decl_index = 35 }
+"particles.IParticleSystemMgr.GetSnapshotParticleCount" = { itanium_slot = 47, msvc_slot = 47, decl_index = 36 }
+"particles.IParticleSystemMgr.SnapshotHasAttribute" = { itanium_slot = 48, msvc_slot = 48, decl_index = 37 }
+"particles.IParticleSystemMgr.SetSnapshotSubset" = { itanium_slot = 49, msvc_slot = 49, decl_index = 38 }
+"particles.IParticleSystemMgr.ClearSnapshot" = { itanium_slot = 50, msvc_slot = 50, decl_index = 39 }
+"particles.IParticleSystemMgr.GetParticleSystemVersion" = { itanium_slot = 51, msvc_slot = 51, decl_index = 40 }
+"particles.IParticleSystemMgr.GetParticleSystemVersionChangeDescription" = { itanium_slot = 52, msvc_slot = 52, decl_index = 41 }
+"particles.IParticleSystemMgr.SetHoveredParticleSystem" = { itanium_slot = 53, msvc_slot = 53, decl_index = 42 }
+"particles.IParticleSystemMgr.HasFeatureFlags" = { itanium_slot = 54, msvc_slot = 54, decl_index = 43 }
+"particles.IParticleSystemMgr.AddInstancedMeshes" = { itanium_slot = 55, msvc_slot = 55, decl_index = 44 }
+"particles.IParticleSystemMgr.unk401" = { itanium_slot = 56, msvc_slot = 56, decl_index = 45 }
+"particles.IParticleSystemMgr.unk402" = { itanium_slot = 57, msvc_slot = 57, decl_index = 46 }
+"particles.IParticleSystemMgr.unk403" = { itanium_slot = 58, msvc_slot = 58, decl_index = 47 }
+"particles.IParticleSystemMgr.unk404" = { itanium_slot = 59, msvc_slot = 59, decl_index = 48 }
+"particles.IParticleSystemMgr.SimulateGPUParticles" = { itanium_slot = 60, msvc_slot = 60, decl_index = 49 }
+"particles.IParticleFunctionDefinition" = { length = 3, msvc_length = 3 }
+"particles.IParticleFunctionDefinition.GetName" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"particles.IParticleFunctionDefinition.GetId" = { itanium_slot = 1, msvc_slot = 1, decl_index = 1 }
+"particles.IParticleFunctionDefinition.GetSchemaBinding" = { itanium_slot = 2, msvc_slot = 2, decl_index = 2 }
+"particles.HParticleSystemDefinition" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"particles.HParticleSnapshot" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8 }
+"particles.ParticleSnapshotAttributeMap_t" = { size = 8, align = 4, msvc_size = 8, msvc_align = 4 }
+"particles.ParticleSnapshotAttributeMap_t.m_nContainerAttribute" = { offset = 0, msvc_offset = 0 }
+"particles.ParticleSnapshotAttributeMap_t.m_nParticleAttribute" = { offset = 4, msvc_offset = 4 }
+
+# soundsystem: both ABIs, 2000930. The two guid classes are 4 bytes on both (MSVC returns them
+# through a hidden pointer, Itanium in eax). The params block is 0x28 bytes, identical on both
+# ABIs. ISoundOpSystem is the 101-slot interface (11 IAppSystem + 90 own) on both ABIs; the
+# concrete CSoundOpSystem is longer (103 on MSVC, 166 on Itanium), see sigs/scripts/sdkcheck.py.
+# CS2 2000940 inserted the 4-byte m_unk201 at 0x1c (everything after it +4, sizeof 0x28 -> 0x30;
+# workflows/updates/2000940.md).
+"soundsystem.SoundEventGuid_t" = { size = 4, align = 4, msvc_size = 4, msvc_align = 4 }
+"soundsystem.SoundGuid_t" = { size = 4, align = 4, msvc_size = 4, msvc_align = 4 }
+"soundsystem.SosStartSoundEventParams_t" = { size = 0x30, align = 8, msvc_size = 0x30, msvc_align = 8 }
+"soundsystem.SosStartSoundEventParams_t.m_unk001" = { offset = 0, msvc_offset = 0 }
+"soundsystem.SosStartSoundEventParams_t.m_pFieldData" = { offset = 0x08, msvc_offset = 0x08 }
+"soundsystem.SosStartSoundEventParams_t.m_nSoundEventHash" = { offset = 0x10, msvc_offset = 0x10 }
+"soundsystem.SosStartSoundEventParams_t.m_SourceEntity" = { offset = 0x14, msvc_offset = 0x14 }
+"soundsystem.SosStartSoundEventParams_t.m_Guid" = { offset = 0x18, msvc_offset = 0x18 }
+"soundsystem.SosStartSoundEventParams_t.m_unk201" = { offset = 0x1c, msvc_offset = 0x1c }
+"soundsystem.SosStartSoundEventParams_t.m_nFieldDataSize" = { offset = 0x20, msvc_offset = 0x20 }
+"soundsystem.SosStartSoundEventParams_t.m_nSeed" = { offset = 0x24, msvc_offset = 0x24 }
+"soundsystem.SosStartSoundEventParams_t.m_nLayer" = { offset = 0x26, msvc_offset = 0x26 }
+"soundsystem.SosStartSoundEventParams_t.m_unk101" = { offset = 0x27, msvc_offset = 0x27 }
+"soundsystem.SosStartSoundEventParams_t.m_bTraceSoundscapes" = { offset = 0x28, msvc_offset = 0x28 }
+"soundsystem.ISoundEventListener" = { length = 6, msvc_length = 6 }
+"soundsystem.ISoundEventListener.OnSoundEventStarted" = { itanium_slot = 5, msvc_slot = 5, decl_index = 5 }
+"soundsystem.ISoundEventManager" = { length = 63, msvc_length = 63 }
+"soundsystem.ISoundEventManager.GetSoundEventName" = { itanium_slot = 2, msvc_slot = 2, decl_index = 2 }
+"soundsystem.ISoundOpSystem" = { length = 101, msvc_length = 101 }
+"soundsystem.ISoundOpSystem.@ISoundEventManager" = { offset = 8, msvc_offset = 8 }
+"soundsystem.ISoundOpSystem.StartSoundEvent#0" = { itanium_slot = 11, msvc_slot = 13, decl_index = 0 }
+"soundsystem.ISoundOpSystem.StartSoundEvent#1" = { itanium_slot = 12, msvc_slot = 12, decl_index = 1 }
+"soundsystem.ISoundOpSystem.StartSoundEvent#2" = { itanium_slot = 13, msvc_slot = 11, decl_index = 2 }
+"soundsystem.ISoundOpSystem.GetActiveSoundEventName" = { itanium_slot = 68, msvc_slot = 68, decl_index = 57 }
+"soundsystem.ISoundOpSystem.AddSoundEventListener" = { itanium_slot = 81, msvc_slot = 81, decl_index = 70 }
+"soundsystem.ISoundOpSystem.RemoveSoundEventListener" = { itanium_slot = 82, msvc_slot = 82, decl_index = 71 }
+"soundsystem.ISoundOpSystem.GetSoundEventSourceEntity" = { itanium_slot = 86, msvc_slot = 86, decl_index = 75 }
+
+# client: both ABIs, 2000930. CClientInput is the destructor plus 32 virtuals: 33 MSVC slots, 34 Itanium (two
+# destructor entries). Every Itanium slot after the destructor is the MSVC slot + 1; there are no overloads.
+# CCSGOInput overrides 23 of them and adds none (the same table), and derives the two one-slot engine2
+# callback interfaces after CClientInput, at +0xB80 and +0xB88. The unknowns and the bridge's four slots are
+# pinned, so a renumbering is a deliberate edit. sizeof CClientInput 0xB80, CCSGOInput 0xC10, the button
+# object 0x90 (the next pointer at +0x88), CInputValueBase 0x80. COFF_INPUT_BUTTONS is m_pButtons.
+"client.CInputValueBase" = { size = 0x80, align = 8, msvc_size = 0x80, msvc_align = 8 }
+"client.CInputValueBase.m_pszName" = { offset = 0, msvc_offset = 0 }
+"client.CInputValueBase.m_unk101" = { offset = 8, msvc_offset = 8 }
+"client.CInputValueBase.m_unk102" = { offset = 12, msvc_offset = 12 }
+"client.CInputValueBase.m_unk103" = { offset = 16, msvc_offset = 16 }
+"client.ClientInputButton_t" = { size = 0x90, align = 8, msvc_size = 0x90, msvc_align = 8 }
+"client.ClientInputButton_t.m_nButton" = { offset = 0, msvc_offset = 0 }
+"client.ClientInputButton_t.m_InputValue" = { offset = 8, msvc_offset = 8 }
+"client.ClientInputButton_t.m_pNext" = { offset = 0x88, msvc_offset = 0x88 }
+"client.CClientInput" = { size = 0xB80, align = 8, msvc_size = 0xB80, msvc_align = 8, length = 34, msvc_length = 33 }
+"client.CClientInput.m_unk001" = { offset = 8, msvc_offset = 8 }
+"client.CClientInput.m_pButtons" = { offset = 0x10, msvc_offset = 0x10 }
+"client.CClientInput.m_unk101" = { offset = 0x210, msvc_offset = 0x210 }
+"client.CCSGOInput" = { size = 0xC10, align = 8, msvc_size = 0xC10, msvc_align = 8 }
+"client.CCSGOInput.@IKeybindChangeListener" = { offset = 0xB80, msvc_offset = 0xB80 }
+"client.CCSGOInput.@IInputHandler" = { offset = 0xB88, msvc_offset = 0xB88 }
+"client.CCSGOInput.m_unk011" = { offset = 0xB90, msvc_offset = 0xB90 }
+"client.CClientInput.Init" = { itanium_slot = 2, msvc_slot = 1, decl_index = 1 }
+"client.CClientInput.Shutdown" = { itanium_slot = 3, msvc_slot = 2, decl_index = 2 }
+"client.CClientInput.unk101" = { itanium_slot = 4, msvc_slot = 3, decl_index = 3 }
+"client.CClientInput.ProcessInput" = { itanium_slot = 5, msvc_slot = 4, decl_index = 4 }
+"client.CClientInput.CreateMove" = { itanium_slot = 6, msvc_slot = 5, decl_index = 5 }
+"client.CClientInput.unk201" = { itanium_slot = 7, msvc_slot = 6, decl_index = 6 }
+"client.CClientInput.unk202" = { itanium_slot = 8, msvc_slot = 7, decl_index = 7 }
+"client.CClientInput.unk203" = { itanium_slot = 9, msvc_slot = 8, decl_index = 8 }
+"client.CClientInput.MakeWeaponSelection" = { itanium_slot = 10, msvc_slot = 9, decl_index = 9 }
+"client.CClientInput.unk301" = { itanium_slot = 11, msvc_slot = 10, decl_index = 10 }
+"client.CClientInput.unk302" = { itanium_slot = 12, msvc_slot = 11, decl_index = 11 }
+"client.CClientInput.unk303" = { itanium_slot = 13, msvc_slot = 12, decl_index = 12 }
+"client.CClientInput.unk304" = { itanium_slot = 14, msvc_slot = 13, decl_index = 13 }
+"client.CClientInput.unk305" = { itanium_slot = 15, msvc_slot = 14, decl_index = 14 }
+"client.CClientInput.unk306" = { itanium_slot = 16, msvc_slot = 15, decl_index = 15 }
+"client.CClientInput.unk307" = { itanium_slot = 17, msvc_slot = 16, decl_index = 16 }
+"client.CClientInput.unk308" = { itanium_slot = 18, msvc_slot = 17, decl_index = 17 }
+"client.CClientInput.unk309" = { itanium_slot = 19, msvc_slot = 18, decl_index = 18 }
+"client.CClientInput.unk3010" = { itanium_slot = 20, msvc_slot = 19, decl_index = 19 }
+"client.CClientInput.unk3011" = { itanium_slot = 21, msvc_slot = 20, decl_index = 20 }
+"client.CClientInput.unk3012" = { itanium_slot = 22, msvc_slot = 21, decl_index = 21 }
+"client.CClientInput.unk3013" = { itanium_slot = 23, msvc_slot = 22, decl_index = 22 }
+"client.CClientInput.unk3014" = { itanium_slot = 24, msvc_slot = 23, decl_index = 23 }
+"client.CClientInput.unk3015" = { itanium_slot = 25, msvc_slot = 24, decl_index = 24 }
+"client.CClientInput.unk3016" = { itanium_slot = 26, msvc_slot = 25, decl_index = 25 }
+"client.CClientInput.unk3017" = { itanium_slot = 27, msvc_slot = 26, decl_index = 26 }
+"client.CClientInput.unk3018" = { itanium_slot = 28, msvc_slot = 27, decl_index = 27 }
+"client.CClientInput.unk3019" = { itanium_slot = 29, msvc_slot = 28, decl_index = 28 }
+"client.CClientInput.unk3020" = { itanium_slot = 30, msvc_slot = 29, decl_index = 29 }
+"client.CClientInput.unk3021" = { itanium_slot = 31, msvc_slot = 30, decl_index = 30 }
+"client.CClientInput.unk3022" = { itanium_slot = 32, msvc_slot = 31, decl_index = 31 }
+"client.CClientInput.unk3023" = { itanium_slot = 33, msvc_slot = 32, decl_index = 32 }
+"engine.IInputHandler.HandleInputEvent" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"engine.IKeybindChangeListener.unk001" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+
+# --------------------------------------------------------------------------- #
+# the consts: every value is measured by clang; these are the expectations the
+# consumers rely on (the bridge's literals, the acceptance list).
+# --------------------------------------------------------------------------- #
+"consts.MAX_EDICTS" = { value = 0x4000 }
+"consts.IMAGE_FORMAT_RGBA8888" = { value = 0 }
+"consts.IMAGE_FORMAT_BGRA8888" = { value = 9 }
+"consts.IMAGE_FORMAT_D24S8" = { value = 42 }
+"consts.IMAGE_FORMAT_D32FS8" = { value = 48 }
+"consts.NUM_ENT_ENTRY_BITS" = { value = 16 }
+"consts.NUM_ENT_ENTRIES" = { value = 0x10000 }
+"consts.NUM_SERIAL_NUM_BITS" = { value = 17 }
+"consts.INVALID_EHANDLE_INDEX" = { value = 0xFFFFFFFF }
+"consts.EXTERNAL_CONST_BUFFER_MARKER" = { value = 0x40000000 }
+"consts.EXTERNAL_BUFFER_MARKER" = { value = 0x80000000 }
+"consts.STRINGTOKEN_MURMURHASH_SEED" = { value = 0x31415926 }
+"consts.SCHEMASYSTEM_INTERFACE_VERSION" = { value = "SchemaSystem_001" }
+"consts.SOURCE2ENGINETOCLIENT_INTERFACE_VERSION" = { value = "Source2EngineToClient001" }
+"consts.SOURCE2SERVERCONFIG_INTERFACE_VERSION" = { value = "Source2ServerConfig001" }
+"consts.TESTSCRIPTMANAGER_INTERFACE_VERSION" = { value = "TestScriptMgr001" }
+"consts.INPUTSERVICE_INTERFACE_VERSION" = { value = "InputService_001" }
+"consts.SOUNDOPSYSTEM_INTERFACE_VERSION" = { value = "SoundOpSystem001" }
+"consts.TOOLFRAMEWORK2_INTERFACE_VERSION" = { value = "ToolFramework2_002" }
+"consts.SCENESYSTEM_INTERFACE_VERSION" = { value = "SceneSystem_002" }
+"consts.SCENEUTILS_INTERFACE_VERSION" = { value = "SceneUtils_001" }
+"consts.RENDERSERVICE_INTERFACE_VERSION" = { value = "RenderService_001" }
+"consts.RENDER_DEVICE_INTERFACE_VERSION" = { value = "RenderDevice003" }
+# The acceptance list's S2_PIPELINE_TOKEN_TOOLS: MurmurHash2LowerCase("Tools",
+# STRINGTOKEN_MURMURHASH_SEED). The two render-target tokens are anchored to the
+# values bridge/s2sdk.h carries as S2_ATTR_TOKEN_COLOR/DEPTH.
+"consts.TOKEN_TOOLS" = { value = 0x785BE7A7 }
+"consts.TOKEN_OUTPUT_COLOR" = { value = 226443304 }
+"consts.TOKEN_OUTPUT_DEPTH" = { value = 1884464147 }
+"consts.APP_SYSTEM_TIER3" = { value = 3 }
+"consts.kBuildTypeRelease" = { value = 2 }
+"consts.ENTITY_INDEX_BITS" = { value = 15 }
+"consts.ENTITY_SERIAL_BITS" = { value = 17 }
+"consts.ENTITY_INDEX_MASK" = { value = 0x7FFF }
+
+# The second upstream's consts: the plugin API version/name a Rust Metamod
+# plugin answers ISmmPlugin::GetApiVersion / Metamod's lookup with, and KHook's
+# "no hook" id. All three are measured from the metamod checkout's headers, the
+# way every other const here is measured from the SDK's.
+"consts.METAMOD_PLAPI_VERSION" = { value = 18 }
+"consts.METAMOD_PLAPI_NAME" = { value = "ISmmPlugin" }
+"consts.INVALID_HOOK" = { value = 0xFFFFFFFF }
+"consts.PL_MIN_ID" = { value = 1 }
+
+# toolutils2 and pet: Windows-only (pet.dll, MSVC numbers only). Slots and offsets are typed from RE9 (pet.dll
+# 2000930), independently of the IR. The Itanium numbers of these groups claim nothing. CBaseEditorSeparateWindowApp
+# (0x1E8, no member of its own) is the modeldoc_editor app base; CPetApp is 0x230 (the static object).
+"toolutils2.IBindTarget" = { msvc_size = 0x10, msvc_align = 8, msvc_length = 9 }
+"toolutils2.IToolsResourceListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 2 }
+"toolutils2.IUndoable" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 12 }
+"toolutils2.IUndoListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"toolutils2.CBaseUndoable" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 13 }
+"toolutils2.UndoGroup_t" = { msvc_size = 0xC0, msvc_align = 8 }
+"toolutils2.UndoGroup_t.m_unk001" = { msvc_offset = 0x0 }
+"toolutils2.UndoGroup_t.m_unk002" = { msvc_offset = 0x18 }
+"toolutils2.UndoGroup_t.m_nSerial" = { msvc_offset = 0x20 }
+"toolutils2.UndoGroup_t.m_szName" = { msvc_offset = 0x24 }
+"toolutils2.UndoGroup_t.m_unk101" = { msvc_offset = 0xA4 }
+"toolutils2.UndoGroup_t.m_unk102" = { msvc_offset = 0xA5 }
+"toolutils2.UndoGroup_t.m_unk103" = { msvc_offset = 0xA8 }
+"toolutils2.UndoGroup_t.m_unk104" = { msvc_offset = 0xB0 }
+"toolutils2.CUndoHistory" = { msvc_size = 0x4B0, msvc_align = 8, msvc_length = 4 }
+"toolutils2.ToolAttrUnk_t" = { msvc_size = 0x28, msvc_align = 1 }
+"toolutils2.IToolAttr_Table" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 11 }
+"toolutils2.IToolAttrNotifyRoot" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 6 }
+"toolutils2.CBaseKV3DataWithFGDClass" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 17 }
+"toolutils2.CBaseEditorSession" = { msvc_size = 0x58, msvc_align = 8, msvc_length = 26 }
+"toolutils2.CSimpleBaseEditorSession" = { msvc_size = 0x68, msvc_align = 8 }
+"toolutils2.CSimpleSharedWindowEditorSession" = { msvc_size = 0x70, msvc_align = 8 }
+"toolutils2.CBaseToolSystem2" = { msvc_size = 0x30, msvc_align = 8 }
+"toolutils2.CBaseEditorApp" = { msvc_size = 0x1E8, msvc_align = 8, msvc_length = 49 }
+"toolutils2.CBaseEditorSharedWindowApp" = { msvc_size = 0x1E8, msvc_align = 8, msvc_length = 50 }
+"toolutils2.CBaseEditorSeparateWindowApp" = { msvc_size = 0x1E8, msvc_align = 8 }
+"pet.CBasePetNode" = { msvc_size = 0x30, msvc_align = 8, msvc_length = 34 }
+"pet.PetDocSelection_t" = { msvc_size = 0x8, msvc_align = 4 }
+"pet.CPetDoc" = { msvc_size = 0xD0, msvc_align = 8, msvc_length = 14 }
+"pet.CPetSession" = { msvc_size = 0x2C0, msvc_align = 8, msvc_length = 27 }
+"pet.CPetApp" = { msvc_size = 0x230, msvc_align = 8 }
+"toolutils2.CToolNodeTypeName" = { msvc_size = 0x10, msvc_align = 8 }
+"modeldoc_editor.IAssetFingerprintListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"modeldoc_editor.IErrorListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 6 }
+"modeldoc_editor.CModelDocAnalysis" = { msvc_size = 0x98, msvc_align = 8 }
+"modeldoc_editor.CModelDocEditorSession" = { msvc_size = 0x1088, msvc_align = 8 }
+"modeldoc_editor.CModelDocEditorApp" = { msvc_size = 0x418, msvc_align = 8 }
+"toolutils2.IBindTarget.m_unk001" = { msvc_offset = 0x8 }
+"toolutils2.CBaseEditorSession.m_bIsNew" = { msvc_offset = 0x19 }
+"toolutils2.CSimpleBaseEditorSession.m_Path" = { msvc_offset = 0x58 }
+"toolutils2.CSimpleBaseEditorSession.m_bModified" = { msvc_offset = 0x60 }
+"toolutils2.CSimpleBaseEditorSession.m_unk111" = { msvc_offset = 0x61 }
+"toolutils2.CSimpleSharedWindowEditorSession.m_unk021" = { msvc_offset = 0x68 }
+"toolutils2.CUndoHistory.m_unk001" = { msvc_offset = 0x8 }
+"toolutils2.CUndoHistory.m_unk002" = { msvc_offset = 0x20 }
+"toolutils2.CUndoHistory.m_pPartner" = { msvc_offset = 0x80 }
+"toolutils2.CUndoHistory.m_unk101" = { msvc_offset = 0x88 }
+"toolutils2.CBaseEditorApp.m_unk001" = { msvc_offset = 0x40 }
+"toolutils2.CBaseEditorApp.m_unk002" = { msvc_offset = 0x48 }
+"toolutils2.CBaseEditorApp.m_pActiveSession" = { msvc_offset = 0x50 }
+"toolutils2.CBaseEditorApp.m_Sessions" = { msvc_offset = 0x58 }
+"toolutils2.CBaseEditorApp.m_unk101" = { msvc_offset = 0x70 }
+"toolutils2.CBaseEditorApp.m_bInOpenFile" = { msvc_offset = 0x1A3 }
+"toolutils2.CBaseEditorApp.m_unk201" = { msvc_offset = 0x1A4 }
+"pet.CBasePetNode.m_unk001" = { msvc_offset = 0x10 }
+"pet.CBasePetNode.m_unk002" = { msvc_offset = 0x18 }
+"pet.CBasePetNode.m_unk003" = { msvc_offset = 0x20 }
+"pet.CPetDoc.m_unk001" = { msvc_offset = 0x10 }
+"pet.CPetDoc.m_Selection" = { msvc_offset = 0x68 }
+"pet.CPetDoc.m_pRoot" = { msvc_offset = 0x80 }
+"pet.CPetDoc.m_pUndoHistory" = { msvc_offset = 0x88 }
+"pet.CPetDoc.m_unk101" = { msvc_offset = 0x90 }
+"pet.CPetDoc.m_unk102" = { msvc_offset = 0x98 }
+"pet.CPetSession.m_unk031" = { msvc_offset = 0x80 }
+"pet.CPetSession.m_pDoc" = { msvc_offset = 0x108 }
+"pet.CPetSession.m_unk131" = { msvc_offset = 0x110 }
+"toolutils2.CToolNodeTypeName.m_Token" = { msvc_offset = 0x0 }
+"toolutils2.CToolNodeTypeName.m_pszName" = { msvc_offset = 0x8 }
+"modeldoc_editor.CModelDocEditorSession.m_unk021" = { msvc_offset = 0x88 }
+"modeldoc_editor.CModelDocEditorSession.m_pMainWnd" = { msvc_offset = 0x110 }
+"modeldoc_editor.CModelDocEditorSession.m_pDoc" = { msvc_offset = 0x118 }
+"modeldoc_editor.CModelDocEditorSession.m_unk121" = { msvc_offset = 0x120 }
+"modeldoc_editor.CModelDocEditorSession.m_pAsset" = { msvc_offset = 0xBF8 }
+"modeldoc_editor.CModelDocEditorSession.m_unk221" = { msvc_offset = 0xC00 }
+"modeldoc_editor.CModelDocEditorSession.m_Analysis" = { msvc_offset = 0xF98 }
+"modeldoc_editor.CModelDocEditorSession.m_unk321" = { msvc_offset = 0x1030 }
+"modeldoc_editor.CModelDocEditorApp.m_unk021" = { msvc_offset = 0x1E8 }
+"toolutils2.IBindTarget.unk101" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IBindTarget.unk102" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IBindTarget.unk103" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IBindTarget.unk104" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IBindTarget.unk105" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.IBindTarget.unk106" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.IBindTarget.unk107" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.IBindTarget.unk108" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.IToolsResourceListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IToolsResourceListener.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IUndoable.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IUndoable.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IUndoable.unk003" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IUndoable.unk004" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IUndoable.unk005" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IUndoable.unk006" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.IUndoable.unk007" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.IUndoable.unk008" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.IUndoable.unk009" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.IUndoable.unk0010" = { msvc_slot = 9, decl_index = 9 }
+"toolutils2.IUndoable.unk0011" = { msvc_slot = 10, decl_index = 10 }
+"toolutils2.IUndoable.unk0012" = { msvc_slot = 11, decl_index = 11 }
+"toolutils2.IUndoListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.CUndoHistory.unk101" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.CUndoHistory.Undo" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.CUndoHistory.HasEntries" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IToolAttr_Table.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IToolAttr_Table.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IToolAttr_Table.unk003" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IToolAttr_Table.unk004" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IToolAttr_Table.unk005" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IToolAttr_Table.unk006" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.IToolAttr_Table.unk007" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.IToolAttr_Table.unk008" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.IToolAttr_Table.unk009" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.IToolAttr_Table.unk0010" = { msvc_slot = 9, decl_index = 9 }
+"toolutils2.IToolAttr_Table.unk0011" = { msvc_slot = 10, decl_index = 10 }
+"toolutils2.IToolAttrNotifyRoot.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IToolAttrNotifyRoot.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IToolAttrNotifyRoot.unk003" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IToolAttrNotifyRoot.unk004" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IToolAttrNotifyRoot.unk005" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IToolAttrNotifyRoot.unk006" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.CBaseKV3DataWithFGDClass.unk111" = { msvc_slot = 12, decl_index = 1 }
+"toolutils2.CBaseKV3DataWithFGDClass.unk112" = { msvc_slot = 13, decl_index = 2 }
+"toolutils2.CBaseKV3DataWithFGDClass.unk113" = { msvc_slot = 14, decl_index = 3 }
+"toolutils2.CBaseKV3DataWithFGDClass.unk114" = { msvc_slot = 15, decl_index = 4 }
+"toolutils2.CBaseKV3DataWithFGDClass.unk115" = { msvc_slot = 16, decl_index = 5 }
+"toolutils2.CBaseEditorSession.unk101" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.CBaseEditorSession.unk102" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.CBaseEditorSession.unk103" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.CBaseEditorSession.unk104" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.CBaseEditorSession.unk105" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.CBaseEditorSession.unk106" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.CBaseEditorSession.ReloadDocument" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.CBaseEditorSession.unk201" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.CBaseEditorSession.unk202" = { msvc_slot = 9, decl_index = 9 }
+"toolutils2.CBaseEditorSession.unk203" = { msvc_slot = 10, decl_index = 10 }
+"toolutils2.CBaseEditorSession.IsModified" = { msvc_slot = 11, decl_index = 11 }
+"toolutils2.CBaseEditorSession.SetModified" = { msvc_slot = 12, decl_index = 12 }
+"toolutils2.CBaseEditorSession.GetPath" = { msvc_slot = 13, decl_index = 13 }
+"toolutils2.CBaseEditorSession.unk301" = { msvc_slot = 14, decl_index = 14 }
+"toolutils2.CBaseEditorSession.unk302" = { msvc_slot = 15, decl_index = 15 }
+"toolutils2.CBaseEditorSession.unk303" = { msvc_slot = 16, decl_index = 16 }
+"toolutils2.CBaseEditorSession.unk304" = { msvc_slot = 17, decl_index = 17 }
+"toolutils2.CBaseEditorSession.Save" = { msvc_slot = 18, decl_index = 18 }
+"toolutils2.CBaseEditorSession.unk401" = { msvc_slot = 19, decl_index = 19 }
+"toolutils2.CBaseEditorSession.unk402" = { msvc_slot = 20, decl_index = 20 }
+"toolutils2.CBaseEditorSession.unk403" = { msvc_slot = 21, decl_index = 21 }
+"toolutils2.CBaseEditorSession.unk404" = { msvc_slot = 22, decl_index = 22 }
+"toolutils2.CBaseEditorSession.unk405" = { msvc_slot = 23, decl_index = 23 }
+"toolutils2.CBaseEditorSession.unk406" = { msvc_slot = 24, decl_index = 24 }
+"toolutils2.CBaseEditorSession.unk407" = { msvc_slot = 25, decl_index = 25 }
+"toolutils2.CBaseEditorApp.unk071" = { msvc_slot = 17, decl_index = 0 }
+"toolutils2.CBaseEditorApp.OpenFile" = { msvc_slot = 18, decl_index = 1 }
+"toolutils2.CBaseEditorApp.unk171" = { msvc_slot = 19, decl_index = 2 }
+"toolutils2.CBaseEditorApp.unk172" = { msvc_slot = 20, decl_index = 3 }
+"toolutils2.CBaseEditorApp.unk173" = { msvc_slot = 21, decl_index = 4 }
+"toolutils2.CBaseEditorApp.unk174" = { msvc_slot = 22, decl_index = 5 }
+"toolutils2.CBaseEditorApp.unk175" = { msvc_slot = 23, decl_index = 6 }
+"toolutils2.CBaseEditorApp.unk176" = { msvc_slot = 24, decl_index = 7 }
+"toolutils2.CBaseEditorApp.unk177" = { msvc_slot = 25, decl_index = 8 }
+"toolutils2.CBaseEditorApp.unk178" = { msvc_slot = 26, decl_index = 9 }
+"toolutils2.CBaseEditorApp.unk179" = { msvc_slot = 27, decl_index = 10 }
+"toolutils2.CBaseEditorApp.unk1710" = { msvc_slot = 28, decl_index = 11 }
+"toolutils2.CBaseEditorApp.unk1711" = { msvc_slot = 29, decl_index = 12 }
+"toolutils2.CBaseEditorApp.unk1712" = { msvc_slot = 30, decl_index = 13 }
+"toolutils2.CBaseEditorApp.unk1713" = { msvc_slot = 31, decl_index = 14 }
+"toolutils2.CBaseEditorApp.unk1714" = { msvc_slot = 32, decl_index = 15 }
+"toolutils2.CBaseEditorApp.unk1715" = { msvc_slot = 33, decl_index = 16 }
+"toolutils2.CBaseEditorApp.unk1716" = { msvc_slot = 34, decl_index = 17 }
+"toolutils2.CBaseEditorApp.unk1717" = { msvc_slot = 35, decl_index = 18 }
+"toolutils2.CBaseEditorApp.unk1718" = { msvc_slot = 36, decl_index = 19 }
+"toolutils2.CBaseEditorApp.unk1719" = { msvc_slot = 37, decl_index = 20 }
+"toolutils2.CBaseEditorApp.unk1720" = { msvc_slot = 38, decl_index = 21 }
+"toolutils2.CBaseEditorApp.unk1721" = { msvc_slot = 39, decl_index = 22 }
+"toolutils2.CBaseEditorApp.unk1722" = { msvc_slot = 40, decl_index = 23 }
+"toolutils2.CBaseEditorApp.unk1723" = { msvc_slot = 41, decl_index = 24 }
+"toolutils2.CBaseEditorApp.AppRestoreToolSettings" = { msvc_slot = 42, decl_index = 25 }
+"toolutils2.CBaseEditorApp.AppSaveToolSettings" = { msvc_slot = 43, decl_index = 26 }
+"toolutils2.CBaseEditorApp.unk271" = { msvc_slot = 44, decl_index = 27 }
+"toolutils2.CBaseEditorApp.unk272" = { msvc_slot = 45, decl_index = 28 }
+"toolutils2.CBaseEditorApp.unk273" = { msvc_slot = 46, decl_index = 29 }
+"toolutils2.CBaseEditorApp.unk274" = { msvc_slot = 47, decl_index = 30 }
+"toolutils2.CBaseEditorApp.unk275" = { msvc_slot = 48, decl_index = 31 }
+"toolutils2.CBaseEditorSharedWindowApp.unk081" = { msvc_slot = 49, decl_index = 0 }
+"pet.CPetDoc.unk021" = { msvc_slot = 13, decl_index = 0 }
+"pet.CPetSession.unk031" = { msvc_slot = 26, decl_index = 0 }
+"pet.CBasePetNode.unk021" = { msvc_slot = 17, decl_index = 0 }
+"pet.CBasePetNode.GetClassName" = { msvc_slot = 18, decl_index = 1 }
+"pet.CBasePetNode.unk121" = { msvc_slot = 19, decl_index = 2 }
+"pet.CBasePetNode.unk122" = { msvc_slot = 20, decl_index = 3 }
+"pet.CBasePetNode.unk123" = { msvc_slot = 21, decl_index = 4 }
+"pet.CBasePetNode.unk124" = { msvc_slot = 22, decl_index = 5 }
+"pet.CBasePetNode.unk125" = { msvc_slot = 23, decl_index = 6 }
+"pet.CBasePetNode.unk126" = { msvc_slot = 24, decl_index = 7 }
+"pet.CBasePetNode.unk127" = { msvc_slot = 25, decl_index = 8 }
+"pet.CBasePetNode.unk128" = { msvc_slot = 26, decl_index = 9 }
+"pet.CBasePetNode.unk129" = { msvc_slot = 27, decl_index = 10 }
+"pet.CBasePetNode.unk1210" = { msvc_slot = 28, decl_index = 11 }
+"pet.CBasePetNode.unk1211" = { msvc_slot = 29, decl_index = 12 }
+"pet.CBasePetNode.unk1212" = { msvc_slot = 30, decl_index = 13 }
+"pet.CBasePetNode.unk1213" = { msvc_slot = 31, decl_index = 14 }
+"pet.CBasePetNode.unk1214" = { msvc_slot = 32, decl_index = 15 }
+"pet.CBasePetNode.unk1215" = { msvc_slot = 33, decl_index = 16 }
+"modeldoc_editor.IAssetFingerprintListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+
+# W10 checks begin
+# datamodel / mapdoclib / hammer: Windows-only groups (hammer.dll), MSVC numbers only. Sizes, offsets, base offsets,
+# vtable lengths and the slot of every own virtual are the values the RE specs measured in the binary (hammer-doc.md,
+# hammer-nodes.md); IDataModel's overloads are numbered in declaration order (MSVC lays an overload group out in reverse).
+"datamodel.IDataModel" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 140 }
+"datamodel.IDataModel.AddElementFactory" = { msvc_slot = 11, decl_index = 0 }
+"datamodel.IDataModel.GetElementFactoryHelper" = { msvc_slot = 12, decl_index = 1 }
+"datamodel.IDataModel.SetDefaultElementFactory" = { msvc_slot = 13, decl_index = 2 }
+"datamodel.IDataModel.GetFirstFactory" = { msvc_slot = 14, decl_index = 3 }
+"datamodel.IDataModel.GetNextFactory" = { msvc_slot = 15, decl_index = 4 }
+"datamodel.IDataModel.IsValidFactory" = { msvc_slot = 16, decl_index = 5 }
+"datamodel.IDataModel.GetFactoryName" = { msvc_slot = 17, decl_index = 6 }
+"datamodel.IDataModel.CreateElement#0" = { msvc_slot = 19, decl_index = 7 }
+"datamodel.IDataModel.CreateElement#1" = { msvc_slot = 18, decl_index = 8 }
+"datamodel.IDataModel.DestroyElement" = { msvc_slot = 20, decl_index = 9 }
+"datamodel.IDataModel.GetElement" = { msvc_slot = 21, decl_index = 10 }
+"datamodel.IDataModel.GetElementType" = { msvc_slot = 22, decl_index = 11 }
+"datamodel.IDataModel.GetElementName" = { msvc_slot = 23, decl_index = 12 }
+"datamodel.IDataModel.GetElementId" = { msvc_slot = 24, decl_index = 13 }
+"datamodel.IDataModel.GetAttributeNameForType" = { msvc_slot = 25, decl_index = 14 }
+"datamodel.IDataModel.GetAttributeTypeForName" = { msvc_slot = 26, decl_index = 15 }
+"datamodel.IDataModel.AddSerializer" = { msvc_slot = 27, decl_index = 16 }
+"datamodel.IDataModel.AddLegacyUpdater" = { msvc_slot = 28, decl_index = 17 }
+"datamodel.IDataModel.AddFormatUpdater" = { msvc_slot = 29, decl_index = 18 }
+"datamodel.IDataModel.GetFormatExtension" = { msvc_slot = 30, decl_index = 19 }
+"datamodel.IDataModel.GetFormatDescription" = { msvc_slot = 31, decl_index = 20 }
+"datamodel.IDataModel.GetFormatCount" = { msvc_slot = 32, decl_index = 21 }
+"datamodel.IDataModel.GetFormatName" = { msvc_slot = 33, decl_index = 22 }
+"datamodel.IDataModel.GetDefaultEncoding" = { msvc_slot = 34, decl_index = 23 }
+"datamodel.IDataModel.GetEncodingCount" = { msvc_slot = 35, decl_index = 24 }
+"datamodel.IDataModel.GetEncodingName" = { msvc_slot = 36, decl_index = 25 }
+"datamodel.IDataModel.IsEncodingBinary" = { msvc_slot = 37, decl_index = 26 }
+"datamodel.IDataModel.DoesEncodingStoreVersionInFile" = { msvc_slot = 38, decl_index = 27 }
+"datamodel.IDataModel.SetSerializationDelimiter" = { msvc_slot = 39, decl_index = 28 }
+"datamodel.IDataModel.SetSerializationArrayDelimiter" = { msvc_slot = 40, decl_index = 29 }
+"datamodel.IDataModel.IsUnserializing" = { msvc_slot = 41, decl_index = 30 }
+"datamodel.IDataModel.Serialize" = { msvc_slot = 42, decl_index = 31 }
+"datamodel.IDataModel.Unserialize" = { msvc_slot = 43, decl_index = 32 }
+"datamodel.IDataModel.UpdateUnserializedElements" = { msvc_slot = 44, decl_index = 33 }
+"datamodel.IDataModel.OnlyCreateUntypedElements" = { msvc_slot = 45, decl_index = 34 }
+"datamodel.IDataModel.FindSerializer" = { msvc_slot = 46, decl_index = 35 }
+"datamodel.IDataModel.FindLegacyUpdater" = { msvc_slot = 47, decl_index = 36 }
+"datamodel.IDataModel.FindFormatUpdater" = { msvc_slot = 48, decl_index = 37 }
+"datamodel.IDataModel.SaveToFile" = { msvc_slot = 49, decl_index = 38 }
+"datamodel.IDataModel.RestoreFromFile" = { msvc_slot = 50, decl_index = 39 }
+"datamodel.IDataModel.SetKeyValuesElementCallback" = { msvc_slot = 51, decl_index = 40 }
+"datamodel.IDataModel.GetKeyValuesElementName" = { msvc_slot = 52, decl_index = 41 }
+"datamodel.IDataModel.GetSymbol" = { msvc_slot = 53, decl_index = 42 }
+"datamodel.IDataModel.unk101" = { msvc_slot = 54, decl_index = 43 }
+"datamodel.IDataModel.unk102" = { msvc_slot = 55, decl_index = 44 }
+"datamodel.IDataModel.GetMaxNumberOfElements" = { msvc_slot = 56, decl_index = 45 }
+"datamodel.IDataModel.GetElementsAllocatedSoFar" = { msvc_slot = 57, decl_index = 46 }
+"datamodel.IDataModel.GetAllocatedAttributeCount" = { msvc_slot = 58, decl_index = 47 }
+"datamodel.IDataModel.GetAllocatedElementCount" = { msvc_slot = 59, decl_index = 48 }
+"datamodel.IDataModel.FirstAllocatedElement" = { msvc_slot = 60, decl_index = 49 }
+"datamodel.IDataModel.NextAllocatedElement" = { msvc_slot = 61, decl_index = 50 }
+"datamodel.IDataModel.EstimateMemoryUsage" = { msvc_slot = 62, decl_index = 51 }
+"datamodel.IDataModel.SetUndoEnabled" = { msvc_slot = 63, decl_index = 52 }
+"datamodel.IDataModel.IsUndoEnabled" = { msvc_slot = 64, decl_index = 53 }
+"datamodel.IDataModel.UndoEnabledForElement" = { msvc_slot = 65, decl_index = 54 }
+"datamodel.IDataModel.IsDirty" = { msvc_slot = 66, decl_index = 55 }
+"datamodel.IDataModel.CanUndo" = { msvc_slot = 67, decl_index = 56 }
+"datamodel.IDataModel.CanRedo" = { msvc_slot = 68, decl_index = 57 }
+"datamodel.IDataModel.StartUndo" = { msvc_slot = 69, decl_index = 58 }
+"datamodel.IDataModel.FinishUndo" = { msvc_slot = 70, decl_index = 59 }
+"datamodel.IDataModel.AbortUndoableOperation" = { msvc_slot = 71, decl_index = 60 }
+"datamodel.IDataModel.ClearRedo" = { msvc_slot = 72, decl_index = 61 }
+"datamodel.IDataModel.GetUndoDesc" = { msvc_slot = 73, decl_index = 62 }
+"datamodel.IDataModel.GetRedoDesc" = { msvc_slot = 74, decl_index = 63 }
+"datamodel.IDataModel.Undo" = { msvc_slot = 75, decl_index = 64 }
+"datamodel.IDataModel.Redo" = { msvc_slot = 76, decl_index = 65 }
+"datamodel.IDataModel.TraceUndo" = { msvc_slot = 77, decl_index = 66 }
+"datamodel.IDataModel.ClearUndo" = { msvc_slot = 78, decl_index = 67 }
+"datamodel.IDataModel.GetUndoInfo" = { msvc_slot = 79, decl_index = 68 }
+"datamodel.IDataModel.unk201" = { msvc_slot = 80, decl_index = 69 }
+"datamodel.IDataModel.unk202" = { msvc_slot = 81, decl_index = 70 }
+"datamodel.IDataModel.AddUndoElement" = { msvc_slot = 82, decl_index = 71 }
+"datamodel.IDataModel.GetUndoDescInternal" = { msvc_slot = 83, decl_index = 72 }
+"datamodel.IDataModel.GetRedoDescInternal" = { msvc_slot = 84, decl_index = 73 }
+"datamodel.IDataModel.unk301" = { msvc_slot = 85, decl_index = 74 }
+"datamodel.IDataModel.unk302" = { msvc_slot = 86, decl_index = 75 }
+"datamodel.IDataModel.EmptyClipboard" = { msvc_slot = 87, decl_index = 76 }
+"datamodel.IDataModel.SetClipboardData" = { msvc_slot = 88, decl_index = 77 }
+"datamodel.IDataModel.AddToClipboardData" = { msvc_slot = 89, decl_index = 78 }
+"datamodel.IDataModel.GetClipboardData" = { msvc_slot = 90, decl_index = 79 }
+"datamodel.IDataModel.HasClipboardData" = { msvc_slot = 91, decl_index = 80 }
+"datamodel.IDataModel.GetAttribute#0" = { msvc_slot = 93, decl_index = 81 }
+"datamodel.IDataModel.GetAttribute#1" = { msvc_slot = 92, decl_index = 109 }
+"datamodel.IDataModel.IsAttributeHandleValid" = { msvc_slot = 94, decl_index = 82 }
+"datamodel.IDataModel.NumFileIds" = { msvc_slot = 95, decl_index = 83 }
+"datamodel.IDataModel.GetFileId#0" = { msvc_slot = 97, decl_index = 84 }
+"datamodel.IDataModel.GetFileId#1" = { msvc_slot = 96, decl_index = 87 }
+"datamodel.IDataModel.FindOrCreateFileId" = { msvc_slot = 98, decl_index = 85 }
+"datamodel.IDataModel.RemoveFileId" = { msvc_slot = 99, decl_index = 86 }
+"datamodel.IDataModel.GetFileName" = { msvc_slot = 100, decl_index = 88 }
+"datamodel.IDataModel.SetFileName" = { msvc_slot = 101, decl_index = 89 }
+"datamodel.IDataModel.GetFileFormat" = { msvc_slot = 102, decl_index = 90 }
+"datamodel.IDataModel.SetFileFormat" = { msvc_slot = 103, decl_index = 91 }
+"datamodel.IDataModel.GetFileRoot" = { msvc_slot = 104, decl_index = 92 }
+"datamodel.IDataModel.SetFileRoot" = { msvc_slot = 105, decl_index = 93 }
+"datamodel.IDataModel.GetFileModificationUTCTime" = { msvc_slot = 106, decl_index = 94 }
+"datamodel.IDataModel.GetCurrentUTCTime" = { msvc_slot = 107, decl_index = 95 }
+"datamodel.IDataModel.UTCTimeToString" = { msvc_slot = 108, decl_index = 96 }
+"datamodel.IDataModel.IsFileLoaded" = { msvc_slot = 109, decl_index = 97 }
+"datamodel.IDataModel.MarkFileLoaded" = { msvc_slot = 110, decl_index = 98 }
+"datamodel.IDataModel.UnloadFile" = { msvc_slot = 111, decl_index = 99 }
+"datamodel.IDataModel.NumElementsInFile" = { msvc_slot = 112, decl_index = 100 }
+"datamodel.IDataModel.DontAutoDelete" = { msvc_slot = 113, decl_index = 101 }
+"datamodel.IDataModel.unk401" = { msvc_slot = 114, decl_index = 102 }
+"datamodel.IDataModel.MarkHandleInvalid" = { msvc_slot = 115, decl_index = 103 }
+"datamodel.IDataModel.MarkHandleValid" = { msvc_slot = 116, decl_index = 104 }
+"datamodel.IDataModel.FindElement" = { msvc_slot = 117, decl_index = 105 }
+"datamodel.IDataModel.GetExistingElements" = { msvc_slot = 118, decl_index = 106 }
+"datamodel.IDataModel.FirstAttributeReferencingElement" = { msvc_slot = 119, decl_index = 107 }
+"datamodel.IDataModel.NextAttributeReferencingElement" = { msvc_slot = 120, decl_index = 108 }
+"datamodel.IDataModel.InstallNotificationCallback" = { msvc_slot = 121, decl_index = 110 }
+"datamodel.IDataModel.RemoveNotificationCallback" = { msvc_slot = 122, decl_index = 111 }
+"datamodel.IDataModel.IsSuppressingNotify" = { msvc_slot = 123, decl_index = 112 }
+"datamodel.IDataModel.SetSuppressingNotify" = { msvc_slot = 124, decl_index = 113 }
+"datamodel.IDataModel.PushNotificationScope" = { msvc_slot = 125, decl_index = 114 }
+"datamodel.IDataModel.PopNotificationScope" = { msvc_slot = 126, decl_index = 115 }
+"datamodel.IDataModel.GetUndoString" = { msvc_slot = 127, decl_index = 116 }
+"datamodel.IDataModel.unk501" = { msvc_slot = 128, decl_index = 117 }
+"datamodel.IDataModel.unk502" = { msvc_slot = 129, decl_index = 118 }
+"datamodel.IDataModel.unk503" = { msvc_slot = 130, decl_index = 119 }
+"datamodel.IDataModel.HasElementFactory" = { msvc_slot = 131, decl_index = 120 }
+"datamodel.IDataModel.SetUndoDepth" = { msvc_slot = 132, decl_index = 121 }
+"datamodel.IDataModel.DisplayMemoryStats" = { msvc_slot = 133, decl_index = 122 }
+"datamodel.IDataModel.unk601" = { msvc_slot = 134, decl_index = 123 }
+"datamodel.IDataModel.IsDMXFormat" = { msvc_slot = 135, decl_index = 124 }
+"datamodel.IDataModel.AddOnElementCreatedCallback" = { msvc_slot = 136, decl_index = 125 }
+"datamodel.IDataModel.RemoveOnElementCreatedCallback" = { msvc_slot = 137, decl_index = 126 }
+"datamodel.IDataModel.unk701" = { msvc_slot = 138, decl_index = 127 }
+"datamodel.IDataModel.unk702" = { msvc_slot = 139, decl_index = 128 }
+"datamodel.DmAttributeList_t" = { msvc_size = 0x10, msvc_align = 8 }
+"datamodel.DmAttributeList_t.m_hAttribute" = { msvc_offset = 0x0 }
+"datamodel.DmAttributeList_t.m_pNext" = { msvc_offset = 0x8 }
+"datamodel.DmElementReference_t" = { msvc_size = 0x20, msvc_align = 8 }
+"datamodel.DmElementReference_t.m_hElement" = { msvc_offset = 0x0 }
+"datamodel.DmElementReference_t.m_unk101" = { msvc_offset = 0x4 }
+"datamodel.DmElementReference_t.m_unk102" = { msvc_offset = 0x8 }
+"datamodel.DmElementReference_t.m_attributes" = { msvc_offset = 0x10 }
+"datamodel.CDmElement" = { msvc_size = 0x98, msvc_align = 8, msvc_length = 15 }
+"datamodel.CDmElement.m_Id" = { msvc_offset = 0x8 }
+"datamodel.CDmElement.m_unk101" = { msvc_offset = 0x18 }
+"datamodel.CDmElement.m_ref" = { msvc_offset = 0x28 }
+"datamodel.CDmElement.m_pAttributes" = { msvc_offset = 0x48 }
+"datamodel.CDmElement.m_Type" = { msvc_offset = 0x50 }
+"datamodel.CDmElement.m_fileId" = { msvc_offset = 0x58 }
+"datamodel.CDmElement.m_unk201" = { msvc_offset = 0x5C }
+"datamodel.CDmElement.m_unk202" = { msvc_offset = 0x5E }
+"datamodel.CDmElement.m_unk203" = { msvc_offset = 0x60 }
+"datamodel.CDmElement.m_unk204" = { msvc_offset = 0x68 }
+"datamodel.CDmElement.OnAttributeChanged" = { msvc_slot = 0, decl_index = 0 }
+"datamodel.CDmElement.OnAttributeArrayElementAdded" = { msvc_slot = 1, decl_index = 1 }
+"datamodel.CDmElement.OnAttributeArrayElementRemoved" = { msvc_slot = 2, decl_index = 2 }
+"datamodel.CDmElement.Resolve" = { msvc_slot = 3, decl_index = 3 }
+"datamodel.CDmElement.IsA" = { msvc_slot = 4, decl_index = 4 }
+"datamodel.CDmElement.GetInheritanceDepth" = { msvc_slot = 5, decl_index = 5 }
+"datamodel.CDmElement.OnElementUnserialized" = { msvc_slot = 6, decl_index = 6 }
+"datamodel.CDmElement.OnElementSerialized" = { msvc_slot = 7, decl_index = 7 }
+"datamodel.CDmElement.AllocatedSize" = { msvc_slot = 8, decl_index = 8 }
+"datamodel.CDmElement.PerformConstruction" = { msvc_slot = 10, decl_index = 10 }
+"datamodel.CDmElement.PerformDestruction" = { msvc_slot = 11, decl_index = 11 }
+"datamodel.CDmElement.OnAdoptedFromUndo" = { msvc_slot = 12, decl_index = 12 }
+"datamodel.CDmElement.OnOrphanedToUndo" = { msvc_slot = 13, decl_index = 13 }
+"datamodel.CDmElement.unk101" = { msvc_slot = 14, decl_index = 14 }
+"datamodel.CDmAttribute" = { msvc_size = 0x28, msvc_align = 8 }
+"datamodel.CDmAttribute.m_pNext" = { msvc_offset = 0x0 }
+"datamodel.CDmAttribute.m_pData" = { msvc_offset = 0x8 }
+"datamodel.CDmAttribute.m_pOwner" = { msvc_offset = 0x10 }
+"datamodel.CDmAttribute.m_Handle" = { msvc_offset = 0x18 }
+"datamodel.CDmAttribute.m_nFlags" = { msvc_offset = 0x1C }
+"datamodel.CDmAttribute.m_Name" = { msvc_offset = 0x20 }
+"mapdoclib.MapNodeUnk8_t" = { msvc_size = 0x8, msvc_align = 1 }
+"mapdoclib.MapNodeUnk8_t.m_unk001" = { msvc_offset = 0x0 }
+"mapdoclib.MapNodeUnk4_t" = { msvc_size = 0x4, msvc_align = 1 }
+"mapdoclib.MapNodeUnk4_t.m_unk001" = { msvc_offset = 0x0 }
+"mapdoclib.IToolRenderCallbacks" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 6 }
+"mapdoclib.IToolRenderCallbacks.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.IToolRenderCallbacks.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IToolRenderCallbacks.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.IToolRenderCallbacks.unk004" = { msvc_slot = 3, decl_index = 3 }
+"mapdoclib.IToolRenderCallbacks.unk005" = { msvc_slot = 4, decl_index = 4 }
+"mapdoclib.IToolRenderCallbacks.unk006" = { msvc_slot = 5, decl_index = 5 }
+"mapdoclib.IHitTestable" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 8 }
+"mapdoclib.IHitTestable.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.IHitTestable.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IHitTestable.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.IHitTestable.unk004" = { msvc_slot = 3, decl_index = 3 }
+"mapdoclib.IHitTestable.unk005" = { msvc_slot = 4, decl_index = 4 }
+"mapdoclib.IHitTestable.unk006" = { msvc_slot = 5, decl_index = 5 }
+"mapdoclib.IHitTestable.unk007" = { msvc_slot = 6, decl_index = 6 }
+"mapdoclib.IHitTestable.unk008" = { msvc_slot = 7, decl_index = 7 }
+"mapdoclib.ITransformable" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 4 }
+"mapdoclib.ITransformable.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.ITransformable.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.ITransformable.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.ITransformable.unk004" = { msvc_slot = 3, decl_index = 3 }
+"mapdoclib.IMapNodeToolAttrRoot" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 12 }
+"mapdoclib.IMapNodeToolAttrRoot.unk011" = { msvc_slot = 11, decl_index = 0 }
+"mapdoclib.IRaytraceEnvironmentOwner" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 7 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk004" = { msvc_slot = 3, decl_index = 3 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk005" = { msvc_slot = 4, decl_index = 4 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk006" = { msvc_slot = 5, decl_index = 5 }
+"mapdoclib.IRaytraceEnvironmentOwner.unk007" = { msvc_slot = 6, decl_index = 6 }
+"mapdoclib.CMapAtom" = { msvc_size = 0xA0, msvc_align = 8, msvc_length = 17 }
+"mapdoclib.CMapAtom.m_unk011" = { msvc_offset = 0x98 }
+"mapdoclib.CMapAtom.m_unk012" = { msvc_offset = 0x9C }
+"mapdoclib.CMapAtom.unk011" = { msvc_slot = 15, decl_index = 0 }
+"mapdoclib.CMapAtom.unk012" = { msvc_slot = 16, decl_index = 1 }
+"mapdoclib.CMapPoint" = { msvc_size = 0xC8, msvc_align = 8, msvc_length = 28 }
+"mapdoclib.CMapPoint.m_Origin" = { msvc_offset = 0xA0 }
+"mapdoclib.CMapPoint.m_Angles" = { msvc_offset = 0xAC }
+"mapdoclib.CMapPoint.m_Scales" = { msvc_offset = 0xB8 }
+"mapdoclib.CMapPoint.SetOrigin" = { msvc_slot = 17, decl_index = 0 }
+"mapdoclib.CMapPoint.SetAngles" = { msvc_slot = 18, decl_index = 1 }
+"mapdoclib.CMapPoint.SetScales" = { msvc_slot = 19, decl_index = 2 }
+"mapdoclib.CMapPoint.GetWorldTransform" = { msvc_slot = 20, decl_index = 3 }
+"mapdoclib.CMapPoint.unk121" = { msvc_slot = 21, decl_index = 4 }
+"mapdoclib.CMapPoint.unk122" = { msvc_slot = 22, decl_index = 5 }
+"mapdoclib.CMapPoint.unk123" = { msvc_slot = 23, decl_index = 6 }
+"mapdoclib.CMapPoint.unk124" = { msvc_slot = 24, decl_index = 7 }
+"mapdoclib.CMapPoint.unk125" = { msvc_slot = 25, decl_index = 8 }
+"mapdoclib.CMapPoint.unk126" = { msvc_slot = 26, decl_index = 9 }
+"mapdoclib.CMapPoint.unk127" = { msvc_slot = 27, decl_index = 10 }
+"mapdoclib.CMapNode" = { msvc_size = 0x498, msvc_align = 8, msvc_length = 252 }
+"mapdoclib.CMapNode.@IUndoable" = { msvc_offset = 0xC8 }
+"mapdoclib.CMapNode.@IToolRenderCallbacks" = { msvc_offset = 0xD0 }
+"mapdoclib.CMapNode.@IHitTestable" = { msvc_offset = 0xD8 }
+"mapdoclib.CMapNode.@ITransformable" = { msvc_offset = 0xE0 }
+"mapdoclib.CMapNode.@IMapNodeToolAttrRoot" = { msvc_offset = 0xE8 }
+"mapdoclib.CMapNode.@IToolAttrNotifyRoot" = { msvc_offset = 0xF0 }
+"mapdoclib.CMapNode.@IRaytraceEnvironmentOwner" = { msvc_offset = 0xF8 }
+"mapdoclib.CMapNode.m_unk031" = { msvc_offset = 0x100 }
+"mapdoclib.CMapNode.m_pParent" = { msvc_offset = 0x198 }
+"mapdoclib.CMapNode.m_unk131" = { msvc_offset = 0x1A0 }
+"mapdoclib.CMapNode.m_Children" = { msvc_offset = 0x1F8 }
+"mapdoclib.CMapNode.m_unk231" = { msvc_offset = 0x210 }
+"mapdoclib.CMapNode.m_unk232" = { msvc_offset = 0x218 }
+"mapdoclib.CMapNode.m_unk233" = { msvc_offset = 0x220 }
+"mapdoclib.CMapNode.unk031" = { msvc_slot = 28, decl_index = 0 }
+"mapdoclib.CMapNode.unk032" = { msvc_slot = 29, decl_index = 1 }
+"mapdoclib.CMapNode.unk033" = { msvc_slot = 30, decl_index = 2 }
+"mapdoclib.CMapNode.unk034" = { msvc_slot = 31, decl_index = 3 }
+"mapdoclib.CMapNode.unk035" = { msvc_slot = 32, decl_index = 4 }
+"mapdoclib.CMapNode.unk036" = { msvc_slot = 33, decl_index = 5 }
+"mapdoclib.CMapNode.unk037" = { msvc_slot = 34, decl_index = 6 }
+"mapdoclib.CMapNode.unk038" = { msvc_slot = 35, decl_index = 7 }
+"mapdoclib.CMapNode.unk039" = { msvc_slot = 36, decl_index = 8 }
+"mapdoclib.CMapNode.unk0310" = { msvc_slot = 37, decl_index = 9 }
+"mapdoclib.CMapNode.unk0311" = { msvc_slot = 38, decl_index = 10 }
+"mapdoclib.CMapNode.unk0312" = { msvc_slot = 39, decl_index = 11 }
+"mapdoclib.CMapNode.unk0313" = { msvc_slot = 40, decl_index = 12 }
+"mapdoclib.CMapNode.unk0314" = { msvc_slot = 41, decl_index = 13 }
+"mapdoclib.CMapNode.unk0315" = { msvc_slot = 42, decl_index = 14 }
+"mapdoclib.CMapNode.unk0316" = { msvc_slot = 43, decl_index = 15 }
+"mapdoclib.CMapNode.unk0317" = { msvc_slot = 44, decl_index = 16 }
+"mapdoclib.CMapNode.unk0318" = { msvc_slot = 45, decl_index = 17 }
+"mapdoclib.CMapNode.unk0319" = { msvc_slot = 46, decl_index = 18 }
+"mapdoclib.CMapNode.unk0320" = { msvc_slot = 47, decl_index = 19 }
+"mapdoclib.CMapNode.unk0321" = { msvc_slot = 48, decl_index = 20 }
+"mapdoclib.CMapNode.unk0322" = { msvc_slot = 49, decl_index = 21 }
+"mapdoclib.CMapNode.unk0323" = { msvc_slot = 50, decl_index = 22 }
+"mapdoclib.CMapNode.unk0324" = { msvc_slot = 51, decl_index = 23 }
+"mapdoclib.CMapNode.unk0325" = { msvc_slot = 52, decl_index = 24 }
+"mapdoclib.CMapNode.unk0326" = { msvc_slot = 53, decl_index = 25 }
+"mapdoclib.CMapNode.unk0327" = { msvc_slot = 54, decl_index = 26 }
+"mapdoclib.CMapNode.unk0328" = { msvc_slot = 55, decl_index = 27 }
+"mapdoclib.CMapNode.unk0329" = { msvc_slot = 56, decl_index = 28 }
+"mapdoclib.CMapNode.AddChild" = { msvc_slot = 57, decl_index = 29 }
+"mapdoclib.CMapNode.unk131" = { msvc_slot = 58, decl_index = 30 }
+"mapdoclib.CMapNode.unk132" = { msvc_slot = 59, decl_index = 31 }
+"mapdoclib.CMapNode.unk133" = { msvc_slot = 60, decl_index = 32 }
+"mapdoclib.CMapNode.unk134" = { msvc_slot = 61, decl_index = 33 }
+"mapdoclib.CMapNode.unk135" = { msvc_slot = 62, decl_index = 34 }
+"mapdoclib.CMapNode.SetParent" = { msvc_slot = 63, decl_index = 35 }
+"mapdoclib.CMapNode.unk231" = { msvc_slot = 64, decl_index = 36 }
+"mapdoclib.CMapNode.unk232" = { msvc_slot = 65, decl_index = 37 }
+"mapdoclib.CMapNode.unk233" = { msvc_slot = 66, decl_index = 38 }
+"mapdoclib.CMapNode.unk234" = { msvc_slot = 67, decl_index = 39 }
+"mapdoclib.CMapNode.unk235" = { msvc_slot = 68, decl_index = 40 }
+"mapdoclib.CMapNode.unk236" = { msvc_slot = 69, decl_index = 41 }
+"mapdoclib.CMapNode.unk237" = { msvc_slot = 70, decl_index = 42 }
+"mapdoclib.CMapNode.unk238" = { msvc_slot = 71, decl_index = 43 }
+"mapdoclib.CMapNode.unk239" = { msvc_slot = 72, decl_index = 44 }
+"mapdoclib.CMapNode.unk2310" = { msvc_slot = 73, decl_index = 45 }
+"mapdoclib.CMapNode.unk2311" = { msvc_slot = 74, decl_index = 46 }
+"mapdoclib.CMapNode.unk2312" = { msvc_slot = 75, decl_index = 47 }
+"mapdoclib.CMapNode.unk2313" = { msvc_slot = 76, decl_index = 48 }
+"mapdoclib.CMapNode.unk2314" = { msvc_slot = 77, decl_index = 49 }
+"mapdoclib.CMapNode.unk2315" = { msvc_slot = 78, decl_index = 50 }
+"mapdoclib.CMapNode.unk2316" = { msvc_slot = 79, decl_index = 51 }
+"mapdoclib.CMapNode.unk2317" = { msvc_slot = 80, decl_index = 52 }
+"mapdoclib.CMapNode.unk2318" = { msvc_slot = 81, decl_index = 53 }
+"mapdoclib.CMapNode.unk2319" = { msvc_slot = 82, decl_index = 54 }
+"mapdoclib.CMapNode.unk2320" = { msvc_slot = 83, decl_index = 55 }
+"mapdoclib.CMapNode.unk2321" = { msvc_slot = 84, decl_index = 56 }
+"mapdoclib.CMapNode.unk2322" = { msvc_slot = 85, decl_index = 57 }
+"mapdoclib.CMapNode.unk2323" = { msvc_slot = 86, decl_index = 58 }
+"mapdoclib.CMapNode.unk2324" = { msvc_slot = 87, decl_index = 59 }
+"mapdoclib.CMapNode.unk2325" = { msvc_slot = 88, decl_index = 60 }
+"mapdoclib.CMapNode.unk2326" = { msvc_slot = 89, decl_index = 61 }
+"mapdoclib.CMapNode.unk2327" = { msvc_slot = 90, decl_index = 62 }
+"mapdoclib.CMapNode.unk2328" = { msvc_slot = 91, decl_index = 63 }
+"mapdoclib.CMapNode.unk2329" = { msvc_slot = 92, decl_index = 64 }
+"mapdoclib.CMapNode.unk2330" = { msvc_slot = 93, decl_index = 65 }
+"mapdoclib.CMapNode.unk2331" = { msvc_slot = 94, decl_index = 66 }
+"mapdoclib.CMapNode.unk2332" = { msvc_slot = 95, decl_index = 67 }
+"mapdoclib.CMapNode.unk2333" = { msvc_slot = 96, decl_index = 68 }
+"mapdoclib.CMapNode.unk2334" = { msvc_slot = 97, decl_index = 69 }
+"mapdoclib.CMapNode.unk2335" = { msvc_slot = 98, decl_index = 70 }
+"mapdoclib.CMapNode.unk2336" = { msvc_slot = 99, decl_index = 71 }
+"mapdoclib.CMapNode.unk2337" = { msvc_slot = 100, decl_index = 72 }
+"mapdoclib.CMapNode.unk2338" = { msvc_slot = 101, decl_index = 73 }
+"mapdoclib.CMapNode.unk2339" = { msvc_slot = 102, decl_index = 74 }
+"mapdoclib.CMapNode.unk2340" = { msvc_slot = 103, decl_index = 75 }
+"mapdoclib.CMapNode.unk2341" = { msvc_slot = 104, decl_index = 76 }
+"mapdoclib.CMapNode.unk2342" = { msvc_slot = 105, decl_index = 77 }
+"mapdoclib.CMapNode.unk2343" = { msvc_slot = 106, decl_index = 78 }
+"mapdoclib.CMapNode.unk2344" = { msvc_slot = 107, decl_index = 79 }
+"mapdoclib.CMapNode.unk2345" = { msvc_slot = 108, decl_index = 80 }
+"mapdoclib.CMapNode.unk2346" = { msvc_slot = 109, decl_index = 81 }
+"mapdoclib.CMapNode.unk2347" = { msvc_slot = 110, decl_index = 82 }
+"mapdoclib.CMapNode.unk2348" = { msvc_slot = 111, decl_index = 83 }
+"mapdoclib.CMapNode.unk2349" = { msvc_slot = 112, decl_index = 84 }
+"mapdoclib.CMapNode.unk2350" = { msvc_slot = 113, decl_index = 85 }
+"mapdoclib.CMapNode.unk2351" = { msvc_slot = 114, decl_index = 86 }
+"mapdoclib.CMapNode.unk2352" = { msvc_slot = 115, decl_index = 87 }
+"mapdoclib.CMapNode.unk2353" = { msvc_slot = 116, decl_index = 88 }
+"mapdoclib.CMapNode.unk2354" = { msvc_slot = 117, decl_index = 89 }
+"mapdoclib.CMapNode.unk2355" = { msvc_slot = 118, decl_index = 90 }
+"mapdoclib.CMapNode.unk2356" = { msvc_slot = 119, decl_index = 91 }
+"mapdoclib.CMapNode.unk2357" = { msvc_slot = 120, decl_index = 92 }
+"mapdoclib.CMapNode.unk2358" = { msvc_slot = 121, decl_index = 93 }
+"mapdoclib.CMapNode.unk2359" = { msvc_slot = 122, decl_index = 94 }
+"mapdoclib.CMapNode.unk2360" = { msvc_slot = 123, decl_index = 95 }
+"mapdoclib.CMapNode.unk2361" = { msvc_slot = 124, decl_index = 96 }
+"mapdoclib.CMapNode.unk2362" = { msvc_slot = 125, decl_index = 97 }
+"mapdoclib.CMapNode.unk2363" = { msvc_slot = 126, decl_index = 98 }
+"mapdoclib.CMapNode.unk2364" = { msvc_slot = 127, decl_index = 99 }
+"mapdoclib.CMapNode.unk2365" = { msvc_slot = 128, decl_index = 100 }
+"mapdoclib.CMapNode.unk2366" = { msvc_slot = 129, decl_index = 101 }
+"mapdoclib.CMapNode.unk2367" = { msvc_slot = 130, decl_index = 102 }
+"mapdoclib.CMapNode.unk2368" = { msvc_slot = 131, decl_index = 103 }
+"mapdoclib.CMapNode.unk2369" = { msvc_slot = 132, decl_index = 104 }
+"mapdoclib.CMapNode.unk2370" = { msvc_slot = 133, decl_index = 105 }
+"mapdoclib.CMapNode.unk2371" = { msvc_slot = 134, decl_index = 106 }
+"mapdoclib.CMapNode.unk2372" = { msvc_slot = 135, decl_index = 107 }
+"mapdoclib.CMapNode.unk2373" = { msvc_slot = 136, decl_index = 108 }
+"mapdoclib.CMapNode.unk2374" = { msvc_slot = 137, decl_index = 109 }
+"mapdoclib.CMapNode.unk2375" = { msvc_slot = 138, decl_index = 110 }
+"mapdoclib.CMapNode.unk2376" = { msvc_slot = 139, decl_index = 111 }
+"mapdoclib.CMapNode.SetPivotPosition" = { msvc_slot = 140, decl_index = 112 }
+"mapdoclib.CMapNode.unk331" = { msvc_slot = 141, decl_index = 113 }
+"mapdoclib.CMapNode.unk332" = { msvc_slot = 142, decl_index = 114 }
+"mapdoclib.CMapNode.unk333" = { msvc_slot = 143, decl_index = 115 }
+"mapdoclib.CMapNode.unk334" = { msvc_slot = 144, decl_index = 116 }
+"mapdoclib.CMapNode.unk335" = { msvc_slot = 145, decl_index = 117 }
+"mapdoclib.CMapNode.unk336" = { msvc_slot = 146, decl_index = 118 }
+"mapdoclib.CMapNode.unk337" = { msvc_slot = 147, decl_index = 119 }
+"mapdoclib.CMapNode.unk338" = { msvc_slot = 148, decl_index = 120 }
+"mapdoclib.CMapNode.unk339" = { msvc_slot = 149, decl_index = 121 }
+"mapdoclib.CMapNode.unk3310" = { msvc_slot = 150, decl_index = 122 }
+"mapdoclib.CMapNode.unk3311" = { msvc_slot = 151, decl_index = 123 }
+"mapdoclib.CMapNode.unk3312" = { msvc_slot = 152, decl_index = 124 }
+"mapdoclib.CMapNode.unk3313" = { msvc_slot = 153, decl_index = 125 }
+"mapdoclib.CMapNode.unk3314" = { msvc_slot = 154, decl_index = 126 }
+"mapdoclib.CMapNode.unk3315" = { msvc_slot = 155, decl_index = 127 }
+"mapdoclib.CMapNode.unk3316" = { msvc_slot = 156, decl_index = 128 }
+"mapdoclib.CMapNode.unk3317" = { msvc_slot = 157, decl_index = 129 }
+"mapdoclib.CMapNode.unk3318" = { msvc_slot = 158, decl_index = 130 }
+"mapdoclib.CMapNode.unk3319" = { msvc_slot = 159, decl_index = 131 }
+"mapdoclib.CMapNode.unk3320" = { msvc_slot = 160, decl_index = 132 }
+"mapdoclib.CMapNode.unk3321" = { msvc_slot = 161, decl_index = 133 }
+"mapdoclib.CMapNode.unk3322" = { msvc_slot = 162, decl_index = 134 }
+"mapdoclib.CMapNode.unk3323" = { msvc_slot = 163, decl_index = 135 }
+"mapdoclib.CMapNode.unk3324" = { msvc_slot = 164, decl_index = 136 }
+"mapdoclib.CMapNode.unk3325" = { msvc_slot = 165, decl_index = 137 }
+"mapdoclib.CMapNode.unk3326" = { msvc_slot = 166, decl_index = 138 }
+"mapdoclib.CMapNode.unk3327" = { msvc_slot = 167, decl_index = 139 }
+"mapdoclib.CMapNode.unk3328" = { msvc_slot = 168, decl_index = 140 }
+"mapdoclib.CMapNode.unk3329" = { msvc_slot = 169, decl_index = 141 }
+"mapdoclib.CMapNode.unk3330" = { msvc_slot = 170, decl_index = 142 }
+"mapdoclib.CMapNode.unk3331" = { msvc_slot = 171, decl_index = 143 }
+"mapdoclib.CMapNode.unk3332" = { msvc_slot = 172, decl_index = 144 }
+"mapdoclib.CMapNode.unk3333" = { msvc_slot = 173, decl_index = 145 }
+"mapdoclib.CMapNode.unk3334" = { msvc_slot = 174, decl_index = 146 }
+"mapdoclib.CMapNode.unk3335" = { msvc_slot = 175, decl_index = 147 }
+"mapdoclib.CMapNode.unk3336" = { msvc_slot = 176, decl_index = 148 }
+"mapdoclib.CMapNode.unk3337" = { msvc_slot = 177, decl_index = 149 }
+"mapdoclib.CMapNode.unk3338" = { msvc_slot = 178, decl_index = 150 }
+"mapdoclib.CMapNode.unk3339" = { msvc_slot = 179, decl_index = 151 }
+"mapdoclib.CMapNode.unk3340" = { msvc_slot = 180, decl_index = 152 }
+"mapdoclib.CMapNode.unk3341" = { msvc_slot = 181, decl_index = 153 }
+"mapdoclib.CMapNode.unk3342" = { msvc_slot = 182, decl_index = 154 }
+"mapdoclib.CMapNode.unk3343" = { msvc_slot = 183, decl_index = 155 }
+"mapdoclib.CMapNode.unk3344" = { msvc_slot = 184, decl_index = 156 }
+"mapdoclib.CMapNode.unk3345" = { msvc_slot = 185, decl_index = 157 }
+"mapdoclib.CMapNode.unk3346" = { msvc_slot = 186, decl_index = 158 }
+"mapdoclib.CMapNode.unk3347" = { msvc_slot = 187, decl_index = 159 }
+"mapdoclib.CMapNode.unk3348" = { msvc_slot = 188, decl_index = 160 }
+"mapdoclib.CMapNode.unk3349" = { msvc_slot = 189, decl_index = 161 }
+"mapdoclib.CMapNode.unk3350" = { msvc_slot = 190, decl_index = 162 }
+"mapdoclib.CMapNode.unk3351" = { msvc_slot = 191, decl_index = 163 }
+"mapdoclib.CMapNode.unk3352" = { msvc_slot = 192, decl_index = 164 }
+"mapdoclib.CMapNode.unk3353" = { msvc_slot = 193, decl_index = 165 }
+"mapdoclib.CMapNode.unk3354" = { msvc_slot = 194, decl_index = 166 }
+"mapdoclib.CMapNode.unk3355" = { msvc_slot = 195, decl_index = 167 }
+"mapdoclib.CMapNode.unk3356" = { msvc_slot = 196, decl_index = 168 }
+"mapdoclib.CMapNode.unk3357" = { msvc_slot = 197, decl_index = 169 }
+"mapdoclib.CMapNode.unk3358" = { msvc_slot = 198, decl_index = 170 }
+"mapdoclib.CMapNode.unk3359" = { msvc_slot = 199, decl_index = 171 }
+"mapdoclib.CMapNode.unk3360" = { msvc_slot = 200, decl_index = 172 }
+"mapdoclib.CMapNode.unk3361" = { msvc_slot = 201, decl_index = 173 }
+"mapdoclib.CMapNode.unk3362" = { msvc_slot = 202, decl_index = 174 }
+"mapdoclib.CMapNode.unk3363" = { msvc_slot = 203, decl_index = 175 }
+"mapdoclib.CMapNode.unk3364" = { msvc_slot = 204, decl_index = 176 }
+"mapdoclib.CMapNode.unk3365" = { msvc_slot = 205, decl_index = 177 }
+"mapdoclib.CMapNode.unk3366" = { msvc_slot = 206, decl_index = 178 }
+"mapdoclib.CMapNode.unk3367" = { msvc_slot = 207, decl_index = 179 }
+"mapdoclib.CMapNode.unk3368" = { msvc_slot = 208, decl_index = 180 }
+"mapdoclib.CMapNode.unk3369" = { msvc_slot = 209, decl_index = 181 }
+"mapdoclib.CMapNode.unk3370" = { msvc_slot = 210, decl_index = 182 }
+"mapdoclib.CMapNode.unk3371" = { msvc_slot = 211, decl_index = 183 }
+"mapdoclib.CMapNode.unk3372" = { msvc_slot = 212, decl_index = 184 }
+"mapdoclib.CMapNode.unk3373" = { msvc_slot = 213, decl_index = 185 }
+"mapdoclib.CMapNode.unk3374" = { msvc_slot = 214, decl_index = 186 }
+"mapdoclib.CMapNode.unk3375" = { msvc_slot = 215, decl_index = 187 }
+"mapdoclib.CMapNode.unk3376" = { msvc_slot = 216, decl_index = 188 }
+"mapdoclib.CMapNode.unk3377" = { msvc_slot = 217, decl_index = 189 }
+"mapdoclib.CMapNode.unk3378" = { msvc_slot = 218, decl_index = 190 }
+"mapdoclib.CMapNode.unk3379" = { msvc_slot = 219, decl_index = 191 }
+"mapdoclib.CMapNode.unk3380" = { msvc_slot = 220, decl_index = 192 }
+"mapdoclib.CMapNode.unk3381" = { msvc_slot = 221, decl_index = 193 }
+"mapdoclib.CMapNode.unk3382" = { msvc_slot = 222, decl_index = 194 }
+"mapdoclib.CMapNode.unk3383" = { msvc_slot = 223, decl_index = 195 }
+"mapdoclib.CMapNode.unk3384" = { msvc_slot = 224, decl_index = 196 }
+"mapdoclib.CMapNode.unk3385" = { msvc_slot = 225, decl_index = 197 }
+"mapdoclib.CMapNode.unk3386" = { msvc_slot = 226, decl_index = 198 }
+"mapdoclib.CMapNode.unk3387" = { msvc_slot = 227, decl_index = 199 }
+"mapdoclib.CMapNode.unk3388" = { msvc_slot = 228, decl_index = 200 }
+"mapdoclib.CMapNode.unk3389" = { msvc_slot = 229, decl_index = 201 }
+"mapdoclib.CMapNode.unk3390" = { msvc_slot = 230, decl_index = 202 }
+"mapdoclib.CMapNode.unk3391" = { msvc_slot = 231, decl_index = 203 }
+"mapdoclib.CMapNode.unk3392" = { msvc_slot = 232, decl_index = 204 }
+"mapdoclib.CMapNode.unk3393" = { msvc_slot = 233, decl_index = 205 }
+"mapdoclib.CMapNode.unk3394" = { msvc_slot = 234, decl_index = 206 }
+"mapdoclib.CMapNode.unk3395" = { msvc_slot = 235, decl_index = 207 }
+"mapdoclib.CMapNode.unk3396" = { msvc_slot = 236, decl_index = 208 }
+"mapdoclib.CMapNode.unk3397" = { msvc_slot = 237, decl_index = 209 }
+"mapdoclib.CMapNode.unk3398" = { msvc_slot = 238, decl_index = 210 }
+"mapdoclib.CMapNode.unk3399" = { msvc_slot = 239, decl_index = 211 }
+"mapdoclib.CMapNode.unk33100" = { msvc_slot = 240, decl_index = 212 }
+"mapdoclib.CMapNode.unk33101" = { msvc_slot = 241, decl_index = 213 }
+"mapdoclib.CMapNode.unk33102" = { msvc_slot = 242, decl_index = 214 }
+"mapdoclib.CMapNode.unk33103" = { msvc_slot = 243, decl_index = 215 }
+"mapdoclib.CMapNode.unk33104" = { msvc_slot = 244, decl_index = 216 }
+"mapdoclib.CMapNode.unk33105" = { msvc_slot = 245, decl_index = 217 }
+"mapdoclib.CMapNode.unk33106" = { msvc_slot = 246, decl_index = 218 }
+"mapdoclib.CMapNode.unk33107" = { msvc_slot = 247, decl_index = 219 }
+"mapdoclib.CMapNode.unk33108" = { msvc_slot = 248, decl_index = 220 }
+"mapdoclib.CMapNode.unk33109" = { msvc_slot = 249, decl_index = 221 }
+"mapdoclib.CMapNode.unk33110" = { msvc_slot = 250, decl_index = 222 }
+"mapdoclib.CMapNode.unk33111" = { msvc_slot = 251, decl_index = 223 }
+"mapdoclib.FgdClass_t" = { msvc_size = 0x120, msvc_align = 4 }
+"mapdoclib.FgdClass_t.m_nType" = { msvc_offset = 0xC }
+"mapdoclib.FgdClass_t.m_unk002" = { msvc_offset = 0x10 }
+"mapdoclib.MapEntityConnection_t" = { msvc_size = 0x50, msvc_align = 8 }
+"mapdoclib.MapEntityConnection_t.m_unk001" = { msvc_offset = 0x0 }
+"mapdoclib.MapEntityConnection_t.m_unk002" = { msvc_offset = 0x8 }
+"mapdoclib.MapEntityConnection_t.m_unk003" = { msvc_offset = 0x10 }
+"mapdoclib.MapEntityConnection_t.m_unk004" = { msvc_offset = 0x18 }
+"mapdoclib.MapEntityConnection_t.m_unk005" = { msvc_offset = 0x20 }
+"mapdoclib.MapEntityConnection_t.m_unk006" = { msvc_offset = 0x28 }
+"mapdoclib.MapEntityConnection_t.m_unk007" = { msvc_offset = 0x30 }
+"mapdoclib.MapEntityConnection_t.m_unk008" = { msvc_offset = 0x40 }
+"mapdoclib.MapEntityConnection_t.m_unk009" = { msvc_offset = 0x44 }
+"mapdoclib.MapEntityConnection_t.m_unk0010" = { msvc_offset = 0x48 }
+"mapdoclib.MapEntityConnection_t.m_unk0011" = { msvc_offset = 0x4C }
+"mapdoclib.IVDataLookupListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"mapdoclib.IVDataLookupListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.CMapEntityIONode" = { msvc_size = 0x528, msvc_align = 8, msvc_length = 267 }
+"mapdoclib.CMapEntityIONode.m_unk041" = { msvc_offset = 0x498 }
+"mapdoclib.CMapEntityIONode.m_Connections" = { msvc_offset = 0x4A0 }
+"mapdoclib.CMapEntityIONode.m_unk141" = { msvc_offset = 0x4B8 }
+"mapdoclib.CMapEntityIONode.unk041" = { msvc_slot = 252, decl_index = 0 }
+"mapdoclib.CMapEntityIONode.unk042" = { msvc_slot = 253, decl_index = 1 }
+"mapdoclib.CMapEntityIONode.unk043" = { msvc_slot = 254, decl_index = 2 }
+"mapdoclib.CMapEntityIONode.unk044" = { msvc_slot = 255, decl_index = 3 }
+"mapdoclib.CMapEntityIONode.unk045" = { msvc_slot = 256, decl_index = 4 }
+"mapdoclib.CMapEntityIONode.unk046" = { msvc_slot = 257, decl_index = 5 }
+"mapdoclib.CMapEntityIONode.unk047" = { msvc_slot = 258, decl_index = 6 }
+"mapdoclib.CMapEntityIONode.unk048" = { msvc_slot = 259, decl_index = 7 }
+"mapdoclib.CMapEntityIONode.unk049" = { msvc_slot = 260, decl_index = 8 }
+"mapdoclib.CMapEntityIONode.unk0410" = { msvc_slot = 261, decl_index = 9 }
+"mapdoclib.CMapEntityIONode.unk0411" = { msvc_slot = 262, decl_index = 10 }
+"mapdoclib.CMapEntityIONode.unk0412" = { msvc_slot = 263, decl_index = 11 }
+"mapdoclib.CMapEntityIONode.unk0413" = { msvc_slot = 264, decl_index = 12 }
+"mapdoclib.CMapEntityIONode.unk0414" = { msvc_slot = 265, decl_index = 13 }
+"mapdoclib.CMapEntityIONode.unk0415" = { msvc_slot = 266, decl_index = 14 }
+"mapdoclib.CMapGameDataNode" = { msvc_size = 0x1820, msvc_align = 8, msvc_length = 273 }
+"mapdoclib.CMapGameDataNode.@IVDataLookupListener" = { msvc_offset = 0x528 }
+"mapdoclib.CMapGameDataNode.@IToolsResourceListener" = { msvc_offset = 0x530 }
+"mapdoclib.CMapGameDataNode.m_unk051" = { msvc_offset = 0x538 }
+"mapdoclib.CMapGameDataNode.m_pGameDataClass" = { msvc_offset = 0x550 }
+"mapdoclib.CMapGameDataNode.m_unk151" = { msvc_offset = 0x558 }
+"mapdoclib.CMapGameDataNode.unk051" = { msvc_slot = 267, decl_index = 0 }
+"mapdoclib.CMapGameDataNode.unk052" = { msvc_slot = 268, decl_index = 1 }
+"mapdoclib.CMapGameDataNode.unk053" = { msvc_slot = 269, decl_index = 2 }
+"mapdoclib.CMapGameDataNode.unk054" = { msvc_slot = 270, decl_index = 3 }
+"mapdoclib.CMapGameDataNode.unk055" = { msvc_slot = 271, decl_index = 4 }
+"mapdoclib.CMapGameDataNode.unk056" = { msvc_slot = 272, decl_index = 5 }
+"mapdoclib.CMapEntity" = { msvc_size = 0x1858, msvc_align = 8, msvc_length = 274 }
+"mapdoclib.CMapEntity.m_unk061" = { msvc_offset = 0x1820 }
+"mapdoclib.CMapEntity.unk061" = { msvc_slot = 273, decl_index = 0 }
+"mapdoclib.IHammerMeshChangeListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 3 }
+"mapdoclib.IHammerMeshChangeListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.IHammerMeshChangeListener.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IHammerMeshChangeListener.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.CMapMeshBase" = { msvc_size = 0x3BA0, msvc_align = 8, msvc_length = 257 }
+"mapdoclib.CMapMeshBase.m_unk041" = { msvc_offset = 0x498 }
+"mapdoclib.CMapMeshBase.unk041" = { msvc_slot = 252, decl_index = 0 }
+"mapdoclib.CMapMeshBase.unk042" = { msvc_slot = 253, decl_index = 1 }
+"mapdoclib.CMapMeshBase.unk043" = { msvc_slot = 254, decl_index = 2 }
+"mapdoclib.CMapMeshBase.unk044" = { msvc_slot = 255, decl_index = 3 }
+"mapdoclib.CMapMeshBase.unk045" = { msvc_slot = 256, decl_index = 4 }
+"mapdoclib.CMapMesh" = { msvc_size = 0x3C40, msvc_align = 8, msvc_length = 263 }
+"mapdoclib.CMapMesh.@IHammerMeshChangeListener" = { msvc_offset = 0x3BA0 }
+"mapdoclib.CMapMesh.m_unk051" = { msvc_offset = 0x3BA8 }
+"mapdoclib.CMapMesh.unk051" = { msvc_slot = 257, decl_index = 0 }
+"mapdoclib.CMapMesh.unk052" = { msvc_slot = 258, decl_index = 1 }
+"mapdoclib.CMapMesh.unk053" = { msvc_slot = 259, decl_index = 2 }
+"mapdoclib.CMapMesh.unk054" = { msvc_slot = 260, decl_index = 3 }
+"mapdoclib.CMapMesh.unk055" = { msvc_slot = 261, decl_index = 4 }
+"mapdoclib.CMapMesh.unk056" = { msvc_slot = 262, decl_index = 5 }
+"mapdoclib.IMapFileReference" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 7 }
+"mapdoclib.IMapFileReference.unk101" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IMapFileReference.unk102" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.IMapFileReference.unk103" = { msvc_slot = 3, decl_index = 3 }
+"mapdoclib.IMapFileReference.unk104" = { msvc_slot = 4, decl_index = 4 }
+"mapdoclib.IMapFileReference.unk105" = { msvc_slot = 5, decl_index = 5 }
+"mapdoclib.IMapFileReference.unk106" = { msvc_slot = 6, decl_index = 6 }
+"mapdoclib.IUndoDoc" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 3 }
+"mapdoclib.IUndoDoc.unk001" = { msvc_slot = 0, decl_index = 0 }
+"mapdoclib.IUndoDoc.unk002" = { msvc_slot = 1, decl_index = 1 }
+"mapdoclib.IUndoDoc.unk003" = { msvc_slot = 2, decl_index = 2 }
+"mapdoclib.CMapDocHistory" = { msvc_size = 0x4B8, msvc_align = 8 }
+"mapdoclib.CMapDocHistory.m_unk011" = { msvc_offset = 0x4B0 }
+"mapdoclib.CMapRootElement" = { msvc_size = 0x260, msvc_align = 8 }
+"mapdoclib.CMapRootElement.m_unk011" = { msvc_offset = 0x98 }
+"mapdoclib.CMapRootElement.m_hWorld" = { msvc_offset = 0x180 }
+"mapdoclib.CMapRootElement.m_unk111" = { msvc_offset = 0x184 }
+"mapdoclib.CMapRootElement.m_pUndoHistory" = { msvc_offset = 0x240 }
+"mapdoclib.CMapRootElement.m_pRedoHistory" = { msvc_offset = 0x248 }
+"mapdoclib.CMapRootElement.m_unk211" = { msvc_offset = 0x250 }
+"mapdoclib.CEditScopeStack" = { msvc_size = 0x28, msvc_align = 8 }
+"mapdoclib.CEditScopeStack.m_pDoc" = { msvc_offset = 0x8 }
+"mapdoclib.CEditScopeStack.m_Scopes" = { msvc_offset = 0x10 }
+"mapdoclib.CMapDoc" = { msvc_size = 0xCD0, msvc_align = 8 }
+"mapdoclib.CMapDoc.m_unk001" = { msvc_offset = 0x18 }
+"mapdoclib.CMapDoc.m_pDocSession" = { msvc_offset = 0x78 }
+"mapdoclib.CMapDoc.m_pRoot" = { msvc_offset = 0x80 }
+"mapdoclib.CMapDoc.m_pWorld" = { msvc_offset = 0x88 }
+"mapdoclib.CMapDoc.m_unk101" = { msvc_offset = 0x90 }
+"mapdoclib.CMapDoc.m_EditScopeStack" = { msvc_offset = 0x98 }
+"mapdoclib.CMapDoc.m_unk201" = { msvc_offset = 0xC0 }
+"mapdoclib.CMapDoc.m_bActive" = { msvc_offset = 0x118 }
+"mapdoclib.CMapDoc.m_pSelection" = { msvc_offset = 0x120 }
+"mapdoclib.CMapDoc.m_unk301" = { msvc_offset = 0x128 }
+"mapdoclib.CMapDoc.m_Path" = { msvc_offset = 0x6A0 }
+"mapdoclib.CMapDoc.m_unk401" = { msvc_offset = 0x6A8 }
+"hammer.HammerEditorSettings_t" = { msvc_size = 0xE18, msvc_align = 1 }
+"hammer.HammerEditorSettings_t.m_bShowGameObjectsOnly" = { msvc_offset = 0x2D }
+"hammer.HammerEditorSettings_t.m_bShowVisContributorsOnly" = { msvc_offset = 0x2E }
+"hammer.HammerEditorSettings_t.m_bShowAcousticGeometryOnly" = { msvc_offset = 0x2F }
+"hammer.HammerEditorSettings_t.m_bShowToolsMaterials" = { msvc_offset = 0x30 }
+"hammer.HammerEditorSettings_t.m_unk002" = { msvc_offset = 0x31 }
+"hammer.IBindableCommandListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"hammer.IBindableCommandListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IAssetFileListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"hammer.IAssetFileListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IMapDocSession" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 4 }
+"hammer.IMapDocSession.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IMapDocSession.unk002" = { msvc_slot = 1, decl_index = 1 }
+"hammer.IMapDocSession.unk003" = { msvc_slot = 2, decl_index = 2 }
+"hammer.IMapDocSession.unk004" = { msvc_slot = 3, decl_index = 3 }
+"hammer.CMapDocSession" = { msvc_size = 0xF20, msvc_align = 8, msvc_length = 5 }
+"hammer.CMapDocSession.m_unk001" = { msvc_offset = 0x8 }
+"hammer.CMapDocSession.m_Doc" = { msvc_offset = 0x10 }
+"hammer.CMapDocSession.m_pOwner" = { msvc_offset = 0xCE0 }
+"hammer.CMapDocSession.m_unk101" = { msvc_offset = 0xCE8 }
+"hammer.CHammerEditorSession" = { msvc_size = 0x268, msvc_align = 8, msvc_length = 27 }
+"hammer.CHammerEditorSession.@IBindTarget" = { msvc_offset = 0x58 }
+"hammer.CHammerEditorSession.@IToolsResourceListener" = { msvc_offset = 0x68 }
+"hammer.CHammerEditorSession.@IBindableCommandListener" = { msvc_offset = 0x70 }
+"hammer.CHammerEditorSession.@IAssetFileListener" = { msvc_offset = 0x78 }
+"hammer.CHammerEditorSession.m_unk011" = { msvc_offset = 0x80 }
+"hammer.CHammerEditorSession.m_pViewMgr" = { msvc_offset = 0x130 }
+"hammer.CHammerEditorSession.m_pDocSession" = { msvc_offset = 0x138 }
+"hammer.CHammerEditorSession.m_unk111" = { msvc_offset = 0x140 }
+"hammer.CHammerEditorSession.GetMapFilePath" = { msvc_slot = 26, decl_index = 0 }
+"hammer.ITagVisualizationListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 1 }
+"hammer.ITagVisualizationListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IShaderReloadListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 2 }
+"hammer.IShaderReloadListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IShaderReloadListener.unk002" = { msvc_slot = 1, decl_index = 1 }
+"hammer.IBoundingBoxChangeListener" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 2 }
+"hammer.IBoundingBoxChangeListener.unk001" = { msvc_slot = 0, decl_index = 0 }
+"hammer.IBoundingBoxChangeListener.unk002" = { msvc_slot = 1, decl_index = 1 }
+"hammer.CMapView" = { msvc_size = 0x1AC0, msvc_align = 8 }
+"hammer.CMapView.m_unk011" = { msvc_offset = 0x20 }
+"hammer.CMapView.m_nViewType" = { msvc_offset = 0x84 }
+"hammer.CMapView.m_nRenderMode" = { msvc_offset = 0x88 }
+"hammer.CMapView.m_unk111" = { msvc_offset = 0x8C }
+"hammer.CMapViewMgr" = { msvc_size = 0x170, msvc_align = 8 }
+"hammer.CMapViewMgr.m_unk001" = { msvc_offset = 0x18 }
+"hammer.CMapViewMgr.m_Views" = { msvc_offset = 0x58 }
+"hammer.CMapViewMgr.m_unk101" = { msvc_offset = 0x70 }
+"toolutils2.ToolCameraUnk_t" = { msvc_size = 0x470, msvc_align = 16 }
+"toolutils2.ToolCameraUnk_t.m_unk001" = { msvc_offset = 0x0 }
+"toolutils2.ToolCameraUnk_t.m_Frustum" = { msvc_offset = 0x50 }
+"toolutils2.ToolRenderableViewHostUnk8_t" = { msvc_size = 0x8, msvc_align = 8 }
+"toolutils2.ToolRenderableViewHostUnk8_t.m_unk001" = { msvc_offset = 0x0 }
+"toolutils2.IToolRenderableViewHost" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 18 }
+"toolutils2.IToolRenderableViewHost.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IToolRenderableViewHost.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IToolRenderableViewHost.unk003" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IToolRenderableViewHost.unk004" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IToolRenderableViewHost.unk005" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IToolRenderableViewHost.unk006" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.IToolRenderableViewHost.GetCamera" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.IToolRenderableViewHost.unk101" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.IToolRenderableViewHost.unk102" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.IToolRenderableViewHost.unk103" = { msvc_slot = 9, decl_index = 9 }
+"toolutils2.IToolRenderableViewHost.unk104" = { msvc_slot = 10, decl_index = 10 }
+"toolutils2.IToolRenderableViewHost.unk105" = { msvc_slot = 11, decl_index = 11 }
+"toolutils2.IToolRenderableViewHost.unk106" = { msvc_slot = 12, decl_index = 12 }
+"toolutils2.IToolRenderableViewHost.unk107" = { msvc_slot = 13, decl_index = 13 }
+"toolutils2.IToolRenderableViewHost.unk108" = { msvc_slot = 14, decl_index = 14 }
+"toolutils2.IToolRenderableViewHost.unk109" = { msvc_slot = 15, decl_index = 15 }
+"toolutils2.IToolRenderableViewHost.unk1010" = { msvc_slot = 16, decl_index = 16 }
+"toolutils2.IToolRenderableViewHost.unk1011" = { msvc_slot = 17, decl_index = 17 }
+"toolutils2.IBindableCameraScene" = { msvc_size = 0x8, msvc_align = 8, msvc_length = 18 }
+"toolutils2.IBindableCameraScene.unk001" = { msvc_slot = 0, decl_index = 0 }
+"toolutils2.IBindableCameraScene.unk002" = { msvc_slot = 1, decl_index = 1 }
+"toolutils2.IBindableCameraScene.unk003" = { msvc_slot = 2, decl_index = 2 }
+"toolutils2.IBindableCameraScene.unk004" = { msvc_slot = 3, decl_index = 3 }
+"toolutils2.IBindableCameraScene.unk005" = { msvc_slot = 4, decl_index = 4 }
+"toolutils2.IBindableCameraScene.unk006" = { msvc_slot = 5, decl_index = 5 }
+"toolutils2.IBindableCameraScene.unk007" = { msvc_slot = 6, decl_index = 6 }
+"toolutils2.IBindableCameraScene.unk008" = { msvc_slot = 7, decl_index = 7 }
+"toolutils2.IBindableCameraScene.unk009" = { msvc_slot = 8, decl_index = 8 }
+"toolutils2.IBindableCameraScene.unk0010" = { msvc_slot = 9, decl_index = 9 }
+"toolutils2.IBindableCameraScene.unk0011" = { msvc_slot = 10, decl_index = 10 }
+"toolutils2.IBindableCameraScene.unk0012" = { msvc_slot = 11, decl_index = 11 }
+"toolutils2.IBindableCameraScene.unk0013" = { msvc_slot = 12, decl_index = 12 }
+"toolutils2.IBindableCameraScene.unk0014" = { msvc_slot = 13, decl_index = 13 }
+"toolutils2.IBindableCameraScene.unk0015" = { msvc_slot = 14, decl_index = 14 }
+"toolutils2.IBindableCameraScene.unk0016" = { msvc_slot = 15, decl_index = 15 }
+"toolutils2.IBindableCameraScene.unk0017" = { msvc_slot = 16, decl_index = 16 }
+"toolutils2.IBindableCameraScene.unk0018" = { msvc_slot = 17, decl_index = 17 }
+
+
+# --------------------------------------------------------------------------- #
+# metamod: the second upstream (Metamod:Source 2.0-dev + KHook). Every number
+# here is the compiler's, read off ir/metamod.json after the first generation and
+# then pinned: a metamod or khook bump that adds, removes or reorders a virtual
+# fails the run (and `gen.py --check`) instead of being regenerated silently.
+# --------------------------------------------------------------------------- #
+# ISmmPlugin declares a virtual destructor (ISmmPlugin.h:76,84) right after
+# GetApiVersion: two Itanium entries, one MSVC one, so every later Itanium
+# slot is MSVC + 1 and the whole table is one entry longer there. The generated
+# tests assert both numbers and that relation.
+"metamod.ISmmPlugin" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8, length = 17, msvc_length = 16 }
+"metamod.ISmmPlugin.GetApiVersion" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"metamod.ISmmPlugin.Load" = { itanium_slot = 3, msvc_slot = 2, decl_index = 2 }
+# IMetamodListener (ISmmPlugin.h:211) declares no destructor: 15 slots on both.
+"metamod.IMetamodListener" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8, length = 15, msvc_length = 15 }
+"metamod.IMetamodListener.OnPluginLoad" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+# ISmmAPI (ISmmAPI.h:88) declares no destructor either; GetDetourInterface
+# (ISmmAPI.h:449) is its
+# last virtual, which is the slot a hook-plugin's PLUGIN_SAVEVARS() calls.
+"metamod.ISmmAPI" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8, length = 34, msvc_length = 34 }
+"metamod.ISmmAPI.GetDetourInterface" = { itanium_slot = 33, msvc_slot = 33, decl_index = 33, last_slot = true }
+# ISmmPluginManager (IPluginManager.h:66, MetaFactory MMIFACE_PLMANAGER): 8 pure
+# virtuals, no destructor, no overloads, so the same slots on both ABIs. The
+# bridge's `metamod.plugins` walks the plugin table through Query (and the
+# QueryHandle after it), so both are pinned with the length.
+"metamod.ISmmPluginManager" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8, length = 8, msvc_length = 8 }
+"metamod.ISmmPluginManager.Query" = { itanium_slot = 5, msvc_slot = 5, decl_index = 5 }
+"metamod.ISmmPluginManager.QueryHandle" = { itanium_slot = 7, msvc_slot = 7, decl_index = 7, last_slot = true }
+"consts.MMIFACE_PLMANAGER" = { value = "IPluginManager" }
+# IKHook (khook.hpp:2184): 15 pure virtuals, no destructor, same slots on both
+# ABIs - every one of them is pinned, because KHook is a submodule of the second
+# upstream that can move under this repository: a reordered or added virtual has
+# to fail the run, not silently renumber what a plugin calls through.
+"metamod.IKHook" = { size = 8, align = 8, msvc_size = 8, msvc_align = 8, length = 15, msvc_length = 15 }
+"metamod.IKHook.SetupHook" = { itanium_slot = 0, msvc_slot = 0, decl_index = 0 }
+"metamod.IKHook.SetupVirtualHook" = { itanium_slot = 1, msvc_slot = 1, decl_index = 1 }
+"metamod.IKHook.RemoveHook" = { itanium_slot = 2, msvc_slot = 2, decl_index = 2 }
+"metamod.IKHook.GetContextPtr" = { itanium_slot = 3, msvc_slot = 3, decl_index = 3 }
+"metamod.IKHook.GetOriginalFunction" = { itanium_slot = 4, msvc_slot = 4, decl_index = 4 }
+"metamod.IKHook.GetOriginalValuePtr" = { itanium_slot = 5, msvc_slot = 5, decl_index = 5 }
+"metamod.IKHook.GetOverrideValuePtr" = { itanium_slot = 6, msvc_slot = 6, decl_index = 6 }
+"metamod.IKHook.GetCurrentValuePtr" = { itanium_slot = 7, msvc_slot = 7, decl_index = 7 }
+"metamod.IKHook.DestroyReturnValue" = { itanium_slot = 8, msvc_slot = 8, decl_index = 8 }
+"metamod.IKHook.FindOriginal" = { itanium_slot = 9, msvc_slot = 9, decl_index = 9 }
+"metamod.IKHook.FindOriginalVirtual" = { itanium_slot = 10, msvc_slot = 10, decl_index = 10 }
+"metamod.IKHook.DoRecall" = { itanium_slot = 11, msvc_slot = 11, decl_index = 11 }
+"metamod.IKHook.SaveReturnValue" = { itanium_slot = 12, msvc_slot = 12, decl_index = 12 }
+"metamod.IKHook.LookupSignature" = { itanium_slot = 13, msvc_slot = 13, decl_index = 13 }
+"metamod.IKHook.WasOriginalFunctionSkipped" = { itanium_slot = 14, msvc_slot = 14, decl_index = 14, last_slot = true }

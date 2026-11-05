@@ -1,0 +1,2905 @@
+{
+ "initialize": {
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+   "tools": {}
+  },
+  "serverInfo": {
+   "name": "hammer-mcp",
+   "version": "0.0.1"
+  },
+  "instructions": "Drives a live CS2 Hammer session through the in-process bridge. session_status reports liveness and the blocked state. Tools are gated on the bridge's advertised capabilities and return NotImplemented (data.missing) without sending anything when a method is absent. Nothing is ever auto-saved: save_map is the only writer; file-backed reads report unsaved bridge edits as staleRead. ModelDoc (model_*): .vmdl sources are edited on disk (model_edit/model_create, backup + atomic write, only inside the active addon), then model_reload makes the running editor pick the change up; model_compile builds the .vmdl_c (resourcecompiler by default). model_status shows the editor state. Particles (particle_*): .vpcf sources are validated against the particles schema and edited on disk the same way (particle_edit/particle_create), particle_compile builds the .vpcf_c; the live particle editor (pet) is loaded with particle_load, then particle_open/particle_reload/particle_save drive it. particle_status shows its state. Compiles are jobs: compile_map returns a jobId to poll (compile_map {jobId}), compile_asset starts any asset compile, job_status polls/lists jobs and job_cancel ends one; how the compiler runs (bridge or container) is not your concern."
+ },
+ "tools": [
+  {
+   "name": "session_status",
+   "description": "Bridge/session status: build, liveness (mainThreadAgeMs), capabilities, active document + host path, unsaved bridge edits, jobs. Never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_entities",
+   "description": "Create entities in one edit.batch (one undo group; expectDoc sent; never saves; raw handles dropped). Keyvalues are validated against the FGD class database and sent as strings; an unknown class, a `classname` key or a strict FGD issue refuses with nothing sent. A `sound`-typed keyvalue (e.g. snd_event_point.soundName) is looked up in the soundevent index first: an unknown name is SoundEventNotFound unless allowUnknownSoundEvent is true. undoLabel is echoed but the bridge labels the group \"MCP: batch\" (a batch with a create op; a set-only one is \"MCP: set keyvalues\").",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUnknownSoundEvent": {
+      "default": false,
+      "description": "true = write a soundevent name the soundevent index does not know (a warning instead of the SoundEventNotFound refusal); a misspelt name is silent at runtime. Only the sound-typed keys are affected",
+      "type": "boolean"
+     },
+     "entities": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "[pitch, yaw, roll]",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "class": {
+         "description": "FGD classname, e.g. info_target (checked against the FGD database; unknown -> UnknownClass, nothing sent)",
+         "type": "string"
+        },
+        "keyValues": {
+         "additionalProperties": {
+          "type": [
+           "string",
+           "number",
+           "boolean"
+          ]
+         },
+         "description": "at most 32 keys; values are strings, numbers (sent as their JSON text) or bools (\"1\"/\"0\"); arrays/objects/null are refused; `classname`, `origin`, `angles` and `scales` are refused (use the entity's own fields); a value is at most 511 bytes",
+         "type": "object"
+        },
+        "origin": {
+         "description": "[x, y, z] world units",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        }
+       },
+       "required": [
+        "class",
+        "origin"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "strict": {
+      "default": false,
+      "description": "turn any FGD keyvalue *error* into InvalidArguments (nothing sent); FGD warnings (e.g. an integral float on an integer key) pass",
+      "type": "boolean"
+     },
+     "undoLabel": {
+      "description": "recorded as requestedUndoLabel; the bridge's edit.batch group is \"MCP: batch\" (this tool sends only creates; a set-only batch is labelled \"MCP: set keyvalues\", protocol-diff-m2.15.md \u00a77 + item 16)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "entities"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "undo_last",
+   "description": "Undo one bridge-created undo group (refuses a user group unless acceptUserEdits). Undo groups close implicitly, so the top group may contain the user's own edits; a popped \"MCP: set keyvalues\" group does NOT revert the values.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "acceptUserEdits": {
+      "default": false,
+      "description": "allow undoing an undo group not created by this server",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "save_map",
+   "description": "Save the LIVE map to its path (Hammer's own FileSave; the ONLY writer). Refuses editable:false / a read-only host file without sending anything; resets the unsaved counter only when the bridge reports saved:true.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "reload_map",
+   "description": "Reload the LIVE map from disk (Hammer's ReloadFromDisk; the in-editor undo history is dropped and unsaved edits are discarded). Refuses an untitled (new) document outright, and a dirty or dirty-unknown one unless force; resets the unsaved counter only when the bridge confirms reloaded:true.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "force": {
+      "description": "Reload even though the document is dirty (unsaved in-editor edits are discarded)",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "run_map",
+   "description": "Load the COMPILED map in the engine of the running tools session (the console command `map <name> nomapvalidation=1` over the VToolMessage command channel) and wait for the engine's own load signal in game/csgo/console.log. A map the engine already has mounted is unmounted first (`disconnect` + its idle-level signal) so a recompile is really picked up (remount in the result). The .vpk must already exist (compile_map first): a map that was never compiled is refused before anything is sent, and a .vpk older than its .vmap is reported as staleCompile. The map is addressed by path (addon-relative maps/<x>.vmap, default: the active document) or is derived from it; gameType/gameMode are sent as separate game_type/game_mode posts first (defuse uses 0/1). unload:true instead UNLOADS the map the engine has mounted (only `disconnect`, no map command, `path`/gameType/gameMode not allowed) and waits for the idle level \u2014 the way to let a recompile be picked up, and what compile_map's map-in-game refusal points at. The Hammer document is not touched by a load (unsaved edits are reported but never included: the engine loads the .vpk). Asynchronous engine-side: this call returns state ok|failed|timeout|unknown|unconfirmed (or ok|failed|timeout for an unload) with the console lines it saw; a timeout is not an error (the load may still be coming), and a post whose delivery is unknown is never repeated. One load at a time: while this server's previous load has no verdict the call waits for it and then refuses EngineBusy.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "gameMode": {
+      "description": "optional: posted as `game_mode M` (its own VToolMessage) before the map command (0..=255; the defuse playtest used 1 = competitive)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "gameType": {
+      "description": "optional: posted as `game_type N` (its own VToolMessage) before the map command (0..=255; the defuse playtest used 0)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "addon-content-relative path of the map to run (maps/<x>.vmap, the same shape open_map takes); default: the active Hammer document's map. The COMPILED maps/<x>.vpk must exist. Not allowed with unload:true",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "how long to watch console.log for the load signal (default 60000 or what the tool budget leaves, whichever is smaller; max 600000; always clamped to the remaining tool budget)",
+      "minimum": 1,
+      "type": "integer"
+     },
+     "unload": {
+      "description": "true: unload the map the engine has mounted instead of loading one \u2014 posts only the engine's `disconnect` and waits for the idle level (state ok|failed|timeout). No-op (with a note) when game.local says the engine is not in a map. path/gameType/gameMode are not allowed with it",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "open_map",
+   "description": "Open a .vmap in Hammer (the editor's own OpenFile, on the tools main thread). Refuses a path that is not a canonical maps/... .vmap of the addon locally, and a file this server cannot parse as a binary-v9 .vmap (InvalidMapFile: OpenFile would pop its \"Error opening file\" modal and wedge the bridge). The bridge refuses a file that is missing on the host or already open in another editor session: Hammer's own session match is a stub, so re-opening an open file would create a SECOND session for it and leak the first. existing:true is a result, not an error.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "path": {
+      "description": "addon-content-relative path of the .vmap to open, e.g. \"maps/de_probe.vmap\" (canonical: forward slashes, no '.'/'..'/'//' segment, 1..512 chars)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_entities",
+   "description": "Entities from the SAVED .vmap (file route; reports staleRead).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "classnames": {
+      "description": "true = return only the per-classname histogram (classnames map; count = distinct classes) instead of the entity list (default false)",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "max entities returned (default 500) (default 500; at most 2000)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap: addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; omitted = the active Hammer document (needs the bridge)",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "find_entities",
+   "description": "Filter entities from the SAVED .vmap by classname/targetname/sphere (file route; reports staleRead).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "exact classname match, case-insensitive (e.g. func_buyzone); an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "limit": {
+      "description": "max matches returned (default 500) (default 500; at most 2000)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "nameContains": {
+      "description": "substring match on classname OR targetname, case-insensitive; an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "path": {
+      "description": "SAVED .vmap: addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; omitted = the active Hammer document (needs the bridge)",
+      "type": "string"
+     },
+     "targetname": {
+      "description": "exact targetname match, case-insensitive; an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "withKeyvalues": {
+      "description": "include each entity's keyvalues (default false)",
+      "type": "boolean"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "sphere on the node origin",
+      "properties": {
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "radius": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+       }
+      },
+      "required": [
+       "origin",
+       "radius"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_entity",
+   "description": "One entity (keyvalues, I/O connections) from the SAVED .vmap (file route; reports staleRead). Connections come from the file's connectionsData and are covered on real maps by the ignored real-tree tests.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "the node id (wins when targetname is also given); 0..=2147483647",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap: addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; omitted = the active Hammer document (needs the bridge)",
+      "type": "string"
+     },
+     "targetname": {
+      "description": "exact, case-sensitive",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "render_view",
+   "description": "Render the LIVE map (unsaved edits included) from a camera with Hammer's own offscreen renderer (the map-thumbnail path): a PNG under <app>/renders/, the mapped host path and image statistics, and an inline image block (downscaled above 1920x1080) unless inline:false. Camera: omit everything for the current 3D viewport camera; or origin+angles; or origin+lookAt; or lookAt alone to orbit a target (distance/pitch/yaw). angles are [pitch,yaw,roll] degrees, pitch>0 looks down, yaw 0 = +X / 90 = +Y; fov is HORIZONTAL degrees. The render shows the editor view (helpers, gizmos, grid); hideToolMaterials hides trigger/clip/tools volumes. Does not change the document.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch,yaw,roll] degrees",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "distance": {
+      "default": 256,
+      "description": "orbit distance when only lookAt is given",
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "fov": {
+      "description": "horizontal fov, default: the viewport's",
+      "exclusiveMaximum": 179,
+      "exclusiveMinimum": 1,
+      "type": "number"
+     },
+     "height": {
+      "default": 360,
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "hideToolMaterials": {
+      "default": false,
+      "type": "boolean"
+     },
+     "inline": {
+      "default": true,
+      "description": "attach the PNG as an image block (default true)",
+      "type": "boolean"
+     },
+     "lookAt": {
+      "description": "point to aim at (computes angles)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "name": {
+      "description": "file stem under renders/ (a trailing .png is dropped; default: the bridge names the file render_<tick>_<seq>, so concurrent servers cannot collide)",
+      "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}$",
+      "type": "string"
+     },
+     "origin": {
+      "description": "camera position",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pitch": {
+      "default": 30,
+      "description": "orbit pitch (degrees, >0 = from above)",
+      "maximum": 89,
+      "minimum": -89,
+      "type": "number"
+     },
+     "width": {
+      "default": 640,
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "yaw": {
+      "default": 45,
+      "description": "orbit view direction yaw (degrees)",
+      "type": "number"
+     },
+     "zfar": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "znear": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "render_world",
+   "description": "Render the map currently loaded in the ENGINE (the compiled .vpk with game lighting, sky and entities; no editor helpers) from any camera, WITHOUT Hammer, through the game's own rendering pipeline into an offscreen target: the size is independent of the window/screen (up to 8192 px per side, 33554432 pixels). Camera is required: origin+angles, origin+lookAt, or lookAt alone to orbit a target (distance/pitch/yaw). angles are [pitch,yaw,roll] degrees, pitch>0 looks down, yaw 0 = +X; fov is HORIZONTAL degrees. Written under <app>/renders/; returned as an image block by default only up to 1920x1080 (inline:false to refuse, inline:true to force one). The world is live: animated content can differ slightly between identical renders. No map loaded in the engine still renders its empty scene world: expect a black image and the blank note (the -32021 NoGameWorld error is the rare case of an engine with no scene world object at all).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch,yaw,roll] degrees (required)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "distance": {
+      "default": 256,
+      "description": "orbit distance when only lookAt is given",
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "fov": {
+      "default": 90,
+      "description": "horizontal fov",
+      "exclusiveMaximum": 179,
+      "exclusiveMinimum": 1,
+      "type": "number"
+     },
+     "height": {
+      "default": 1080,
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "attach the PNG as an image block (default: only if width*height <= 1920*1080)",
+      "type": "boolean"
+     },
+     "lookAt": {
+      "description": "point to aim at (computes angles)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "name": {
+      "description": "file stem under renders/ (a trailing .png is dropped; default: the bridge names the file render_<tick>_<seq>, so concurrent servers cannot collide)",
+      "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}$",
+      "type": "string"
+     },
+     "origin": {
+      "description": "camera position (required)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "pitch": {
+      "default": 30,
+      "description": "orbit pitch (degrees, >0 = from above)",
+      "maximum": 89,
+      "minimum": -89,
+      "type": "number"
+     },
+     "width": {
+      "default": 1920,
+      "maximum": 8192,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "yaw": {
+      "default": 45,
+      "description": "orbit view direction yaw (degrees)",
+      "type": "number"
+     },
+     "zfar": {
+      "default": 30000,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "znear": {
+      "default": 4,
+      "exclusiveMinimum": 0,
+      "type": "number"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_meshes",
+   "description": "List CMapMesh nodes (brush geometry) from the SAVED .vmap (file route; reports staleRead): nodeID, origin, bounds, vertex/face counts, materials. Filter with within={min,max} (bounds overlap).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "limit": {
+      "description": "max meshes returned (default 500; at most 5000)",
+      "maximum": 5000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap: addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; omitted = the active Hammer document (needs the bridge)",
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "bounds-overlap filter (boxes that share space with it)",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_mesh",
+   "description": "Full geometry of one CMapMesh by nodeID. An omitted `path` reads the ACTIVE document live (source \"live\": what Hammer holds now, unsaved edits included \u2014 the geometry and face order set_mesh_material {faces} and the rebuild operators index into) when the bridge supports it, else the SAVED .vmap (source \"file\", with staleRead); `path` always reads that file. WORLD vertices, faces (vertex-index loops, counter-clockwise from the visible side), faceMaterials, per-face centre/normal (faceInfo), bounds. Limits: the live read applies only the node's own transform, so under an instance/prefab/unknown container the vertices may be parent-space (worldSpace:false + a note; the rebuild operators refuse such a mesh); a mesh too large for one bridge reply (about 1 MiB, thousands of vertices) is read from the saved file when the document is clean, else refused with MeshTooLarge and its counts (save_map and retry).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "the mesh's node id (0..=2147483647)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap: addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; omitted = the active Hammer document (needs the bridge)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_mesh",
+   "description": "Create a mesh (brush geometry) in the LIVE map from WORLD-space vertices and faces (each face a vertex-index loop, counter-clockwise seen from the visible side; coincident vertices are welded by Hammer, and the node's pivot is re-centred on the bounds). orientOutward=true fixes the winding of a closed convex solid automatically. One undo group; undo_last removes the mesh; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faceMaterials": {
+      "description": "one material path or null (= the base material) per face; at most 64 distinct materials",
+      "items": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "type": "array"
+     },
+     "faces": {
+      "description": "vertex-index loops, counter-clockwise seen from the visible side; at least 3 distinct indices each, no repeats, no zero-area face",
+      "items": {
+       "items": {
+        "minimum": 0,
+        "type": "integer"
+       },
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "description": "base material of the mesh (e.g. materials/dev/reflectivity_30.vmat), at most 259 bytes",
+      "type": "string"
+     },
+     "orientOutward": {
+      "default": false,
+      "description": "flip every face whose normal points at the solid's centroid (for a closed convex solid); the result says how many were flipped",
+      "type": "boolean"
+     },
+     "vertices": {
+      "description": "3..65536 WORLD-space [x, y, z] points, |coordinate| < 1e6",
+      "items": {
+       "items": {
+        "type": "number"
+       },
+       "maxItems": 3,
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "vertices",
+     "faces"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_block",
+   "description": "Create a primitive mesh in the LIVE map: shape=box (min,max), wedge = ramp (min,max, riseToward +x/-x/+y/-y, full height at that end), cylinder (center = bottom centre, radius, height, sides 3..64). Optional per-side materials: topMaterial / bottomMaterial / sideMaterial win over `material` per face by its normal's z. One undo group; undo_last removes the mesh; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "bottomMaterial": {
+      "description": "faces whose normal has z < -0.5",
+      "type": "string"
+     },
+     "center": {
+      "description": "cylinder: bottom centre [x, y, z]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "height": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "type": "string"
+     },
+     "max": {
+      "description": "box/wedge: high corner (greater than min on every axis)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "min": {
+      "description": "box/wedge: low corner [x, y, z]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "radius": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+     },
+     "riseToward": {
+      "default": "+x",
+      "description": "wedge: the end that reaches max.z",
+      "enum": [
+       "+x",
+       "-x",
+       "+y",
+       "-y"
+      ],
+      "type": "string"
+     },
+     "shape": {
+      "default": "box",
+      "enum": [
+       "box",
+       "wedge",
+       "cylinder"
+      ],
+      "type": "string"
+     },
+     "sideMaterial": {
+      "description": "vertical faces (|normal.z| <= 0.5)",
+      "type": "string"
+     },
+     "sides": {
+      "default": 16,
+      "maximum": 64,
+      "minimum": 3,
+      "type": "integer"
+     },
+     "topMaterial": {
+      "description": "faces whose normal has z > 0.5",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_mesh_geometry",
+   "description": "Replace ALL polygons of a mesh (nodeID) in the LIVE document with new WORLD-space vertices and faces (counter-clockwise seen from the visible side). The node keeps its id; its pivot is re-centred on the bounds and texture alignment is re-initialised. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faceMaterials": {
+      "description": "one material path or null (= the base material) per face",
+      "items": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "type": "array"
+     },
+     "faces": {
+      "description": "vertex-index loops, counter-clockwise seen from the visible side; no zero-area face",
+      "items": {
+       "items": {
+        "minimum": 0,
+        "type": "integer"
+       },
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "material": {
+      "default": "materials/dev/reflectivity_30.vmat",
+      "type": "string"
+     },
+     "nodeID": {
+      "description": "the live mesh's node id (see list_meshes / node.list)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "vertices": {
+      "description": "3..65536 WORLD-space [x, y, z] points, |coordinate| < 1e6",
+      "items": {
+       "items": {
+        "type": "number"
+       },
+       "maxItems": 3,
+       "minItems": 3,
+       "type": "array"
+      },
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID",
+     "vertices",
+     "faces"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "transform_mesh",
+   "description": "Translate, yaw-rotate (degrees about the pivot) and/or scale a LIVE mesh (nodeID), rebuilding it: the node keeps its id, its pivot is re-centred on the bounds and texture alignment is re-initialised. The geometry transformed is what this server knows for the mesh \u2014 the geometry it wrote in this session, else the SAVED .vmap (only while the live document is clean: a dirty or dirty-unknown document is refused with a hint to save_map first) \u2014 and `geometrySource` says which. A scale on an odd number of negative axes mirrors the mesh and flips every face's winding. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "the live mesh's node id (see list_meshes / get_mesh)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "pivot": {
+      "description": "centre of the scale/rotate (default: the bounds centre)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "rotateYaw": {
+      "description": "yaw in degrees about the pivot (z is untouched); positive is counter-clockwise seen from above (+X toward +Y)",
+      "type": "number"
+     },
+     "scale": {
+      "description": "a uniform factor or [sx, sy, sz]; zero is refused, and an odd number of negative axes mirrors the winding",
+      "oneOf": [
+       {
+        "type": "number"
+       },
+       {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      ]
+     },
+     "translate": {
+      "description": "world-space offset [dx, dy, dz]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "move_mesh_vertices",
+   "description": "Offset selected vertices of a LIVE mesh (nodeID) by [dx, dy, dz] \u2014 e.g. drag the top edge of a box to make a slope \u2014 and rebuild it (pivot re-centred, texture alignment re-initialised). `vertices` are indices from get_mesh. Faces must stay planar for clean results (Hammer triangulates non-planar polygons); a move that flattens a face is refused before anything is sent. The geometry moved is what this server knows for the mesh \u2014 the geometry it wrote in this session, else the SAVED .vmap (only while the live document is clean: a dirty or dirty-unknown document is refused with a hint to save_map first) \u2014 and `geometrySource` says which. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "the live mesh's node id (see list_meshes / get_mesh)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "offset": {
+      "description": "world-space [dx, dy, dz]",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "vertices": {
+      "description": "vertex indices to move (from get_mesh), at least one",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID",
+     "vertices",
+     "offset"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "extrude_mesh_face",
+   "description": "Push one face of a LIVE mesh (nodeID) out along its normal by `distance`, adding one side quad per edge, and rebuild it (pivot re-centred, texture alignment re-initialised). A negative distance pushes inward (a recess). `face` is an index from get_mesh; the cap keeps its face slot and material and sideMaterial defaults to the cap's. The geometry extruded is what this server knows for the mesh \u2014 the geometry it wrote in this session, else the SAVED .vmap (only while the live document is clean: a dirty or dirty-unknown document is refused with a hint to save_map first) \u2014 and `geometrySource` says which. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "distance": {
+      "description": "how far along the face normal; negative = inward (a recess); zero is refused",
+      "type": "number"
+     },
+     "face": {
+      "description": "the face index to extrude (from get_mesh)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "nodeID": {
+      "description": "the live mesh's node id (see list_meshes / get_mesh)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "sideMaterial": {
+      "description": "material of the new side quads (default: the cap's)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "nodeID",
+     "face",
+     "distance"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "delete_mesh_faces",
+   "description": "Remove faces of a LIVE mesh (nodeID) and rebuild it: vertices no face uses are dropped and the remaining face indices are renumbered (call get_mesh again before more face edits); the pivot is re-centred and texture alignment re-initialised. `faces` are indices from get_mesh. Deleting every face is refused \u2014 use delete_nodes instead. The geometry is what this server knows for the mesh \u2014 the geometry it wrote in this session, else the SAVED .vmap (only while the live document is clean: a dirty or dirty-unknown document is refused with a hint to save_map first) \u2014 and `geometrySource` says which. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "description": "face indices to delete (from get_mesh), at least one",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     },
+     "nodeID": {
+      "description": "the live mesh's node id (see list_meshes / get_mesh)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "faces"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_mesh_material",
+   "description": "Assign a material to a LIVE mesh's faces (undoable, never saves). Without `faces` the bridge's mesh.setMaterial assigns it to every face and keeps texture alignment; with `faces` (indices from get_mesh) the mesh is rebuilt through mesh.setGeometry, which needs the geometry of a mesh this server created or rewrote in this session (the bridge has no live geometry read: mesh.get is NotImplemented), and re-initialises texture alignment.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "description": "face indices to change, as get_mesh reports them for the active document (its source:\"live\" answer has the face order this rebuild uses; a source:\"file\" answer lists the SAVED file's own order, which a live mesh need not share). Omit for all faces (the cheap mesh.setMaterial route)",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     },
+     "material": {
+      "description": "the material path to assign (e.g. materials/tools/toolsnodraw.vmat)",
+      "type": "string"
+     },
+     "nodeID": {
+      "description": "the live mesh's node id",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "material"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "delete_nodes",
+   "description": "Delete meshes/entities/groups by nodeID in the LIVE document (one undo group; undo_last restores them; never saves).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeIDs": {
+      "description": "1..256 unique live node ids in 0..=2147483647 (world cannot be deleted; the bridge's node ids are 32-bit)",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+     }
+    },
+    "required": [
+     "nodeIDs"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "compile_map",
+   "description": "Compile a Hammer map headless (the direct resourcecompiler route, NEVER the map.compile dialog). path: addon-content-relative maps/<x>.vmap (default: the active document's map); mode \"full\" (default) or \"nav\" (EXTRA_FLAGS -nav: only nav + map resource, world from the existing vpk \u2014 refused when no candidate .vpk exists). Returns a background job at once ({jobId, state, log, route}); call compile_map {jobId} to poll it (running|ok|failed|timeout|cancelled, vpk form + candidates, sourceChanged, logTail, failLines) and compile_map {jobId, cancel:true} (or job_cancel) to end it. It runs as a bridge job when the bridge advertises job.start (route \"bridge\"), else in the tools container (route \"podman\"); you do not need to care which. Refuses UnsavedChanges when the target map is the active document and possibly unsaved: the compiler reads the SAVED file, so save_map first. Refuses EngineBusy when the engine is already in this map (unload it with run_map {unload:true} first), when another map compile is running, or when a tagged compile tree from another server is still alive in the container.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "cancel": {
+      "description": "with jobId: end that job instead of polling it (a finished job answers its final state with cancelled:false)",
+      "type": "boolean"
+     },
+     "jobId": {
+      "description": "poll an existing job instead of starting one (pass no path/mode with it)",
+      "type": "string"
+     },
+     "mode": {
+      "description": "full = the full compile (world, lighting, nav); nav = the -nav pass only, which needs the existing .vpk",
+      "enum": [
+       "full",
+       "nav"
+      ],
+      "type": "string"
+     },
+     "path": {
+      "description": "addon-content-relative path of the map to compile, e.g. \"maps/probe.vmap\" (canonical: forward slashes, no '.'/'..'/'//' segment, 1..512 chars); default: the active document's map",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "compile deadline, default 1500000 (1500 s: fresh compiles took 2-7 min, the vrad3 lighting pass is the slow part)",
+      "maximum": 3600000,
+      "minimum": 1,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_entity_keyvalues",
+   "description": "Set keyvalues on an existing entity by nodeID (LIVE; returns previous values; undo does not revert values). Values are validated against the FGD class database and sent as strings; strict refuses on an FGD issue with nothing sent. A `sound`-typed keyvalue is looked up in the soundevent index (unknown -> SoundEventNotFound unless force).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "force": {
+      "default": false,
+      "description": "skip the WP-R1 `model` check and the WP-S3 sound check: a `model` keyvalue on a prop-tagged class is normalized and looked up in the model catalog (unknown -> ModelNotFound with suggestions), and a `sound`-typed keyvalue (e.g. soundName) is looked up in the soundevent index (unknown -> SoundEventNotFound with suggestions); force sends either value unchecked with a warning",
+      "type": "boolean"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "at most 32 keys; values are strings, numbers (sent as their JSON text) or bools (\"1\"/\"0\"); arrays/objects/null are refused; `classname`, `origin`, `angles` and `scales` are refused; a value is at most 511 bytes",
+      "type": "object"
+     },
+     "nodeID": {
+      "description": "the live node id (see find_entities_live / node.list); 0..=2147483647 (the bridge's node ids are 32-bit)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "strict": {
+      "default": false,
+      "description": "turn any FGD keyvalue *error* into InvalidArguments (nothing sent); a value equal to the entity's current value is exempt (reverts are never refused)",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "nodeID",
+     "keyValues"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_entity_live",
+   "description": "One entity's classname, origin, angles, keyvalues and I/O connections from the LIVE document by nodeID (the connections are the live vector, bridge m2.18; get_entity reads the SAVED .vmap's).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "nodeID": {
+      "description": "the live node id (see find_entities_live / node.list); 0..=2147483647 (the bridge's node ids are 32-bit)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "find_entities_live",
+   "description": "Find entities in the LIVE document by classname/targetname/sphere.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "exact classname match, case-insensitive (e.g. func_buyzone); an empty string is refused (the bridge reads it as no filter)",
+      "minLength": 1,
+      "type": "string"
+     },
+     "limit": {
+      "description": "max entities returned (bridge default 500; at most 2000)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "targetname": {
+      "description": "exact targetname match, case-insensitive; an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "sphere on the node origin",
+      "properties": {
+       "origin": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "radius": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+       }
+      },
+      "required": [
+       "origin",
+       "radius"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_entity_classes",
+   "description": "Entity classes from the game's FGD files (filter by substring/kind/tag).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "filter": {
+      "description": "substring of the class name, case-insensitive (e.g. \"buyzone\")",
+      "type": "string"
+     },
+     "kind": {
+      "description": "which class kinds to list (default: point + solid)",
+      "enum": [
+       "point",
+       "solid",
+       "base",
+       "all"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "description": "max classes returned (default 200; at most 1000)",
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "tag": {
+      "description": "only classes carrying this `tags( \u2026 )` FGD helper argument (case-insensitive, through the base chain: \"Sound\", \"PropStatic\", \"Logic\", \u2026); a tag nothing carries lists nothing (never an error)",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_entity_class",
+   "description": "One entity class from the FGD: resolved keyvalues (type, default, choices, flags), inputs, outputs, bases.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "class name, case-insensitive (e.g. info_target)",
+      "type": "string"
+     },
+     "includeBases": {
+      "description": "false = keep only keyvalues/inputs/outputs declared by the class itself (default true: the resolved, inherited view)",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "class"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_status",
+   "description": "ModelDoc status: whether modeldoc_editor.dll is loaded and verified, missing modeldoc.* capabilities, the active document (+ host path, inAddon) and a launch/open hint. Never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_read",
+   "description": "Read a .vmdl from disk (file route, source:\"file\"): one node subtree as JSON (_class, name, attrs, children). Paths: host, Z:\\app\\..., or csgo_addons/<addon>/models/x.vmdl.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_list_nodes",
+   "description": "Flat node list of a .vmdl from disk (path /i/j, _class, name, childCount, attrKeys), filterable by class/name.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_edit",
+   "description": "Edit a .vmdl file in the active addon: ops add_node/remove_node/move_node/set_attr/remove_attr, all-or-nothing, validated (node classes vs the snapshot), backup + atomic write. Does not touch the editor: model_reload afterwards.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_create",
+   "description": "Create a new .vmdl in the active addon from a template (static_prop, skeletal). Refuses an existing file unless overwrite.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_compile",
+   "description": "Compile a .vmdl to .vmdl_c. Route resourcecompiler (default; runs in the ModelDoc container, works for new files) or editor (bridge Compile; needs hasAsset, refuses dirty unless saveFirst). ok = .vmdl_c updated.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_open",
+   "description": "Open a .vmdl of the active addon in the running ModelDoc (pre-validated; refuses while the live document is dirty or dirty unknown unless force).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_reload",
+   "description": "Reload the active ModelDoc document from disk (after model_edit). Discards the editor's undo history; refuses while dirty or dirty unknown unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_save",
+   "description": "Save the active ModelDoc document to its own path (never Save As: refuses untitled documents and files outside the addon).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_node_types",
+   "description": "Every ModelDoc node class name (_class) the running editor knows, sorted; writeSnapshot stores them in hammer-mcp/research/modeldoc-nodetypes.json.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "model_render",
+   "description": "Offscreen render of ModelDoc's main 3D viewport for the active session (bridge modeldoc.render, m2.14): writes a PNG on the host under <app>/renders/, returns the bridge's stats, the mapped host path and image statistics, and inlines the PNG as an image block (downscaled above 1920x1080) unless inline:false. An active session (an open .vmdl tab in the running ModelDoc) is required; the document itself is not. The camera is the viewport's own.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "height": {
+      "description": "default 768; width*height at most 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "attach the PNG as an image block (default true); false returns only the path and reports inline:null",
+      "type": "boolean"
+     },
+     "name": {
+      "description": "file stem [A-Za-z0-9._-], 1..64 chars, no leading dot; an optional .png is dropped; default render_<tick>_<seq>",
+      "type": "string"
+     },
+     "width": {
+      "description": "default 1024; width*height at most 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_read",
+   "description": "Read a .vpcf from disk (file route, source:\"file\"): the kv3 header, the root's non-array fields, per-array entry counts, and with function:\"m_Operators/2\" that entry's fields. Paths: host, Z:\\app\\..., or csgo_addons/<addon>/particles/x.vpcf.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_list",
+   "description": "Flat list of a .vpcf's function entries from disk (array, type, index, class, fieldKeys), filterable by array (one of the nine keys) and class. counts reports how many entries each present array holds.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_validate",
+   "description": "Validate a .vpcf on disk against research/pet-schema.json (structure, root class, array registration, every entry's class and fields); returns ok, errors, warnings and schemaSource. The schema is required: with no usable snapshot this is SchemaUnavailable, never ok:true.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_edit",
+   "description": "Edit a .vpcf file in the active addon: ops add_function/remove_function/move_function/set_field/remove_field/set_root_field/remove_root_field/add_child/remove_child/add_variable/remove_variable, all-or-nothing, schema-checked (skipSchema skips only that check), backup + atomic write. Does not touch pet: particle_reload afterwards.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_create",
+   "description": "Create a new .vpcf in the active addon from the minimal template (maxParticles, renderer). Refuses an existing file unless overwrite.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_compile",
+   "description": "Compile a .vpcf to .vpcf_c with resourcecompiler.exe in any running tools container (label cs2mcp.tool; a ModelDoc instance works too). ok = the .vpcf_c was written/up to date; failLines/fatal explain a failed run.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_status",
+   "description": "Particle editor (pet) status: whether pet.dll is loaded, missing pet.* capabilities, the active .vpcf document (+ host path, inAddon, the nine arrays by key) and a launch/load hint. Never raises.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_types",
+   "description": "Every particle function class the running pet registers (pet.functionTypes), grouped by array. writeSnapshot stores the full pet-schema.json snapshot (pet.schema per class) under hammer-mcp/research/.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_schema",
+   "description": "Schema (bases, flattened fields, metadata) of one particle class: from the running pet (pet.schema) when it is advertised, else from the local pet-schema.json snapshot.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_load",
+   "description": "Load the particle editor tool (pet.load) into the running tools session and wait for pet.dll to verify. One shot: a loaded:false reply means a modal may be up (restart the session).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_open",
+   "description": "Open a .vpcf of the active addon in the running pet (pre-validated on the host; refuses while the live document is dirty or dirty unknown unless force).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_reload",
+   "description": "Reload the active pet document from disk after a file edit (pre-validated on the host: a malformed file would crash pet in ReloadDocument \u2014 main-thread stack overflow, the whole game process wedges \u2014 so nothing is sent until the file validates). Refuses while dirty or dirty unknown unless force.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_save",
+   "description": "Save the active pet document to its own path (never Save As: refuses untitled documents and files outside the addon); force re-saves a clean document in pet's own form, e.g. to normalize a hand-written file.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "force": {
+      "description": "re-save even a clean document (pet re-serializes it in its own form); without it a clean document is skipped and nothing is written",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_live_read",
+   "description": "Read the live pet document as pet serialized it (pet.text): source:\"live\", the document path (+ host path), dirty/isNewFile/canUndo/canRedo, bytes, the kv3 header, the root's non-array fields, per-array entry counts and, with function:\"m_Operators/2\", that one entry.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "function": {
+      "description": "one entry as \"<array>/<index>\" (e.g. m_Operators/2), or \"/\" for the root object itself",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_live_edit",
+   "description": "Edit the live pet document in-editor with full undo (pet.text + pet.apply): ops add_function/remove_function/move_function/set_field/remove_field/set_root_field/remove_root_field/add_child/remove_child/add_variable/remove_variable, all-or-nothing, schema-checked (skipSchema skips only that check; structure is never skippable). The document is dirty afterwards: particle_reload/particle_open then need force, or particle_save first.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {
+     "allowObsolete": {
+      "description": "accept obsolete classes (warning instead of error); default true",
+      "type": "boolean"
+     },
+     "label": {
+      "description": "undo-step label (1..64 printable ASCII, no quote or backslash); default \"MCP: <op names>\"",
+      "type": "string"
+     },
+     "ops": {
+      "description": "the ops to apply in order (the particle_edit op set)",
+      "minItems": 1,
+      "type": "array"
+     },
+     "skipSchema": {
+      "description": "skip the schema check (structural checks stay); default false",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "ops"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_undo",
+   "description": "Undo the last live pet edit (pet.undo; the same history the editor's Ctrl+Z uses). A bridge done:false (nothing to undo) is a retry-safe error.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_redo",
+   "description": "Redo the last undone live pet edit (pet.redo). A bridge done:false (nothing to redo) is a retry-safe error.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "particle_render",
+   "description": "Offscreen render of the running particle editor's preview viewport (bridge pet.render, m2.13): writes a PNG on the host under <app>/renders/, returns the bridge's stats, the mapped host path and image statistics, and inlines the PNG as an image block (downscaled above 1920x1080) unless inline:false. The camera and viewport are pet's own preview; a document is not required.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "height": {
+      "description": "default 768; width*height at most 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     },
+     "inline": {
+      "description": "attach the PNG as an image block (default true); false returns only the path and reports inline:null",
+      "type": "boolean"
+     },
+     "name": {
+      "description": "file stem [A-Za-z0-9._-], 1..64 chars, no leading dot; an optional .png is dropped; default render_<tick>_<seq>",
+      "type": "string"
+     },
+     "width": {
+      "description": "default 1024; width*height at most 8388608",
+      "maximum": 4096,
+      "minimum": 16,
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_models",
+   "description": "Model files available in the game VPKs and the current addon, as cataloged (models/**/*.vmdl). Use an entry's `model` value verbatim as the prop's `model` keyvalue.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "compiledOnly": {
+      "description": "list only models that have a compiled .vmdl_c (default false)",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "max models returned (default 100; at most 1000)",
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "offset": {
+      "description": "page offset into the sorted matches (default 0)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "prefix": {
+      "description": "the model path must start with this lowercase /-separated prefix under models/ (e.g. 'models/props/')",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring of the model path; when it contains '*' or '?' it is a glob (e.g. 'models/props/*chair*')",
+      "type": "string"
+     },
+     "source": {
+      "description": "filter by where the model comes from (default any)",
+      "enum": [
+       "any",
+       "addon",
+       "game"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_model_info",
+   "description": "Compiled-model facts for placing a prop (ReadOnly: model catalog + the model's .vmdl_c bytes). Reports render/physics bounds, `placement` (floorOffset lifts the origin so the model rests on a floor at its z; footprint = the x/y box size), skins, bodygroups, sequences, attachments and the embedded keyvalue text. An uncompiled addon model is refused (ModelNotCompiled); an unknown name gets up to 5 catalog suggestions.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "include": {
+      "description": "which lists to carry (default: sequences, attachments and bodygroups; the embedded keyvalue text needs an explicit 'keyvalues')",
+      "items": {
+       "enum": [
+        "sequences",
+        "attachments",
+        "bodygroups",
+        "keyvalues"
+       ],
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "limit": {
+      "description": "max entries per included list (default 200, at most 2000; a cut is reported in truncated)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "model": {
+      "description": "the model to report, in any spelling the catalog normalizes (case, backslashes and the .vmdl_c form all spell one models/**.vmdl path)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "model"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_props",
+   "description": "Prop entities of a map (kind from the FGD tags(Prop*) classes): from the SAVED .vmap (source \"file\", reports staleRead) or the LIVE document (source \"live\", bridge m2.15+, whose m2.18 entity.get reports the node origin/angles/scales).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "exact classname match, case-insensitive (e.g. prop_static); an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "includeKeyValues": {
+      "description": "include each returned prop's keyvalues (default false)",
+      "type": "boolean"
+     },
+     "includeOtherModelEntities": {
+      "description": "also include classes that are not prop-tagged but declare a `model` keyvalue of type studio (kind \"other\"), and non-FGD classes whose entities carry a non-empty `model` keyvalue (kind \"unknown\", problems:\"unknown class\"); default false",
+      "type": "boolean"
+     },
+     "kind": {
+      "description": "keep only this prop kind (default \"any\"); other/unknown are model-entity kinds that need includeOtherModelEntities true for anything to match them",
+      "enum": [
+       "any",
+       "static",
+       "dynamic",
+       "physics",
+       "other",
+       "unknown"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "description": "max props returned (default 200; at most 2000)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "model": {
+      "description": "case-insensitive substring of the entity's `model` keyvalue (e.g. \".vmdl\"); an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "offset": {
+      "description": "skip the first this many matches (default 0)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap (file route): addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; only valid for source \"file\"",
+      "type": "string"
+     },
+     "source": {
+      "description": "read the SAVED .vmap (\"file\": needs `path`, else the open document; no bridge needed) or the LIVE document (\"live\": needs the bridge); default: \"file\" when `path` is given, \"live\" when it is not",
+      "enum": [
+       "file",
+       "live"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "exact targetname match, case-insensitive; an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "axis-aligned box on the node origin; max >= min on every axis",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_props",
+   "description": "Place prop model entities in one edit.batch (one undo group; expectDoc sent; never saves). Each prop: kind static|dynamic|physics -> prop_static|prop_dynamic|prop_physics, or an explicit FGD class that carries a prop tag (exactly one of kind/class); model is catalog-checked (unknown -> ModelNotFound with suggestions; an uncompiled addon model is refused unless allowUncompiled); scales need the m2.18 builder \u2014 a bridge without node.setTransform refuses the whole call BridgeTooOld before anything is sent.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUncompiled": {
+      "default": false,
+      "description": "place props whose model has no compiled .vmdl_c anyway (with a per-prop note that the model does not draw until the addon compiles and the document reloads); the default refuses (ModelNotCompiled)",
+      "type": "boolean"
+     },
+     "props": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "[pitch, yaw, roll] (optional)",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "class": {
+         "description": "an explicit FGD class that must carry a prop tag (tags(Prop*) itself or through base()) - else NotAPropClass, nothing sent",
+         "type": "string"
+        },
+        "keyValues": {
+         "additionalProperties": {
+          "type": [
+           "string",
+           "number",
+           "boolean"
+          ]
+         },
+         "description": "other FGD keyvalues, validated against the FGD like create_entities (an FGD error refuses with nothing sent); values are strings, numbers or bools; model/classname/origin/angles/scales/skin/targetname are refused - use the fields",
+         "type": "object"
+        },
+        "kind": {
+         "description": "selects prop_static / prop_dynamic / prop_physics (exactly one of kind/class)",
+         "enum": [
+          "static",
+          "dynamic",
+          "physics"
+         ],
+         "type": "string"
+        },
+        "model": {
+         "description": "required; the model keyvalue in any spelling the catalog normalizes (models/**.vmdl); an unknown name is ModelNotFound with the catalog's suggestions, an addon model without its .vmdl_c is ModelNotCompiled unless allowUncompiled:true on the call",
+         "type": "string"
+        },
+        "origin": {
+         "description": "[x, y, z] world units (required)",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "scales": {
+         "description": "optional; each value in (0, 1000] (0, negative and non-finite are refused before anything is created); needs bridge m2.18 (node.setTransform) or the whole call answers BridgeTooOld",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "skin": {
+         "description": "optional; the skin keyvalue (a get_model_info skin name)",
+         "type": "string"
+        },
+        "snapToFloor": {
+         "description": "when true, origin.z is lifted by the model's get_model_info placement.floorOffset, scaled by the prop's scales.z; the applied offset is reported as floorOffsetApplied",
+         "type": "boolean"
+        },
+        "targetname": {
+         "description": "optional; the entity's targetname (a runtime concern: prop_static ignores it at runtime)",
+         "type": "string"
+        }
+       },
+       "required": [
+        "model",
+        "origin"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "props"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_node_transform",
+   "description": "Move/rotate/scale one live node (entity or mesh brush) by nodeID through Hammer's own setters (one undo group \"MCP: set transform\"; never saves). At least one of origin/angles/scales; relative=true treats origin/angles as deltas from the current values (read first) and scales as factors multiplied with the current ones. Needs bridge m2.18 (node.setTransform); moving a prop_static changes the editor only until the next compile_map.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "angles": {
+      "description": "[pitch, yaw, roll] degrees; with relative:true a delta added to the current angles",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "nodeID": {
+      "description": "the live node id (find_entities_live / node.list / get_entity_live); 0..=2147483647 (the bridge's ids are 32-bit)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "origin": {
+      "description": "[x, y, z] world units, each within +-1048576; with relative:true a delta added to the node's current origin",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     },
+     "relative": {
+      "default": false,
+      "description": "add origin/angles to the current values and multiply scales with them (the current values are read first; a field the read cannot supply is refused, never guessed)",
+      "type": "boolean"
+     },
+     "scales": {
+      "description": "[x, y, z] object scale, each in (0, 1000]; with relative:true a factor multiplied with the current scales (the read must report them \u2014 m2.18's entity.get does; a mesh node has no live transform read, so relative scales are refused for it with nothing sent)",
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "add_entity_connections",
+   "description": "Add I/O connections to a live entity by nodeID (one undo group, never saves). Names are checked against the FGD first: the source class must declare the output, a target the live document names must accept the input (force:true skips both checks), and a connection to a compile-time prop_static is always refused (it has no runtime inputs). A target that names nothing (or starts with `!`) is allowed with a note. The bridge verifies each entry by reading it back: an entry it could not confirm is reported under `unconfirmed` with `outcomeUnknown:true` (maybe-executed \u2014 read it back, never retry). Example: a trigger_multiple `OnStartTouch` -> a door prop_dynamic `SetAnimationLooping` \"open\". Needs bridge m2.18 (entity.addConnections).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "connections": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "delay": {
+         "description": "seconds before the input fires (0..=3600)",
+         "maximum": 3600.0,
+         "minimum": 0,
+         "type": "number"
+        },
+        "input": {
+         "description": "the target's input name (FGD, e.g. SetAnimationLooping); checked against the live target's class",
+         "minLength": 1,
+         "type": "string"
+        },
+        "output": {
+         "description": "the source's output name (FGD, e.g. OnStartTouch); at most 255 bytes, no control characters",
+         "minLength": 1,
+         "type": "string"
+        },
+        "param": {
+         "description": "override parameter (e.g. the animation name); may be empty; at most 255 bytes",
+         "type": "string"
+        },
+        "target": {
+         "description": "targetname, for example door_prop; `!activator`, `!self`, `!player` and any name the live document does not hold yet are allowed with a note",
+         "minLength": 1,
+         "type": "string"
+        },
+        "timesToFire": {
+         "description": "how often the input fires; -1 (default) = every time, a positive count otherwise (0 is refused)",
+         "minimum": -1,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "output",
+        "target",
+        "input"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "force": {
+      "default": false,
+      "description": "skip the FGD output/input checks (the connection is written anyway); it never skips the prop_static refusal",
+      "type": "boolean"
+     },
+     "nodeID": {
+      "description": "the live SOURCE entity's node id (find_entities_live)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID",
+     "connections"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "remove_entity_connections",
+   "description": "Remove live entity I/O connections by nodeID: either `indices` (positional, resolved against the live vector inside the write) or `match` (output/target/input fields, the safer form \u2014 indices shift with every edit). One undo group, never saves. The result reports `removed`/`removedCount` and `remaining` (the bridge's own post-removal count; its `count` is the number removed, not what is left). Needs bridge m2.18 (entity.removeConnections).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "indices": {
+      "description": "connection indices as get_entity_live lists them (0-based); at most 512 per call (the bridge's own cap \u2014 entity.get lists at most that many); out-of-range or duplicate indices are refused by the bridge with nothing opened",
+      "items": {
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 512,
+      "minItems": 1,
+      "type": "array"
+     },
+     "match": {
+      "additionalProperties": false,
+      "description": "remove every connection whose fields equal these; at least one of the three keys; the bridge resolves it against the live vector and answers ConnectionNotFound when nothing matches",
+      "properties": {
+       "input": {
+        "minLength": 1,
+        "type": "string"
+       },
+       "output": {
+        "minLength": 1,
+        "type": "string"
+       },
+       "target": {
+        "minLength": 1,
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "nodeID": {
+      "description": "the live entity's node id (find_entities_live); its `connections` come from get_entity_live",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_triggers",
+   "description": "Brush entities of a map (trigger volumes and other @SolidClass brushes) from the SAVED .vmap (source \"file\", reports staleRead) or the LIVE document (source \"live\"); kind \"trigger\" (default) keeps the trigger classes, kind \"solid\" lists every @SolidClass incl. func_buyzone. Volumes are the union of the mesh children's bounds; live, they need bridge m2.19 entity.get.children plus the live mesh.get read or the saved file.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "class": {
+      "description": "exact classname match, case-insensitive (e.g. trigger_once); an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "includeConnections": {
+      "description": "include each returned trigger's I/O connections (default true; false omits the field)",
+      "type": "boolean"
+     },
+     "includeKeyValues": {
+      "description": "include each returned trigger's keyvalues (default false)",
+      "type": "boolean"
+     },
+     "kind": {
+      "description": "\"trigger\" (default) = @SolidClass classes that resolve to a Trigger/TriggerOnce base or a tags(Trigger) helper; \"solid\" = every @SolidClass (func_buyzone, func_brush, ...) plus unknown-class entities with mesh children",
+      "enum": [
+       "trigger",
+       "solid"
+      ],
+      "type": "string"
+     },
+     "limit": {
+      "description": "max triggers returned (default 200; at most 2000)",
+      "maximum": 2000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "offset": {
+      "description": "skip the first this many matches (default 0)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "path": {
+      "description": "SAVED .vmap (file route): addon-relative (maps/x.vmap), content-relative (csgo_addons/<addon>/maps/x.vmap), host absolute, or a mapped Windows path; only valid for source \"file\"",
+      "type": "string"
+     },
+     "source": {
+      "description": "read the SAVED .vmap (\"file\": needs `path`, else the open document; no bridge needed) or the LIVE document (\"live\": needs the bridge); default: \"file\" when `path` is given, \"live\" when it is not",
+      "enum": [
+       "file",
+       "live"
+      ],
+      "type": "string"
+     },
+     "targetname": {
+      "description": "exact targetname match, case-insensitive; an empty string is refused",
+      "minLength": 1,
+      "type": "string"
+     },
+     "within": {
+      "additionalProperties": false,
+      "description": "axis-aligned box the trigger is matched against: the volume bounds when known, else the node origin (a trigger whose volume is unknown is tested on its ORIGIN only \u2014 the entity origin is the first mesh's pivot and can lie outside a box the volume overlaps); max >= min on every axis",
+      "properties": {
+       "max": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "withinMode": {
+      "description": "how `within` matches (default \"contains\"): \"contains\" = the trigger's volume must lie ENTIRELY inside the box; \"intersects\" = the volume must overlap the box (a trigger straddling the edge matches). Without a volume both modes test the origin point",
+      "enum": [
+       "contains",
+       "intersects"
+      ],
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_trigger",
+   "description": "Create a trigger brush entity in the LIVE map from exactly one volume \u2014 `box {min,max}`, `geometry {vertices,faces}` or `meshNodeIDs` (existing world meshes) \u2014 and tie it to the new entity (bridge m2.19 entity.tieMeshes). The class must be an FGD @SolidClass (default trigger_multiple); spawnflags are the COMPLETE set of the class's FGD flags (omit the argument to get the FGD defaults, sent explicitly and noted; naming only some flags sends exactly those and warns about every default-on bit it leaves off). `connections` are checked against the class's FGD outputs BEFORE anything is sent. Runs as 2..n undo groups (the volume, the tie, each retextured mesh, the connections) and reports `undoGroups`/`undoLabels`; a failure after the volume was created is PartialFailure naming that mesh (not retry-safe). `allowRetie` moves a mesh that already belongs to another brush entity. `keyValues` are echoed back as `applied` and a warning per key the bridge did not write. Never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowRetie": {
+      "default": false,
+      "description": "with `meshNodeIDs`: allow a mesh that already belongs to ANOTHER brush entity to be moved (its emptied old entity is deleted in the same undo group and listed in `removedEmptyEntities`); without it such a mesh is MeshAlreadyTied. Ignored by the box/geometry forms",
+      "type": "boolean"
+     },
+     "box": {
+      "additionalProperties": false,
+      "description": "the volume as an axis-aligned box; exactly one of box, geometry and meshNodeIDs",
+      "properties": {
+       "max": {
+        "description": "high corner; greater than min on every axis, each side at least 1 unit",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "description": "low corner [x, y, z], |coordinate| <= 1048576",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "class": {
+      "default": "trigger_multiple",
+      "description": "the FGD @SolidClass of the brush entity (default trigger_multiple); an unknown class is UnknownClass, a known non-solid one NotASolidClass, both with nothing sent",
+      "type": "string"
+     },
+     "connections": {
+      "description": "1..64 I/O connections added to the new entity (one more undo group); the same shape add_entity_connections takes",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "delay": {
+         "description": "seconds before the input fires",
+         "maximum": 3600,
+         "minimum": 0,
+         "type": "number"
+        },
+        "input": {
+         "description": "the target's input name (FGD)",
+         "minLength": 1,
+         "type": "string"
+        },
+        "output": {
+         "description": "the class's output name (FGD, e.g. OnStartTouch); checked before anything is sent",
+         "minLength": 1,
+         "type": "string"
+        },
+        "param": {
+         "description": "override parameter",
+         "type": "string"
+        },
+        "target": {
+         "description": "targetname; `!activator`/`!self`/... and names the live document does not hold yet are allowed with a note",
+         "minLength": 1,
+         "type": "string"
+        },
+        "timesToFire": {
+         "description": "-1 (default) = every time, else a positive count",
+         "minimum": -1,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "output",
+        "target",
+        "input"
+       ],
+       "type": "object"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "force": {
+      "default": false,
+      "description": "skip the FGD output/input checks of `connections` (the prop_static target refusal is never skipped)",
+      "type": "boolean"
+     },
+     "geometry": {
+      "additionalProperties": false,
+      "description": "the volume as explicit WORLD-space geometry (the mesh.create rules: 3..65536 vertices, faces as vertex-index loops counter-clockwise seen from the visible side, no degenerate face); exactly one of box, geometry and meshNodeIDs",
+      "properties": {
+       "faces": {
+        "description": "vertex-index loops, at least 3 distinct indices each",
+        "items": {
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "vertices": {
+        "description": "3..65536 world-space [x, y, z] points, |coordinate| < 1e6",
+        "items": {
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "vertices",
+       "faces"
+      ],
+      "type": "object"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "other FGD keyvalues of the class, validated against it (FGD issues are warnings, like create_entities); values are strings, numbers or bools; `classname`, `spawnflags`, `targetname` and the engine-managed `origin`/`angles`/`scales` are refused \u2014 the fields above are their spellings",
+      "type": "object"
+     },
+     "material": {
+      "description": "the volume's material; default: the class's FGD auto_apply_material (core/base.fgd), else materials/tools/toolstrigger.vmat. Applied to created meshes; existing meshes only with retexture:true",
+      "type": "string"
+     },
+     "meshNodeIDs": {
+      "description": "existing live world meshes to tie (1..64 distinct ids, no duplicates); exactly one of box, geometry and meshNodeIDs",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "retexture": {
+      "default": false,
+      "description": "also assign `material` to every mesh named in `meshNodeIDs` (one mesh.setMaterial undo group per mesh); created meshes always take it",
+      "type": "boolean"
+     },
+     "spawnflags": {
+      "description": "the COMPLETE set of the class's spawnflags: flag labels (case-insensitive, e.g. [\"Clients\"]) or bit numbers \u2014 these exact bits are written, so a default-on bit that is not listed is OFF and a warning names it. Omit the argument for the FGD defaults, sent explicitly (trigger_once: \"4097\") and noted; an unknown label is UnknownSpawnflag with the valid ones",
+      "items": {
+       "type": [
+        "string",
+        "integer"
+       ]
+      },
+      "type": "array"
+     },
+     "targetname": {
+      "description": "the entity's targetname (what other entities' `connections` target)",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "tie_to_entity",
+   "description": "Tie existing live world meshes to a brush entity (bridge m2.19 entity.tieMeshes): either a NEW entity of an FGD @SolidClass (`class`, with spawnflags/keyValues validated against it) or an existing brush entity (`entityID`). One undo group creates/uses the entity and re-parents the meshes; a mesh already under the target is skipped (`alreadyTied`) and an all-alreadyTied call is a success no-op that opens no undo group, and `allowRetie` moves a mesh that belongs to another brush entity (deleting the emptied one). `material` (when given) retextures every tied mesh through mesh.setMaterial (one undo group per mesh). `keyValues` are echoed back as `applied` with a warning per key the bridge did not write. The bare primitive create_trigger's tie step uses; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowRetie": {
+      "default": false,
+      "description": "move a mesh that already belongs to ANOTHER brush entity (its emptied old entity is deleted in the tie's own undo group and listed in `removedEmptyEntities`); without it such a mesh is MeshAlreadyTied {nodeID, parentNodeID}",
+      "type": "boolean"
+     },
+     "class": {
+      "description": "the FGD @SolidClass of the brush entity to create (unknown -> UnknownClass, non-solid -> NotASolidClass, both with nothing sent); exactly one of class and entityID",
+      "type": "string"
+     },
+     "entityID": {
+      "description": "an existing LIVE brush entity to tie into (a @SolidClass entity); exactly one of class and entityID; a point entity or a non-entity is NotABrushEntity. With entityID the class/targetname/spawnflags/keyValues arguments are refused (the entity already exists)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "keyValues": {
+      "additionalProperties": {
+       "type": [
+        "string",
+        "number",
+        "boolean"
+       ]
+      },
+      "description": "other FGD keyvalues; `classname`, `spawnflags`, `targetname`, `origin`, `angles` and `scales` are refused here (refused with entityID)",
+      "type": "object"
+     },
+     "material": {
+      "description": "when given, every tied mesh is retextured with it (mesh.setMaterial per mesh, one undo group each); without it the meshes keep their own materials (Hammer itself never applies one on tie)",
+      "type": "string"
+     },
+     "meshNodeIDs": {
+      "description": "the live world meshes to tie (1..64 distinct ids); a mesh under the target entity is skipped (`alreadyTied`), a mesh under another brush entity is MeshAlreadyTied unless allowRetie:true",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+     },
+     "spawnflags": {
+      "description": "the COMPLETE set of the class's FGD spawnflags (labels or bit numbers): a default-on bit that is not listed is OFF and a warning names it; omit the argument for the FGD defaults, sent explicitly and noted (refused with entityID)",
+      "items": {
+       "type": [
+        "string",
+        "integer"
+       ]
+      },
+      "type": "array"
+     },
+     "targetname": {
+      "description": "the new entity's targetname (refused with entityID)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "meshNodeIDs"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "move_to_world",
+   "description": "Move a tied brush entity's meshes back under the entity's PARENT (the world, or the group/prefab the entity itself sits in) and delete the entity (bridge m2.19 entity.untie, one \"Untie from entity\" undo group, never saves). A point entity (no mesh children) is NotABrushEntity; `deleteEntity:false` is refused until Hammer itself can keep an empty entity.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "deleteEntity": {
+      "default": true,
+      "description": "the bridge's own recipe always removes the emptied entity; false is refused (InvalidArguments) until the RE says Hammer supports keeping one",
+      "type": "boolean"
+     },
+     "nodeID": {
+      "description": "the live brush entity's node id (list_triggers / get_entity_live)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_trigger_volume",
+   "description": "Replace a LIVE brush entity's volume (nodeID) with a new box or explicit geometry, through mesh.setGeometry on one of its tied meshes in WORLD coordinates: the mesh keeps its id, parent and node, its pivot is re-centred on the new bounds and texture alignment is re-initialised. The entity's children (entity.get, bridge m2.19) decide which mesh is the volume: none = NotABrushEntity, several = name one with `meshNodeID` (a truncated children list cannot rule a selector out, so it is sent with a note). The material defaults to the mesh's own (this session's cache, else the SAVED .vmap \u2014 the file only while the document is clean: a dirty document is refused UnsavedChanges, like the rebuild operators, for a NON-trigger class; a trigger class instead falls back to its FGD auto_apply_material, else materials/tools/toolstrigger.vmat, with materialSource \"fgd-default (mesh material unknown)\"), else the trigger default materials/tools/toolstrigger.vmat. One undo group; undo_last restores the previous geometry; never saves.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "box": {
+      "additionalProperties": false,
+      "description": "the new volume as an axis-aligned box; exactly one of box and geometry",
+      "properties": {
+       "max": {
+        "description": "high corner; greater than min on every axis, each side at least 1 unit",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       },
+       "min": {
+        "description": "low corner [x, y, z], |coordinate| <= 1048576 (WORLD space: the tied mesh takes world coordinates)",
+        "items": {
+         "type": "number"
+        },
+        "maxItems": 3,
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "min",
+       "max"
+      ],
+      "type": "object"
+     },
+     "geometry": {
+      "additionalProperties": false,
+      "description": "the new volume as explicit WORLD-space geometry (the mesh rules: 3..65536 vertices, faces as vertex-index loops counter-clockwise seen from the visible side, no degenerate face); exactly one of box and geometry",
+      "properties": {
+       "faces": {
+        "description": "vertex-index loops, at least 3 distinct indices each",
+        "items": {
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 1,
+        "type": "array"
+       },
+       "vertices": {
+        "description": "3..65536 world-space [x, y, z] points, |coordinate| < 1e6",
+        "items": {
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "minItems": 3,
+        "type": "array"
+       }
+      },
+      "required": [
+       "vertices",
+       "faces"
+      ],
+      "type": "object"
+     },
+     "material": {
+      "description": "the rebuilt volume's material; default: the mesh's own (the live mesh.get read, else the SAVED .vmap \u2014 the file only while the document is clean, UnsavedChanges otherwise like the rebuild operators; a trigger class falls back to its FGD auto_apply_material instead of refusing), else materials/tools/toolstrigger.vmat; every face takes it",
+      "type": "string"
+     },
+     "meshNodeID": {
+      "description": "which tied mesh to rebuild when the entity has several (entity.get children); required then, refused when it is not one of the children (unless the bridge truncated the children list, then it is sent with a note). With it the children read is not needed (an m2.18 bridge works); without it a bridge that reports no children is BridgeTooOld",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     },
+     "nodeID": {
+      "description": "the live brush entity's node id (list_triggers / get_entity_live); its tied meshes are its volume(s)",
+      "maximum": 2147483647,
+      "minimum": 0,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "nodeID"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "list_soundevents",
+   "description": "Soundevents (`*.vsndevts_c`/`*.vsndevts`) available to the game and the active addon, from the game VPKs and the addon's soundevents directories (no bridge, pure filesystem). Use an entry's `name` verbatim as a sound event keyvalue. Pass `name` for one event's full properties plus its resolved `base` chain; the list filters (`query`/`prefix`/`source`/`type`/`file`/`hasPosition`) apply to the list route only.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "file": {
+      "description": "case-insensitive substring of the holding file of the top-ranked copy (e.g. 'weapons' or 'csgo_addons')",
+      "type": "string"
+     },
+     "hasPosition": {
+      "description": "keep only events carrying a `position` (default false)",
+      "type": "boolean"
+     },
+     "includeProperties": {
+      "description": "include each listed event's raw `properties` object (default false; the `name` route always includes it)",
+      "type": "boolean"
+     },
+     "limit": {
+      "description": "max events returned (default 100; at most 1000)",
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "name": {
+      "description": "exact event name (case-sensitive): the detail route \u2014 returns ONE event with its `properties`, `resolved` base chain and the `children`/`vsnds` verdicts, and ignores the list filters; unknown names fail with suggestions",
+      "minLength": 1,
+      "type": "string"
+     },
+     "offset": {
+      "description": "skip the first this many matches (default 0)",
+      "minimum": 0,
+      "type": "integer"
+     },
+     "prefix": {
+      "description": "the event name must start with this prefix, case-insensitive (e.g. 'mcp.')",
+      "type": "string"
+     },
+     "query": {
+      "description": "case-insensitive substring of the event name; when it carries '*' or '?' it is a glob over the whole name (e.g. 'Weapon_AK*')",
+      "type": "string"
+     },
+     "source": {
+      "description": "filter by where the event comes from: 'addon' = the addon's compiled or source files, 'game' = the csgo/core VPKs (default any)",
+      "enum": [
+       "any",
+       "addon",
+       "game"
+      ],
+      "type": "string"
+     },
+     "type": {
+      "description": "exact `type` value of the event (e.g. 'csgo_mega')",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "edit_soundevents",
+   "description": "Edit the addon's soundevents_addon.vsndevts (or another .vsndevts under the addon) without destroying comments: ops set (properties object; merge:true shallow-merges into the existing event, overwrite:true replaces it), remove (force:true removes a referenced event), rename (rewrites base/soundevent_01 references). Validates names ([A-Za-z0-9_.]{1..127}), base resolution and type/base presence before anything is written; a comment inside a replaced event is reported in commentsDropped, everything else survives byte-for-byte. dryRun checks without writing; createFile writes the template header first.",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "compile_soundevents",
+   "description": "Compile a .vsndevts with resourcecompiler.exe in a running tools container to <file>_c (ok:false is a result; errors lists every RESOURCE COMPILE ERROR with line/col, events counts the compiled file's events). The compiled file is loaded at the next map load (run_map).",
+   "inputSchema": {
+    "additionalProperties": true,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "create_sound_entities",
+   "description": "Create sound entities in the LIVE map: kind point|sphere|alignedbox|orientedbox|soundscape|soundscape_proxy (or any FGD tags(Sound) class), with the soundevent name checked against the soundevent index BEFORE anything is sent (an unknown name is a refusal unless allowUnknownSoundEvent \u2014 a misspelt event is silent at runtime). The entity family comes from the FGD's base chain: env_soundscape descendants (snd_soundscape, *_triggerable too) get enablesoundevent+soundevent, point_soundevent descendants get soundName, other tags(Sound) classes take soundEvent only when the FGD declares a sound-typed key (a class that declares none refuses a soundEvent instead of silently writing nothing). Writes the engine's key spellings for you (soundName/soundevent, enablesoundevent, radius, box_mins/box_maxs, position0..7) and builds the timing helpers on request: schedule {startDelay, stopDelay} creates ONE logic_auto (OnMapSpawn -> StartSound/StopSound with the delays), repeatEvery (+repeatInitialDelay) creates ONE logic_timer (OnTimer -> StartSound; its FIRST fire lands at InitialDelay + RefireTime after load, then every RefireTime). A class whose FGD has no StartSound input (soundscapes) refuses schedule. One edit.batch for the entities AND their helpers, then one entity.addConnections group per entity with connections/schedule (undoGroups says how many; undo_last pops them). Never saves. Needs bridge m2.18.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "allowUnknownSoundEvent": {
+      "default": false,
+      "description": "create entities whose soundEvent the index does not know (with a warning per entity) instead of refusing",
+      "type": "boolean"
+     },
+     "entities": {
+      "description": "1..=32 sound entities (their helpers come on top)",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "angles": {
+         "description": "optional [pitch, yaw, roll]",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "box": {
+         "additionalProperties": false,
+         "description": "only for classes whose FGD declares box_mins/box_maxs (alignedbox/orientedbox, snd_event_box_helper): {min, max} corners; per-axis min < max, |coordinate| <= 1048576; the two box kinds send the FGD default -64..64 explicitly when omitted",
+         "properties": {
+          "max": {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          },
+          "min": {
+           "items": {
+            "type": "number"
+           },
+           "maxItems": 3,
+           "minItems": 3,
+           "type": "array"
+          }
+         },
+         "required": [
+          "min",
+          "max"
+         ],
+         "type": "object"
+        },
+        "class": {
+         "description": "any other FGD tags(Sound) class (snd_event_path, ambient_generic, ...); refused NotASoundClass when the class carries no Sound tag",
+         "type": "string"
+        },
+        "connections": {
+         "description": "I/O on the new sound entity itself; checked against the class's FGD outputs before anything is sent (snd_event_* outputs: SoundEventGuid, OnSoundFinished)",
+         "items": {
+          "additionalProperties": false,
+          "properties": {
+           "delay": {
+            "type": "number"
+           },
+           "input": {
+            "type": "string"
+           },
+           "output": {
+            "type": "string"
+           },
+           "param": {
+            "type": "string"
+           },
+           "target": {
+            "type": "string"
+           },
+           "timesToFire": {
+            "minimum": -1,
+            "type": "integer"
+           }
+          },
+          "required": [
+           "output",
+           "target",
+           "input"
+          ],
+          "type": "object"
+         },
+         "maxItems": 16,
+         "minItems": 1,
+         "type": "array"
+        },
+        "keyValues": {
+         "description": "other FGD keyvalues (this tool's spellings \u2014 soundName, soundevent, enablesoundevent, radius, box_mins/box_maxs, startOnSpawn, ..., position0..7, classname, origin, angles, scales \u2014 are refused inside it: use the fields)",
+         "type": "object"
+        },
+        "kind": {
+         "description": "the sound-entity kind (maps to the fixed class); exactly one of kind and class",
+         "enum": [
+          "point",
+          "sphere",
+          "alignedbox",
+          "orientedbox",
+          "soundscape",
+          "soundscape_proxy"
+         ],
+         "type": "string"
+        },
+        "legacySoundscape": {
+         "description": "the legacy .vsc soundscape name (soundscape family only): written to `soundscape` with enablesoundevent \"0\", unvalidated",
+         "type": "string"
+        },
+        "origin": {
+         "description": "[x, y, z], required",
+         "items": {
+          "type": "number"
+         },
+         "maxItems": 3,
+         "minItems": 3,
+         "type": "array"
+        },
+        "positions": {
+         "description": "soundscape family only: 1..=8 targetnames written to position0..7",
+         "items": {
+          "type": "string"
+         },
+         "maxItems": 8,
+         "minItems": 1,
+         "type": "array"
+        },
+        "radius": {
+         "description": "allowed when the class declares a radius key in the FGD: snd_event_sphere a number > 0; the soundscape family (and env_soundscape_proxy) an integer >= 1 or -1; refused otherwise",
+         "type": "number"
+        },
+        "schedule": {
+         "additionalProperties": false,
+         "description": "timing helpers (needs targetname; refused for classes whose FGD has no StartSound input, the soundscapes): startDelay/stopDelay build ONE logic_auto <targetname>_auto, repeatEvery (+ repeatInitialDelay) ONE logic_timer <targetname>_timer \u2014 its FIRST fire lands at InitialDelay + RefireTime after load (e.g. repeatEvery 5, repeatInitialDelay 1 -> first StartSound 6 s after load, then every 5 s)",
+         "properties": {
+          "repeatEvery": {
+           "type": "number"
+          },
+          "repeatInitialDelay": {
+           "type": "number"
+          },
+          "startDelay": {
+           "minimum": 0,
+           "type": "number"
+          },
+          "stopDelay": {
+           "type": "number"
+          }
+         },
+         "type": "object"
+        },
+        "soundEvent": {
+         "description": "the soundevent name (required for the point_soundevent family and the soundscape family unless legacySoundscape; optional for other tags(Sound) classes and written only when the FGD declares a sound-typed key \u2014 a class that declares none refuses it, since the name would be written nowhere); checked against the index",
+         "type": "string"
+        },
+        "sourceEntityName": {
+         "type": "string"
+        },
+        "startOnSpawn": {
+         "description": "write startOnSpawn \"1\"/\"0\" (default: the FGD default, not sent)",
+         "type": "boolean"
+        },
+        "stopOnNew": {
+         "type": "boolean"
+        },
+        "targetname": {
+         "description": "required when schedule or connections are given (the helpers and I/O address the entity by name)",
+         "type": "string"
+        },
+        "toLocalPlayer": {
+         "type": "boolean"
+        }
+       },
+       "type": "object"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+     },
+     "strict": {
+      "default": false,
+      "description": "refuse on FGD keyvalue ERRORS (warnings pass either way)",
+      "type": "boolean"
+     },
+     "undoLabel": {
+      "description": "echoed on the batch (the bridge labels it \"MCP: batch\")",
+      "type": "string"
+     }
+    },
+    "required": [
+     "entities"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "drain_sounds",
+   "description": "Read AND consume the bridge's sound-event ring (sound.drain): the sound events that started since the last drain, with their name/hash, entindex/entityName, the SOS slot that started them (via), ageMs and \u2014 since bridge m2.20 \u2014 the server's packed sound params decoded into params and a world position (a snd_event_* carries the entity's Hammer origin there; origin/entityName alone are the world entity and [0,0,0], which is why the position matters). The drain destroys what it returns and the ring holds 256 entries: call it promptly after the moment you are observing and call it again while truncated is true. The local filter (namePrefix, exact names, within sphere) is applied AFTER the drain \u2014 filtered-out events are still consumed and counted in unmatched; within matches the decoded position first, else a non-null non-zero origin, so an event with neither is always unmatched (noted). installOnly:true sends sound.status instead and installs the wrap WITHOUT draining \u2014 arm it before run_map so the load's startOnSpawn events are still in the ring afterwards. A bridge that does not advertise sound.drain is refused NotImplemented with nothing sent; -32017 PrerequisiteFailed (the soundsystem pins) and every other bridge error pass through unchanged.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "filter": {
+      "additionalProperties": false,
+      "description": "applied locally after the drain (filtered-out events are consumed and counted in unmatched)",
+      "properties": {
+       "namePrefix": {
+        "description": "keep events whose name starts with this",
+        "type": "string"
+       },
+       "names": {
+        "description": "keep events whose name is exactly one of these (1..=32, case-sensitive: names are hashed by the engine)",
+        "items": {
+         "type": "string"
+        },
+        "maxItems": 32,
+        "minItems": 1,
+        "type": "array"
+       },
+       "within": {
+        "additionalProperties": false,
+        "description": "keep events inside a sphere: the decoded position first, else a non-null non-zero origin; an event with neither never matches",
+        "properties": {
+         "center": {
+          "description": "[x, y, z] (Hammer world units)",
+          "items": {
+           "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+         },
+         "radius": {
+          "description": "must be > 0",
+          "exclusiveMinimum": 0,
+          "type": "number"
+         }
+        },
+        "required": [
+         "center",
+         "radius"
+        ],
+        "type": "object"
+       }
+      },
+      "type": "object"
+     },
+     "installOnly": {
+      "description": "true: send sound.status instead of sound.drain \u2014 install the sound-op wrap without draining (the arm-before-run_map step). filter is refused with it; max/resolve are ignored with a note",
+      "type": "boolean"
+     },
+     "max": {
+      "description": "at most this many events (1..=256, default 256). The bridge's own default is 128, so the value is always sent explicitly",
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+     },
+     "resolve": {
+      "description": "default true: resolve each event's entity (origin, entityName). false skips that read and leaves origin absent \u2014 a within filter can then only match the decoded position",
+      "type": "boolean"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "compile_asset",
+   "description": "Start the resource compiler on ONE asset of the active addon and return at once ({jobId, state:\"running\", log, command}). Any of vmap vmdl vpcf vsndevts vmat vtex vsnd vsmart vanim vmks; path is addon-relative (\"materials/x.vmat\"), content-relative (\"csgo_addons/<addon>/...\") or a host/Windows path inside the addon content tree. NEXT: poll job_status {jobId} until state is ok|failed|timeout|cancelled (logTail and failLines say why), end it with job_cancel {jobId}. The compiled file is written next to the game tree (check the asset with its own tool afterwards). For a MAP use compile_map instead: it adds the dirty/in-game gates and the vpk verdict. One compile at a time (EngineBusy names the running job). Needs the bridge's job.start (no other route).",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "flags": {
+      "description": "extra compiler flags as tokens, the bridge's allowlist: -nav -fshallow -quiet -unbufferedio -noassert -nop4 -f and -maxtextureres N / -threads N as two tokens",
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "game": {
+      "description": "pass -game <gamedir>/csgo to the compiler; default false for .vmap, true for everything else",
+      "type": "boolean"
+     },
+     "path": {
+      "description": "the asset to compile (addon-relative, content-relative or an absolute host/Windows path inside content/csgo_addons/<addon>)",
+      "type": "string"
+     },
+     "timeoutMs": {
+      "description": "the bridge ends the job at this deadline (state timeout); default: the bridge's (1500000)",
+      "maximum": 3600000,
+      "minimum": 1000,
+      "type": "integer"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "job_status",
+   "description": "Status of a compile job. jobId as returned by compile_asset (an opaque bridge job id, pass it back verbatim; also a compile_map bridgeJobId): the bridge's status (state running|ok|failed|cancelled|timeout, elapsedMs, summary, failLines, logTail, log.host = the log file on the host). jobId c<N> (a compile_map job id): the same answer as compile_map {jobId} (vpk verdict, sourceChanged). No jobId: both lists. Poll until the state is not running; use job_cancel to end one.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "jobId": {
+      "description": "a bridge job id (opaque, verbatim from compile_asset) or a c<N> compile_map job id; omit to list both",
+      "type": "string"
+     }
+    },
+    "type": "object"
+   }
+  },
+  {
+   "name": "job_cancel",
+   "description": "End a compile job: a bridge job id (opaque, verbatim from compile_asset) or a c<N> compile_map job id. Answers the final state with cancelled:true when this call ended it, cancelled:false when the job had already finished (its final state is reported). The compiler's whole process tree is ended.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "jobId": {
+      "description": "a bridge job id (verbatim) or c<N>",
+      "type": "string"
+     }
+    },
+    "required": [
+     "jobId"
+    ],
+    "type": "object"
+   }
+  },
+  {
+   "name": "get_selection",
+   "description": "What is selected in the LIVE Hammer document: the selection `mode` (groups, objects, meshes, vertices, edges, faces, mixed, tile, or null), the selected `nodeIDs` and `count`, and in faces mode `faces: [{nodeID, faces:[i, ...]}]` per mesh. Face indices are the ones get_mesh reports (Hammer's face order, which is also the saved .vmap order). In the vertices/edges/mixed/tile modes only the count is reported. `unmapped` counts selected items the bridge could not map to a node or face list (0 normally); `truncated:true` means the lists were cut at 16384 entries (`count` is still the true count). A selection in a mode Hammer reports as unknown reads as mode null, count 0. Read-only: selection is not an edit. Next: get_mesh / get_entity_live on a selected node, set_mesh_material {faces} on the selected faces, transform_mesh / delete_nodes on the selected nodes.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+   }
+  },
+  {
+   "name": "set_selection",
+   "description": "Change the selection in the LIVE Hammer document so the user sees what you are working on. `op` is replace | add | remove | clear. Give exactly one of `nodeIDs` (select nodes; Hammer switches to objects mode unless it is already in groups/objects/meshes mode) or `faces` ([{nodeID, faces:[i, ...]}] on meshes; Hammer switches to faces mode; indices are the ones get_mesh reports); clear takes neither and empties the current mode's selection. After a mode switch `add`/`remove` start from an empty selection (`modeChanged: true`). Not an undo step and not an edit: nothing is dirtied or saved. Hammer may filter locked or hidden nodes: the reply's `applied` can be smaller than `requested` (see `notApplied`) - not an error. Unknown nodeIDs, non-mesh face targets and face indices >= the mesh's face count are refused with nothing changed. At most 4096 nodeIDs and 65536 face indices per call. If Hammer's selection mode is unknown every op, clear included, is refused (-32603 selection mode unknown) with nothing changed. If the selection changed but reading it back failed, the reply is still a success with `applied: null` and `appliedError`.",
+   "inputSchema": {
+    "additionalProperties": false,
+    "properties": {
+     "faces": {
+      "description": "faces to select, per mesh; not with `nodeIDs`, and never with op clear",
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "faces": {
+         "description": "face indices as get_mesh reports them",
+         "items": {
+          "minimum": 0,
+          "type": "integer"
+         },
+         "minItems": 1,
+         "type": "array"
+        },
+        "nodeID": {
+         "maximum": 2147483647,
+         "minimum": 0,
+         "type": "integer"
+        }
+       },
+       "required": [
+        "nodeID",
+        "faces"
+       ],
+       "type": "object"
+      },
+      "maxItems": 4096,
+      "minItems": 1,
+      "type": "array"
+     },
+     "nodeIDs": {
+      "description": "live node ids to select (find_entities_live / node.list); not with `faces`, and never with op clear",
+      "items": {
+       "maximum": 2147483647,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "maxItems": 4096,
+      "minItems": 1,
+      "type": "array"
+     },
+     "op": {
+      "description": "replace the selection, add to it, remove from it, or clear it",
+      "enum": [
+       "replace",
+       "add",
+       "remove",
+       "clear"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "op"
+    ],
+    "type": "object"
+   }
+  }
+ ]
+}

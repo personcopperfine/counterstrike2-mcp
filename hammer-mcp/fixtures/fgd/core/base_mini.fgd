@@ -1,0 +1,299 @@
+// Hand-written mini core FGD fixture (included by fixtures/fgd/csgo/csgo.fgd).
+// Covers: a @BaseClass chain (GameEntity -> Targetname), key metadata `{ ... }` blocks (including
+// the desc-after-block form), `input` lines without a description, `local.`-style key names and
+// a duplicate class (the later definition wins).
+
+@BaseClass = GameEntity
+[
+	input Kill(void) : "Removes this entity from the world."
+	vscripts(scriptlist) [ group="Misc" ] : "Entity Scripts" : "" : "Name(s) of script files that are executed after all entities have spawned."
+]
+
+@BaseClass base(GameEntity) = Targetname
+[
+	targetname(target_source) { sort_priority = 90 } : "Name" : : "The name that other entities refer to this entity by."
+]
+
+@BaseClass = Parentname
+[
+	parentname(target_destination) { group="Hierarchy" } : "Parent" : : "The name of this entity's parent in the movement hierarchy."
+]
+
+// A class the csgo fixture extends with an @OverrideClass (key override in place).
+@PointClass base(Targetname) = light_environment : "Light environment."
+[
+	directlight(choices) : "Direct Lighting Type" : "1" : "How direct lighting should be represented." =
+	[
+		"0" : "None"
+		"1" : "Static"
+	]
+	fog(remove_key)
+	_fademindist(float) : "Fade Start Dist" : "-1" : "Distance at which the light begins to fade out."
+]
+
+@BaseClass = WeaponCore
+[
+	// A key whose metadata block spans lines with the display value after the block,
+	// exactly as in the real Parentname base class.
+	useLocalOffset(boolean)
+	{
+		group="Hierarchy"
+		bindable_command_buttons =
+		[
+			{
+				target = "ToolSelection"
+				command = "RepositionToMatchLocalOffset"
+			}
+		]
+	}
+	: "Use Local Transform" : 0 : "Whether to respect the specified local offset."
+
+	// An input without a description at all:
+	input SetParentLocalOffset(api)
+
+	// A child override of a same-named key, plus a `local.` key name:
+	local.origin(vector) { group="Hierarchy" } : "Local Origin" : : "Offset in the local space of the parent."
+]
+
+// Deliberately duplicated from the csgo fixture (and again below): later wins, warning recorded.
+@PointClass base(Targetname) = info_mini : "Earlier file definition."
+[
+	early_key(integer) : "Early key" : 0
+]
+@PointClass base(Targetname) = info_mini : "Later file definition in the same file."
+[
+	late_key(integer) : "Late key" : 0
+]
+
+// ---- trigger classes (WP-F): the FGD chain the trigger tools resolve -------------------------
+// `TriggerOnce` carries the real 12 spawnflags (default 1|4096 = 4097) and the `metadata { }`
+// block whose `auto_apply_material` is the trigger tools' default material; `Trigger` adds the
+// remaining `On*Touch` outputs. `trigger_push` declares its own 128/256 block, which merges with
+// the base's 12 — the case that pins the flag merge in `resolve`. `func_wall_mini` is a
+// @SolidClass with no `Trigger` in its chain and no `tags( Trigger )`: not a trigger.
+@BaseClass base(GameEntity) tags( Trigger )
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+		collision_group = "trigger"
+		physics_only_model = true
+	}
+	= TriggerOnce
+[
+	spawnflags(flags) =
+	[
+		1: "Clients" : 1
+		2: "NPCs" : 0
+		4: "Projectiles" : 0
+		8: "Physics Objects" : 0
+		16: "Only player ally NPCs" : 0
+		32: "Only clients in vehicles" : 0
+		64: "Everything (not including physics debris)" : 0
+		512: "Only clients *not* in vehicles" : 0
+		1024: "Physics debris" : 0
+		2048: "Only NPCs in vehicles (respects player ally flag)" : 0
+		4096: "Correctly account for object mass (trigger_push used to assume 100Kg) and multiple component physobjs (car, blob...)" : 1
+		268435456: "Touch objects in the trigger's hierarchy" : 0
+	]
+
+	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator triggers me."
+
+	input Toggle(void) : "Toggles this trigger between enabled and disabled states."
+
+	output OnStartTouch(void) : "Fired when an entity starts touching this trigger."
+]
+
+@BaseClass base(TriggerOnce) = Trigger
+[
+	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger, and no other entities are touching it."
+	output OnEndTouch(void) : "Fired when an entity stops touching this trigger."
+	output OnEndTouchAll(void) : "Fired when an entity stops touching this trigger, and no other entities are touching it."
+]
+
+@SolidClass base(TriggerOnce) = trigger_once :
+	"A trigger volume that removes itself after it is triggered once."
+[
+	output OnTrigger(void) : "Fired whenever the trigger is activated."
+]
+
+@SolidClass base(Trigger) = trigger_multiple :
+	"A trigger volume that can be triggered multiple times."
+[
+	wait(float) : "Delay Before Reset" : 1 : "Amount of time, in seconds, after the trigger_multiple has triggered before it can be triggered again."
+	output OnTrigger(void) : "Fired whenever the trigger is activated."
+]
+
+@SolidClass base(Trigger) = trigger_push :
+	"A trigger volume that pushes entities that touch it."
+[
+	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0"
+
+	spawnflags(flags) =
+	[
+		128: "Once Only" : 0
+		256: "Affects Ladders (Half-Life 2)" : 0
+	]
+
+	speed(integer) : "Speed of Push" : 40 : "The speed at which to push entities away, in inches / second."
+]
+
+@SolidClass base(Targetname) = func_wall_mini :
+	"A brush entity with no trigger in its chain."
+[
+	solidity(choices) : "Solidity" : 0 =
+	[
+		0 : "Toggle"
+		1 : "Never Solid"
+	]
+]
+
+// ---- sound classes (WP-S3): the FGD side of the sound tools --------------------------------
+// Faithful to the real core/base.fgd: the `tags( Sound )` header helper is the marker
+// `Database::is_sound_class` reads (through `base()` resolution), and the keyvalues whose FGD type
+// is `sound` are what `Database::sound_keys` returns — `soundName` for the `snd_event_*` family,
+// `soundevent` for the soundscapes, `message` for the legacy `ambient_generic` file-or-event form.
+// `logic_auto`/`logic_timer` are the timing helpers `create_sound_entities` schedules with; they
+// carry `tags( Logic )`, like the real file. `trigger_soundscape` deliberately carries **no**
+// `tags( Sound )` (the real one does not either: its `soundscape` key is a legacy `.vsc` name) —
+// it is the negative case for `is_sound_class`. `snd_soundscape` also carries **no** own
+// `tags( Sound )` here (the real file re-declares it): the fixture must exercise the base-chain
+// inheritance the sound WP pins, and the real file's own-tag form is covered by the `#[ignore]`d
+// corpus test (`real_game_sound_classes`). `EnableDisable` is the real `@BaseClass` the
+// soundscapes inherit their Enable/Disable inputs from.
+
+@BaseClass = EnableDisable
+[
+	StartDisabled(boolean) : "Start Disabled" : 0
+
+	input Enable(void) : "Enable this entity."
+	input Disable(void) : "Disable this entity."
+]
+
+@PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/ambient_generic.vmat") sphere() = ambient_generic :
+	"Universal ambient sound. Use it to play and control a single sound."
+[
+	message(sound) [report] : "Sound Name" : "" : "Name of the GameSound entry for the sound to play. Also supports direct .wav filenames."
+	health(integer) : "Volume" : 10 : "Sound volume, expressed as a range from 0 to 10, where 10 is the loudest."
+	radius(string) : "Max Audible Distance" : "1250" : "Maximum distance at which this sound is audible."
+	spawnflags(flags) =
+	[
+		1 : "Play everywhere" : 0
+		16 : "Start Silent" : 1
+		32 : "Is NOT Looped" : 1
+	]
+	SourceEntityName(target_destination) : "SourceEntityName" : : "If an entity is specified, sound will come from this named entity instead of the location of ambient_generic."
+
+	input PlaySound(void) : "Starts the sound."
+	input StopSound(void) : "Stops the sound if it is playing."
+	input ToggleSound(void) : "Toggles the sound between playing and stopping."
+]
+
+@PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/snd_event.vmat") = point_soundevent :
+	"Plays a sound event from a point. The point can be this entity or a specified entity's position."
+[
+	soundName(sound) [report] : "Sound Event Name" : "" : "Name of the sound event to play"
+	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity the sound should emit from."
+	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
+	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
+	stopOnNew(boolean) : "Re-trigger Stops Last" : 1 : "Stop a previously playing event when a new one is started"
+
+	input SetSourceEntity(string) : "Set the name of the entity to play the sound from. The sound will follow the entity as it moves."
+	input SetSoundEventName(string) : "Set the name of the sound event to play"
+	input StartSound(void) : "Start the sound event. If an entity name is provided, the sound will originate from that entity"
+	input PauseSound(void) : "Pause the sound event."
+	input UnPauseSound(void) : "UnPause the sound event."
+	input StopSound(void) : "Stop the sound event"
+
+	output SoundEventGuid(integer) : "Sound Event GUID"
+	output OnSoundFinished(void) : "Fired when the sound finished playing"
+]
+
+@PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_event_point :
+	"Plays a sound event from a point. The point can be this entity or a specified entity's position."
+[
+]
+
+@PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") sphere(radius) = snd_event_sphere :
+	"Plays a sound event from the closest point on a sphere to the player."
+[
+	radius(float) : "Radius" : "5.0" : "Size of soundevent sphere"
+]
+
+@PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") box_oriented( box_mins, box_maxs ) = snd_event_alignedbox :
+	"Plays a sound event from a point, passes along the min and max positions of its AABB."
+[
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
+@PointClass base(Targetname, Parentname, EnableDisable) tags( Sound ) sphere() iconsprite("editor/env_soundscape.vmat") = env_soundscape :
+	"An entity to control sound in an area. The active soundscape at any time is the last one that had line-of-sight to the player, and was within the radius."
+[
+	radius(integer) : "Radius" : 128 : "If set to -1, then the player can hear the soundscape as long as he can see it (regardless of distance to it)."
+	soundscape(string) : "Soundscape" : "Nothing" : "The name of the soundscape to use. Corresponds to an entry in the soundscapes*.txt file in the scripts directory."
+	enablesoundevent(boolean) : "Override soundscape with sound event" : 0
+	soundevent(sound) : "Sound Event" : "" : "The name of the sound event to start from the soundscape entity."
+
+	position0(target_destination) : "Sound Position 0" : ""
+	position1(target_destination) : "Sound Position 1" : ""
+
+	input ToggleEnabled(void) : "Toggle the soundscape enabled state."
+
+	output OnPlay(void) : "Fired when this soundscape becomes the active one."
+]
+
+@PointClass base(env_soundscape) sphere() iconsprite("editor/env_soundscape.vmat") = snd_soundscape :
+	"An entity to control sound in an area (the sound-event flavour of env_soundscape)."
+[
+]
+
+@SolidClass base(Trigger) = trigger_soundscape :
+	"Soundscape trigger. It is not necessary to create outputs for this trigger."
+[
+	soundscape(target_destination) : "Soundscape"
+]
+
+@PointClass base( Targetname ) tags( Logic ) iconsprite("editor/logic_auto.vmat")
+	metadata
+	{
+		entity_tool_name = "Logic Auto"
+		entity_tool_group = "Logic"
+	}
+= logic_auto :
+	"Fires outputs when a map spawns."
+[
+	spawnflags(Flags) =
+	[
+		1 : "Remove on fire" : 1
+	]
+
+	output OnMapSpawn(void) : "Fired when the map is loaded for any reason."
+	output OnMultiNewRound(void) : "Fired only in multiplayer, when a new round is started."
+]
+
+@PointClass base(Targetname, EnableDisable) tags( Logic ) iconsprite("editor/logic_timer.vmat")
+	metadata
+	{
+		entity_tool_name = "Logic Timer"
+		entity_tool_group = "Logic"
+	}
+= logic_timer :
+	"An entity that fires a timer event at regular, or random, intervals."
+[
+	spawnflags(flags) =
+	[
+		1 : "Oscillator (alternates between OnTimerHigh and OnTimerLow outputs)" : 0
+	]
+
+	UseRandomTime(boolean) : "Use Random Time" : 0
+	RefireTime(float) : "Refire Interval" : : "If 'Use Random Time' isn't set, this is the time between timer fires, in seconds."
+	InitialDelay(float) : "Initial delay before first fire" : 0 : "Time to wait after the timer is enabled before firing the first time."
+
+	input RefireTime(float) : "Set a new Refire Interval."
+	input ResetTimer(void) : "Reset the timer. It will fire after the Refire Interval expires."
+	input FireTimer(void) : "Force the timer to fire immediately."
+	input Toggle(void) : "Toggle the timer on/off."
+
+	output OnTimer(void) : "Fired when the timer expires."
+	output OnTimerHigh(void) : "Fired every other time for an oscillating timer."
+]

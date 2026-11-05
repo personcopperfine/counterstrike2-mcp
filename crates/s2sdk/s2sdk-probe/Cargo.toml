@@ -1,0 +1,21 @@
+[package]
+name = "s2sdk-probe"
+version = "0.0.1"
+description = "LD_PRELOAD payload that exercises s2sdk inside a live CS2 process and reports a RESULT line (live test)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "s2sdk_probe"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+s2sdk = { path = "../s2sdk" }
+libc = "0.2"
+
+# tests/live.rs drives a real LinuxDedicated session through cs2-mcp-common's DockerRuntime
+[dev-dependencies]
+cs2-mcp-common = { path = "../../cs2-mcp-common" }
+tokio = { workspace = true }
+serde_json = { workspace = true }

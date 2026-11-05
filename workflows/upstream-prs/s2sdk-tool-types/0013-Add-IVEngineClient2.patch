@@ -1,0 +1,259 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 03:12:45 -0500
+Subject: [PATCH 13/47] Add IVEngineClient2
+
+Ported from Wend4r/sourcesdk s2/restore-client
+public/cdll_int.h, verified against CS2 2000930 (win64 and
+linux).
+
+Co-authored-by: Wend4r <47463683+Wend4r@users.noreply.github.com>
+Co-authored-by: boeing666 <linbergh.dd@gmail.com>
+---
+ public/engine2/ivengineclient2.h | 238 +++++++++++++++++++++++++++++++
+ 1 file changed, 238 insertions(+)
+ create mode 100644 public/engine2/ivengineclient2.h
+
+diff --git a/public/engine2/ivengineclient2.h b/public/engine2/ivengineclient2.h
+new file mode 100644
+index 00000000..8bd771b4
+--- /dev/null
++++ b/public/engine2/ivengineclient2.h
+@@ -0,0 +1,238 @@
++//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose:
++//
++// $NoKeywords: $
++//
++//===========================================================================//
++
++#ifndef IVENGINECLIENT2_H
++#define IVENGINECLIENT2_H
++
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "engine2/isource2engine.h"
++#include "engine2/engineevents.h"
++#include "worldrenderer/world_defs.h"
++#include "tier0/basetypes.h"
++#include "tier0/buffer_string.h"
++#include "tier0/keyvalues.h"
++#include "tier0/platwindow.h"
++#include "tier0/utlsymbollarge.h"
++#include "const.h"
++#include "playerslot.h"
++#include <steam/steamclientpublic.h>
++
++class CDemoSaveGame;
++class CEngineGotvSyncPacket;
++class CGameInfo;
++class CGamestatsData;
++class CMovieRecorder;
++class CMsgPlayerInfo;
++class CUtlBuffer;
++class IAchievementMgr;
++class IBroadcastPlayer;
++class IDemoPlayer;
++class IDemoRecorder;
++class INetChannel;
++class IVoiceTweak;
++
++// AMNOTE: Placeholder for a 40-byte per-frame timing record that IVEngineClient2 returns by value; it must stay trivially copyable
++struct EngineClientUnk40_t
++{
++	uint64 m_unk001;
++	uint64 m_unk002;
++	uint64 m_unk003;
++	uint64 m_unk004;
++	uint64 m_unk005;
++};
++
++//-----------------------------------------------------------------------------
++// Purpose: Interface the engine exposes to the client DLL
++//-----------------------------------------------------------------------------
++abstract_class IVEngineClient2 : public ISource2Engine
++{
++public:
++	virtual EUniverse GetSteamUniverse() const = 0;
++	virtual WorldGroupId_t FindWorldGroupByName( const char *pszName ) = 0;
++	virtual const char *GetWorldGroupName( WorldGroupId_t hWorldGroup ) = 0;
++	virtual WorldGroupId_t GetFirstWorldGroupId( bool bClient ) = 0;
++	virtual WorldGroupId_t MaxWorldGroupId( bool bClientSide ) = 0;
++	virtual bool IsWorldGroupValid( WorldGroupId_t hWorldGroup ) = 0;
++	virtual float *GetMainLoopTimes() = 0;
++	virtual void SetFrameTimeAmnesty( const char *amnesty, int, float frametime ) = 0;
++	virtual const char *GetFrameTimeAmnesty( bool check_cvar ) = 0;
++	virtual void SetFramePerformanceTag( const char *pszTag, int nValue, int, float flDuration ) = 0;
++	virtual void ShowFrameTimeReport( void *, bool, LoggingChannelID_t channel = -1 ) = 0;
++	virtual void DumpNetStats( void *, void (*pfnPrint)( const char * ) ) = 0;
++	virtual bool ShouldForceMaxFrametimeToTickInterval() = 0;
++	virtual uint32 GetLongFrameCount() = 0;
++	virtual bool GetPlayerInfo( int nPlayerIndex, CMsgPlayerInfo *pInfo ) = 0;
++	virtual CPlayerUserId GetPlayerUserId( int nPlayerIndex ) = 0;
++	virtual CPlayerSlot GetLocalPlayer( CSplitScreenSlot nSlot ) = 0;
++	virtual CSplitScreenSlot GetSplitScreenSlotForPlayer( CPlayerSlot nPlayerSlot ) = 0;
++	virtual float GetLastTimeStamp() = 0;
++	virtual int GetLastServerTick() = 0;
++	virtual int GetMaxClients() = 0;
++	virtual bool IsInGame() = 0;
++	virtual bool IsConnected() = 0;
++	virtual INetChannel *GetNetChannel( CSplitScreenSlot nSlot ) = 0;
++	virtual bool IsPlayingDemo() = 0;
++	virtual const char *GetDemoFilePath() = 0;
++	virtual const char *GetDemoHostName() = 0;
++	virtual bool IsRecordingDemo() = 0;
++	virtual bool IsPlayingTimeDemo() = 0;
++	// AMNOTE: Returns a flag byte of the current entry of an engine-side table; false when there is none
++	virtual bool unk101() = 0;
++	virtual bool IsPlayingBroadcast() = 0;
++	virtual IBroadcastPlayer *GetBroadcastPlayer() = 0;
++	virtual void ServerCmd( CSplitScreenSlot nSlot, const char *pszCmd ) = 0;
++	virtual void ClientCommand( CSplitScreenSlot nSlot, const char *pszCmd, bool bUnrestricted, double flInputTime, uint64 nInputTimestamp ) = 0;
++	virtual void SetRestrictServerCommands( bool bRestrict ) = 0;
++	virtual void SetRestrictClientCommands( bool bRestrict ) = 0;
++	virtual bool IsLowViolence() = 0;
++	virtual CPlayerSlot GetSplitScreenPlayer( CSplitScreenSlot nSlot ) = 0;
++	virtual bool IsSplitScreenActive() = 0;
++	virtual bool IsValidSplitScreenSlot( CSplitScreenSlot nSlot ) = 0;
++	virtual CSplitScreenSlot FirstValidSplitScreenSlot() = 0;
++	virtual CSplitScreenSlot NextValidSplitScreenSlot( CSplitScreenSlot nPreviousSlot ) = 0;
++	virtual int GetAvailableAsyncThread() = 0;
++	virtual void GetScreenSize( int &nWidth, int &nHeight ) = 0;
++	virtual bool IsLoadingLevel() = 0;
++	virtual void OnEngineLevelLoadingFinished() = 0;
++	virtual const char *GetLevelName() = 0;
++	virtual const char *GetLevelNameShort() = 0;
++	virtual IVoiceTweak *GetVoiceTweakAPI() = 0;
++	virtual void CheckPoint( const char *pszName ) = 0;
++	virtual CMovieRecorder *GetMovieRecorder() = 0;
++	virtual IDemoPlayer *GetDemoPlayer() = 0;
++	virtual IDemoRecorder *GetDemoRecorder() = 0;
++	virtual bool IsDemoPlaybackPaused() = 0;
++	virtual bool IsSkippingPlayback() = 0;
++	virtual int GetDemoRecordingTick() = 0;
++	virtual int GetDemoPlaybackTick() = 0;
++	virtual int GetDemoPlaybackStartTick() = 0;
++	virtual float GetDemoPlaybackTimeScale() = 0;
++	virtual int GetDemoPlaybackTotalTicks() = 0;
++	virtual const char *GetDemoPlaybackFileName() = 0;
++	virtual void PlayDemo( const char *pszFilename ) = 0;
++	// AMNOTE: Setter and getter of the same demo player flag
++	virtual void unk201( bool ) = 0;
++	virtual bool unk202() = 0;
++	virtual void PauseDemo() = 0;
++	virtual void ResumeDemo() = 0;
++	virtual void SkipToDemoTick( int nTick ) = 0;
++	// AMNOTE: Sets another demo player flag
++	virtual void unk301( bool ) = 0;
++	virtual bool IsHLTV() = 0;
++	virtual void GetUILanguage( CBufferString &sLanguage ) = 0;
++	virtual float GetScreenAspectRatio( int nViewportWidth, int nViewportHeight ) = 0;
++	virtual int GetPatchVersion() = 0;
++	virtual int GetBuildVersion() const = 0;
++	virtual const char *GetVersionDateString() = 0;
++	virtual const char *GetVersionTimeString() = 0;
++	virtual int GetConnectedServerNetworkVersion() = 0;
++	virtual uint32 GetAppID() = 0;
++	virtual bool ReadKeyBindings( CSplitScreenSlot nSlot ) = 0;
++	virtual void SetAchievementMgr( IAchievementMgr *pAchievementMgr ) = 0;
++	virtual IAchievementMgr *GetAchievementMgr() = 0;
++	virtual CSplitScreenSlot GetActiveSplitScreenPlayerSlot() = 0;
++	virtual CSplitScreenSlot SetActiveSplitScreenPlayerSlot( CSplitScreenSlot nSlot ) = 0;
++	virtual bool SetLocalPlayerIsResolvable( const char *pszContext, int nLine, bool bResolvable ) = 0;
++	virtual bool IsLocalPlayerResolvable() = 0;
++	virtual void RegisterDemoCustomDataCallback( const CUtlSymbolLarge &szCallbackSaveID, void ( *pfnCallback )( uint8 *pData, size_t nSize ) ) = 0;
++	virtual void RecordDemoCustomData( void ( *pfnCallback )( uint8 *pData, size_t nSize ), const void *pData, size_t nDataLength ) = 0;
++	virtual void SetPitchScale( float flPitchScale ) = 0;
++	virtual float GetPitchScale() = 0;
++	virtual void SetMixGroupOfCurrentMixer( const char *pszGroupName, const char *pszParam, float flValue ) = 0;
++	virtual int GetMixLayerIndex( const char *pszMixLayerName ) = 0;
++	virtual void SetMixLayerLevel( int nIndex, float flLevel ) = 0;
++	virtual bool IsVoiceRecording() = 0;
++	virtual void SetTimescale( float flTimescale ) = 0;
++	virtual void SetGamestatsData( CGamestatsData *pGamestatsData ) = 0;
++	virtual CGamestatsData *GetGamestatsData() = 0;
++	virtual int GetBugSubmissionCount() = 0;
++	virtual void ClearBugSubmissionCount() = 0;
++	virtual float GetServerSimulationFrameTime() = 0;
++	// AMNOTE: pTickTimes is a CUtlVector of per-tick timing records; returns the newest frame number
++	virtual uint64 GetServerTickTimes( uint64 nFirstFrame, void *pTickTimes ) = 0;
++	virtual bool IsInLevelLoadLoop() = 0;
++	virtual void SetConnectionPassword( const char *pszPassword ) = 0;
++	virtual void ServerCmdKeyValues( KeyValues *pKeyValues ) = 0;
++	virtual void TickProgressBar() = 0;
++	virtual PlatWindow_t GetEngineWindow() = 0;
++	virtual void ChangePVSSpawnGroupHandle( SpawnGroupHandle_t hSpawnGroup ) = 0;
++	virtual void SkipDemoToTime( float flTime ) = 0;
++	virtual void FlashWindow() = 0;
++	virtual void DesktopNotify( const char *pszTitle, const char *pszMessage ) = 0;
++	virtual void AlertUser( const char *pszTitle, const char *pszMessage ) = 0;
++	virtual bool GetDemoGameInfo( CGameInfo *pGameInfo ) = 0;
++	virtual bool GetDemoFileGameInfo( const char *pszFileName, CGameInfo *pGameInfo ) = 0;
++	virtual bool SOSSetOpvarFloat( const char *pszStackName, const char *pszOpvarName, float flValue ) = 0;
++	virtual bool SOSGetOpvarFloat( const char *pszStackName, const char *pszOpvarName, float *pflOut ) = 0;
++	virtual bool MapLoadFailed() = 0;
++	virtual void SetMapLoadFailed( bool bState ) = 0;
++	virtual SpawnGroupHandle_t LoadSpawnGroup( const SpawnGroupDesc_t &desc ) = 0;
++	virtual void UnloadSpawnGroup( SpawnGroupHandle_t hSpawnGroup, /*ESpawnGroupUnloadOption*/ int nOption ) = 0;
++	virtual void SetSpawnGroupDescription( SpawnGroupHandle_t hSpawnGroup, const char *pszDescription ) = 0;
++	virtual bool IsSpawnGroupLoaded( SpawnGroupHandle_t hSpawnGroup ) = 0;
++	virtual bool IsSpawnGroupLoading( SpawnGroupHandle_t hSpawnGroup ) = 0;
++	virtual SpawnGroupHandle_t FindSpawnGroupByName( const char *pszName ) = 0;
++	virtual void SynchronouslySpawnGroup( SpawnGroupHandle_t hSpawnGroup ) = 0;
++	virtual void SynchronizeAndBlockUntilLoaded( SpawnGroupHandle_t hSpawnGroup ) = 0;
++	virtual bool GetDemoSaveGameForTick( int nTick, CDemoSaveGame *pSaveGame ) = 0;
++	virtual int GetInstantReplayOldestTick() = 0;
++	virtual int GetInstantReplayLiveTick() = 0;
++	virtual int GetInstantReplayTicksBehindLive() = 0;
++	virtual bool IsInstantReplayPaused() = 0;
++	virtual float GetInstantReplayTimescale() = 0;
++	virtual bool IsClientLocalToActiveServer() = 0;
++	virtual uint64 GetGameServerSteamID() = 0;
++	virtual const char *GetDefaultRenderSystemOption() = 0;
++	virtual void SetDefaultRenderSystemOption( const char *pszOption ) = 0;
++	virtual bool IsRenderSystemOptionFromCommandLine() = 0;
++	virtual uint64 GetRenderSystemOptionFlags() = 0;
++	virtual void SetRenderSystemOptionFlags( uint32 nValue, uint32 nMask ) = 0;
++	virtual bool IsRenderSystemOptionRecommendationStale() = 0;
++	virtual void MarkRenderSystemOptionRecommended() = 0;
++	virtual void SaveBootConfig() = 0;
++	virtual void unk401( const EngineLoopState_t &loopState ) = 0;
++	virtual void RunPanoramaAnimUpdate() = 0;
++	virtual void WaitForPanoramaAnimUpdate() = 0;
++	virtual const char *GetLanguage( int nType ) = 0;
++	virtual void SetLanguage( int nType, const char *pszLanguage ) = 0;
++	virtual bool IsLanguageSetOnCommandLine( int nType ) = 0;
++	virtual const char *GetSubLanguage( int nType ) = 0;
++	virtual void SetSubLanguage( int nType, const char *pszSubLanguage ) = 0;
++	virtual bool IsSubLanguageSetOnCommandLine( int nType ) = 0;
++	virtual void WriteMinidumpSystemInfo( CUtlBuffer *pBuffer ) = 0;
++	virtual bool GetLowViolence() = 0;
++	virtual void SetLowViolence( bool bLowViolence ) = 0;
++	virtual float DemoTicksToTime( int nTicks ) = 0;
++	virtual const char *GetDemoRecordingFileName() = 0;
++	// AMNOTE: Returns the constant 0.1
++	virtual double unk501() = 0;
++	// AMNOTE: Points into the timing record of the frame in flight, NULL when there is none
++	virtual void *unk502() = 0;
++	// AMNOTE: Newest of the last ten per-frame timing records
++	virtual EngineClientUnk40_t unk503() = 0;
++	virtual bool unk504( const CEngineGotvSyncPacket *pSyncPacket ) = 0;
++	// AMNOTE: Does nothing
++	virtual void unk505( float ) = 0;
++	// AMNOTE: Does nothing
++	virtual void unk506( int ) = 0;
++	// AMNOTE: Does nothing
++	virtual void unk507( float ) = 0;
++	// AMNOTE: Adds or removes the command name (hashed lower-case) from a set the engine client keeps
++	virtual void unk508( const char *pszCommand, bool bEnable ) = 0;
++	virtual void DisallowSecureServers() = 0;
++	virtual void SendVProfLiteReportToServer( void *pReport ) = 0;
++	virtual int GetGlobalThreadPoolMode() = 0;
++	virtual void SetGlobalThreadPoolMode( int nMode ) = 0;
++	virtual void ResetGlobalThreadPoolMode() = 0;
++	virtual void PrintNetworkSummaryReport() = 0;
++};
++
++#endif // IVENGINECLIENT2_H

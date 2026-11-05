@@ -1,0 +1,116 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 07:10:42 -0500
+Subject: [PATCH 19/47] Add CClientInput, ClientInputButton_t & CInputValueBase
+
+Verified against CS2 2000930 (win64 and linux). CreateMove and
+MakeWeaponSelection are named after IInput in the public Source SDK 2013
+game/client/iinput.h; Init and Shutdown after its Init_All and Shutdown_All.
+---
+ game/client/clientinput.h | 98 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+ create mode 100644 game/client/clientinput.h
+
+diff --git a/game/client/clientinput.h b/game/client/clientinput.h
+new file mode 100644
+index 00000000..b2d4077b
+--- /dev/null
++++ b/game/client/clientinput.h
+@@ -0,0 +1,98 @@
++//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
++//
++// Purpose: Client input: buttons, per-frame input processing and per-tick user commands
++//
++//=============================================================================//
++
++#ifndef CLIENTINPUT_H
++#define CLIENTINPUT_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "in_buttons.h"
++#include "mathlib/vector.h"
++#include "tier0/convar.h"
++#include "tier0/utlvector.h"
++
++class CEntityInstance;
++class CUserCmd;
++
++// AMNOTE: Registered with IInputService by name; the engine applies "+name" / "-name" commands and key bindings to it
++class CInputValueBase
++{
++public:
++	const char *m_pszName;
++	// AMNOTE: 0 for buttons
++	int m_unk101;
++	bool m_unk102;
++	// AMNOTE: Per split screen slot state (value, press and release edges), written by the engine
++	uint32 m_unk103[28];
++};
++
++// AMNOTE: One static object per client button ("forward", "attack", ...), linked into a global list
++struct ClientInputButton_t
++{
++	// AMNOTE: IN_ALL for buttons that are not part of the user command buttons (moveup, movedown)
++	InputBitMask_t m_nButton;
++	CInputValueBase m_InputValue;
++	ClientInputButton_t *m_pNext;
++};
++
++// AMNOTE: Incomplete class, only the button table is known
++class CClientInput
++{
++public:
++	virtual ~CClientInput() = 0;
++	virtual void Init() = 0;
++	virtual void Shutdown() = 0;
++	// AMNOTE: Called when the game loop mode receives the server info
++	virtual void unk101() = 0;
++	virtual void ProcessInput( CSplitScreenSlot nSlot, float flFrameTime, bool bActive ) = 0;
++	virtual void CreateMove( CSplitScreenSlot nSlot, bool bActive ) = 0;
++	// AMNOTE: Called on the finished user command, before prediction
++	virtual void unk201( CUserCmd *pCmd ) = 0;
++	virtual void unk202( CSplitScreenSlot nSlot ) = 0;
++	virtual void unk203( CSplitScreenSlot nSlot ) = 0;
++	virtual void MakeWeaponSelection( CSplitScreenSlot nSlot, CEntityInstance *pWeapon ) = 0;
++	virtual bool unk301() = 0;
++	virtual bool unk302() = 0;
++	// AMNOTE: Called before and after the engine executes a batch of commands from one input event
++	virtual void unk303( CSplitScreenSlot nSlot, CUtlVector< CCommand * > *pCommands ) = 0;
++	virtual void unk304( CSplitScreenSlot nSlot, CUtlVector< CCommand * > *pCommands ) = 0;
++	// AMNOTE: Asked before the engine applies a command to an input value, true swallows the command
++	virtual bool unk305( CSplitScreenSlot nSlot, CInputValueBase *pInputValue, const CCommand &args ) = 0;
++	// AMNOTE: Called after the engine applied a command to an input value
++	virtual void unk306( CSplitScreenSlot nSlot, CInputValueBase *pInputValue, const CCommand &args ) = 0;
++	virtual bool unk307() = 0;
++	// AMNOTE: Appends attack, jump, duck, forward, back, left, right and attack2
++	virtual void unk308( CUtlVector< ClientInputButton_t * > &buttons ) = 0;
++	// AMNOTE: Adds forward minus back
++	virtual void unk309( CSplitScreenSlot nSlot, float *pflMove ) = 0;
++	// AMNOTE: Adds moveup minus movedown
++	virtual void unk3010( CSplitScreenSlot nSlot, float *pflMove ) = 0;
++	// AMNOTE: Adds left minus right
++	virtual void unk3011( CSplitScreenSlot nSlot, float *pflMove ) = 0;
++	// AMNOTE: Clamps pitch to the cl_pitchup / cl_pitchdown limits and roll to 50 degrees
++	virtual void unk3012( QAngle &angles ) = 0;
++	virtual void unk3013( CSplitScreenSlot nSlot, QAngle *pViewAngles, float *pMove, float *pUnk, float *pFrameMove, void *pButtons, float flFrameTime ) = 0;
++	virtual bool unk3014() = 0;
++	virtual float unk3015( float flValue ) = 0;
++	virtual void unk3016( CSplitScreenSlot nSlot, CUserCmd *pCmd ) = 0;
++	virtual bool unk3017( CSplitScreenSlot nSlot, void *pUnk, CUserCmd *pCmd ) = 0;
++	virtual bool unk3018( CSplitScreenSlot nSlot, void *pUnk ) = 0;
++	virtual void unk3019( CSplitScreenSlot nSlot, void *pFrame, const QAngle &angles ) = 0;
++	virtual QAngle unk3020( CSplitScreenSlot nSlot, void *pFrame ) = 0;
++	virtual void unk3021( CSplitScreenSlot nSlot, void *pFrame ) = 0;
++	virtual void unk3022( CSplitScreenSlot nSlot, void *pFrame ) = 0;
++	// AMNOTE: Asked while building the user command; true replaces the view angles with *pAngles
++	virtual bool unk3023( CSplitScreenSlot nSlot, double flTime, QAngle *pAngles ) = 0;
++
++public:
++	bool m_unk001;
++	// AMNOTE: Indexed by the bit index of the button's IN_ bit
++	ClientInputButton_t *m_pButtons[64];
++	uint8 m_unk101[2416];
++};
++
++#endif // CLIENTINPUT_H

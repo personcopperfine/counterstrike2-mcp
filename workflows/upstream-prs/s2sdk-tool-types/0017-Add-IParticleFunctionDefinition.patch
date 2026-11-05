@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 06:29:22 -0500
+Subject: [PATCH 17/47] Add IParticleFunctionDefinition
+
+ParticleOperatorId_t and the GetName/GetId methods come from the public
+Source SDK 2013, public/particles/particles.h (IParticleOperatorDefinition),
+updated for the game's IParticleFunctionDefinition, verified against CS2
+2000930 (win64 and linux).
+---
+ public/particles/iparticlesystemmgr.h | 33 +++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 public/particles/iparticlesystemmgr.h
+
+diff --git a/public/particles/iparticlesystemmgr.h b/public/particles/iparticlesystemmgr.h
+new file mode 100644
+index 00000000..33e6b0b1
+--- /dev/null
++++ b/public/particles/iparticlesystemmgr.h
+@@ -0,0 +1,33 @@
++//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: Particle system manager interface
++//
++//===========================================================================//
++
++#ifndef IPARTICLESYSTEMMGR_H
++#define IPARTICLESYSTEMMGR_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "schemasystem/minschema.h"
++
++//-----------------------------------------------------------------------------
++// A particle system can only have 1 operator using a particular ID
++//-----------------------------------------------------------------------------
++enum ParticleOperatorId_t
++{
++	OPERATOR_GENERIC = -2,		// Can have as many of these as you want
++	OPERATOR_SINGLETON = -1,	// Can only have 1 operator with the same name as this one
++};
++
++// AMNOTE: A registered particle function class (emitter, initializer, operator, ...); the manager keeps one static instance per class
++abstract_class IParticleFunctionDefinition
++{
++public:
++	virtual const char *GetName() const = 0;
++	virtual ParticleOperatorId_t GetId() const = 0;
++	virtual SchemaMetaInfoHandle_t< CSchemaClassInfo > GetSchemaBinding() const = 0;
++};
++
++#endif // IPARTICLESYSTEMMGR_H

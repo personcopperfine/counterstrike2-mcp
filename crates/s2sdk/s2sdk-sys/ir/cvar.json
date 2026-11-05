@@ -1,0 +1,1423 @@
+{
+  "enums": [
+    {
+      "fixed_underlying": true,
+      "header": "public/tier0/convar.h",
+      "itanium": {
+        "fixed": true,
+        "size": 2,
+        "underlying": "short"
+      },
+      "msvc": {
+        "size": 2,
+        "underlying": "short"
+      },
+      "name": "EConVarType",
+      "rust_repr": "i16",
+      "underlying": "short",
+      "values": [
+        {
+          "name": "EConVarType_Invalid",
+          "value": -1
+        },
+        {
+          "name": "EConVarType_Bool",
+          "value": 0
+        },
+        {
+          "name": "EConVarType_Int16",
+          "value": 1
+        },
+        {
+          "name": "EConVarType_UInt16",
+          "value": 2
+        },
+        {
+          "name": "EConVarType_Int32",
+          "value": 3
+        },
+        {
+          "name": "EConVarType_UInt32",
+          "value": 4
+        },
+        {
+          "name": "EConVarType_Int64",
+          "value": 5
+        },
+        {
+          "name": "EConVarType_UInt64",
+          "value": 6
+        },
+        {
+          "name": "EConVarType_Float32",
+          "value": 7
+        },
+        {
+          "name": "EConVarType_Float64",
+          "value": 8
+        },
+        {
+          "name": "EConVarType_String",
+          "value": 9
+        },
+        {
+          "name": "EConVarType_Color",
+          "value": 10
+        },
+        {
+          "name": "EConVarType_Vector2",
+          "value": 11
+        },
+        {
+          "name": "EConVarType_Vector3",
+          "value": 12
+        },
+        {
+          "name": "EConVarType_Vector4",
+          "value": 13
+        },
+        {
+          "name": "EConVarType_Qangle",
+          "value": 14
+        },
+        {
+          "name": "EConVarType_VectorWS",
+          "value": 15
+        },
+        {
+          "name": "EConVarType_MAX",
+          "value": 16
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pszName",
+          "offset": 0,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CVValue_t *",
+          "name": "m_defaultValue",
+          "offset": 8,
+          "rust_type": "*mut CVValue_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CVValue_t *",
+          "name": "m_minValue",
+          "offset": 16,
+          "rust_type": "*mut CVValue_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CVValue_t *",
+          "name": "m_maxValue",
+          "offset": 24,
+          "rust_type": "*mut CVValue_t",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "const char *",
+          "name": "m_pszHelpString",
+          "offset": 32,
+          "rust_type": "*const ::core::ffi::c_char",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "EConVarType",
+          "name": "m_eVarType",
+          "offset": 40,
+          "rust_type": "EConVarType",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "short",
+          "name": "m_Version",
+          "offset": 42,
+          "rust_type": "i16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "unsigned int",
+          "name": "m_iTimesChanged",
+          "offset": 44,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_nFlags",
+          "offset": 48,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "unsigned int",
+          "name": "m_iCallbackIndex",
+          "offset": 56,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "unsigned int",
+          "name": "m_iFilterCBIndex",
+          "offset": 60,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "unsigned int",
+          "name": "m_iCompletionCBIndex",
+          "offset": 64,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_GameInfoFlags",
+          "offset": 68,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_UserInfoByteIndex",
+          "offset": 72,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "FnGetEnumInfoHandle_t",
+          "name": "m_fnGetEnumInfoHandle",
+          "offset": 80,
+          "rust_type": "*const ::core::ffi::c_void",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint8[16]",
+          "name": "m_Values",
+          "offset": 88,
+          "rust_type": "[u8; 16]",
+          "size": 16
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/convar.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_defaultValue",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_minValue",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_maxValue",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszHelpString",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eVarType",
+            "offset": 40,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Version",
+            "offset": 42,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iTimesChanged",
+            "offset": 44,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nFlags",
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iCallbackIndex",
+            "offset": 56,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iFilterCBIndex",
+            "offset": 60,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iCompletionCBIndex",
+            "offset": 64,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_GameInfoFlags",
+            "offset": 68,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_UserInfoByteIndex",
+            "offset": 72,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fnGetEnumInfoHandle",
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Values",
+            "offset": 88,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 104
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszName",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_defaultValue",
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_minValue",
+            "offset": 16,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_maxValue",
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_pszHelpString",
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_eVarType",
+            "offset": 40,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Version",
+            "offset": 42,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iTimesChanged",
+            "offset": 44,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_nFlags",
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iCallbackIndex",
+            "offset": 56,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iFilterCBIndex",
+            "offset": 60,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_iCompletionCBIndex",
+            "offset": 64,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_GameInfoFlags",
+            "offset": 68,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_UserInfoByteIndex",
+            "offset": 72,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fnGetEnumInfoHandle",
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_Values",
+            "offset": 88,
+            "size": 16
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 104
+      },
+      "name": "ConVarData",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 104
+    },
+    {
+      "align": 8,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "bool",
+          "name": "m_bValue",
+          "offset": 0,
+          "rust_type": "bool",
+          "size": 1
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int16",
+          "name": "m_i16Value",
+          "offset": 0,
+          "rust_type": "i16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_u16Value",
+          "offset": 0,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int32",
+          "name": "m_i32Value",
+          "offset": 0,
+          "rust_type": "i32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint32",
+          "name": "m_u32Value",
+          "offset": 0,
+          "rust_type": "u32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int64",
+          "name": "m_i64Value",
+          "offset": 0,
+          "rust_type": "i64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint64",
+          "name": "m_u64Value",
+          "offset": 0,
+          "rust_type": "u64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float32",
+          "name": "m_fl32Value",
+          "offset": 0,
+          "rust_type": "f32",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "float64",
+          "name": "m_fl64Value",
+          "offset": 0,
+          "rust_type": "f64",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "CUtlString",
+          "name": "m_StringValue",
+          "offset": 0,
+          "rust_type": "CUtlString",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Color",
+          "name": "m_clrValue",
+          "offset": 0,
+          "rust_type": "Color",
+          "size": 4
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector2D",
+          "name": "m_vec2Value",
+          "offset": 0,
+          "rust_type": "Vector2D",
+          "size": 8
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector",
+          "name": "m_vec3Value",
+          "offset": 0,
+          "rust_type": "Vector",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "Vector4D",
+          "name": "m_vec4Value",
+          "offset": 0,
+          "rust_type": "Vector4D",
+          "size": 16
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "QAngle",
+          "name": "m_angValue",
+          "offset": 0,
+          "rust_type": "QAngle",
+          "size": 12
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "VectorWS",
+          "name": "m_vecwsValue",
+          "offset": 0,
+          "rust_type": null,
+          "size": 12
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/convar.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bValue",
+            "offset": 0,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i16Value",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u16Value",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fl32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fl64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_StringValue",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_clrValue",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec2Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec3Value",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec4Value",
+            "offset": 0,
+            "size": 16
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_angValue",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecwsValue",
+            "offset": 0,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "kind": "union",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_bValue",
+            "offset": 0,
+            "size": 1
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i16Value",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u16Value",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_i64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_u64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fl32Value",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_fl64Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_StringValue",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_clrValue",
+            "offset": 0,
+            "size": 4
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec2Value",
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec3Value",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vec4Value",
+            "offset": 0,
+            "size": 16
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_angValue",
+            "offset": 0,
+            "size": 12
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_vecwsValue",
+            "offset": 0,
+            "size": 12
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "CVValue_t",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 16
+    },
+    {
+      "align": 4,
+      "bases": [],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "uint16",
+          "name": "m_ConVarAccessIndex",
+          "offset": 0,
+          "rust_type": "u16",
+          "size": 2
+        },
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "int",
+          "name": "m_ConVarRegisteredIndex",
+          "offset": 4,
+          "rust_type": "i32",
+          "size": 4
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/convar.h",
+      "itanium": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarAccessIndex",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarRegisteredIndex",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 4,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarAccessIndex",
+            "offset": 0,
+            "size": 2
+          },
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarRegisteredIndex",
+            "offset": 4,
+            "size": 4
+          }
+        ],
+        "pass_in_registers": true,
+        "size": 8
+      },
+      "name": "ConVarRef",
+      "opaque": false,
+      "pass_in_registers": true,
+      "size": 8
+    },
+    {
+      "align": 8,
+      "bases": [
+        {
+          "name": "ConVarRef",
+          "offset": 0,
+          "virtual": false
+        }
+      ],
+      "fields": [
+        {
+          "bit_offset": null,
+          "bit_width": null,
+          "cxx_type": "ConVarData *",
+          "name": "m_ConVarData",
+          "offset": 8,
+          "rust_type": "*mut ConVarData",
+          "size": 8
+        }
+      ],
+      "has_vptr": false,
+      "header": "public/tier0/convar.h",
+      "itanium": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarData",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "kind": "class",
+      "msvc": {
+        "align": 8,
+        "fields": [
+          {
+            "bit_offset": null,
+            "bit_width": null,
+            "name": "m_ConVarData",
+            "offset": 8,
+            "size": 8
+          }
+        ],
+        "pass_in_registers": false,
+        "size": 16
+      },
+      "name": "ConVarRefAbstract",
+      "opaque": false,
+      "pass_in_registers": false,
+      "size": 16
+    }
+  ],
+  "specs": [],
+  "upstream": {
+    "abis": [
+      "itanium-x86_64",
+      "msvc-x86_64"
+    ],
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": [
+    {
+      "class": "ICvar",
+      "header": "public/tier0/icvar.h",
+      "methods": [
+        {
+          "cxx_signature": "ConVarRef (const char *, bool)",
+          "decl_index": 0,
+          "is_dtor": false,
+          "itanium_slot": 11,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, ret: *mut ConVarRef, name: *const ::core::ffi::c_char, allow_defensive: bool) -> *mut ConVarRef",
+          "msvc_slot": 11,
+          "name": "FindConVar",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, name: *const ::core::ffi::c_char, allow_defensive: bool) -> ConVarRef"
+        },
+        {
+          "cxx_signature": "ConVarRef ()",
+          "decl_index": 1,
+          "is_dtor": false,
+          "itanium_slot": 12,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, ret: *mut ConVarRef) -> *mut ConVarRef",
+          "msvc_slot": 12,
+          "name": "FindFirstConVar",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar) -> ConVarRef"
+        },
+        {
+          "cxx_signature": "ConVarRef (ConVarRef)",
+          "decl_index": 2,
+          "is_dtor": false,
+          "itanium_slot": 13,
+          "msvc_rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, ret: *mut ConVarRef, prev: ConVarRef) -> *mut ConVarRef",
+          "msvc_slot": 13,
+          "name": "FindNextConVar",
+          "overrides": null,
+          "ret": {
+            "itanium": {
+              "regs": "int",
+              "size": 8,
+              "sret": false
+            },
+            "msvc": {
+              "size": 8,
+              "sret": true
+            }
+          },
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, prev: ConVarRef) -> ConVarRef"
+        },
+        {
+          "cxx_signature": "void (ConVarRef, const CSplitScreenSlot, const CVValue_t *, const CVValue_t *, ConVarUserInfoSet_t *)",
+          "decl_index": 3,
+          "is_dtor": false,
+          "itanium_slot": 14,
+          "msvc_slot": 14,
+          "name": "CallChangeCallback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, cvar: ConVarRef, nSlot: CSplitScreenSlot, pNewValue: *const CVValue_t, pOldValue: *const CVValue_t, userinfo_data: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ConVarRef, FnCvarCallbacksReader_t)",
+          "decl_index": 4,
+          "is_dtor": false,
+          "itanium_slot": 15,
+          "msvc_slot": 15,
+          "name": "IterateConVarCallbacks",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, cvar: ConVarRef, cb: *const ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "bool (ConVarRef, const CSplitScreenSlot, const CVValue_t *, const CVValue_t *, ConVarUserInfoSet_t *)",
+          "decl_index": 5,
+          "is_dtor": false,
+          "itanium_slot": 16,
+          "msvc_slot": 16,
+          "name": "CallFilterCallback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, cvar: ConVarRef, nSlot: CSplitScreenSlot, pNewValue: *const CVValue_t, pOldValue: *const CVValue_t, userinfo_data: *mut ::core::ffi::c_void) -> bool"
+        },
+        {
+          "cxx_signature": "ConCommandRef (const char *, bool)",
+          "decl_index": 6,
+          "is_dtor": false,
+          "itanium_slot": 17,
+          "msvc_slot": 17,
+          "name": "FindConCommand",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "ConCommandRef ()",
+          "decl_index": 7,
+          "is_dtor": false,
+          "itanium_slot": 18,
+          "msvc_slot": 18,
+          "name": "FindFirstConCommand",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "ConCommandRef (ConCommandRef)",
+          "decl_index": 8,
+          "is_dtor": false,
+          "itanium_slot": 19,
+          "msvc_slot": 19,
+          "name": "FindNextConCommand",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (ConCommandRef, const CCommandContext &, const CCommand &)",
+          "decl_index": 9,
+          "is_dtor": false,
+          "itanium_slot": 20,
+          "msvc_slot": 20,
+          "name": "DispatchConCommand",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (FnChangeCallbackGlobal_t)",
+          "decl_index": 10,
+          "is_dtor": false,
+          "itanium_slot": 21,
+          "msvc_slot": 21,
+          "name": "InstallGlobalChangeCallback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, callback: *const ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (FnChangeCallbackGlobal_t)",
+          "decl_index": 11,
+          "is_dtor": false,
+          "itanium_slot": 22,
+          "msvc_slot": 22,
+          "name": "RemoveGlobalChangeCallback",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, callback: *const ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ConVarRefAbstract *, CSplitScreenSlot, const char *, const char *, ConVarUserInfoSet_t *)",
+          "decl_index": 12,
+          "is_dtor": false,
+          "itanium_slot": 23,
+          "msvc_slot": 23,
+          "name": "CallGlobalChangeCallbacks",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, ref_: *mut ConVarRefAbstract, nSlot: CSplitScreenSlot, newValue: *const ::core::ffi::c_char, oldValue: *const ::core::ffi::c_char, userinfo_data: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (uint64)",
+          "decl_index": 13,
+          "is_dtor": false,
+          "itanium_slot": 24,
+          "msvc_slot": 24,
+          "name": "ResetConVarsToDefaultValuesByFlag",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, nFlag: u64)"
+        },
+        {
+          "cxx_signature": "void (int)",
+          "decl_index": 14,
+          "is_dtor": false,
+          "itanium_slot": 25,
+          "msvc_slot": 25,
+          "name": "SetMaxSplitScreenSlots",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, nSlots: i32)"
+        },
+        {
+          "cxx_signature": "void (IConVarListener *)",
+          "decl_index": 15,
+          "is_dtor": false,
+          "itanium_slot": 26,
+          "msvc_slot": 26,
+          "name": "RegisterCreationListeners",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, callbacks: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (IConVarListener *)",
+          "decl_index": 16,
+          "is_dtor": false,
+          "itanium_slot": 27,
+          "msvc_slot": 27,
+          "name": "RemoveCreationListeners",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, callbacks: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (const char *)",
+          "decl_index": 17,
+          "is_dtor": false,
+          "itanium_slot": 28,
+          "msvc_slot": 28,
+          "name": "ResetConVarsToDefaultValuesByName",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, pszPrefix: *const ::core::ffi::c_char)"
+        },
+        {
+          "cxx_signature": "ConVarSnapshot_t *()",
+          "decl_index": 18,
+          "is_dtor": false,
+          "itanium_slot": 29,
+          "msvc_slot": 29,
+          "name": "TakeConVarSnapshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (ConVarSnapshot_t *)",
+          "decl_index": 19,
+          "is_dtor": false,
+          "itanium_slot": 30,
+          "msvc_slot": 30,
+          "name": "ResetConVarsToSnapshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, pSnapshot: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void (ConVarSnapshot_t *)",
+          "decl_index": 20,
+          "is_dtor": false,
+          "itanium_slot": 31,
+          "msvc_slot": 31,
+          "name": "DestroyConVarSnapshot",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, pSnapshot: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "characterset_t *()",
+          "decl_index": 21,
+          "is_dtor": false,
+          "itanium_slot": 32,
+          "msvc_slot": 32,
+          "name": "GetCharacterSet",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar) -> *mut ::core::ffi::c_void"
+        },
+        {
+          "cxx_signature": "void (KeyValues *)",
+          "decl_index": 22,
+          "is_dtor": false,
+          "itanium_slot": 33,
+          "msvc_slot": 33,
+          "name": "SetConVarsFromGameInfo",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, pKV: *mut ::core::ffi::c_void)"
+        },
+        {
+          "cxx_signature": "void ()",
+          "decl_index": 23,
+          "is_dtor": false,
+          "itanium_slot": 34,
+          "msvc_slot": 34,
+          "name": "StripDevelopmentFlags",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar)"
+        },
+        {
+          "cxx_signature": "int ()",
+          "decl_index": 24,
+          "is_dtor": false,
+          "itanium_slot": 35,
+          "msvc_slot": 35,
+          "name": "GetTotalUserInfoCvarsByteSize",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar) -> i32"
+        },
+        {
+          "cxx_signature": "void (ConVarUserInfoSet_t, int, int, bool)",
+          "decl_index": 25,
+          "is_dtor": false,
+          "itanium_slot": 36,
+          "msvc_slot": 36,
+          "name": "CopyUserInfoCvarDefaults",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (const CCommand &, CUtlVector<CUtlString> &, bool *)",
+          "decl_index": 26,
+          "is_dtor": false,
+          "itanium_slot": 37,
+          "msvc_slot": 37,
+          "name": "GetCompletionResults",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, command: *mut ::core::ffi::c_void, completions: *mut ::core::ffi::c_void, successful: *mut bool)"
+        },
+        {
+          "cxx_signature": "void (const ConVarCreation_t &, uint64, ConVarRef *, ConVarData **)",
+          "decl_index": 27,
+          "is_dtor": false,
+          "itanium_slot": 38,
+          "msvc_slot": 38,
+          "name": "RegisterConVar",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, setup: *mut ::core::ffi::c_void, nAdditionalFlags: u64, pCvarRef: *mut ConVarRef, pCvarData: *mut *mut ConVarData)"
+        },
+        {
+          "cxx_signature": "void (ConVarRef)",
+          "decl_index": 28,
+          "is_dtor": false,
+          "itanium_slot": 39,
+          "msvc_slot": 39,
+          "name": "UnregisterConVarCallbacks",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, cvar: ConVarRef)"
+        },
+        {
+          "cxx_signature": "void (bool)",
+          "decl_index": 29,
+          "is_dtor": false,
+          "itanium_slot": 40,
+          "msvc_slot": 40,
+          "name": "LockConVarValueInitialisation",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, state: bool)"
+        },
+        {
+          "cxx_signature": "ConVarData *(ConVarRef)",
+          "decl_index": 30,
+          "is_dtor": false,
+          "itanium_slot": 41,
+          "msvc_slot": 41,
+          "name": "GetConVarData",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, cvar: ConVarRef) -> *mut ConVarData"
+        },
+        {
+          "cxx_signature": "ConCommandRef (const ConCommandCreation_t &, uint64)",
+          "decl_index": 31,
+          "is_dtor": false,
+          "itanium_slot": 42,
+          "msvc_slot": 42,
+          "name": "RegisterConCommand",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (ConCommandRef)",
+          "decl_index": 32,
+          "is_dtor": false,
+          "itanium_slot": 43,
+          "msvc_slot": 43,
+          "name": "UnregisterConCommandCallbacks",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "ConCommandData *(ConCommandRef)",
+          "decl_index": 33,
+          "is_dtor": false,
+          "itanium_slot": 44,
+          "msvc_slot": 44,
+          "name": "GetConCommandData",
+          "overrides": null,
+          "rust_fn": null
+        },
+        {
+          "cxx_signature": "void (ConVarRefAbstract *, CSplitScreenSlot, ConVarUserInfoSet_t *, CVValue_t *)",
+          "decl_index": 34,
+          "is_dtor": false,
+          "itanium_slot": 45,
+          "msvc_slot": 45,
+          "name": "QueueThreadSetValue",
+          "overrides": null,
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ICvar, ref_: *mut ConVarRefAbstract, nSlot: CSplitScreenSlot, userinfo_data: *mut ::core::ffi::c_void, value: *mut CVValue_t)"
+        }
+      ],
+      "msvc": {
+        "length": 46,
+        "own_entries": 35
+      },
+      "primary_base": "IAppSystem",
+      "secondary_bases": []
+    }
+  ]
+}

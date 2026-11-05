@@ -1,0 +1,28 @@
+[workspace]
+resolver = "2"
+members = ["crates/cs2-kv3", "crates/cs2-kv1", "crates/cs2-dmx", "crates/cs2-mcp-common", "crates/cs2-bridge", "crates/mm-testplugin", "crates/mm-launch", "crates/cs2-native", "crates/cs2-vtm", "hammer-mcp", "client-mcp", "crates/cs2-vk-capture", "crates/s2sdk/s2sdk-sys", "crates/s2sdk/s2sdk", "crates/s2sdk/s2sdk-probe"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.89"
+license = "MIT"
+
+[workspace.dependencies]
+cs2-mcp-common = { path = "crates/cs2-mcp-common" }
+s2sdk-sys = { path = "crates/s2sdk/s2sdk-sys" }
+# MCP: official Rust SDK (stdio transport). See each AGENT.md "MCP library".
+rmcp = { version = "3.5", features = ["server", "transport-io", "macros"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util", "process", "time", "sync", "fs", "signal"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap = { version = "4", features = ["derive", "env"] }
+regex = "1"
+png = "0.18"
+# Compiled resources (binary KV3): block LZ4 (KV3 buffers and the chained blob frames) and a
+# pure-Rust ZSTD decoder (KV3 compression 2).
+lz4_flex = "0.14"
+ruzstd = "0.9"

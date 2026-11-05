@@ -1,0 +1,18 @@
+{
+  "name": "smartprop_zoo",
+  "map": "editor/zoo/smartprop_zoo",
+  "setup": [
+    {"label": "round", "tool": "round_start", "args": {"mode": "ensure"}},
+    {"label": "place", "tool": "setpos", "args": {"origin": [-6176, -2192, 0.031], "angles": [0, 0, 0]}},
+    {"label": "snap", "tool": "game_snapshot", "args": {"name": "zoo_start"}}
+  ],
+  "steps": [
+    {"label": "walk", "tool": "input_sequence",
+     "args": {"steps": [{"press": ["forward"], "holdTicks": 64}]},
+     "expect": [{"path": "totals.distance", "op": "ge", "value": 100}]},
+    {"label": "shoot", "tool": "fire_weapon", "args": {"shots": 1},
+     "expect": [{"path": "clip1Delta", "op": "eq", "value": -1}]},
+    {"label": "restore", "tool": "game_restore", "args": {"name": "zoo_start"},
+     "expect": [{"path": "restored", "op": "eq", "value": true}]}
+  ]
+}

@@ -1,0 +1,8 @@
+// Fixture: an @include that resolves nowhere (searched the including file's directory, csgo/ and
+// core/) is a warning carrying file:line, never an error: the rest of the file still loads.
+@include "does_not_exist.fgd"
+
+@PointClass base(Targetname) = survivor : "Loads despite the missing include."
+[
+	works(integer) : "Works" : 0
+]

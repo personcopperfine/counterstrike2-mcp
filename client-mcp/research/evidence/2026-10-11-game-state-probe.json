@@ -1,0 +1,192 @@
+[
+ {
+  "check": "bridge build m2.9",
+  "pass": true,
+  "detail": "m2.9"
+ },
+ {
+  "check": "module verified: schemasystem.dll",
+  "pass": true,
+  "detail": "verified"
+ },
+ {
+  "check": "module verified: soundsystem.dll",
+  "pass": true,
+  "detail": "verified"
+ },
+ {
+  "check": "module verified: client.dll",
+  "pass": true,
+  "detail": "verified"
+ },
+ {
+  "check": "module verified: engine2.dll",
+  "pass": true,
+  "detail": "verified"
+ },
+ {
+  "check": "advertised: game.local",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "advertised: game.weapons",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "advertised: game.radar",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "advertised: game.selectWeapon",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "advertised: sound.status",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "advertised: sound.drain",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "game.local ok",
+  "pass": true,
+  "detail": "null"
+ },
+ {
+  "check": "game.local map/tick",
+  "pass": true,
+  "detail": "de_dust2 @ 623"
+ },
+ {
+  "check": "game.local origin",
+  "pass": true,
+  "detail": "[258.159, 2480.554, -121.077]"
+ },
+ {
+  "check": "game.local viewAngles",
+  "pass": true,
+  "detail": "[0, -67.5, 0]"
+ },
+ {
+  "check": "game.local eye/velocity",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "game.local activeWeapon",
+  "pass": true,
+  "detail": "weapon_hkp2000"
+ },
+ {
+  "check": "viewAngles follows input override (yaw 90)",
+  "pass": true,
+  "detail": "[0, 90, 0]"
+ },
+ {
+  "check": "origin moves after +forward (> 20 u)",
+  "pass": true,
+  "detail": "moved=66.41500036889254 from [258.159, 2480.554, -121.077] to [258.166, 2546.969, -115.449]"
+ },
+ {
+  "check": "velocity present",
+  "pass": true,
+  "detail": "[0, 0, 0]"
+ },
+ {
+  "check": "game.weapons ok",
+  "pass": true,
+  "detail": "null"
+ },
+ {
+  "check": "game.weapons count>0",
+  "pass": true,
+  "detail": "count=2 names=['weapon_knife', 'weapon_hkp2000']"
+ },
+ {
+  "check": "game.weapons active clip1 >= 0",
+  "pass": true,
+  "detail": "active=weapon_hkp2000 clip1=13 reserve=4"
+ },
+ {
+  "check": "game.selectWeapon slot3 queued",
+  "pass": true,
+  "detail": "null"
+ },
+ {
+  "check": "select_weapon slot3 -> knife",
+  "pass": true,
+  "detail": "start=weapon_hkp2000 slot3=weapon_knife"
+ },
+ {
+  "check": "select_weapon slot2 -> pistol",
+  "pass": true,
+  "detail": "slot2=weapon_hkp2000"
+ },
+ {
+  "check": "select_weapon use weapon_knife",
+  "pass": false,
+  "detail": "use=weapon_hkp2000"
+ },
+ {
+  "check": "viewAngles vs eyeAngles sanity",
+  "pass": true,
+  "detail": "view=[0, -67.5, 0] eye=[0, -67.5, 0] inputIsStatic=None"
+ },
+ {
+  "check": "game.radar ok",
+  "pass": true,
+  "detail": "null"
+ },
+ {
+  "check": "game.radar players>0",
+  "pass": true,
+  "detail": "players=1 bomb=[] hostages=0 (3 ms round trip)"
+ },
+ {
+  "check": "game.radar has isLocal",
+  "pass": true,
+  "detail": "[{'controllerIndex': 1, 'pawnIndex': 303, 'name': 'cs2-docker', 'team': 3, 'alive': True, 'health': 100, 'isLocal': True, 'origin': [258.166, 2546.969, -115.449"
+ },
+ {
+  "check": "game.radar origins",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "sound.subscribe both",
+  "pass": true,
+  "detail": "{\"jsonrpc\": \"2.0\", \"id\": \"p19\", \"bridge\": {\"protocol\": 1, \"build\": \"m2.9\"}, \"result\": {\"installed\": true, \"mode\": \"both\", \"pending\": 0, \"total\": 0, \"dropped\": 0"
+ },
+ {
+  "check": "sound.drain events after jump+attack",
+  "pass": true,
+  "detail": "total=3 wrap=3 listener=0 names=['Concrete.BulletImpact', 'Default.WalkJump', 'Weapon_hkp2000.Single']"
+ },
+ {
+  "check": "wrap records carry entindex",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "listener records carry names",
+  "pass": false,
+  "detail": ""
+ },
+ {
+  "check": "listener inst150 == wrap entindex",
+  "pass": false,
+  "detail": "pairs=[]"
+ },
+ {
+  "check": "sound.uninstall",
+  "pass": true,
+  "detail": ""
+ }
+]

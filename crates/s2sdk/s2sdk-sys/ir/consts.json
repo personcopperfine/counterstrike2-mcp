@@ -1,0 +1,729 @@
+{
+  "consts": [
+    {
+      "doc": "public/const.h `MAX_EDICTS`: 1<<MAX_EDICT_BITS, the engine's entity count.",
+      "expr": "MAX_EDICTS",
+      "itanium": {
+        "value": 16384
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 16384
+      },
+      "name": "MAX_EDICTS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 16384
+    },
+    {
+      "doc": "public/const.h: bits an ehandle index is encoded in.",
+      "expr": "NUM_ENT_ENTRY_BITS",
+      "itanium": {
+        "value": 16
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 16
+      },
+      "name": "NUM_ENT_ENTRY_BITS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 16
+    },
+    {
+      "doc": "public/const.h: 1<<NUM_ENT_ENTRY_BITS. NOT the identity index bound the client uses - see ENTITY_INDEX_BITS.",
+      "expr": "NUM_ENT_ENTRIES",
+      "itanium": {
+        "value": 65536
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 65536
+      },
+      "name": "NUM_ENT_ENTRIES",
+      "per_abi": false,
+      "type": "u32",
+      "value": 65536
+    },
+    {
+      "doc": "public/const.h: ehandle serial-number bits.",
+      "expr": "NUM_SERIAL_NUM_BITS",
+      "itanium": {
+        "value": 17
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 17
+      },
+      "name": "NUM_SERIAL_NUM_BITS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 17
+    },
+    {
+      "doc": "public/entity2/entityidentity.h: CEntityIdentity entries per identity chunk (512 = 1<<9). The bridge's client identity lookup splits an entity index at this boundary (chunk = index / 512, slot = index % 512).",
+      "expr": "MAX_ENTITIES_IN_LIST",
+      "itanium": {
+        "value": 512
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 512
+      },
+      "name": "MAX_ENTITIES_IN_LIST",
+      "per_abi": false,
+      "type": "u32",
+      "value": 512
+    },
+    {
+      "doc": "public/const.h: the all-ones ehandle index.",
+      "expr": "INVALID_EHANDLE_INDEX",
+      "itanium": {
+        "value": 4294967295
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 4294967295
+      },
+      "name": "INVALID_EHANDLE_INDEX",
+      "per_abi": false,
+      "type": "u32",
+      "value": 4294967295
+    },
+    {
+      "doc": "tier0/utlvectormemory.h: CUtlVector uses a const external buffer (never realloc, never free).",
+      "expr": "CUtlVectorMemory_Growable<int>::EXTERNAL_CONST_BUFFER_MARKER",
+      "itanium": {
+        "value": 1073741824
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 1073741824
+      },
+      "name": "EXTERNAL_CONST_BUFFER_MARKER",
+      "per_abi": false,
+      "type": "u32",
+      "value": 1073741824
+    },
+    {
+      "doc": "tier0/utlvectormemory.h: CUtlVector uses an external buffer it may reallocate. The enum is `int`, so 1<<31 is a negative int there and the entry reads it as the uint32 bit pattern 0x80000000 that the bridge's mask wants. The bridge's S2_UTLVEC_EXTERNAL comment names this marker for the 1<<30 value.",
+      "expr": "(uint32)CUtlVectorMemory_Growable<int>::EXTERNAL_BUFFER_MARKER",
+      "itanium": {
+        "value": 2147483648
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 2147483648
+      },
+      "name": "EXTERNAL_BUFFER_MARKER",
+      "per_abi": false,
+      "type": "u32",
+      "value": 2147483648
+    },
+    {
+      "doc": "tier0/utlstringtoken.h: the seed every CUtlStringToken hash uses.",
+      "expr": "STRINGTOKEN_MURMURHASH_SEED",
+      "itanium": {
+        "value": 826366246
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 826366246
+      },
+      "name": "STRINGTOKEN_MURMURHASH_SEED",
+      "per_abi": false,
+      "type": "u32",
+      "value": 826366246
+    },
+    {
+      "doc": "bridge mcp_bridge_game.inc asks for it by hand today.",
+      "expr": "SCHEMASYSTEM_INTERFACE_VERSION",
+      "itanium": {
+        "value": "SchemaSystem_001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "SchemaSystem_001"
+      },
+      "name": "SCHEMASYSTEM_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "SchemaSystem_001"
+    },
+    {
+      "doc": "bridge mcp_bridge*.c asks for Source2EngineToClient001.",
+      "expr": "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION",
+      "itanium": {
+        "value": "Source2EngineToClient001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "Source2EngineToClient001"
+      },
+      "name": "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "Source2EngineToClient001"
+    },
+    {
+      "doc": "bridge/mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h).",
+      "expr": "SOURCE2SERVERCONFIG_INTERFACE_VERSION",
+      "itanium": {
+        "value": "Source2ServerConfig001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "Source2ServerConfig001"
+      },
+      "name": "SOURCE2SERVERCONFIG_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "Source2ServerConfig001"
+    },
+    {
+      "doc": "engine2/isource2server.h:118: the server's ISource2Server (\"Source2Server001\"), the object whose GameFrame the bridge hooks for its tick on non-tools hosts.",
+      "expr": "INTERFACEVERSION_SERVERGAMEDLL",
+      "itanium": {
+        "value": "Source2Server001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "Source2Server001"
+      },
+      "name": "INTERFACEVERSION_SERVERGAMEDLL",
+      "per_abi": false,
+      "type": "&str",
+      "value": "Source2Server001"
+    },
+    {
+      "doc": "bridge/mcp_bridge.c:2657 asks for TestScriptMgr001.",
+      "expr": "TESTSCRIPTMANAGER_INTERFACE_VERSION",
+      "itanium": {
+        "value": "TestScriptMgr001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "TestScriptMgr001"
+      },
+      "name": "TESTSCRIPTMANAGER_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "TestScriptMgr001"
+    },
+    {
+      "doc": "bridge mcp_bridge*.c asks for InputService_001.",
+      "expr": "INPUTSERVICE_INTERFACE_VERSION",
+      "itanium": {
+        "value": "InputService_001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "InputService_001"
+      },
+      "name": "INPUTSERVICE_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "InputService_001"
+    },
+    {
+      "doc": "bridge mcp_bridge_game.inc asks for SoundOpSystem001.",
+      "expr": "SOUNDOPSYSTEM_INTERFACE_VERSION",
+      "itanium": {
+        "value": "SoundOpSystem001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "SoundOpSystem001"
+      },
+      "name": "SOUNDOPSYSTEM_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "SoundOpSystem001"
+    },
+    {
+      "doc": "bridge/s2sdk.h S2_TOOLFRAMEWORK2_VERSION.",
+      "expr": "TOOLFRAMEWORK2_INTERFACE_VERSION",
+      "itanium": {
+        "value": "ToolFramework2_002"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "ToolFramework2_002"
+      },
+      "name": "TOOLFRAMEWORK2_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "ToolFramework2_002"
+    },
+    {
+      "doc": "bridge/s2sdk.h S2_SCENESYSTEM_VERSION.",
+      "expr": "SCENESYSTEM_INTERFACE_VERSION",
+      "itanium": {
+        "value": "SceneSystem_002"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "SceneSystem_002"
+      },
+      "name": "SCENESYSTEM_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "SceneSystem_002"
+    },
+    {
+      "doc": "bridge/s2sdk.h S2_SCENEUTILS_VERSION.",
+      "expr": "SCENEUTILS_INTERFACE_VERSION",
+      "itanium": {
+        "value": "SceneUtils_001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "SceneUtils_001"
+      },
+      "name": "SCENEUTILS_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "SceneUtils_001"
+    },
+    {
+      "doc": "bridge/s2sdk.h S2_RENDERSERVICE_VERSION.",
+      "expr": "RENDERSERVICE_INTERFACE_VERSION",
+      "itanium": {
+        "value": "RenderService_001"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "RenderService_001"
+      },
+      "name": "RENDERSERVICE_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "RenderService_001"
+    },
+    {
+      "doc": "bridge/s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator).",
+      "expr": "RENDER_DEVICE_INTERFACE_VERSION",
+      "itanium": {
+        "value": "RenderDevice003"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "RenderDevice003"
+      },
+      "name": "RENDER_DEVICE_INTERFACE_VERSION",
+      "per_abi": false,
+      "type": "&str",
+      "value": "RenderDevice003"
+    },
+    {
+      "doc": "public/bitmap/imageformat_declarations.h: the format the bridge reads screenshots back in.",
+      "expr": "IMAGE_FORMAT_RGBA8888",
+      "itanium": {
+        "value": 0
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 0
+      },
+      "name": "IMAGE_FORMAT_RGBA8888",
+      "per_abi": false,
+      "type": "u32",
+      "value": 0
+    },
+    {
+      "doc": "public/bitmap/imageformat_declarations.h: the bridge's colour scratch format.",
+      "expr": "IMAGE_FORMAT_BGRA8888",
+      "itanium": {
+        "value": 9
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 9
+      },
+      "name": "IMAGE_FORMAT_BGRA8888",
+      "per_abi": false,
+      "type": "u32",
+      "value": 9
+    },
+    {
+      "doc": "public/bitmap/imageformat_declarations.h: the bridge's default depth format.",
+      "expr": "IMAGE_FORMAT_D24S8",
+      "itanium": {
+        "value": 42
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 42
+      },
+      "name": "IMAGE_FORMAT_D24S8",
+      "per_abi": false,
+      "type": "u32",
+      "value": 42
+    },
+    {
+      "doc": "public/bitmap/imageformat_declarations.h: the bridge's depth format when the device uses reverse depth.",
+      "expr": "IMAGE_FORMAT_D32FS8",
+      "itanium": {
+        "value": 48
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 48
+      },
+      "name": "IMAGE_FORMAT_D32FS8",
+      "per_abi": false,
+      "type": "u32",
+      "value": 48
+    },
+    {
+      "doc": "bridge IRenderingPipelineVtbl token S2_PIPELINE_TOKEN_TOOLS.",
+      "expr": "MurmurHash2LowerCase(\"Tools\", STRINGTOKEN_MURMURHASH_SEED)",
+      "itanium": {
+        "value": 2019288999
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 2019288999
+      },
+      "name": "TOKEN_TOOLS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 2019288999
+    },
+    {
+      "doc": "bridge S2_ATTR_TOKEN_COLOR (226443304) source string.",
+      "expr": "MurmurHash2LowerCase(\"OutputColor\", STRINGTOKEN_MURMURHASH_SEED)",
+      "itanium": {
+        "value": 226443304
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 226443304
+      },
+      "name": "TOKEN_OUTPUT_COLOR",
+      "per_abi": false,
+      "type": "u32",
+      "value": 226443304
+    },
+    {
+      "doc": "bridge S2_ATTR_TOKEN_DEPTH (1884464147) source string.",
+      "expr": "MurmurHash2LowerCase(\"OutputDepth\", STRINGTOKEN_MURMURHASH_SEED)",
+      "itanium": {
+        "value": 1884464147
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 1884464147
+      },
+      "name": "TOKEN_OUTPUT_DEPTH",
+      "per_abi": false,
+      "type": "u32",
+      "value": 1884464147
+    },
+    {
+      "doc": "public/appframework/iappsystem.h: AppSystemTier_t APP_SYSTEM_TIER3, the tier the bridge's m0_GetTier returns.",
+      "expr": "APP_SYSTEM_TIER3",
+      "itanium": {
+        "value": 3
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 3
+      },
+      "name": "APP_SYSTEM_TIER3",
+      "per_abi": false,
+      "type": "u32",
+      "value": 3
+    },
+    {
+      "doc": "public/appframework/iappsystem.h: BuildType_t kBuildTypeRelease, the build type the bridge's m0_GetBuildType returns.",
+      "expr": "kBuildTypeRelease",
+      "itanium": {
+        "value": 2
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 2
+      },
+      "name": "kBuildTypeRelease",
+      "per_abi": false,
+      "type": "u32",
+      "value": 2
+    },
+    {
+      "derived": "CEntityHandle.m_EntityIndex.bit_width",
+      "derived_path": [
+        "m_Parts",
+        "m_EntityIndex"
+      ],
+      "doc": "CEntityHandle::m_EntityIndex width: the identity index the entity list is indexed by.",
+      "itanium": {
+        "value": 15
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 15
+      },
+      "name": "ENTITY_INDEX_BITS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 15
+    },
+    {
+      "derived": "CEntityHandle.m_Serial.bit_width",
+      "derived_path": [
+        "m_Parts",
+        "m_Serial"
+      ],
+      "doc": "CEntityHandle::m_Serial width: the ehandle serial number.",
+      "itanium": {
+        "value": 17
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 17
+      },
+      "name": "ENTITY_SERIAL_BITS",
+      "per_abi": false,
+      "type": "u32",
+      "value": 17
+    },
+    {
+      "derived": "CEntityHandle.m_EntityIndex.bit_width",
+      "derived_path": [
+        "m_Parts",
+        "m_EntityIndex"
+      ],
+      "doc": "(1<<ENTITY_INDEX_BITS)-1: the mask the bridge spells 0x7FFF. Not upstream's ENT_ENTRY_MASK.",
+      "itanium": {
+        "value": 32767
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 32767
+      },
+      "name": "ENTITY_INDEX_MASK",
+      "per_abi": false,
+      "transform": "mask",
+      "type": "u32",
+      "value": 32767
+    },
+    {
+      "doc": "core/ISmmPluginExt.h:69: the plugin API version ISmmPlugin::GetApiVersion must return (18).",
+      "expr": "METAMOD_PLAPI_VERSION",
+      "itanium": {
+        "value": 18
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 18
+      },
+      "name": "METAMOD_PLAPI_VERSION",
+      "per_abi": false,
+      "type": "u32",
+      "value": 18
+    },
+    {
+      "doc": "core/ISmmPluginExt.h:70: the plugin interface name (\"ISmmPlugin\") Metamod looks the plugin up by.",
+      "expr": "METAMOD_PLAPI_NAME",
+      "itanium": {
+        "value": "ISmmPlugin"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "ISmmPlugin"
+      },
+      "name": "METAMOD_PLAPI_NAME",
+      "per_abi": false,
+      "type": "&str",
+      "value": "ISmmPlugin"
+    },
+    {
+      "doc": "core/ISmmAPI.h:64: the MetaFactory name (\"IPluginManager\") Metamod hands its ISmmPluginManager out under (core/IPluginManager.h).",
+      "expr": "MMIFACE_PLMANAGER",
+      "itanium": {
+        "value": "IPluginManager"
+      },
+      "kind": "string",
+      "msvc": {
+        "value": "IPluginManager"
+      },
+      "name": "MMIFACE_PLMANAGER",
+      "per_abi": false,
+      "type": "&str",
+      "value": "IPluginManager"
+    },
+    {
+      "doc": "third_party/khook/include/khook.hpp:116: HookID_t INVALID_HOOK = -1, the uint32_t all-ones id IKHook::RemoveHook and the Find* calls return for a miss.",
+      "expr": "KHook::INVALID_HOOK",
+      "itanium": {
+        "value": 4294967295
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 4294967295
+      },
+      "name": "INVALID_HOOK",
+      "per_abi": false,
+      "type": "u32",
+      "value": 4294967295
+    },
+    {
+      "doc": "core/IPluginManager.h:48: Pl_MinId, the first plugin id Metamod hands out (the unnamed enum's other enumerators: Pl_BadLoad 0, Pl_Console -1, Pl_File -2).",
+      "expr": "SourceMM::Pl_MinId",
+      "itanium": {
+        "value": 1
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 1
+      },
+      "name": "PL_MIN_ID",
+      "per_abi": false,
+      "type": "i32",
+      "value": 1
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_DEVELOPMENTONLY`: devonly: hidden in released products.",
+      "expr": "FCVAR_DEVELOPMENTONLY",
+      "itanium": {
+        "value": 2
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 2
+      },
+      "name": "FCVAR_DEVELOPMENTONLY",
+      "per_abi": false,
+      "type": "u64",
+      "value": 2
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_HIDDEN`: hidden from find/cvarlist and autocomplete.",
+      "expr": "FCVAR_HIDDEN",
+      "itanium": {
+        "value": 16
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 16
+      },
+      "name": "FCVAR_HIDDEN",
+      "per_abi": false,
+      "type": "u64",
+      "value": 16
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_PROTECTED`: a server cvar whose value is not sent (passwords).",
+      "expr": "FCVAR_PROTECTED",
+      "itanium": {
+        "value": 32
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 32
+      },
+      "name": "FCVAR_PROTECTED",
+      "per_abi": false,
+      "type": "u64",
+      "value": 32
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_ARCHIVE`: saved to the config.",
+      "expr": "FCVAR_ARCHIVE",
+      "itanium": {
+        "value": 128
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 128
+      },
+      "name": "FCVAR_ARCHIVE",
+      "per_abi": false,
+      "type": "u64",
+      "value": 128
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_NOTIFY`: players are told when it changes.",
+      "expr": "FCVAR_NOTIFY",
+      "itanium": {
+        "value": 256
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 256
+      },
+      "name": "FCVAR_NOTIFY",
+      "per_abi": false,
+      "type": "u64",
+      "value": 256
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_REPLICATED`: server setting enforced on clients.",
+      "expr": "FCVAR_REPLICATED",
+      "itanium": {
+        "value": 8192
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 8192
+      },
+      "name": "FCVAR_REPLICATED",
+      "per_abi": false,
+      "type": "u64",
+      "value": 8192
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_CHEAT`: only usable with sv_cheats.",
+      "expr": "FCVAR_CHEAT",
+      "itanium": {
+        "value": 16384
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 16384
+      },
+      "name": "FCVAR_CHEAT",
+      "per_abi": false,
+      "type": "u64",
+      "value": 16384
+    },
+    {
+      "doc": "tier0/convar.h `FCVAR_RELEASE`: available to customers.",
+      "expr": "FCVAR_RELEASE",
+      "itanium": {
+        "value": 524288
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 524288
+      },
+      "name": "FCVAR_RELEASE",
+      "per_abi": false,
+      "type": "u64",
+      "value": 524288
+    },
+    {
+      "doc": "tier0/convar.h ConVarRef::kInvalidAccessIndex: the m_ConVarAccessIndex of a ConVarRef that names no cvar (FindConVar's not-found answer).",
+      "expr": "ConVarRef::kInvalidAccessIndex",
+      "itanium": {
+        "value": 65535
+      },
+      "kind": "int",
+      "msvc": {
+        "value": 65535
+      },
+      "name": "CONVARREF_INVALID_ACCESS_INDEX",
+      "per_abi": false,
+      "type": "u32",
+      "value": 65535
+    }
+  ],
+  "enums": [],
+  "records": [],
+  "upstream": {
+    "abi": "itanium-x86_64",
+    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+  },
+  "vtables": []
+}

@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 11:27:04 -0500
+Subject: [PATCH 29/47] Fix EAttributeDataType for CS2
+
+---
+ public/tier0/utlsoacontainer.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/public/tier0/utlsoacontainer.h b/public/tier0/utlsoacontainer.h
+index 79047651..44755b60 100644
+--- a/public/tier0/utlsoacontainer.h
++++ b/public/tier0/utlsoacontainer.h
+@@ -128,6 +128,8 @@ enum EAttributeDataType
+ 	ATTRDATATYPE_4V,			// vector data type, stored as class FourVectors
+ 	ATTRDATATYPE_INT,			// integer. not especially sse-able on all architectures.
+ 	ATTRDATATYPE_POINTER,		// a pointer.
++	// AMNOTE: 8 bytes per element; the BONE_INDICES particle attribute uses it
++	ATTRDATATYPE_UNK001,
+ 
+ 	ATTRDATATYPE_COUNT,
+ };

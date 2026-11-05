@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sun, 18 Oct 2026 12:11:04 -0500
+Subject: [PATCH 46/47] Add CMapView
+
+Verified against CS2 2000930 (win64).
+---
+ tools/hammer/mapview.h | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 tools/hammer/mapview.h
+
+diff --git a/tools/hammer/mapview.h b/tools/hammer/mapview.h
+new file mode 100644
+index 00000000..6b64c192
+--- /dev/null
++++ b/tools/hammer/mapview.h
+@@ -0,0 +1,29 @@
++//===== Copyright (c) 1996-2005, Valve Corporation, All rights reserved. ======//
++//
++// Purpose: A Hammer viewport
++//
++//===========================================================================//
++
++#ifndef MAPVIEW_H
++#define MAPVIEW_H
++#ifdef _WIN32
++#pragma once
++#endif
++
++#include "toolutils2/itoolrenderableviewhost.h"
++#include "toolutils2/ibindablecamerascene.h"
++#include "toolutils2/ibindtarget.h"
++#include "tier0/platform.h"
++
++class CMapView : public IToolRenderableViewHost, public IBindTarget, public IBindableCameraScene
++{
++public:
++	uint8 m_unk011[100];
++	// AMNOTE: -1 until set; above 2 is a 3D view
++	int m_nViewType;
++	int m_nRenderMode;
++	// AMNOTE: Holds a CBindableCamera, whose camera GetCamera returns
++	uint8 m_unk111[6708];
++};
++
++#endif // MAPVIEW_H
