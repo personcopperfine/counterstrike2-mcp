@@ -5,7 +5,7 @@
 #
 #   <out>/cs2mcp-native[.exe]  client-mcp[.exe]  hammer-mcp[.exe]
 #   <out>/sigs/                          sigs/signatures (the servers' signature DB)
-#   <out>/payload/bridge-rs/<plat>/      bridge/build-rs.sh output (win64 | linuxsteamrt64)
+#   <out>/payload/bridge-rs/<plat>/      cargo bridge build output (win64 | linuxsteamrt64)
 #   <out>/payload/metamod/<plat>/addons/ the Metamod build (win64 | linux)
 #   <out>/payload/gbe/<plat>/            scripts/stage-gbe.sh output (win64 | linux64), + GBE_REF.txt
 #   <out>/payload/vklayer/<plat>/        the capture layer (crates/cs2-vk-capture, built here):
@@ -13,7 +13,7 @@
 #   <out>/SHA256SUMS
 #
 # Inputs (each must exist; nothing is fetched): BRIDGE_DIR (default <repo>/target/bridge-rs),
-# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: bridge/lib-root.sh),
+# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: crates/cs2-native/scripts/lib-root.sh),
 # GBE_DIR (<repo>/target/gbe).
 # The binaries are built with cargo --release (-j${JOBS:-2}, the OOM guard) unless --no-build.
 # The dev tool cs2mcp-native-dev is not shipped. Valve binaries never go in: the payload is ours
@@ -41,12 +41,12 @@ out="${out:-$repo/target/cs2mcp-native-$os}"
 bridge="${BRIDGE_DIR:-$repo/target/bridge-rs}"
 gbe="${GBE_DIR:-$repo/target/gbe}"
 metamod="${METAMOD_DIR:-$repo/target/metamod}"
-# shellcheck source=../../../bridge/lib-root.sh
-. "$repo/bridge/lib-root.sh"
+# shellcheck source=lib-root.sh
+. "$repo/crates/cs2-native/scripts/lib-root.sh"
 [ -d "$metamod/$mplat" ] || metamod="$(cs2mcp_main_checkout "$repo")/target/metamod"
 
 need() { [ -e "$1" ] || { echo "package.sh: missing $1 ($2)" >&2; exit 1; }; }
-need "$bridge/$bplat" "bridge/build-rs.sh, or set BRIDGE_DIR"
+need "$bridge/$bplat" "cargo bridge build, or set BRIDGE_DIR"
 need "$metamod/$mplat/addons/metamod" "the Metamod build, or set METAMOD_DIR"
 need "$gbe/$gplat" "scripts/stage-gbe.sh, or set GBE_DIR"
 

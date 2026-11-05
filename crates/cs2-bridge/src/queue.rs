@@ -3,7 +3,7 @@
 //! Ported from the C bridge's `Req`/`Out` records and their machinery:
 //!
 //! * the request queue - `q_init`/`q_push`/`q_pop`/`q_purge_gen`/`q_remove_id`/`q_depth`
-//!   (`bridge/mcp_bridge.c:1428-1477`), filled by the IPC thread and emptied by the main
+//!   (`mcp_bridge.c:1428-1477`), filled by the IPC thread and emptied by the main
 //!   thread;
 //! * the outbound queue - `out_push`/`out_space`/`out_pop_blocking` (`:1499-1528`), read by
 //!   the writer thread;
@@ -548,7 +548,7 @@ fn wait<'a>(condvar: &Condvar, guard: MutexGuard<'a, Inner>) -> MutexGuard<'a, I
 }
 
 /// The exact error envelope of the C's `build_error`/`build_error_ext`
-/// (`bridge/mcp_bridge.c:1563-1583`), one line including the trailing `\n`:
+/// (`mcp_bridge.c:1563-1583`), one line including the trailing `\n`:
 ///
 /// ```text
 /// {"jsonrpc":"2.0","id":<id|null>,"bridge":{"protocol":1,"build":"m2.20"},

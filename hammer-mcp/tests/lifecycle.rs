@@ -395,7 +395,7 @@ async fn a_protocol_error_on_delete_nodes_is_maybe_executed() {
 }
 
 // -------------------------------------------------------------------------------------------
-// open_map (map.open; live behaviour spec: bridge/protocol-diff-m2.16.md)
+// open_map (map.open; live behaviour spec: crates/cs2-bridge/PROTOCOL.md §8.2)
 // -------------------------------------------------------------------------------------------
 
 /// A Hammer world whose `doc.active` is served by the world itself (no responder): `open_map`
@@ -493,7 +493,7 @@ async fn open_map_of_an_already_open_file_is_a_result_and_changes_nothing() {
     assert_eq!(mb.method_calls("map.open").len(), 1);
 }
 
-/// Every path shape `bridge/map_path.h` refuses is refused here first: nothing is sent, so a garbled
+/// Every path shape `map_path.h` refuses is refused here first: nothing is sent, so a garbled
 /// path can never reach `OpenFile`'s modal boxes (which block the editor's main thread). Review M1:
 /// only the canonical spelling gets through.
 #[tokio::test]
@@ -896,7 +896,7 @@ async fn open_map_without_map_open_and_without_a_container_says_how_to_open_the_
     let err = call(&server, "open_map", json!({"path": "maps/b.vmap"})).await.unwrap_err();
     assert_eq!(err.name, "NotImplemented", "{err:?}");
     assert_eq!(err.data["missing"], json!(["map.open"]), "{err:?}");
-    assert!(err.data["hint"].as_str().unwrap().contains("runtime.sh"), "{err:?}");
+    assert!(err.data["hint"].as_str().unwrap().contains("cargo bridge runtime"), "{err:?}");
 }
 
 /// LIVE-P1 bug 4: a map of ANOTHER addon passed the precheck (it looked under the selected addon)
@@ -1078,7 +1078,7 @@ async fn open_map_of_a_background_session_reports_existing_and_not_active() {
 }
 
 // -------------------------------------------------------------------------------------------
-// reload_map (map.reload; live behaviour spec: bridge/test_reload.py)
+// reload_map (map.reload; live behaviour spec: test_reload.py)
 // -------------------------------------------------------------------------------------------
 
 #[tokio::test]

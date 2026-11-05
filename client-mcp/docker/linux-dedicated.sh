@@ -19,7 +19,7 @@
 #   * the shared csgo/console.log is not touched (a client in the same volume owns that file).
 #   * Metamod loads gameinfo-free, like the client: libcs2mcp_mmload.so is prepended to LD_PRELOAD
 #     on the cs2.sh/`cs2 -dedicated` command only (not exported), and the script refuses to launch
-#     when it is missing. nothing edits csgo/gameinfo.gi any more (bridge/metamod/README.md,
+#     when it is missing. nothing edits csgo/gameinfo.gi any more (crates/metamod/README.md,
 #     "Launching").
 #
 # Preamble: sourced from lib-preamble.sh, run under the home-volume flock (see that file for why a
@@ -45,7 +45,7 @@ cs2mcp_unlock
 # aborts instead of running without Metamod).
 MMLOAD="csgo/addons/cs2mcp/bin/linuxsteamrt64/libcs2mcp_mmload.so"
 if [ ! -f "$G/$MMLOAD" ]; then
-    echo "[cs2mcp-mmload] FAIL: $G/$MMLOAD is missing; Metamod would not load - run 'bridge/install-rs.sh --platform linux ensure' (or install) and retry" >&2
+    echo "[cs2mcp-mmload] FAIL: $G/$MMLOAD is missing; Metamod would not load - run 'cargo bridge install --platform linux ensure' (or install) and retry" >&2
     exit 1
 fi
 # no X display for a server; the env block is the same one the client gets

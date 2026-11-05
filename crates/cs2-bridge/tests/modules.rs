@@ -1,6 +1,6 @@
 //! The module identity gate (`cs2_bridge::modules`) over synthetic images and a fake loader.
 //!
-//! Everything here is the C block at `bridge/mcp_bridge.c:1149-1405`: `verify_one`'s checks and
+//! Everything here is the C block at `mcp_bridge.c:1149-1405`: `verify_one`'s checks and
 //! their log lines, the state machine, `verified_mask`, the poll throttle and the
 //! single-verifier rule. The synthetic image is a real PE32+ file built in memory and mapped
 //! with [`cs2_bridge::pe::map_image`] before it is handed to `verify_one`.
@@ -271,7 +271,7 @@ impl Fixture {
 }
 
 /// The unmodified synthetic module verifies, and the pin gets the module's first byte-pin RVA
-/// (the C computes exactly that at `bridge/mcp_bridge.c:1352-1356`).
+/// (the C computes exactly that at `mcp_bridge.c:1352-1356`).
 #[test]
 fn a_synthetic_image_that_matches_its_pins_verifies() {
     scratch_log();
@@ -433,7 +433,7 @@ fn the_checks_run_in_the_c_order() {
     assert_eq!(fixture.verify(), Err(Fail::SizeOfImage));
 
     // A changed file byte and a broken byte pin -> the file hash, which the C reads first
-    // (`bridge/mcp_bridge.c:1336-1340` before `:1343-1354`).
+    // (`mcp_bridge.c:1336-1340` before `:1343-1354`).
     let mut fixture = Fixture::new();
     fixture.file[GAP_BYTE] ^= 0xff;
     fixture.file[file_offset(PROLOGUE_RVA)] ^= 0xff;
@@ -556,7 +556,7 @@ fn fabricated_image(index: usize, base: u64) -> Vec<u8> {
 
 /// The loader the C calls, for a build that matches the pins.
 ///
-/// * `module_base` is `GetModuleHandleA` (`bridge/mcp_bridge.c:1310`): `Some(base)` for the
+/// * `module_base` is `GetModuleHandleA` (`mcp_bridge.c:1310`): `Some(base)` for the
 ///   modules in `loaded`, `None` otherwise.
 /// * `loaded`/`host_path` are the Metamod-proof pair the Rust build uses instead of the base
 ///   name: `K32EnumProcessModules` + `GetModuleFileNameW` for the process's images and

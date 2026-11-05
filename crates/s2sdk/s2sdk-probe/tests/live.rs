@@ -210,9 +210,9 @@ fn check<'a>(report: &'a serde_json::Value, name: &str) -> &'a serde_json::Value
 
 /// The SDK layer in a live Linux dedicated server, end to end.
 ///
-/// The launch runs the real `bridge/install-rs.sh --platform linux ensure` on the `cs2-home`
+/// The launch runs the real `cargo bridge install --platform linux ensure` on the `cs2-home`
 /// volume first (the runtime does that for every LinuxDedicated launch), so this needs the
-/// checkout's Linux-capable `bridge/install-rs.sh` as well as podman, the volume and the image.
+/// checkout's Linux-capable `cargo bridge install` as well as podman, the volume and the image.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 #[ignore = "needs podman, the cs2-home volume and the ghcr.io/personcopperfine/cs2-docker image"]
 async fn probe_reports_the_sdk_layer_in_a_live_dedicated_server() {

@@ -9,14 +9,16 @@
 //! of the `cfg` the crate was compiled for, so the generated layout test asserts each
 //! half's numbers against the rule below for its own target. The MSVC half is
 //! compiled with `cargo check --target x86_64-pc-windows-msvc -p s2sdk-sys`; the
-//! Windows *runtime* consumer of these layouts is the C bridge (`bridge/`), which is
-//! why this crate is only ever checked, never run, for that target.
+//! Windows *runtime* consumer of these layouts is the bridge DLL (`crates/cs2-bridge`,
+//! loaded under Wine), which is why this crate's tests are only ever checked, never run,
+//! for that target.
 //!
 //! Input is the generator's declaration-order method lists (see `../README.md`, the
 //! `"vtables"` array of the IR): [`VClass::methods`] holds **this class's own virtuals** in
 //! declaration order, exactly how the generator records them. Nothing here reads a stored
 //! slot number — slots are recomputed from the C++ ABI rules, so generated MSVC tables can
-//! be cross-checked against `bridge/bridge_pins.h`.
+//! be cross-checked against the bridge's pin table (`crates/cs2-bridge/src/generated/pins.rs`,
+//! `tests/abi.rs`).
 //!
 //! # Rules
 //!

@@ -21,7 +21,7 @@ The building blocks, no vision:
 Live operator edits with in-editor undo (`CPetDoc::AddFunctionNode`, `DeleteSelected`, `Undo`) are
 the second pass.
 
-## Live facts (2026-10-13, `bridge/runtime.sh up`, csgo `-tools -addon mcp_test`)
+## Live facts (2026-10-13, `cargo bridge runtime up`, csgo `-tools -addon mcp_test`)
 
 - `vtmsend open_asset particles/x.vpcf` does **not** open pet in a csgo session: the console logs
   `WARNING: No tool (internal or external) found for asset 'particles/mcp_probe/probe.vpcf'` (the
@@ -120,7 +120,7 @@ schema has the static metadata `MObsoleteParticleFunction`; it also checks `MGPU
 `MParticleMinVersion`/`MParticleMaxVersion` against the system's behavior version, and marks
 "Only one allowed" for definitions whose slot 1 returns -1 (singleton). The schema walk itself
 (fields, bases, metadata names) needs no pet code: `SchemaClassInfoData_t` layouts come from the
-generated `bridge/s2sdk_gen.h` (`S2_OFF_SchemaClassInfoData_t_*`, `SchemaClassFieldData_t`,
+generated `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` (`S2_OFF_SchemaClassInfoData_t_*`, `SchemaClassFieldData_t`,
 `SchemaBaseClassInfoData_t`, `SchemaMetadataEntryData_t`), and class lookups by name go through the
 `particles.dll` type scope with the resolver the bridge already uses for `client.dll`.
 
@@ -130,7 +130,7 @@ generated `bridge/s2sdk_gen.h` (`S2_OFF_SchemaClassInfoData_t_*`, `SchemaClassFi
 |---|---|---|
 | load | `TFVS_GET_TOOL_INDEX_BY_NAME` + `TFVS_LOAD_TOOL_SYSTEM` | see above. Only call when pet is not loaded yet (the bridge's module state for pet.dll), on the main thread. |
 | open | `PETVS_APP_OPENFILE` app slot 18 | `void *OpenFile(app, const char *path, u32 flags)`; re-entrancy guard `app+0x1A3` logs and returns 0. Relative paths resolve in `CONTENT` then `GAME` [V]; whether they are addon-rooted like ModelDoc's (`particles/x.vpcf`) is [I] (same base code). An already-open path re-activates its session (`sub_18041F5C0` lookup) [V static]. **Modals**: file missing ("Cannot open ... does not exist"), outside the content dir ("Open anyway?", skipped only in test mode), load errors ("Failed to load" / "File opened with errors"). Pre-check on the host side. flags bit 0 = add to recent files (UI passes 1). |
-| reload | `PETVS_SESSION_RELOAD` slot 7 | `void ReloadDocument(session)`: `LoadFromPath(GetPath())` + `SetModified(0)` + `RecompileResource`. No prompt (the prompt lives in the app's FileReload). A **malformed** file does not fail calmly: live 2026-10-13 the main thread recursed until the Wine stack overflowed and the whole process wedged (two inputs: `{{{ not kv3\n`, and a valid kv3 header followed by a truncated body). A balanced-but-invalid KV3 body wedges it the same way, and a wrong root `_class` makes the process exit (`c0000409`); unknown classes, wrong field types and a non-array function list are tolerated (workflow 05 has the table). The bridge checks KV3 grammar + root `_class` (`bridge/kv3_check.h`) and refuses with `-32602 UnloadableFile` **before** calling (and before `OpenFile`), so the document keeps its root and the main thread keeps draining. Undo history: not reset by this path [?]. |
+| reload | `PETVS_SESSION_RELOAD` slot 7 | `void ReloadDocument(session)`: `LoadFromPath(GetPath())` + `SetModified(0)` + `RecompileResource`. No prompt (the prompt lives in the app's FileReload). A **malformed** file does not fail calmly: live 2026-10-13 the main thread recursed until the Wine stack overflowed and the whole process wedged (two inputs: `{{{ not kv3\n`, and a valid kv3 header followed by a truncated body). A balanced-but-invalid KV3 body wedges it the same way, and a wrong root `_class` makes the process exit (`c0000409`); unknown classes, wrong field types and a non-array function list are tolerated (workflow 05 has the table). The bridge checks KV3 grammar + root `_class` (`kv3_check.h`) and refuses with `-32602 UnloadableFile` **before** calling (and before `OpenFile`), so the document keeps its root and the main thread keeps draining. Undo history: not reset by this path [?]. |
 | dirty | `PETVS_SESSION_ISDIRTY` slot 11 | `u8 IsModified(session)` = `session+0x60`. |
 | set dirty | `PETVS_SESSION_SETMODIFIED` slot 12 | `void SetModified(session, u8)` (also refreshes the window title). |
 | path | `PETVS_SESSION_GETPATH` slot 13 | `const char *GetPath(session)`; `""` when unset. Absolute Windows path [I]. |
@@ -163,7 +163,7 @@ edit, `pet.reload` is enough for pet's own preview; the `.vpcf_c` on disk comes 
       `pet.active` / `pet.reload` / `pet.save` / `pet.schema` / `pet.functionTypes` all answer.
 - [x] [V live 2026-10-13] `ReloadDocument` with an invalid file: the old "empty doc, no modal" claim
       is **wrong**. The main thread recurses until the Wine stack overflows and the process wedges
-      (seen twice, two input shapes); podman cannot stop it. A wrong root `_class` exits the process (`c0000409`). Guard: `bridge/kv3_check.h` (grammar +
+      (seen twice, two input shapes); podman cannot stop it. A wrong root `_class` exits the process (`c0000409`). Guard: `kv3_check.h` (grammar +
       root class) + `-32602 UnloadableFile {reason, path}` before `ReloadDocument` and `OpenFile`.
 - [x] [V live 2026-10-13] Save from the bridge works: a clean document saves nothing (`skippedClean`);
       `pet.save {force:true}` re-serializes it (vpcf66 text, tabs, CRLF, no final newline — the

@@ -14,12 +14,12 @@ pub enum ReadyStage {
     /// the engine created `csgo/console.log` (host path in `SessionPaths::console_log`)
     ConsoleLogExists,
     /// Linux: `SwitchToLoop game` in console.log (tests/cs2/t30_cs2_boot.sh:166).
-    /// Wine tools: the VToolMessage channel is up (vtmsend prints `creator version`; runtime.sh `wait_channel`).
+    /// Wine tools: the VToolMessage channel is up (vtmsend prints `creator version`; `cargo bridge runtime` `wait_channel`).
     /// Wine client: `SwitchToLoop game` in the app tree's console.log ([`WINE_CLIENT_MENU_MARKER`];
     /// unverified live, see the const).
     MenuReached,
     /// Wine: the `cs2_bridge` tool is loaded and `control.hello` answers with the discovery token
-    /// (runtime.sh `load_rs_bridge`). Not checked for `bridge: false` sessions.
+    /// (`cargo bridge runtime`'s `load_bridge`). Not checked for `bridge: false` sessions.
     BridgeHello,
     /// Wine `-testscript` harness parked: `TESTSCRIPT: CheckPoint -> 'VTEST_PARKED'`
     /// (sandbox.txt / harness.txt `Test_Run mark VTEST_PARKED`; AGENT.md rule 9 line format)
@@ -73,7 +73,7 @@ pub const LINUX_MENU_MARKER: &str = "SwitchToLoop game";
 /// engine header): the orchestrator should confirm the line in the Wine client's
 /// `game/csgo/console.log` (`-condebug`) and amend this const if the wording differs.
 pub const WINE_CLIENT_MENU_MARKER: &str = LINUX_MENU_MARKER;
-/// Output of `vtmsend.exe` once toolframework2 Init created the VToolMessage mutex (runtime.sh
+/// Output of `vtmsend.exe` once toolframework2 Init created the VToolMessage mutex (`cargo bridge runtime`
 /// `wait_channel`). Before that vtmsend exits 1 with `OpenMutex failed`, which is not this text.
 pub const CHANNEL_UP_MARKER: &str = "creator version";
 /// Parked-harness marker (test-script CheckPoint line; see [`ReadyStage::Parked`]).

@@ -1,5 +1,5 @@
 //! The input group (`input.set` / `input.clear` / `input.status` / `input.uninstall`): the
-//! C's `op_input` (`bridge/mcp_bridge.c:4932-4975`) and its two CCSGOInput hooks
+//! C's `op_input` (`mcp_bridge.c:4932-4975`) and its two CCSGOInput hooks
 //! (`:4748-4868`), ported onto KHook.
 //!
 //! # Mechanism

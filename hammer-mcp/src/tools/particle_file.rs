@@ -15,7 +15,7 @@
 //!   when that file is usable, else the built-in copy of the same snapshot
 //!   ([`vpcf::known_schema`]; the built-in is the **live snapshot** taken 2026-10-13 on build
 //!   2000930 — 379 classes, `placeholder:false`, written by `particle_types {writeSnapshot:true}`
-//!   / `test_pet.py --write-snapshot` — so validation works offline out of the box). A snapshot
+//!   — so validation works offline out of the box). A snapshot
 //!   that is unusable everywhere (malformed, or `placeholder:true`) still fails closed with
 //!   `SchemaUnavailable` — pass `skipSchema:true` where the tool has that knob (`particle_edit`)
 //!   to skip only the schema part;

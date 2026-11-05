@@ -278,7 +278,7 @@ pub async fn model_status(
         json!(state.launch_command)
     } else if !loaded && cfg!(windows) {
         // native: no ModelDoc container; an open_asset post loads ModelDoc into the running
-        // -tools session (runtime.sh `open`, the same post)
+        // -tools session (`cargo bridge runtime`'s `open`, the same post)
         json!(format!(
             "{}; then cs2mcp-native open models/<file>.vmdl (relative to the addon {}; run it on the \
              game's desktop, the VToolMessage channel is per logon session)",
@@ -415,7 +415,7 @@ pub async fn model_open(
                 "requested": host.display().to_string(),
                 "opened": opened.display().to_string(),
                 "hint": "model_status shows the open document; restart ModelDoc on the selected \
-                         addon (TOOL=modeldoc ADDON=<addon> bridge/runtime.sh up)",
+                         addon (TOOL=modeldoc ADDON=<addon> cargo bridge runtime up)",
             })));
         }
         Some(_) => {}

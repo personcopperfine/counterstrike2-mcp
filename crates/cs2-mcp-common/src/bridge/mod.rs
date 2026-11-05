@@ -1,4 +1,4 @@
-//! Client for the in-process bridge (`../../bridge/mcp_bridge.c`), protocol
+//! Client for the in-process bridge (`mcp_bridge.c`), protocol
 //! `../idabins/docs/data/bridge-protocol.md` (bridge m2.8, protocol 1).
 //!
 //! Port of the POC `bridge_client.py`: discovery -> connect -> `control.hello` -> request/response

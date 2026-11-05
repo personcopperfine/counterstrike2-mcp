@@ -1,6 +1,6 @@
 //! The EDIT lane's negative gate and registration, over the real `wiring::BridgeState` — the
 //! same shape `tests/ops_hammer.rs` holds for the write rows, now for `edit.batch`,
-//! `entity.tieMeshes` and `entity.untie` (`bridge/mcp_bridge.c:5855-5970`, `:5988`, `:5990`).
+//! `entity.tieMeshes` and `entity.untie` (`mcp_bridge.c:5855-5970`, `:5988`, `:5990`).
 //!
 //! The brief's gate item 3: with hammer.dll unverified, `exec_request` answers the C's
 //! `-32017 PrerequisiteFailed` naming `hammer.dll` (the first unmet `needs` bit) and the body

@@ -73,7 +73,7 @@ async fn gate(state: &HammerState) -> Result<(), ToolError> {
                 "CapabilityMissing",
                 format!(
                     "the bridge is {text}; kind hammer_mesh needs m3.18 (mesh.setFaceTexture mode axes). \
-                     Nothing was sent. Reinstall the bridge DLL (bridge/install-rs.sh)"
+                     Nothing was sent. Reinstall the bridge DLL (`cargo bridge install`)"
                 ),
                 json!({"missing": ["mesh.setFaceTexture mode axes"], "bridgeVersion": text, "needs": "m3.18"}),
             ));

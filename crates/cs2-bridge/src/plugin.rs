@@ -124,7 +124,7 @@
 //! # Teardown
 //!
 //! `Unload` tears down exactly what `Load` started and nothing else. The tool object's shutdown
-//! sequence (`bridge/mcp_bridge.c:6763-6795`: `m0_Shutdown` -> `m0_PreShutdown` -> "Shutdown
+//! sequence (`mcp_bridge.c:6763-6795`: `m0_Shutdown` -> `m0_PreShutdown` -> "Shutdown
 //! done") belongs to the tool object's own `Shutdown` slot, where the tools framework calls
 //! it - not to the Metamod lifecycle. One image can serve both roles, so `Unload` never calls
 //! `toolsys::shutdown_body`, and the tool half keeps running after a Metamod unload (the row
@@ -690,7 +690,7 @@ unsafe extern "C" fn query_running(this: *mut ISmmPlugin, error: *mut c_char, ma
 ///
 /// Nothing else runs. In particular the tool object's shutdown sequence - `toolsys`'s
 /// `Shutdown` slot and the C bridge's `m0_Shutdown` -> `m0_PreShutdown` -> "Shutdown done"
-/// (`bridge/mcp_bridge.c:6763-6795`) - is not part of the Metamod lifecycle: `Load` did not
+/// (`mcp_bridge.c:6763-6795`) - is not part of the Metamod lifecycle: `Load` did not
 /// start it, the tools framework owns it, and an image that serves both objects must not have
 /// its tool half torn down because Metamod unloaded its copy. That is why step 0 is gated on the
 /// role and not run unconditionally.

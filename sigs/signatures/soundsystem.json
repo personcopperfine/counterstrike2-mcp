@@ -1790,7 +1790,7 @@
   "SNVS_LISTENER_ON_START": {
    "kind": "const",
    "sdk": "S2_SLOT_ISoundEventListener_OnSoundEventStarted",
-   "via": "bridge/mcp_bridge_game.inc:894 (listener slot 5 (self, guid, aux0, aux1) called after every successful StartSoundEvent_Internal, soundsystem!0x1801C5D90 / 0x1801E1F80)",
+   "via": "mcp_bridge_game.inc:894 (listener slot 5 (self, guid, aux0, aux1) called after every successful StartSoundEvent_Internal, soundsystem!0x1801C5D90 / 0x1801E1F80)",
    "tag": "V",
    "expect": {
     "2000930": 5,

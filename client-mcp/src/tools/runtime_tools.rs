@@ -1055,13 +1055,13 @@ pub fn runtime_error(e: anyhow::Error) -> ToolError {
                 .retry_safe(false)
                 .with_data(json!({
                     "timeoutSecs": secs,
-                    "hint": "run `bridge/install-rs.sh status` to check the tree first",
+                    "hint": "run `cargo bridge install status` (`--platform linux` for a Linux kind) to check the tree first",
                 }))
         }
-        Some(RuntimeError::InstallScriptMissing { path }) => {
-            // a configuration error (this client-mcp has no install script): retrying the same
-            // launch fails the same way until the configuration is fixed
-            ToolError::new("InstallScriptMissing", "InstallScriptMissing", message)
+        Some(RuntimeError::InstallToolMissing { path }) => {
+            // a configuration error (no cs2-bridge-tools next to this client-mcp and none
+            // configured): retrying the same launch fails the same way until it is built
+            ToolError::new("InstallToolMissing", "InstallToolMissing", message)
                 .retry_safe(false)
                 .with_data(json!({"path": path}))
         }

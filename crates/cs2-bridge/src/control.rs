@@ -1,5 +1,5 @@
 //! The pure reply builders of the C bridge's `control.*` methods, ported from
-//! `bridge/mcp_bridge.c` (frozen, m2.20): `build_caps` (`:1190-1220`), `build_error` /
+//! `mcp_bridge.c` (frozen, m2.20): `build_caps` (`:1190-1220`), `build_error` /
 //! `build_error_ext` (`:1563-1583`) and the reply-building halves of the `ipc_thread` control
 //! handlers - `control.ping` (`:6497-6529`), `control.status` (`:6530-6553`),
 //! `control.capabilities` (`:6554-6558`), `control.version` (`:6559-6578`), the
@@ -47,7 +47,7 @@ pub use crate::BRIDGE_BUILD;
 /// reply buffer the C builds every reply in.
 pub const MAX_LINE: u32 = 1024 * 1024;
 
-/// `gameBuild`: the generated `PIN_GAME_BUILD` (`bridge_pins.h:18`, `mcp_bridge.c:128`).
+/// `gameBuild`: the generated `PIN_GAME_BUILD` (`generated/pins.rs`, `mcp_bridge.c:128`).
 pub const GAME_BUILD: &str = pins::PIN_GAME_BUILD;
 
 /// What `control.ping` reads (`mcp_bridge.c:6497-6528`): the ticks and queue state WP2.A

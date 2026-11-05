@@ -3,7 +3,8 @@
 //! The bridge (`crates/cs2-bridge`) is one Metamod plugin among many and must coexist: KHook
 //! runs the `pre`/`post` callbacks of *every* plugin hooked on a target, and passive hooks of
 //! different plugins all fire. This crate is the live fixture that proves it - the
-//! orchestrator's `bridge/test_metamod_coexist.py` (lane D2) drives it against the bridge -
+//! orchestrator's live coexistence test (lane D2, `test_metamod_coexist.py`, since deleted:
+//! `git show 8cdea42:bridge/test_metamod_coexist.py`) drove it against the bridge -
 //! and the seed of a "write a gamemode plugin in Rust" template (see
 //! [the template section](#a-template-for-write-a-gamemode-plugin-in-rust)).
 //!
@@ -74,7 +75,7 @@
 //! The coexistence evidence the fixture exists for - both plugins' hooks firing on one
 //! `AllowSaveRestore` call, and the fold when both change the value - is KHook-vs-KHook
 //! only against a bridge that hooks KHook too: **lane B2**. The D2 coexistence test
-//! (`bridge/test_metamod_coexist.py`) therefore runs its cases only on a B2-or-later
+//! (`test_metamod_coexist.py`, see above) therefore ran its cases only on a B2-or-later
 //! bridge.
 //!
 //! # A template for "write a gamemode plugin in Rust"
@@ -127,7 +128,7 @@ pub(crate) fn guard<R>(default: R, body: impl FnOnce() -> R) -> R {
 }
 
 /// The module's exported entry point - the only symbol this cdylib exports
-/// (`bridge/check-exports.sh` gates exactly that).
+/// (`cargo bridge check-exports`, run by `cargo bridge testplugin`, gates exactly that).
 ///
 /// One name is served: `"ISmmPlugin"` (the generated [`METAMOD_PLAPI_NAME`]), the coexistence
 /// fixture's Metamod plugin object ([`plugin`]). `*ret` follows Metamod's

@@ -1,7 +1,7 @@
 # Hammer prop support RE notes (build 2000930)
 
 Facts the prop tools and bridge m2.18 are built on (`create_props`, `set_node_transform`, entity I/O).
-Every address the bridge uses is an entry in `sigs/signatures/hammer.json` (pins -> `bridge_pins.h`);
+Every address the bridge uses is an entry in `sigs/signatures/hammer.json` (`cargo bridge pins` -> `crates/cs2-bridge/src/generated/pins.rs`);
 never copy a number from here into code. Post-implementation facts (live acceptance, mesh scale
 readback) are in `hammer-mcp/AGENT.md` "## Props".
 
@@ -128,7 +128,7 @@ g_hfn.DocSetModified(doc, doc);
   existing node.
 
 ### Existing bug found [V bin]
-`bridge/s2sdk.h` declares slot 17 as `SetAngles` (pinned `HVS_MESH_SET_ANGLES`, "CMapMesh::SetAngles").
+`s2sdk.h` declares slot 17 as `SetAngles` (pinned `HVS_MESH_SET_ANGLES`, "CMapMesh::SetAngles").
 **Slot 17 is SetOrigin.** The proof: the CMapNode base slot 17 stores +0xA0, which
 `CreateNodeByName`/`SetPositionAndAngles` fill from the *origin* argument, and "Clear Rotation and Scale"
 sets angles through slot 18 (+0x90). The IDB name and the mesh's CMeshEditScope label "SetAngles" are
@@ -269,7 +269,7 @@ Worker notes:
   and `RemoveConnection`'s u8.
 * The other fields used (`HOFF_NODE_ORIGIN` 0xA0, `HOFF_NODE_ANGLES` 0xAC, `HOFF_NODE_UNDOABLE` 0xC8,
   `HFN_RECORD_NODE_TREE`, `HFN_GET_ENTITY_PROPERTIES`, `HFN_DOC_SET_MODIFIED`) are already pinned.
-* `bridge/pins.py` / `bridge_pins.h` were NOT regenerated in the worktree (see the summary for why).
+* `cargo bridge pins` / `bridge_pins.h` were NOT regenerated in the worktree (see the summary for why).
 
 ## Open risks
 * `SetKeyValue` writes only String attributes. If a key exists as int/float/bool, the `SetValueString`
@@ -290,9 +290,9 @@ Worker notes:
   `not_loaded`). Save or undo before `down`, or delete your own autosave file.
 
 ## Probe (how the [V live] evidence was produced)
-(Local scratch of the RE session, not in git.) `target/orch/re/probe/` is a throwaway copy of `bridge/` plus a hidden `probe.props` method
+(Local scratch of the RE session, not in git.) `target/orch/re/probe/` is a throwaway copy of the (since retired) C bridge sources plus a hidden `probe.props` method
 (`target/orch/re/probe_fn.c`) that calls the RVAs above directly. It was built with `build.sh` against the
 main checkout's `target/game-bins`, installed temporarily into the scratch tree, and the original
 `mcp_bridge.dll` (sha256 b8b2420d…) was restored afterwards (backup:
 `target/orch/re/mcp_bridge.dll.installed-backup`). Driver: `target/orch/re/rpc.py`. Renders:
-`workshop/run/app/renders/pp_*.png`, `pq_*.png`. The worktree's `bridge/` sources are unchanged.
+`workshop/run/app/renders/pp_*.png`, `pq_*.png`. The worktree's bridge sources are unchanged.

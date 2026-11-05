@@ -105,10 +105,10 @@ The second upstream changes three things and nothing else:
    `ambiguous_bare_names`), because the second upstream pulls in libstdc++/the
    MSVC STL where `BaseClass` and `IndexType_t` each have a couple of dozen
    declarations;
-3. its numbers are not the C bridge's: `bridge/s2sdk_gen.h` is generated from
+3. its numbers are not in the C header: `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` is generated from
    `c_header_groups()` (every group except `C_HEADER_EXCLUDED_GROUPS`), because the
-   frozen bridge cannot name a metamod type and its checked-in generated header
-   must not move. The same holds per `[consts]` entry measured from the metamod
+   header is frozen at the s2sdk groups the retired C bridge consumed and must not
+   move for a group no sigs `sdk` expression names. The same holds per `[consts]` entry measured from the metamod
    headers (`C_HEADER_EXCLUDED_CONSTS`, `c_header_consts`).
 
 Everything else - the IR shape, the two ABIs, the emitters, the layout tests -
@@ -267,11 +267,12 @@ GROUPS = ("tier0", "schema", "entity", "cvar", "events", "engine", "toolframewor
 # and before `consts`, which is measured last by design.
 METAMOD_GROUP = "metamod"
 
-# Groups the *C* header (bridge/s2sdk_gen.h) is not generated from. The bridge
-# (frozen at m2.20) is compiled from the s2sdk IR only: its numbers name s2sdk
-# types, and no line of bridge code can consume a metamod one, so emitting the
-# metamod group into a frozen generated C header would be a gratuitous change to
-# a file every bridge build checks (bridge/build.sh runs `gen.py --check`).
+# Groups the *C* header (crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h) is not generated from. The C
+# bridge (frozen at m2.20, since retired) was compiled from the s2sdk IR only, and
+# the header still carries exactly that: the sigs `sdk` expressions evaluated
+# against it name s2sdk types, and the Rust Metamod plugin reads metamod.rs, so
+# emitting the metamod group into the header would be a gratuitous change to a
+# file `gen.py --check` holds byte for byte.
 # Removing a group from this tuple is what makes the C header carry it.
 C_HEADER_EXCLUDED_GROUPS = (METAMOD_GROUP,)
 
@@ -283,8 +284,8 @@ def c_header_groups() -> tuple[str, ...]:
 
 # The `[consts]` entries the *C* header is not generated from, for the same
 # reason the metamod group is not in it: they are measured from the
-# Metamod:Source checkout (`core/ISmmPluginExt.h`, khook.hpp), and no line of the
-# frozen bridge (m2.20) can name a metamod constant. They stay in `consts.json`
+# Metamod:Source checkout (`core/ISmmPluginExt.h`, khook.hpp), and the header
+# carries the s2sdk side only. They stay in `consts.json`
 # and `src/generated/consts.rs` - a Rust Metamod plugin is their consumer.
 # Removing a name from this tuple is what makes the C header carry it.
 C_HEADER_EXCLUDED_CONSTS = (
@@ -297,7 +298,7 @@ C_HEADER_EXCLUDED_CONSTS = (
 
 
 def c_header_consts(ir_by_group: dict) -> list[dict]:
-    """The `[consts]` entries `emit_c_header`/`c_generated_values` emit into the C
+    """The `[consts]` entries `emit_c_header` emits into the C
     header: every measured value the C header may carry (see
     C_HEADER_EXCLUDED_CONSTS)."""
     return [
@@ -5749,7 +5750,7 @@ def emit_vtable_slots(shape: dict, abi: str, c_header: bool = True) -> list[str]
         lines += [
             "    /// clang's own vftable length for MSVC, the ABI-rule walk for Itanium",
             "    /// (where the IR has no dump). This class's group is not emitted into",
-            "    /// `bridge/s2sdk_gen.h`, so there is no `S2_VTLEN_"
+            "    /// `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h`, so there is no `S2_VTLEN_"
             + class_name
             + "` define;",
             "    /// a consumer reads this instead of recomputing a length as the last",
@@ -6358,16 +6359,17 @@ def check_rust(files: dict[str, str]) -> int:
 
 
 # --------------------------------------------------------------------------- #
-# the generated C header for the bridge (WP C1; design 2.3, row C1)
+# the generated C header, s2sdk_gen.h (WP C1; design 2.3, row C1)
 # --------------------------------------------------------------------------- #
 
-C_HEADER_PATH = REPO_ROOT / "bridge" / "s2sdk_gen.h"
-C_TIES_PATH = REPO_ROOT / "bridge" / "s2sdk_gen_ties.h"
+C_HEADER_PATH = REPO_ROOT / "crates" / "s2sdk" / "s2sdk-sys" / "include" / "s2sdk_gen.h"
 
-# The records bridge code reads member-by-member at pinned offsets today
-# (design 1.1/1.2/1.3 rows marked "(a)" and "(c)"): these become padded structs
-# in bridge/s2sdk_gen.h, with a _Static_assert on every offset and size.
-# Everything else in the IR lands as S2_SIZEOF_/S2_ALIGNOF_/S2_OFF_ macros only.
+# The records the C bridge read member-by-member at pinned offsets (design
+# 1.1/1.2/1.3 rows marked "(a)" and "(c)"): these are padded structs in
+# crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h, with a _Static_assert on every offset and size.
+# Everything else in the IR lands as S2_SIZEOF_/S2_ALIGNOF_/S2_OFF_ macros only. The list
+# stays as the C bridge left it: the Rust bridge reads s2sdk_sys, and the header's macros
+# are what sigs' `sdk` expressions evaluate against.
 C_EMIT_STRUCTS = (
     "Vector",
     "QAngle",
@@ -6402,8 +6404,8 @@ C_EMIT_STRUCTS = (
 )
 C_EMIT_SPECS = ("CUtlVector<CEntityHandle>",)
 
-# Scalar spellings: the bridge's u8/u16/u32/u64 typedefs (freestanding C has no
-# stdint.h reachable - design R7) plus the C builtins whose MSVC x64 widths the
+# Scalar spellings: the u8/u16/u32/u64 typedefs (C_SMOKE_TYPEDEFS; freestanding C
+# has no stdint.h reachable - design R7) plus the C builtins whose MSVC x64 widths the
 # member-size asserts verify. A rust_type outside this table becomes a byte
 # blob, never a guess.
 _C_SCALARS = {
@@ -6417,16 +6419,16 @@ _C_SCALARS = {
     "i64": "long long",
     "f32": "float",
     "f64": "double",
-    # MSVC bool is one byte; the bridge spells arrays of it as u8 - the
-    # member-size assert keeps the spelling honest.
+    # MSVC bool is one byte, spelled u8 - the member-size assert keeps the
+    # spelling honest.
     "bool": "u8",
 }
 
-# A tie row's `generated` is normally one emitted macro. A pin that is a vtable BYTE offset
-# (the particle editor's `call [rax+0C0h]`) ties to slot * 8 instead: slot_bytes() spells
-# that as the C expression `S2_SLOT_X*8`, split_tie_scale() reads it back, and the
-# generation-time check and sdkcheck compare the scaled value. The C side needs nothing
-# more: `_Static_assert(S2_SLOT_X*8 == PIN, ...)` is an integer constant expression.
+# An `sdk` expression (a tie row's `generated`, in the C bridge's day) is normally one
+# emitted macro. A pin that is a vtable BYTE offset (the particle editor's
+# `call [rax+0C0h]`) is slot * 8 instead: slot_bytes() spells that as the C expression
+# `S2_SLOT_X*8`, split_tie_scale() reads it back, and sigcheck.sdk_eval and sdkcheck
+# compare the scaled value.
 SLOT_BYTES = 8
 
 
@@ -6435,14 +6437,14 @@ def slot_bytes(slot_macro: str) -> str:
 
 
 def split_tie_scale(generated: str) -> tuple[str, int]:
-    """A tie row's `generated` -> (the emitted macro, the factor its value is
+    """An `sdk` expression -> (the emitted macro, the factor its value is
     multiplied by to give the pin). Only slot_bytes() spellings carry a factor."""
     macro, star, factor = generated.partition("*")
     if not star:
         return generated, 1
     if not macro.startswith("S2_SLOT_") or factor != str(SLOT_BYTES):
         raise GenError(
-            f"tie row {generated!r}: only S2_SLOT_<class>_<method>*{SLOT_BYTES} "
+            f"sdk expression {generated!r}: only S2_SLOT_<class>_<method>*{SLOT_BYTES} "
             "(slot_bytes()) may carry a factor"
         )
     return macro, SLOT_BYTES
@@ -6453,7 +6455,7 @@ _TIE_SUM_RE = re.compile(r"(S2_OFF_\w+)\+(S2_OFF_\w+)")
 
 
 def tie_terms(generated: str, values: dict | None = None) -> tuple[str, int, int]:
-    """A tie row's `generated` -> (the emitted macro, factor, addend): the pin is
+    """An `sdk` expression -> (the emitted macro, factor, addend): the pin is
     `macro * factor + addend`. Besides the slot_bytes() factor, a member offset may
     carry a `+N` (`S2_OFF_CPetDoc_m_Selection+8`): a pin that points inside a member
     (the data pointer of a vector) is still anchored to the generated offset. It may
@@ -6467,309 +6469,29 @@ def tie_terms(generated: str, values: dict | None = None) -> tuple[str, int, int
     if match:
         if values is None or match.group(2) not in values:
             raise GenError(
-                f"tie row {generated!r}: {match.group(2)} is not emitted; is it still in the IR?"
+                f"sdk expression {generated!r}: {match.group(2)} is not emitted; is it still in the IR?"
             )
         return match.group(1), 1, int(values[match.group(2)])
     macro, scale = split_tie_scale(generated)
     return macro, scale, 0
 
 
-# Tie tables. A generated header never replaces a hand number by being asserted
-# equal to a pin any more: the bridge spells the generated macro itself (the
-# De-hardcode project), and the sigs entry's `sdk` field is the binary
-# measurement pins.py and sdkcheck.py hold it to. What is left are the ties
-# below. All three kinds are LATE: the bridge-side value lives in s2sdk.h (below
-# the s2sdk_gen.h include site), so bridge/s2sdk_gen_ties.h, included as the
-# last line of the TU, enforces them; emit_c_ties_header also re-checks every
-# row against the IR and the parsed bridge text at generation time.
-# Names only: every value is the committed IR's or parsed out of the bridge
-# files (bridge_int_defines), so a row can never carry a number.
-#
-# A row whose bridge-side duplicate is deleted must be pruned in the same commit
-# (generation time refuses a row whose pin no longer exists).
-#
-# The tie syntax (S2_SLOT_X, S2_SLOT_X*8 via slot_bytes, S2_OFF_X+8,
-# S2_OFF_A+S2_OFF_B) lives on in tie_terms / split_tie_scale: it is the `sdk`
-# field's grammar (sigs/signatures/SCHEMA.json, sigcheck.sdk_eval).
+# The `sdk` field's grammar (sigs/signatures/SCHEMA.json, sigcheck.sdk_eval): a
+# sigs entry names a generated expression instead of carrying a number, and
+# the pins generator and sdkcheck.py hold it to the binary measurement. The
+# spellings are slot_bytes / split_tie_scale / tie_terms above: a plain macro,
+# S2_SLOT_X*8, S2_OFF_X+N and S2_OFF_A+S2_OFF_B. They were the C bridge's tie
+# rows once; the tie tables and the late-ties header went with the C bridge.
 
-# String ties: the generated S2_IFACE_* interface versions vs the bridge's
-# S2_*_VERSION copies in bridge/s2sdk.h (same string, two spellings). LATE
-# ties: s2sdk.h may be included after s2sdk_gen.h (the smoke TU's order), so
-# they would be emitted into bridge/s2sdk_gen_ties.h - sizeof equality plus
-# one _Static_assert per character (a compile-time string compare; a missing
-# pin is a #error naming it), re-checked at generation time against the parsed
-# s2sdk.h string.
-#
-# The per-character assert is NOT a C11 integer constant expression (a
-# string-literal subscript is not an ICE under 6.6, and there is no portable
-# C11 form - a character-literal expansion on the generated side still leaves
-# the bridge-side `pin[i]` unsubscriptable in an ICE). Clang folds it as a GNU
-# extension (warned only under -Wpedantic as -Wgnu-folding-constant; the
-# self-test compiles a synthetic row to prove it). This is why
-# bridge/build.sh refuses a non-clang compiler (review F7).
-#
-# C1c: the table is empty (tie-by-replacement). C1b carried five rows, one per
-# bridge copy; B2 deleted all five copies (S2_TOOLFRAMEWORK2_VERSION,
-# S2_SCENESYSTEM_VERSION, S2_SCENEUTILS_VERSION, S2_RENDERSERVICE_VERSION,
-# S2_RENDERDEVICE_VERSION) and moved the call sites onto the generated
-# S2_IFACE_* macros, so there is no bridge-side value left to tie.
-# S2_TOOLSYSTEM2_VERSION ("ToolSystem2_001") is (b) - upstream has no macro
-# for it - so nothing was ever generated to tie it with. The string-tie
-# emitter stays table-driven and self-tested (with a synthetic row) so a
-# future row fails closed the same way.
-C_HEADER_STRING_TIES: tuple[tuple[str, str, str], ...] = ()  # (generated, pin, why)
-
-# Token/marker ties: a bridge-side macro spelling a measured const (review-c1
-# §3). LATE ties (the macro lives in s2sdk.h, below the include site), emitted
-# into bridge/s2sdk_gen_ties.h like the string ties.
-#
-# C1c: the three hand-literal rows C1b carried (S2_PIPELINE_TOKEN_TOOLS,
-# S2_ATTR_TOKEN_COLOR, S2_ATTR_TOKEN_DEPTH) were pruned tie-by-replacement -
-# B2 deleted the copies and moved the call sites onto the generated macros.
-# S2_UTLVEC_EXTERNAL survives as an ALIAS of its generated macro
-# (bridge_alias_defines resolves it at generation time), so the tie still
-# refuses an alias pointed at the wrong marker (the plain EXTERNAL_BUFFER_MARKER,
-# 1<<31, would let CUtlVector realloc/free caller-owned memory).
-C_HEADER_CONST_TIES: tuple[tuple[str, str, str], ...] = (  # (generated, pin, why)
-    (
-        "S2_CONST_EXTERNAL_CONST_BUFFER_MARKER",
-        "S2_UTLVEC_EXTERNAL",
-        "CUtlVector's external-memory flag (the s2sdk.h alias must spell this exact marker)",
-    ),
+# The u8/u16/u32/u64 typedefs the header is written against (_C_SCALARS): it
+# carries no #include (freestanding C has no stdint.h reachable - design R7), so
+# the smoke compile puts these MSVC x64 widths in front of it.
+C_SMOKE_TYPEDEFS = (
+    "typedef unsigned char u8;",
+    "typedef unsigned short u16;",
+    "typedef unsigned int u32;",
+    "typedef unsigned long long u64;",
 )
-
-# Size ties: a bridge typedef whose size a generated sizeof pins. LATE ties
-# (the typedef lives in s2sdk.h, below the include site), emitted into
-# bridge/s2sdk_gen_ties.h as sizeof(<typedef>) == S2_SIZEOF_<tag>; there is no
-# #ifdef for a typedef, but a missing typedef is itself a compile error, so the
-# tie still fails closed.
-#
-# C1c: the four rows C1b carried (the s2sdk.h spellings S2Vector/S2QAngle/
-# S2Viewport/CUtlSymbolLarge of Vector/QAngle/RenderViewport_t/CUtlSymbolLarge)
-# were pruned tie-by-replacement - B2 deleted the typedefs and moved the call
-# sites onto the generated S2_* types. S2HandleVec survives: the (b)
-# caller-owned CUtlVector<S2MeshHandle> shape has no upstream type of its own,
-# so its size is tied to the generated CUtlVector<CEntityHandle> layout
-# (s2sdk.h also asserts every field offset against it).
-C_HEADER_SIZEOF_TIES: tuple[tuple[str, str, str], ...] = (  # (IR name, typedef, why)
-    ("CUtlVector<CEntityHandle>", "S2HandleVec", "the bridge's handle-vector shape"),
-)
-
-# The bridge's #define spellings: an optional u/U suffix after the digits
-# (bridge_pins.h and s2sdk.h emit unsigned), stripped before int(.., 0).
-_RE_BRIDGE_DEFINE = re.compile(r"^#define\s+(\S+)\s+(0x[0-9a-fA-F]+[uUlL]*|\d+[uUlL]*)\b", re.M)
-_RE_BRIDGE_STRING = re.compile(r'^#define\s+(\S+)\s+"([^"\n]*)"', re.M)
-# An alias: a #define whose whole value is one bare identifier (with an
-# optional trailing /* comment */). See bridge_alias_defines.
-_RE_BRIDGE_ALIAS = re.compile(
-    r"^#define\s+([A-Za-z_]\w*)\s+([A-Za-z_]\w*)\s*(?:/\*[^\n]*\*/\s*)?$", re.M
-)
-# The name of any #define (object- or function-like) - the first token after
-# the keyword. Used by bridge_c_names' disjointness check (review F4).
-_RE_BRIDGE_MACRO_NAME = re.compile(r"^#\s*define\s+([A-Za-z_]\w*)", re.M)
-# A typedef whose declarator carries no braces (`typedef struct X Y;`,
-# `typedef unsigned long long u64;`): the defined name is the last identifier
-# before the semicolon (the character class spans newlines but not a body).
-_RE_BRIDGE_TYPEDEF_NAME = re.compile(r"typedef\b[^;{}]*\b([A-Za-z_]\w*)\s*;", re.M)
-# A declaration directly after a struct/union/enum body (`} S2HandleVec;`):
-# the name may be a typedef or a variable; either way the spelling is taken.
-_RE_BRIDGE_BRACE_NAME = re.compile(r"\}\s*([A-Za-z_]\w*)\s*;", re.M)
-# A struct/union/enum tag spelled with a body - a definition, not a use (a
-# tag shares the ordinary identifiers' namespace with typedef names, so a
-# bridge `struct S2_foo {` would collide with a generated `S2_foo` typedef).
-_RE_BRIDGE_TAG_NAME = re.compile(r"\b(?:struct|union|enum)\s+([A-Za-z_]\w*)\s*\{", re.M)
-
-
-def _bridge_define_value(text: str) -> int:
-    return int(text.rstrip("uUlL"), 0)
-
-
-def bridge_int_defines() -> tuple[dict[str, int], dict[str, str]]:
-    """Every integer #define the bridge's numbers-carrying headers source:
-    bridge/bridge_pins.h (the IDA-measured pins), plus the hand owners
-    bridge/mcp_bridge.c and bridge/s2sdk.h. Returns (values, sources) with the source file per
-    macro (the ties header reports which file owns a pin). A macro defined by two of the files is
-    refused: the owner would be ambiguous. Parsed with the same rule build.sh
-    compares bridge_pins.h with, so a tie can never disagree with the pins the
-    running DLL is verified against."""
-    values: dict[str, int] = {}
-    sources: dict[str, str] = {}
-    for name in ("bridge_pins.h", "mcp_bridge.c", "s2sdk.h"):
-        path = REPO_ROOT / "bridge" / name
-        if not path.is_file():
-            raise GenError(
-                f"C header ties: {name} is missing under bridge/; the ties "
-                "anchor the generated numbers to pins"
-            )
-        for match in _RE_BRIDGE_DEFINE.finditer(
-            path.read_text(encoding="utf-8", errors="replace")
-        ):
-            macro = match.group(1)
-            if macro in values:
-                raise GenError(
-                    f"C header ties: {macro} is #defined by both "
-                    f"{sources[macro]} and {name}; the source would "
-                    "be ambiguous"
-                )
-            values[macro] = _bridge_define_value(match.group(2))
-            sources[macro] = name
-    return values, sources
-
-
-def bridge_string_defines() -> dict[str, str]:
-    """The string #defines bridge/s2sdk.h owns (the S2_*_VERSION interface
-    copies): the pins half of the string ties (C_HEADER_STRING_TIES)."""
-    path = REPO_ROOT / "bridge" / "s2sdk.h"
-    if not path.is_file():
-        raise GenError(f"C header ties: {path.name} is missing under bridge/")
-    return {
-        match.group(1): match.group(2)
-        for match in _RE_BRIDGE_STRING.finditer(
-            path.read_text(encoding="utf-8", errors="replace")
-        )
-    }
-
-
-def bridge_alias_defines() -> tuple[dict[str, str], dict[str, str]]:
-    """The bare-identifier #defines the bridge's three hand-owners carry
-    (`#define NAME TARGET`, e.g. s2sdk.h's
-    `#define S2_UTLVEC_EXTERNAL S2_CONST_EXTERNAL_CONST_BUFFER_MARKER`): alias
-    names a tie's pin may go by, resolved by _bridge_alias_value when a tie
-    references one. Returns (targets, sources) with the source file per alias,
-    like bridge_int_defines. Function-like macros, string values,
-    parenthesized expressions and numeric defines do not match. A macro
-    alias-defined by two of the files is refused, like bridge_int_defines'
-    duplicate rule."""
-    targets: dict[str, str] = {}
-    sources: dict[str, str] = {}
-    for name in ("bridge_pins.h", "mcp_bridge.c", "s2sdk.h"):
-        path = REPO_ROOT / "bridge" / name
-        if not path.is_file():
-            raise GenError(
-                f"C header ties: {name} is missing under bridge/; the ties "
-                "anchor the generated numbers to pins"
-            )
-        for match in _RE_BRIDGE_ALIAS.finditer(
-            path.read_text(encoding="utf-8", errors="replace")
-        ):
-            macro, target = match.group(1), match.group(2)
-            if macro in targets:
-                raise GenError(
-                    f"C header ties: {macro} is alias-#defined by both "
-                    f"{sources[macro]} and {name}; the alias would be ambiguous"
-                )
-            targets[macro] = target
-            sources[macro] = name
-    return targets, sources
-
-
-def bridge_c_names() -> dict[str, str]:
-    """Every name one of the bridge's own sources carries: `#define`d (object-
-    or function-like), typedef'd, declared after a struct body, or spelled as
-    a struct/union/enum tag with a body. Sources: bridge/bridge_pins.h,
-    s2sdk.h, mcp_bridge.c and mcp_bridge_game.inc (the .inc
-    is compiled into mcp_bridge.c, so its names collide the same way).
-    Returns name -> where, for emit_c_header's disjointness check (review F4):
-    a cross-header collision compiles with only `-Wmacro-redefined` (a
-    warning) and the later definition silently wins, so it is refused at
-    generation time instead. Deliberately coarse - a name that only appears in
-    a comment or a string cannot match, and over-capturing a name is harmless
-    (a bridge variable the generator can never collide with) while a missed
-    one would not be."""
-    names: dict[str, str] = {}
-    for source in (
-        "bridge_pins.h",
-        "s2sdk.h",
-        "mcp_bridge.c",
-        "mcp_bridge_game.inc",
-    ):
-        path = REPO_ROOT / "bridge" / source
-        if not path.is_file():
-            raise GenError(
-                f"C header: {source} is missing under bridge/; the generated "
-                "names must be checked against every bridge source"
-            )
-        text = path.read_text(encoding="utf-8", errors="replace")
-        for regex, what in (
-            (_RE_BRIDGE_MACRO_NAME, "#define"),
-            (_RE_BRIDGE_TYPEDEF_NAME, "typedef"),
-            (_RE_BRIDGE_BRACE_NAME, "declaration"),
-            (_RE_BRIDGE_TAG_NAME, "tag"),
-        ):
-            for match in regex.finditer(text):
-                names.setdefault(match.group(1), f"a {what} in bridge/{source}")
-    return names
-
-
-def refuse_c_name_collisions(generated: dict[str, str], bridge: dict[str, str]) -> None:
-    """emit_c_header's last gate (review F4): every name the generated header
-    carries (macros and typedef tags) must be disjoint from the bridge's own
-    names. A collision would be only a clang warning at bridge-compile time
-    and the later definition silently wins - so raise here, at generation
-    time, where the fix is a rename before anything is committed."""
-    for name in sorted(generated):
-        where = bridge.get(name)
-        if where is not None:
-            raise GenError(
-                f"C header: {name} is {generated[name]} but is already "
-                f"{where}; the generated names must be disjoint from the "
-                "bridge's own (clang only warns on the redefinition and the "
-                "later definition silently wins)"
-            )
-
-
-def _bridge_alias_value(
-    name: str,
-    aliases: dict[str, str],
-    int_pins: dict[str, int],
-    generated: dict[str, int],
-    kind: str,
-) -> int:
-    """The value a tie pin resolves to when the bridge-side macro owns no
-    numeric literal: an alias chain (`#define A B`) ending at a parsed int
-    define or a generated macro (WP C1c: B2 left S2_UTLVEC_EXTERNAL spelled as
-    the generated marker, not as a literal). A dead end or a cycle is refused -
-    fail closed: a tie may not anchor to a value nobody owns."""
-    seen = {name}
-    current = name
-    while True:
-        nxt = aliases.get(current)
-        if nxt is None or nxt in seen:
-            break
-        seen.add(nxt)
-        current = nxt
-        if current in int_pins:
-            return int_pins[current]
-        if current in generated:
-            return generated[current]
-    raise GenError(
-        f"{kind} tie: the bridge has no value for {name} (no numeric #define "
-        "and no resolvable alias); the ties anchor the generated values to "
-        "pins, so regenerate (or prune the tie row when the bridge-side "
-        "duplicate is deleted)"
-    )
-
-
-def bridge_c_typedefs() -> list[str]:
-    """The bridge's u8/u16/u32/u64 typedefs, lifted out of bridge/mcp_bridge.c,
-    so the smoke TU compiles the header exactly the way the bridge includes it
-    (after the typedefs, like s2sdk.h)."""
-    text = (REPO_ROOT / "bridge" / "mcp_bridge.c").read_text(
-        encoding="utf-8", errors="replace"
-    )
-    prefixes = (
-        "typedef unsigned char u8;",
-        "typedef unsigned short u16;",
-        "typedef unsigned int u32;",
-        "typedef unsigned long long u64;",
-    )
-    lines = [line for line in text.splitlines() if line.startswith(prefixes)]
-    if len(lines) != len(prefixes):
-        raise GenError(
-            "cannot lift the u8/u16/u32/u64 typedefs out of bridge/mcp_bridge.c "
-            f"(found {len(lines)} of {len(prefixes)})"
-        )
-    return lines
 
 
 def c_tag(name: str) -> str:
@@ -6815,7 +6537,7 @@ def c_field_type(
     follows it); a scalar becomes the C builtin of the same width; anything else
     becomes a `u8[n]` blob. `ctx` (object structs only) adds: fixed-underlying enums
     spelled as their integer, any `CUtlVector<T>` as the generic vector, and a pointer to
-    another IR record as `struct <Name> *` (the bridge declares those names itself)."""
+    another IR record as `struct <Name> *` (the header forward-typedefs those names)."""
     ctx = ctx or {"enums": {}, "records": {}, "objects": set()}
     rust = field["rust_type"]
     if rust is None:
@@ -6880,7 +6602,7 @@ def c_flat_fields(
     (typed IR field, msvc field, owning record, absolute offset). A base the IR has no
     record for (a pure interface, an unmodelled engine class) contributes nothing: its bytes
     stay a pad, and so does a secondary base (offset != 0: its subobject, vptr included, is a
-    pad; no bridge class reads a field out of one - reach it with `S2_BASEOFF_`)."""
+    pad; no consumer reads a field out of one - reach it with `S2_BASEOFF_`)."""
     out: list[tuple[dict, dict, str, int]] = []
     for base in item.get("bases", []):
         if base.get("virtual"):
@@ -6903,7 +6625,7 @@ def c_struct_block(
     and one offset/size assert per IR field. `item` is a record or a spec.
     A record with a vtable pointer or bases is a whole-object struct (`ctx` carries the IR):
     its vptr and any secondary-base subobjects are pads, the fields of its bases are flattened
-    in, and the bridge overlays the typed vtable pointer itself (bridge/s2sdk.h)."""
+    in, and a consumer overlays the typed vtable pointer itself (the C bridge's s2sdk.h did)."""
     tag = c_tag(name)
     msvc = item["msvc"]
     typed = {field["name"]: field for field in item["fields"]}
@@ -6996,12 +6718,14 @@ def c_struct_block(
 def emit_c_header(
     ir_by_group: dict,
 ) -> str:
-    """bridge/s2sdk_gen.h: every number the flat IR carries, spelled for the
-    C the bridge compiles (MSVC x64 side only - the bridge is MSVC-only code,
-    design 2.3). Freestanding (design R7, no #include at all): the bridge
-    includes it after its u8/u16/u32/u64 typedefs, like bridge/s2sdk.h.
-    Committed and regenerated like bridge_pins.h (AGENTS.md rule 1): a header
-    `gen.py --check` disagrees with is a stale header and build.sh refuses it."""
+    """crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h: every number the flat IR carries, spelled as
+    C macros (MSVC x64 side only - the tool DLLs are Windows-only, design 2.3). The
+    C bridge compiled it once; today sigs/scripts/sigcheck.py's sdk_defines/sdk_eval read
+    its S2_SLOT_/S2_OFF_/S2_SIZEOF_/S2_VTLEN_/S2_CONST_/S2_IFACE_ macros, so a sigs `sdk`
+    expression and sdkcheck.py name exactly what clang measured. Freestanding (design R7,
+    no #include at all): it is written against the u8/u16/u32/u64 typedefs
+    (C_SMOKE_TYPEDEFS). Committed and regenerated (AGENTS.md rule 1): a header
+    `gen.py --check` disagrees with is a stale header."""
     commit = None
     for group in c_header_groups():
         commit = ir_by_group[group]["upstream"].get("commit")
@@ -7058,8 +6782,8 @@ def emit_c_header(
         " *",
         f" * Source: crates/s2sdk/s2sdk-sys/ir/<group>.json, the MSVC (Windows x64) sub-objects;",
         f" * upstream {commit} (crates/s2sdk/s2sdk-sys/UPSTREAM.lock). Committed but never hand-",
-        " * edited (AGENTS.md rule 1): `gen.py --check` - which bridge/build.sh runs -",
-        " * regenerates it and refuses the build when the committed copy differs, so a",
+        " * edited (AGENTS.md rule 1): `gen.py --check` - in the AGENTS.md checks list -",
+        " * regenerates it and fails when the committed copy differs, so a",
         " * number here is always clang's answer for the pinned headers.",
         " *",
         " * Contents (design 2.3, work package C1):",
@@ -7074,8 +6798,8 @@ def emit_c_header(
         " *   S2_CONST_* / S2_IFACE_*         the measured [consts] values",
         " *   S2_<Type>                       padded structs for the records bridge code reads",
         " *",
-        " * Freestanding (design R7): no #include at all - include after the bridge's",
-        " * u8/u16/u32/u64 typedefs, like bridge/s2sdk.h. No #pragma pack either: every",
+        " * Freestanding (design R7): no #include at all - include after u8/u16/u32/u64",
+        " * typedefs of the MSVC x64 widths. No #pragma pack either: every",
         " * gap is a spelled-out _p<n> member and every offset is a _Static_assert, so",
         " * the compiler's own layout is proven, never assumed.",
         " */",
@@ -7150,7 +6874,7 @@ def emit_c_header(
     lines.append("")
     lines.append(
         "/* the bridge's own spellings: a pointer member to another game class names that class "
-        "(bridge/s2sdk.h defines it; a repeated typedef is fine in C11) */"
+        "(an opaque forward typedef; a repeated typedef is fine in C11) */"
     )
     pointees = sorted(
         {
@@ -7196,15 +6920,6 @@ def emit_c_header(
             add_macro(macro, literal)
             lines.append(f"#define {macro} {literal}")
 
-    # review F4 (Q4.1): the generated macro and typedef names must be disjoint
-    # from every name the bridge's own sources carry - checked here, at
-    # generation time, not left to a -Werror the build might not run with.
-    generated_names = dict.fromkeys(macro_values, "a generated macro")
-    generated_names.update(
-        {c_tag(struct["name"]): "a generated typedef" for struct in structs}
-    )
-    refuse_c_name_collisions(generated_names, bridge_c_names())
-
     lines.append("")
     lines.append("#endif /* S2SDK_GEN_H */")
     return "\n".join(lines) + "\n"
@@ -7212,10 +6927,6 @@ def emit_c_header(
 
 def write_c_header(text: str) -> None:
     C_HEADER_PATH.write_text(text, encoding="utf-8")
-
-
-def write_c_ties_header(text: str) -> None:
-    C_TIES_PATH.write_text(text, encoding="utf-8")
 
 
 def check_generated_header(path: Path, text: str) -> int:
@@ -7245,353 +6956,31 @@ def check_c_header(text: str) -> int:
     return check_generated_header(C_HEADER_PATH, text)
 
 
-def check_c_ties_header(text: str) -> int:
-    return check_generated_header(C_TIES_PATH, text)
-
-
-def c_generated_values(ir_by_group: dict) -> tuple[dict[str, int], dict[str, str]]:
-    """Every generated C macro a tie can reference, recomputed from the IR with
-    emit_c_header's own rules: (ints, strings). emit_c_ties_header validates
-    each tie row against this, so a generated macro the emitter no longer
-    produces (a renamed class, a pruned const) fails at generation time instead
-    of emitting a tie that references nothing."""
-    ints: dict[str, int] = {}
-    strings: dict[str, str] = {}
-
-    def add_int(name: str, value: int) -> None:
-        if name in ints:
-            raise GenError(f"C header ties: {name} is computed twice")
-        ints[name] = value
-
-    for group in c_header_groups():
-        if group == CONST_GROUP:
-            continue
-        for record in ir_by_group[group]["records"]:
-            add_int(f"S2_SIZEOF_{spec_tag(record['name'])}", record["msvc"]["size"])
-            for field in record["msvc"]["fields"]:
-                add_int(f"S2_OFF_{spec_tag(record['name'])}_{field['name']}", field["offset"])
-        for spec in ir_by_group[group]["specs"]:
-            add_int(f"S2_SIZEOF_{spec_tag(spec['name'])}", spec["msvc"]["size"])
-            for field in spec["msvc"]["fields"]:
-                add_int(f"S2_OFF_{spec_tag(spec['name'])}_{field['name']}", field["offset"])
-        for vtable in ir_by_group[group]["vtables"]:
-            class_name = vtable["class"]
-            counts: dict[str, int] = {}
-            for method in vtable["methods"]:
-                stem = c_method_name(method)
-                count = counts.get(stem, 0)
-                counts[stem] = count + 1
-                suffix = "" if count == 0 else f"_{count}"
-                add_int(f"S2_SLOT_{class_name}_{stem}{suffix}", method["msvc_slot"])
-            for base in vtable["secondary_bases"]:
-                add_int(f"S2_BASEOFF_{class_name}_{base['name']}", base["msvc_offset"])
-            length = vtable.get("msvc", {}).get("length")
-            if length is not None:
-                add_int(f"S2_VTLEN_{class_name}", length)
-    for const in c_header_consts(ir_by_group):
-        value = const["msvc"]["value"]
-        if const["kind"] == "string":
-            if const["name"].endswith("_INTERFACE_VERSION"):
-                macro = "S2_IFACE_" + const["name"][: -len("_INTERFACE_VERSION")]
-                strings[macro] = value
-            else:
-                ints[f"S2_CONST_{const['name']}"] = value
-        else:
-            ints[f"S2_CONST_{const['name']}"] = value
-    return ints, strings
-
-
-def c_tie_whys() -> tuple[tuple[str, str, str], ...]:
-    """Every tie row in one place, so both emitters can validate the `why`
-    texts once: they are spelled into C string literals (_Static_assert
-    messages, #error text is generated from the pin name only), so a quote in
-    one would break the emitted header."""
-    return C_HEADER_CONST_TIES + C_HEADER_STRING_TIES
-
-
-def c_comment(text: str) -> str:
-    """Text spelled inside a /* ... */ comment (review F6): a `*/` would
-    terminate the comment early and corrupt the generated header, so it is
-    neutralized as `*\\/` - the backslash breaks the terminator sequence and is
-    inert inside a comment. (A quote is not handled here on purpose: the same
-    `why` text is also spelled into _Static_assert message strings, and the
-    emitters refuse a quote outright instead of escaping it.)"""
-    return text.replace("*/", "*\\/")
-
-
-def emit_c_ties_header(
-    ir_by_group: dict,
-    int_pins: dict[str, int] | None = None,
-    string_pins: dict[str, str] | None = None,
-    alias_pins: dict[str, str] | None = None,
-) -> str:
-    """bridge/s2sdk_gen_ties.h: the ties (WP C1b, review-c1 §3). The
-    bridge includes it as the last line of the TU - after s2sdk.h and every
-    bridge-owned #define. A bridge-side value that never showed up is a #error
-    naming it. A drifted one fails the _Static_assert where that assert is real; for
-    an alias-valued tie (S2_UTLVEC_EXTERNAL) it is tautological at compile
-    time (review Q2 - the bridge macro is #defined as the generated macro
-    itself, so the assert is X == X) and the real drift check is generation
-    time: _bridge_alias_value refuses an alias chain that does not end at the
-    generated macro. The banner below says exactly this - the header must not
-    claim teeth it does not have. Committed and regenerated like s2sdk_gen.h
-    (AGENTS.md rule 1); gen.py --check refuses a stale copy.
-
-    A bridge-side duplicate that a replacement deletes must have its row pruned
-    with it (generation time refuses a row whose pin no longer exists)."""
-    generated_ints, generated_strings = c_generated_values(ir_by_group)
-    for _, _, why in c_tie_whys():
-        if '"' in why:
-            raise GenError(f"tie why text must not contain a quote: {why!r}")
-    int_sources = bridge_int_defines()[1]
-    if int_pins is None:
-        int_pins, _ = bridge_int_defines()
-    if string_pins is None:
-        string_pins = bridge_string_defines()
-    if alias_pins is None:
-        alias_pins, alias_sources = bridge_alias_defines()
-    else:
-        alias_sources = {}
-    pin_sources = {**int_sources, **alias_sources}
-
-    lines = [
-        "/* Generated by crates/s2sdk/s2sdk-sys/gen/gen.py (emit_c_ties_header) - do not edit.",
-        " *",
-        " * The ties (WP C1b, review-c1 §3): every tie whose bridge-side value is",
-        " * defined in bridge/s2sdk.h or the bridge TU, below the s2sdk_gen.h include",
-        " * site, so it is only in scope here, at the END of the TU. (There are no",
-        " * pin ties: the bridge spells the generated S2_SLOT_/S2_OFF_ macros itself",
-        " * and the sigs `sdk` field is the binary measurement; rows whose",
-        " * bridge-side duplicates were deleted were pruned, tie-by-replacement.)",
-        " *",
-        " *     typedef unsigned char u8;   (u16/u32/u64)",
-        " *     #include \"bridge_pins.h\"",
-        " *     #include \"s2sdk_gen.h\"",
-        " *     #include \"s2sdk.h\"",
-        " *     ... bridge code, its #defines ...",
-        " *     #include \"s2sdk_gen_ties.h\" <- LAST line of the TU",
-        " *",
-        " * What each tie actually guards (review Q2 - no teeth are",
-        " * claimed that a compile does not have):",
-        " *",
-        " *   - the S2_UTLVEC_EXTERNAL const tie is tautological at compile time:",
-        " *     the bridge-side macro is an alias #defined AS the generated macro",
-        " *     (bridge/s2sdk.h: `#define S2_UTLVEC_EXTERNAL",
-        " *     S2_CONST_EXTERNAL_CONST_BUFFER_MARKER`), so the _Static_assert is",
-        " *     X == X whatever either value drifts to. Its real teeth are the",
-        " *     #error when the alias is missing, and the generation-time",
-        " *     alias-target resolution (bridge_alias_defines /",
-        " *     _bridge_alias_value), which refuses a chain that does not end at",
-        " *     the generated marker - e.g. an alias pointed at the plain",
-        " *     EXTERNAL_BUFFER_MARKER (1<<31, the wrong flag for caller-owned",
-        " *     CUtlVectors) cannot even land in a committed header. build.sh",
-        " *     always runs gen.py, so that check gates every build.",
-        " *",
-        " *   - the S2HandleVec size tie is REAL at compile time: sizeof of a",
-        " *     separately shaped hand typedef must equal the generated",
-        " *     CUtlVector<CEntityHandle> sizeof, so a layout drift in either",
-        " *     fails the _Static_assert.",
-        " *",
-        " *   - A string tie (none today) would",
-        " *     be sizeof equality plus one _Static_assert per character; a",
-        " *     string-literal subscript is not a C11 integer constant",
-        " *     expression and no portable form exists, so those asserts rely on",
-        " *     clang's constant folding (GNU extension) - one reason build.sh",
-        " *     refuses a non-clang compiler.",
-        " *",
-        " * Fail closed on the missing side: a pin that never showed up is a",
-        " * #error naming it. The values are re-checked at generation time too",
-        " * (bridge_int_defines / bridge_string_defines / bridge_alias_defines",
-        " * against the IR), so a wrong pin cannot even land in a committed",
-        " * header.",
-        " */",
-        "#ifndef S2SDK_GEN_TIES_H",
-        "#define S2SDK_GEN_TIES_H",
-        "",
-        "#ifndef S2SDK_GEN_H",
-        '#error "s2sdk_gen_ties.h: include s2sdk_gen.h first; every tie references '
-        'its macros"',
-        "#endif",
-    ]
-
-    def check_tie(gen_expr: str, pin_macro: str, gen_value, pins_value, kind: str) -> None:
-        gen_macro, scale, addend = tie_terms(gen_expr, gen_value)
-        if gen_macro not in gen_value:
-            raise GenError(
-                f"{kind} tie: {gen_macro} is not emitted; is it still in the IR?"
-            )
-        value = pins_value.get(pin_macro)
-        if value is None:
-            # not a parsed literal: an alias (S2_UTLVEC_EXTERNAL spells the
-            # generated marker) resolves through its chain, dead ends refused
-            value = _bridge_alias_value(
-                pin_macro, alias_pins, int_pins, generated_ints, kind
-            )
-        expected = gen_value[gen_macro]
-        if not isinstance(expected, str):  # a string tie has neither factor nor addend
-            expected = expected * scale + addend
-        if value != expected:
-            raise GenError(
-                f"{kind} tie: {gen_expr} = {expected!r} but "
-                f"{pin_macro} = {value!r}; the generated value "
-                "and the pin drifted"
-            )
-
-    if C_HEADER_CONST_TIES:
-        lines.append("")
-        lines.append(
-            "/* ---- token/marker ties: bridge/s2sdk.h's copies of measured consts ----\n"
-            "   (an alias-valued tie is tautological at compile time - the alias\n"
-            "   spells the generated macro - so this #error + the generation-time\n"
-            "   alias-target resolution are its teeth; see the banner) ---- */"
-        )
-        for gen_macro, pin_macro, why in C_HEADER_CONST_TIES:
-            check_tie(gen_macro, pin_macro, generated_ints, int_pins, "const")
-            lines.append("")
-            lines.append(f"/* {c_comment(why)} */")
-            lines.append(f"#ifndef {pin_macro}")
-            lines.append(
-                f'#error "s2sdk_gen_ties.h: {pin_macro} must be #defined by the end '
-                f'of the TU ({pin_sources.get(pin_macro, "the bridge TU")} owns it; '
-                f'it must spell {gen_macro})"'
-            )
-            lines.append("#endif")
-            lines.append(
-                f"_Static_assert({gen_macro} == {pin_macro},"
-                f' "{why}: generated == {pin_macro}");'
-            )
-
-    if C_HEADER_STRING_TIES:
-        lines.append("")
-        lines.append(
-            "/* ---- string ties: bridge/s2sdk.h's copies of the interface versions ----\n"
-            "   (the per-character _Static_asserts are not a C11 integer constant\n"
-            "   expression - a string-literal subscript - and no portable form\n"
-            "   exists; clang folds them as a GNU extension, which is why build.sh\n"
-            "   refuses a non-clang compiler) ---- */"
-        )
-        for gen_macro, pin_macro, why in C_HEADER_STRING_TIES:
-            check_tie(gen_macro, pin_macro, generated_strings, string_pins, "string")
-            if not re.fullmatch(r"[A-Za-z0-9_]+", generated_strings[gen_macro]):
-                raise GenError(
-                    f"string tie: {gen_macro} = {generated_strings[gen_macro]!r} "
-                    "is not a plain identifier string; the per-character asserts "
-                    "would not spell it safely"
-                )
-            lines.append("")
-            lines.append(f"/* {c_comment(why)} */")
-            lines.append(f"#ifndef {pin_macro}")
-            lines.append(
-                f'#error "s2sdk_gen_ties.h: {pin_macro} must be #defined by the end '
-                f'of the TU (bridge/s2sdk.h owns it; it must spell {gen_macro})"'
-            )
-            lines.append("#endif")
-            lines.append(
-                f"_Static_assert(sizeof({gen_macro}) == sizeof({pin_macro}),"
-                f' "{why}: same length (with the terminator): generated == {pin_macro}");'
-            )
-            for index in range(len(generated_strings[gen_macro])):
-                lines.append(
-                    f"_Static_assert({gen_macro}[{index}] == {pin_macro}[{index}],"
-                    f' "{why}: char {index}: generated == {pin_macro}");'
-                )
-
-    if C_HEADER_SIZEOF_TIES:
-        lines.append("")
-        lines.append(
-            "/* ---- size ties: bridge/s2sdk.h typedefs that duplicate a generated sizeof ----\n"
-            "   (these are real at compile time: sizeof of an independently shaped\n"
-            "   hand typedef must equal the generated sizeof) ---- */"
-        )
-        for ir_name, typedef, why in C_HEADER_SIZEOF_TIES:
-            gen_macro = f"S2_SIZEOF_{spec_tag(ir_name)}"
-            if gen_macro not in generated_ints:
-                raise GenError(
-                    f"size tie: {gen_macro} is not emitted; is {ir_name} still in the IR?"
-                )
-            lines.append("")
-            lines.append(
-                f"/* {c_comment(why)}: a missing typedef is itself a compile error (there is no "
-                "#ifdef for a typedef), so the tie fails closed either way */"
-            )
-            lines.append(
-                f"_Static_assert(sizeof({typedef}) == {gen_macro},"
-                f' "{why}: sizeof({typedef}) == {gen_macro}");'
-            )
-
-    lines.append("")
-    lines.append("#endif /* S2SDK_GEN_TIES_H */")
-    return "\n".join(lines) + "\n"
-
-
-def bridge_real_order_tu() -> str:
-    """The bridge's real include order as one syntax-only TU (WP C1b): the
-    bridge's u8/u16/u32/u64 typedefs, bridge_pins.h, then
-    s2sdk_gen.h, s2sdk.h, and bridge/s2sdk_gen_ties.h as the last line - so
-    every tie actually compiles. (C1c: no int #define is lifted out of
-    mcp_bridge.c any more - every hand int pin lives in bridge_pins.h;
-    SRVCFG_VT_SLOTS was pruned with its tie.) Written by
-    `gen.py --emit-smoke-tu` for build.sh
-    and compiled by smoke_compile_c_header for --check; the values are lifted
-    out of the bridge files, never spelled here."""
-    return "\n".join(
-        [
-            *bridge_c_typedefs(),
-            "",
-            '#include "bridge_pins.h"',
-            '#include "s2sdk_gen.h"',
-            '#include "s2sdk.h"',
-            '#include "s2sdk_gen_ties.h"',
-        ]
-    ) + "\n"
-
-
-def smoke_compile_c_header(text: str, scratch: Path, ties_text: str | None = None) -> None:
-    """The smoke compile bridge/build.sh relies on: (a) the header alone with the
-    bridge's u8/u16/u32/u64 typedefs prepended, freestanding on the MSVC target,
-    -fsyntax-only (design R7: it must compile with no bridge header at all);
-    and - with the ties text - (b) bridge_real_order_tu against the same
-    headers with -I bridge, so every tie actually compiles in
-    --check, not only in build.sh. The generated copies are shadowed into the
-    scratch dir so (b) compiles exactly the text being checked."""
+def smoke_compile_c_header(text: str, scratch: Path) -> None:
+    """The header alone, with C_SMOKE_TYPEDEFS prepended, compiled freestanding on
+    the MSVC target with -fsyntax-only (design R7: it must compile with nothing
+    else in front of it). Every padded struct's _Static_asserts run here, so
+    `--check` proves the C spelling of each layout, not only the macro text.
+    No C consumer compiles the header any more (the Rust bridge reads s2sdk_sys);
+    sigs/scripts/sigcheck.py's sdk_eval parses its #defines, and this compile is
+    what keeps those #defines a well-formed C header."""
     scratch.mkdir(parents=True, exist_ok=True)
     cc = os.environ.get("CC", "clang")
     tu = scratch / "s2sdk_gen_smoke.c"
-    tu.write_text("\n".join([*bridge_c_typedefs(), "", text]), encoding="utf-8")
+    tu.write_text("\n".join([*C_SMOKE_TYPEDEFS, "", text]), encoding="utf-8")
     run(
         [
             cc,
             "--target=x86_64-pc-windows-msvc",
             "-ffreestanding",
             "-fsyntax-only",
-            # review F4: a macro redefinition across the generated header and a
-            # bridge source must not slip through as a warning (the generation
-            # time check is refuse_c_name_collisions; this is the compile-time
-            # backstop).
+            # add_macro refuses a name emitted twice at generation time; a
+            # redefinition that slipped past it must not pass as a warning.
             "-Werror=macro-redefined",
             str(tu),
         ]
     )
     vlog(f"C header smoke compile ok: {tu}")
-    if ties_text is None:
-        return
-    ties_tu = scratch / "s2sdk_gen_ties_smoke.c"
-    ties_tu.write_text(bridge_real_order_tu(), encoding="utf-8")
-    (scratch / "s2sdk_gen.h").write_text(text, encoding="utf-8")
-    (scratch / "s2sdk_gen_ties.h").write_text(ties_text, encoding="utf-8")
-    run(
-        [
-            cc,
-            "--target=x86_64-pc-windows-msvc",
-            "-ffreestanding",
-            "-fsyntax-only",
-            "-Werror=macro-redefined",
-            f"-I{scratch}",
-            f"-I{REPO_ROOT / 'bridge'}",
-            str(ties_tu),
-        ]
-    )
-    vlog(f"C header ties smoke compile ok (real include order): {ties_tu}")
 
 
 # --------------------------------------------------------------------------- #
@@ -9227,9 +8616,9 @@ def metamod_upstream_header() -> dict:
 # imported right after the paths block (an isolated `python3 -I` run has
 # neither script's directory on sys.path, so that import happens with the
 # directory inserted first) and `--self-test` dispatches to it with
-# `sys.modules[__name__]` as the host module - the suite monkeypatches the
-# tie tables on THAT object, because emit_c_ties_header reads gen.py's
-# own globals.
+# `sys.modules[__name__]` as the host module - the suite monkeypatches
+# globals on THAT object (sdk_head), because the functions under test
+# (locked_heads) read gen.py's own globals.
 # --------------------------------------------------------------------------- #
 
 
@@ -9275,7 +8664,7 @@ def main(argv: list[str]) -> int:
         "--check",
         action="store_true",
         help="regenerate BOTH ABIs into target/ and fail if ir/, src/generated/, "
-        "tests/layout.rs, bridge/s2sdk_gen.h or bridge/s2sdk_gen_ties.h differ",
+        "tests/layout.rs or crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h differ",
     )
     parser.add_argument(
         "--no-verify-cxx",
@@ -9285,30 +8674,12 @@ def main(argv: list[str]) -> int:
     parser.add_argument(
         "--self-test", action="store_true", help="assert the dump parsers and the emitters"
     )
-    parser.add_argument(
-        "--emit-smoke-tu",
-        metavar="PATH",
-        type=Path,
-        help="write the real-include-order smoke TU (typedefs, bridge_pins.h, "
-        "s2sdk_gen.h, s2sdk.h, "
-        "then s2sdk_gen_ties.h) for bridge/build.sh to compile; no SDK or "
-        "sysroot needed",
-    )
     parser.add_argument("--verbose", "-v", action="store_true", help="log every step")
     parser.add_argument("--quiet", "-q", action="store_true", help="only errors")
     args = parser.parse_args(argv)
     VERBOSE = args.verbose
     QUIET = args.quiet
     VERIFY_CXX = not args.no_verify_cxx
-
-    if args.emit_smoke_tu is not None:
-        try:
-            args.emit_smoke_tu.write_text(bridge_real_order_tu(), encoding="utf-8")
-        except GenError as exc:
-            print(f"gen.py: error: {exc}", file=sys.stderr)
-            return 1
-        vlog(f"wrote the real-include-order smoke TU: {args.emit_smoke_tu}")
-        return 0
 
     if args.self_test:
         try:
@@ -9364,23 +8735,20 @@ def main(argv: list[str]) -> int:
             print_summary(result.ir_by_group, result.protos)
             files = emit_all(result.ir_by_group, lock["commit"], allowlist.get("checks"))
             c_header = emit_c_header(result.ir_by_group)
-            c_ties = emit_c_ties_header(result.ir_by_group)
             write_ir(result.ir_by_group, scratch / "ir")
             write_rust(files, scratch)
-            smoke_compile_c_header(c_header, scratch / "c_header_smoke", c_ties)
+            smoke_compile_c_header(c_header, scratch / "c_header_smoke")
             failures = (
                 check_ir(result.ir_by_group)
                 + check_rust(files)
                 + check_c_header(c_header)
-                + check_c_ties_header(c_ties)
             )
             if failures:
                 log(f"check: {failures} generated file(s) differ")
                 return 1
             log(
-                "check: the committed dual-ABI IR, Rust bindings, "
-                "bridge/s2sdk_gen.h and bridge/s2sdk_gen_ties.h match the pinned "
-                "upstream"
+                "check: the committed dual-ABI IR, Rust bindings and "
+                "crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h match the pinned upstream"
             )
             return 0
 
@@ -9403,11 +8771,9 @@ def main(argv: list[str]) -> int:
             return 0
         files = emit_all(result.ir_by_group, lock["commit"], allowlist.get("checks"))
         c_header = emit_c_header(result.ir_by_group)
-        c_ties = emit_c_ties_header(result.ir_by_group)
         write_rust(files, S2SDK_SYS_DIR)
         write_c_header(c_header)
-        write_c_ties_header(c_ties)
-        smoke_compile_c_header(c_header, SCRATCH / "c_header_smoke", c_ties)
+        smoke_compile_c_header(c_header, SCRATCH / "c_header_smoke")
         log(
             "wrote "
             + ", ".join(sorted(files))
@@ -9416,10 +8782,6 @@ def main(argv: list[str]) -> int:
         log(
             f"wrote {C_HEADER_PATH.relative_to(REPO_ROOT)} (smoke-compiled freestanding "
             "on the MSVC target)"
-        )
-        log(
-            f"wrote {C_TIES_PATH.relative_to(REPO_ROOT)} (late ties, smoke-compiled "
-            "in the bridge's real include order)"
         )
         return 0
     except GenError as exc:

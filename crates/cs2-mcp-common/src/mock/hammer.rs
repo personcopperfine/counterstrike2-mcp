@@ -1,4 +1,4 @@
-//! The mock's Hammer entity world (WP-M, plan §3 + §4.1; semantics `bridge/mcp_bridge.c`
+//! The mock's Hammer entity world (WP-M, plan §3 + §4.1; semantics `mcp_bridge.c`
 //! `op_entity_create` / `apply_keyvalues` / `op_set_keyvalues` / `edit.batch` / `node.*` /
 //! `undo.undo` / `map.save` / `map.reload` / `doc.active`), plus the geometry world WP-B added
 //! (`op_mesh_create` / `op_mesh_set_geometry` / `op_mesh_set_material` and their `geo_dispatch`
@@ -24,7 +24,7 @@
 //!   request (`$<createIndex>`); any other handle -> `-32005 StaleHandle unknown_handle`;
 //! * `edit.batch` opens one undo group — `"MCP: batch"` when the ops list contains an
 //!   `entity.create` op, `"MCP: set keyvalues"` otherwise (the bridge's `batch_has_create`,
-//!   decided on the listed ops before the group opens, 35528e8 / protocol-diff-m2.15.md item 16) —
+//!   decided on the listed ops before the group opens, 35528e8 / crates/cs2-bridge/PROTOCOL.md §10) —
 //!   stops at the first failing op and reports `-32012 PartialFailure {results, failedIndex}` —
 //!   no rollback;
 //! * undoing a create/delete restores the node snapshot, undoing a keyvalue group
@@ -940,7 +940,7 @@ fn op_create(w: &mut HammerWorld, params: &Value) -> Result<(Value, String), Val
     });
     // m2.18 §2: the reply echoes the scales the entity vslot applied (the read-back shape the
     // `node.setTransform` recipe uses: the fields' values, not the request's). The echo is
-    // **always** present like the real bridge's (protocol-diff §7 entity.create row: `[1,1,1]`
+    // **always** present like the real bridge's (crates/cs2-bridge/PROTOCOL.md §9.3: `[1,1,1]`
     // when the request sent none; review w2b #6 — the mock used to drop the member and taught
     // readers that an unscaled create has no `scales` key).
     result["scales"] = json!(scales.as_ref().copied().unwrap_or([1.0, 1.0, 1.0]));
@@ -1341,7 +1341,7 @@ fn op_node_delete(w: &mut HammerWorld, params: &Value) -> Result<Value, Value> {
 
 // ---------------------------------------------------------------------------
 // m2.18 prop writes (node.setTransform / entity.addConnections / entity.removeConnections,
-// `bridge/protocol-diff-m2.18.md` — the wire contract of target/re/BRIDGE-M2.18-SPEC.md §3/§4)
+// `crates/cs2-bridge/PROTOCOL.md` §11.3, §9.6, §9.7)
 // ---------------------------------------------------------------------------
 
 /// `node.setTransform`'s origin bound (the bridge refuses |coordinate| > 1048576 before its undo
@@ -1611,8 +1611,9 @@ fn op_add_connections(w: &mut HammerWorld, params: &Value) -> Result<Value, Valu
 }
 
 /// One `match` member compared against a stored connection: the FGD/UI names are text, matched
-/// case-insensitively (the exact comparison the live bridge performs is unverified — `[I]` in
-/// `bridge/protocol-diff-m2.18.md`, which the orchestrator's live run pins).
+/// case-insensitively here. The bridge compares byte for byte (case-sensitive: `seq` in
+/// `crates/cs2-bridge/src/ops/hammer.rs`, `crates/cs2-bridge/PROTOCOL.md` §9.7), so the mock
+/// accepts matches the real bridge refuses.
 fn connection_matches(c: &MockConnection, m: &Map<String, Value>) -> bool {
     let eq = |field: &Value, value: &str| {
         field
@@ -2123,7 +2124,7 @@ struct MockGeom {
     distinct: usize,
 }
 
-/// `geom_parse` (`bridge/mcp_bridge.c`) with its own refusal reasons. Like the bridge it reads the
+/// `geom_parse` (`mcp_bridge.c`) with its own refusal reasons. Like the bridge it reads the
 /// numbers itself: an integer index must be an integer, a coordinate must be strictly inside
 /// +-1e6, and a material is a non-empty string.
 fn parse_geom(params: &Value) -> Result<MockGeom, Value> {
@@ -2772,7 +2773,7 @@ fn op_map_save(w: &mut HammerWorld, params: &Value) -> Result<Value, Value> {
 /// a forced reload of the other document - review L2), then the untitled gate, then `dirty && !force`
 /// -> `-32016 UnsavedChanges {reason}`; with `force` (or a clean document) the reload from disk
 /// marks the document clean again, drops the in-editor undo history (`undoDepth` -> 0, the live
-/// test `bridge/test_reload.py` pins it) and bumps the fingerprint epoch. The mock keeps its
+/// test `test_reload.py` pins it) and bumps the fingerprint epoch. The mock keeps its
 /// node list across a reload: `map.save` models the saved state only as the dirty flag, so
 /// `discardedChanges` is the dirty flag *seen before* the reload.
 fn op_map_reload(w: &mut HammerWorld, params: &Value) -> Result<Value, Value> {
@@ -2833,7 +2834,7 @@ pub(crate) fn addon_rel_of(win: &str) -> Option<String> {
     Some(tail.replace('\\', "/"))
 }
 
-/// The `map.open` path-shape gate as `bridge/map_path.h` spells it, with its own reason strings
+/// The `map.open` path-shape gate as `map_path.h` spells it, with its own reason strings
 /// (`None` = accepted), in the bridge's own order (one rule per reason, so a mock test pins the
 /// exact wire sentence). Review M1: the gate accepts the canonical addon-relative spelling only.
 fn map_shape_reason(path: &str) -> Option<&'static str> {
@@ -3139,7 +3140,7 @@ fn builtin_edit_batch(w: &mut HammerWorld, params: &Value) -> Reply {
         return (None, Some(err(-32602, "invalid params: ops", json!({}))), false);
     };
     // the undo label is decided from the ops *listed*, before the group is opened (the bridge's
-    // `batch_has_create` in mcp_bridge.c, 35528e8; protocol-diff-m2.15.md item 16): a batch with
+    // `batch_has_create` in mcp_bridge.c, 35528e8; crates/cs2-bridge/PROTOCOL.md §10): a batch with
     // no `entity.create` op carries the keyvalue label, which hammer-mcp's `undo_last` leaves the
     // unsaved-edit counter alone for — a popped set-only batch reverts nothing. A batch with no
     // readable ops at all also takes the keyvalue label (nothing was created).

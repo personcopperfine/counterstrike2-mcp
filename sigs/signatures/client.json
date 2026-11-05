@@ -1,7 +1,7 @@
 {
  "module": "client.dll",
  "image_base": 6442450944,
- "_doc": "client.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "client.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "9ddf30d68b8ef666",
@@ -6657,7 +6657,7 @@
   },
   "CCONST_IDENTITY_CHUNK_BITS": {
    "kind": "const",
-   "via": "bridge/mcp_bridge_game.inc gs_ident (chunk = chunks[index / S2_CONST_MAX_ENTITIES_IN_LIST]; slot index & (512-1); \"512 CEntityIdentity per chunk\")",
+   "via": "mcp_bridge_game.inc gs_ident (chunk = chunks[index / S2_CONST_MAX_ENTITIES_IN_LIST]; slot index & (512-1); \"512 CEntityIdentity per chunk\")",
    "tag": "V",
    "expect": {
     "2000930": 9,
@@ -6687,7 +6687,7 @@
   "COFF_BUTTON_INPUTVALUE": {
    "kind": "offset",
    "sdk": "S2_OFF_ClientInputButton_t_m_InputValue",
-   "via": "bridge/mcp_bridge.c:2362-2364 (in_btn_name: CInputValue inside a client button object at btn+8, iv+0 = name; same +8 passed to g_inApply at :2398 and :2444)",
+   "via": "mcp_bridge.c:2362-2364 (in_btn_name: CInputValue inside a client button object at btn+8, iv+0 = name; same +8 passed to g_inApply at :2398 and :2444)",
    "tag": "V",
    "expect": {
     "2000930": 8,

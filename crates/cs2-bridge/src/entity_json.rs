@@ -1,18 +1,18 @@
-//! The C bridge's **entity JSON region** (`bridge/mcp_bridge.c:226-1010`, between the two
+//! The C bridge's **entity JSON region** (`mcp_bridge.c:226-1010`, between the two
 //! `entity JSON region` markers) ported to Rust: the byte scanners the m2.15 entity ops depend on.
 //!
 //! # Why a byte-faithful port
 //!
-//! The C region is host-tested text: `bridge/build.sh:58-78` lifts it verbatim out of the source
-//! into a generated header and compiles `bridge/test_entity_json.c` against it, so the C test pins
+//! The C region is host-tested text: `build.sh:58-78` lifts it verbatim out of the source
+//! into a generated header and compiles `test_entity_json.c` against it, so the C test pins
 //! the *shipped* scanners. This module is the Rust bridge's copy of that behaviour, and
 //! `crates/cs2-bridge/tests/entity_json.rs` holds it to the C two ways:
 //!
-//! * every case of `bridge/test_entity_json.c` is ported one for one (the C's printed case count
+//! * every case of `test_entity_json.c` is ported one for one (the C's printed case count
 //!   is asserted against the Rust test's own count), and the C test is rebuilt and run;
 //! * `tests/data/entity_json_corpus.txt` is a differential corpus produced by the committed C
 //!   generator (`tests/data/entity_json_gen.c`), which the test rebuilds with `cc` against the
-//!   region extracted from `bridge/mcp_bridge.c` exactly as `build.sh` extracts it, and then
+//!   region extracted from `mcp_bridge.c` exactly as `build.sh` extracts it, and then
 //!   requires both the C output and this module's output to equal the committed bytes.
 //!
 //! # What is ported

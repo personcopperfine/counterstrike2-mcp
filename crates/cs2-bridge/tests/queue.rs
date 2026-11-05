@@ -1,6 +1,6 @@
 //! `cs2_bridge::queue` against the C it ports.
 //!
-//! Every expectation here is a line of `bridge/mcp_bridge.c`: `q_push`/`q_pop`/`q_purge_gen`/
+//! Every expectation here is a line of `mcp_bridge.c`: `q_push`/`q_pop`/`q_purge_gen`/
 //! `q_remove_id` and `out_push`/`out_space`/`out_pop_blocking` (`:1406-1528`), the deadline
 //! sweep (`:1587-1608`), `drain` (`:6289-6317`), `flush_outbound` (`:6323-6334`) and the
 //! `build_error`/`build_error_ext` envelope (`:1563-1583`).

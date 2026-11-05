@@ -66,7 +66,7 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
     wrappers that redirect `up`'s output to files. The scheduled task's job is the one that
     refuses breakaway (item 10).
 13. *(packaging itself is fixed, see below)* `target/game-bins` and `target/game-bins-linux-2000940`
-    are hard links of the `native-launcher-windows-fixes` worktree's copies (for `build-rs.sh`);
+    are hard links of the `native-launcher-windows-fixes` worktree's copies (for `cargo bridge build`);
     the Metamod payload comes from the main checkout's `target/metamod` (`package.sh` falls back
     to it).
 
@@ -126,7 +126,7 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
   Steam here, FIXME 3; no container run used them either).
 * 15 (hidden diagnostics in the shipped binary): moved to the `cs2mcp-native-dev` binary (not
   packaged): `tree-hash`, `tree-diff`, `vtm-command`, `vtm-bridge-request`, `gbe-interfaces`,
-  `wait-pid`. `cs2mcp-native open <asset>` is public (the runtime.sh `open` post).
+  `wait-pid`. `cs2mcp-native open <asset>` is public (the `cargo bridge runtime open` post).
 * 16 (bridge renders need an ASCII path): `write_file_atomic` uses the wide-char APIs and the
   renders dir takes any non-empty value (**live**: `CS2_BRIDGE_RENDERS=C:\cs2test\fixmes\renders-Jörg`,
   `render_world` wrote `...\renders-Jörg\fixmes_jorg.png` and client-mcp read it back; the
@@ -151,6 +151,6 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
   lists capture as available; another session name is refused. `down` was `treeClean` after both.
   Found on the way, fixed: `package.sh` built only `cs2mcp-native` (`--bin` limits every package),
   so it shipped stale `client-mcp.exe`/`hammer-mcp.exe` from whatever build was in `target/`.
-* 18 (session-status texts name `bridge/runtime.sh`): on Windows `launch.command` is
+* 18 (session-status texts name `cargo bridge runtime`): on Windows `launch.command` is
   `cs2mcp-native up --steam gbe --tools` and the unreachable note names `cs2mcp-native up`
   (**live**); `model_status` hints `cs2mcp-native open models/<file>.vmdl`.

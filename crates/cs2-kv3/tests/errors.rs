@@ -189,7 +189,7 @@ fn flag_chain(n: usize) -> String {
 }
 
 /// The cap counts **open nesting levels**: the root object is level 1 (this is exactly how
-/// `KV3_CHECK_DEPTH_CAP` counts in `bridge/kv3_check.h`, over the raw token stream), so a value
+/// `KV3_CHECK_DEPTH_CAP` counts in `kv3_check.h`, over the raw token stream), so a value
 /// directly under a root key starts at level 2.
 #[test]
 fn nesting_at_the_cap_parses() {

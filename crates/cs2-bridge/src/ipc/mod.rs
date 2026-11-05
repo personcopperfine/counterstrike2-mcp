@@ -1,7 +1,7 @@
 //! The IPC side of the bridge: the TCP listener, the NDJSON line reader, the `control.hello`
 //! token handshake and the writer thread.
 //!
-//! Ported from `bridge/mcp_bridge.c`:
+//! Ported from `mcp_bridge.c`:
 //!
 //! * the listener thread `ipc_thread` (`:6336-6702`) - 127.0.0.1 with an ephemeral port, one
 //!   authenticated connection, extra connections answered `-32007 Busy` and closed, the recv

@@ -2,7 +2,7 @@
 
 ## Goal
 `runtime::docker::DockerRuntime` brings a tools session up/down, loads the bridge, and exposes
-paths/logs — replacing `bridge/runtime.sh` for the server's needs. Plus a thin
+paths/logs — replacing `cargo bridge runtime` for the server's needs. Plus a thin
 image layer of our own (`docker/`) on top of the published client image.
 
 ## Prerequisites
@@ -11,13 +11,13 @@ image layer of our own (`docker/`) on top of the published client image.
   `../.github/skills/cs2-lavapipe/SKILL.md`; the workshop tree materialised at `workshop/run/app`
   with content merged, gbe `steam_api64.dll`, `S:` drive disabled, `/cache` volume
   (`../idabins/worknotes/wine-tools-bringup.md` steps 1–5).
-- Bridge built and installed: `runtime.sh build && runtime.sh install` (manifest entry in
+- Bridge built and installed: `cargo bridge build && cargo bridge install install` (manifest entry in
   `game/bin/sdkenginetools.txt`, read at toolframework2 Init -> needs a restart).
 - `vtmsend.exe` present in the tree (`/app/entrypoint.sh vtmsend.exe`).
 - Host X display + `XAUTHORITY` (until workflow 08).
 
 ## Steps
-1. **Facts -> code.** Encode `runtime.sh cmd_up` in `DockerRuntime::up`:
+1. **Facts -> code.** Encode `cargo bridge runtime up` in `DockerRuntime::up`:
    `podman run -d --gpus all --name <c> --network=host -v <app>:/app -v <cache>:/cache
    -v /tmp/.X11-unix:/tmp/.X11-unix -v <xauth>:/root/.Xauthority:ro -e DISPLAY=:0
    --entrypoint /bin/bash ghcr.io/personcopperfine/cs2-docker -c "cd /app; exec ./entrypoint.sh cs2mcp_launch.exe -tools
@@ -30,7 +30,7 @@ image layer of our own (`docker/`) on top of the published client image.
    cs2_bridge` posted, `session.json` appears) -> `control.hello` ok -> module identity checks settled
    (`control.capabilities.modules[*].state` not `not_loaded|verifying`) -> document open (`doc.active`).
 3. **`exec`**: `podman exec -i <c> bash -c 'cd /app && ./entrypoint.sh <exe> ...'` for `vtmsend.exe`
-   (payload file `/app/vtm_payload.kv3`, KV3 header as in `runtime.sh put_payload`).
+   (payload file `/app/vtm_payload.kv3`, KV3 header as in ``cargo bridge runtime`'s put_payload`).
 4. **`logs`**: `podman logs` tail + `<app>/mcp_bridge_rs.log` + `<app>/game/csgo/console.log`.
 5. **Guards**: refuse `up` when any `cs2*` container exists (one CS2 at a time; RAM), when the
    discovery file is stale from a previous run (delete before launch), when `XAUTHORITY` is missing.
@@ -47,7 +47,7 @@ image layer of our own (`docker/`) on top of the published client image.
 ## Definition of done
 - `hammer-mcp --launch` from a cold state reaches "document open" on `maps/probe.vmap` (addon
    `mcp_test`) within 3 min on a warm shader cache, and `session_status` shows every ladder step.
-- `runtime.sh` is no longer needed for the server's own loop (it stays for bridge development).
+- `cargo bridge runtime` is no longer needed for the server's own loop (it stays for bridge development).
 
 ## Open questions
 - Image pinning (parent README open decision 6): pin the tools image digest / block CS2 updates in
@@ -60,6 +60,6 @@ image layer of our own (`docker/`) on top of the published client image.
   shared hosts (parent README open decision 5).
 
 ## Evidence
-- `bridge/runtime.sh` (`up`, `wait_channel`, `load_bridge`, `wait_doc`, `wait_modules`) [proven, `cycle` passes on 2000930].
+- `cargo bridge runtime` (`up`, `wait_channel`, `load_bridge`, `wait_doc`, `wait_modules`) [proven, `cycle` passes on 2000930].
 - `../idabins/worknotes/wine-tools-bringup.md` [proven on host X; Xvfb failure documented].
 - `workshop/Dockerfile` (file-source image, Proton prefix layout), `workshop/entrypoint.sh` (wine env, exe allowlist).

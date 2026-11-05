@@ -666,7 +666,7 @@ async fn live_targets(
     drop(bridge);
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
-            "entity.find returned a non-object result: {} (bridge/protocol-diff-m2.15.md §7)",
+            "entity.find returned a non-object result: {} (crates/cs2-bridge/PROTOCOL.md §9.2)",
             reply.result
         )));
     }
@@ -959,7 +959,7 @@ pub(crate) async fn connection_run(
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
             "entity.addConnections returned a non-object result: {} \
-             (bridge/protocol-diff-m2.18.md §4)",
+             (crates/cs2-bridge/PROTOCOL.md §9.6)",
             reply.result
         )));
     }
@@ -1243,7 +1243,7 @@ pub async fn remove_entity_connections(
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
             "entity.removeConnections returned a non-object result: {} \
-             (bridge/protocol-diff-m2.18.md §4)",
+             (crates/cs2-bridge/PROTOCOL.md §9.7)",
             reply.result
         )));
     }

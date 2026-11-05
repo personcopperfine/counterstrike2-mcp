@@ -2,10 +2,10 @@
 """sdkcheck.py - the generated s2sdk numbers vs the Windows game binaries (V1a).
 
 Compares what s2sdk generates - the dual-ABI IR in crates/s2sdk/s2sdk-sys/ir/, visible
-to the bridge as S2_VTLEN_*/S2_SLOT_* in bridge/s2sdk_gen.h (design 2.3, WP C1) -
+to the bridge as S2_VTLEN_*/S2_SLOT_* in crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h (design 2.3, WP C1) -
 with the game binaries under $CS2_BINS, through sigcheck.py's Resolver and PE
 reader (imported, never duplicated: one binary-format implementation, exactly
-like bridge/pins.py).
+like sigs/scripts/pinsdata.py).
 
 Three check groups (design "3. Verification" item 3):
 
@@ -29,7 +29,7 @@ Three check groups (design "3. Verification" item 3):
     the concrete class adds exactly N virtuals of its own (CSoundOpSystem: +2).
 (b) `sdk` entries (check_sdk): every sigs entry carrying an `sdk` field - the generated
     expression in tie syntax (S2_SLOT_X, S2_SLOT_X*8, S2_OFF_X+8, S2_OFF_A+S2_OFF_B) the
-    bridge compiles instead of a pin - is evaluated against bridge/s2sdk_gen.h and must
+    bridge compiles instead of a pin - is evaluated against crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h and must
     equal the entry's own measurement (a vslot locator's slot, else the resolved value).
     Row tag `sdk:<module>/<entry>`: PASS, or SKIP (LITERAL) for an entry with no locator.
 (c) consts: every S2_CONST_* that has a game-measured counterpart among S1b's
@@ -857,10 +857,10 @@ def check_vtables_linux(ir, probes, vt_by_class, rows):
 
 def check_sdk(platform, probes, rows, defines):
     """(d) every sigs entry carrying `sdk`: the generated expression (evaluated against
-    bridge/s2sdk_gen.h, which gen.py --check proves is the pinned upstream's) must equal the
+    crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h, which gen.py --check proves is the pinned upstream's) must equal the
     entry's measurement - the vslot locator's slot index, else the resolved value. These are
     the numbers the bridge compiles from the generated header instead of a pin, so this row
-    and bridge/pins.py's refusal are what hold them to the binary. A located entry is a PASS;
+    and `cargo bridge pins`' refusal (pinsdata.py) are what hold them to the binary. A located entry is a PASS;
     a literal (no locator: the number is a bridge-side shape no binary backs) is SKIP (LITERAL)
     on equality."""
     if platform != "windows":

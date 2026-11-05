@@ -39,7 +39,7 @@ pub fn windows_default_path() -> Option<PathBuf> {
 /// bridge replaces the C DLL): `$XDG_RUNTIME_DIR/cs2mcpbridge/session.json`, falling back to
 /// `$HOME/.local/share/cs2mcpbridge/session.json`.
 ///
-/// The Linux counterpart of the C's `%LOCALAPPDATA%` rule (`bridge/mcp_bridge.c:6746-6758`);
+/// The Linux counterpart of the C's `%LOCALAPPDATA%` rule (`mcp_bridge.c:6746-6758`);
 /// `crates/cs2-bridge/src/ipc/discovery.rs` writes the same path. [`default_path`] (the
 /// Wine/Proton prefix the tools load from) is unchanged, so existing host behaviour is.
 pub fn linux_default_path() -> Option<PathBuf> {

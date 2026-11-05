@@ -32,7 +32,7 @@ acceptance scripts' checks.
    VToolMessage `command` channel instead — **done (WP-R)**, below),
    **`run_map` (WP-R)** — `src/tools/run_map.rs`, the proven recipe (`HANDOFF.md` "Playtest",
    `pt_lib.py` `vcmd`, `compile_map.sh`), **not** `map.run`: one VToolMessage `command` payload per
-   line (`vtmsend.exe`; `runtime.sh`'s own channel route, so it works without `-testscript`, where
+   line (`vtmsend.exe`; `cargo bridge runtime`'s own channel route, so it works without `-testscript`, where
    the bridge's `console.exec` answers `-32011`), each optional `game_type N`/`game_mode M` as its
    own post (the recipe's order; whether the channel splits on `;` is unverified) and then
    `map <name> nomapvalidation=1` (a plain `map <name>` fails
@@ -448,13 +448,13 @@ acceptance scripts' checks.
         `a_user_undo_then_redo_misses_the_mesh_cache` replaces the old "keeps the cache valid" test
         (which pinned a hit under the old mock + old prediction). Live check still owed: create,
         create, undo, redo, `doc.active` (is the redo record's serial new, e.g. `3/2`?) — and now
-        `undo.redo` itself (m2.17's live probe 4 in `bridge/protocol-diff-m2.17.md`), which the
+        `undo.redo` itself (m2.17's live probe 4; contract: `crates/cs2-bridge/PROTOCOL.md` §8.6), which the
         orchestrator runs raw on the bridge, not through this server.
       - **m2.17 (WP-B) — the write's own reply carries the state the cache is validated against.**
         Every undoable write (`mesh.create`/`setGeometry`/`setMaterial`, `node.delete`,
         `entity.create`, `entity.setKeyValues`, `edit.batch`, `undo.undo`) now answers
         `doc: {id, topSerial, undoDepth}` — the same three numbers `doc.active` reports, read on the
-        bridge's main thread **inside the write's dispatch** (`bridge/protocol-diff-m2.17.md`).
+        bridge's main thread **inside the write's dispatch** (`crates/cs2-bridge/PROTOCOL.md` §6.4).
         `live_common::post_write_document` prefers it and only falls back to the post-write
         `doc.active` read when the reply has no `doc` (a bridge older than m2.17; mock knob
         `set_hammer_write_doc(false)`), so a mesh write makes **one** `doc.active` read now (its
@@ -506,7 +506,7 @@ unverified.
 - Keyvalue undo does not revert values (`../idabins/worknotes/evidence/2026-10-06-m4-undo.txt`) —
   surfaced: `undo_last` notes it, `set_entity_keyvalues` returns `previous` (m2.15). A real fix needs
   the CDataModel undo bracket (`hammer-undo.md` §C, slots 69/70), untested.
-- `entity.get`/`entity.find` are implemented in m2.15 (`bridge/protocol-diff-m2.15.md`, live-verified);
+- `entity.get`/`entity.find` are implemented in m2.15 (`crates/cs2-bridge/PROTOCOL.md` §9.1, §9.2, live-verified);
   `doc.list`/`mesh.get` remain bridge work. Live I/O connection edits are not implemented (file
   route `get_entity` reads `connections`).
 - **Mesh geometry has no live read** (`mesh.get` is `-32011`, above). The POC's per-face
@@ -550,7 +550,7 @@ unverified.
 - Mesh writes (WP-B, 2026-10-15): the ported `geometry.py` (unit tests in `src/geometry.rs`), the
   four tools (`src/tools/mesh_live.rs`), the mock arms + pins (`crates/cs2-mcp-common/src/mock/hammer.rs`,
   `tests/mock_entities.rs`, `hammer-mcp/tests/mesh_live.rs`) and the bridge's own request/reply shape
-  (`bridge/mcp_bridge.c` `op_mesh_*`, `bridge/test_geometry.py` request shapes) [ported, mock-tested;
+  (`mcp_bridge.c` `op_mesh_*`, `test_geometry.py` request shapes) [ported, mock-tested;
   live verification pending — the orchestrator runs it].
 - Mesh rebuild operators (WP-C, 2026-10-15): `transform_mesh`, `move_mesh_vertices`,
   `extrude_mesh_face`, `delete_mesh_faces` in `src/tools/mesh_live.rs` over the same
@@ -561,7 +561,7 @@ unverified.
   its own file geometry with identical world positions) [V runtime].
 - Run (WP-R, 2026-10-15): `src/tools/run_map.rs` over the VToolMessage `command` channel
   (`crates/cs2-mcp-common/src/runtime/docker.rs` `vtm_command_payload`/`vtmsend_program_argv`, the same
-  helpers `runtime.sh`'s channel probe and bridge load are built on) and the console watch;
+  helpers `cargo bridge runtime`'s channel probe and bridge load are built on) and the console watch;
   `tests/run_map.rs` (33) + the module's unit tests, and `cs2-mcp-common`'s `vtm_payloads` tests
   [ported, mock-tested; **live verification pending — the orchestrator runs it**]. The live facts it
   rests on: `map <name> nomapvalidation=1` loads an addon map and prints `Loading map "<name>"` …
@@ -584,9 +584,8 @@ unverified.
   fake script; the in-container `/proc` walk's permission behaviour is the live fact the orchestrator
   saw (`target/orch/live/compile-2.err`)].
 - Bridge m2.17 write-reply `doc` state (WP-B, 2026-10-15): the bridge's
-  `sb_add_doc_object`/`sb_add_doc_tail` (`bridge/mcp_bridge.c`) with the pin `HFN_GET_REDO_HISTORY`
+  `sb_add_doc_object`/`sb_add_doc_tail` (`mcp_bridge.c`) with the pin `HFN_GET_REDO_HISTORY`
   from `sigs/signatures/hammer.json`, the Rust consumer `live_common::post_write_document` and the
-  mock's `with_doc` (`bridge/protocol-diff-m2.17.md` has the call chain, the redo evidence and the
-  live probe list) [I: offline — `bridge/build.sh`,
-  `python3 -I bridge/test_entities.py --static` (`static_write_doc_tail`, `static_undo_redo`) and
+  mock's `with_doc` (contract: `crates/cs2-bridge/PROTOCOL.md` §6.4, §8.6) [I: offline at the
+  time — the C bridge's build, its `test_entities.py --static` checks and
   `cargo test -p hammer-mcp -p cs2-mcp-common`; the live promotion is the orchestrator's].

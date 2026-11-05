@@ -137,7 +137,7 @@ impl ContentPaths {
     }
 
     /// `host` -> `csgo_addons/<addon>/models/x.vmdl` (forward slashes), relative to the content
-    /// root; `None` when `host` is not inside it. For display and `runtime.sh open` (vtmsend);
+    /// root; `None` when `host` is not inside it. For display and `cargo bridge runtime open` (vtmsend);
     /// **not** what `modeldoc.open` takes (see [`ContentPaths::addon_rel`]).
     pub fn content_rel(&self, host: &Path) -> Option<String> {
         let rel = strip_prefix(&self.content_root(), host)?;

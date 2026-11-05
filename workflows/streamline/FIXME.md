@@ -74,7 +74,7 @@
 - The caches (model catalog, soundevent index) are rebuilt from scratch on an addon change; the game
   VPK halves are not shared across addons yet (a switch costs one full build).
 - The ModelDoc addon is read with `podman inspect` per guarded call (`container_addon`); a
-  ModelDoc started before `bridge/runtime.sh` set the `cs2mcp.addon` label is read from its launch
+  ModelDoc started before `cargo bridge runtime` set the `cs2mcp.addon` label is read from its launch
   command (`-addon <a>`), and one with neither is treated as "unknown" (the guard passes).
 - model_edit dry-run: the ModelDoc-on-another-addon warning is worded as if the file was written
   ("the file was written in addon ..."), also for `dryRun:true`.
@@ -95,7 +95,7 @@
 - The mock bridge (`cs2-mcp-common` `mock/hammer.rs`) keeps texture values outside its undo snapshot:
   `undo_last` pops the group but does not restore texture values there.
 - `rotate`'s sign is unverified against Hammer's RotateTexture90CW; the tool says "sign as Hammer's rotate
-  field". Fix after the live check (protocol-diff-m3.14.md).
+  field". Fix after the live check (crates/cs2-bridge/PROTOCOL.md §12.6).
 - WP1.5 review: `align_texture`'s refusal classification (retry-safe) matches the bridge's pre-write
   reasons by text ("mesh has no faces", "could not collect face handles") and `TextureSetUnknown`; any new
   pre-write `-32603` reason must be added to `align_refusal` (mesh_live.rs), else it is reported as
@@ -154,7 +154,7 @@
 1. **release+tap (ti_convoy FIXME 26) was the bridge.** `input.set {release:[b], tap:[b]}` of a held
    button cleared and re-set the wanted bit inside one call, so the per-frame body (one delta per
    changed bit) never saw a change. Fixed in the bridge as `regap` (one gap frame; bridge m3.15,
-   `bridge/protocol-diff-m3.15.md`). The scenario was inferred from the FIXME wording ("release + tap
+   `crates/cs2-bridge/PROTOCOL.md` §19.1). The scenario was inferred from the FIXME wording ("release + tap
    in one call doesn't release"): same-button release+tap is the only combination that breaks. Test:
    `crates/cs2-bridge/tests/ops_hooks.rs`. Not run live.
 2. **m3.15 numbering.** WP1.3 may take m3.13 or also bump; `BRIDGE_BUILD` in `crates/cs2-bridge/src/lib.rs`
@@ -256,13 +256,13 @@ From `LIVE-P1b.md` "New findings" A-D. Mock tests for 1-3; not run live.
 
 1. **First-map `open_map` (A).** When `map.open` is not advertised (fresh session, hammer.dll not
    loaded) and a tools container runs, `open_map` posts `open_asset maps/<x>.vmap` over the
-   VToolMessage channel (the `runtime.sh open` route), then polls the capabilities and `doc.active`
+   VToolMessage channel (the `cargo bridge runtime open` route), then polls the capabilities and `doc.active`
    until the document is the map (`openedVia:"vtm"`). The document is matched by the addon-relative
    path tail, case-insensitive. A timeout is `OpenUnconfirmed` (outcome unknown). Not covered: the
    post's real delivery is only known from the document appearing; a modal that blocks the open
    (a map that parses locally but Hammer rejects) shows up as the same timeout, indistinguishable
    from a slow load. The poll is a fixed 250 ms interval inside the call budget (a re-read of the
-   capabilities each time), not an event. **Live check owed:** fresh `runtime.sh up`, then
+   capabilities each time), not an event. **Live check owed:** fresh `cargo bridge runtime up`, then
    `open_map {path:"maps/p1_test.vmap"}` returns `openedVia:"vtm"` and a document.
    Review fixes to item 1: the vtm route needs `modules["hammer.dll"].state` `not_loaded`/`verifying`
    (not just a missing `map.open`); `doc.active`'s `-32017 {module:"hammer.dll"}` maps to

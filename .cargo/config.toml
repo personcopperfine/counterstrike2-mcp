@@ -1,5 +1,4 @@
-# Cross-build configuration for the Rust bridge (`crates/cs2-bridge`), the WP0.4/WP1.A half of
-# the C-to-Rust bridge port.
+# Cross-build configuration for the Rust bridge (`crates/cs2-bridge`).
 #
 # Only the Windows/MSVC target is configured here: the Linux target needs nothing (the workspace
 # already builds it).
@@ -20,8 +19,8 @@
 # `+crt-static`: the DLL links the static CRT (`libcmt`) instead of depending on a
 # `vcruntime140.dll` that the Wine prefix does not necessarily carry. The tool plugin keeps
 # running while the tools framework does (it is never unloaded before the process exits), so a
-# statically linked CRT inside the DLL is exactly what the C bridge does with its freestanding
-# build (`bridge/build.sh`).
+# statically linked CRT inside the DLL is safe. The export gate (`cargo bridge check-exports`)
+# refuses a DLL that imports a CRT DLL anyway.
 [target.x86_64-pc-windows-msvc]
 linker = "lld-link"
 rustflags = [
@@ -35,3 +34,8 @@ rustflags = [
     "-Lnative=target/xwin/sdk/lib/um/x86_64",
     "-Lnative=target/xwin/sdk/lib/ucrt/x86_64",
 ]
+
+# `cargo bridge <command>`: the bridge's operator tooling (crates/cs2-bridge-tools): pins, build,
+# check-exports, install, runtime, metamod, testplugin. Works from anywhere inside the checkout.
+[alias]
+bridge = "run --quiet --package cs2-bridge-tools --"

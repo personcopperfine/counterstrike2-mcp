@@ -9,7 +9,7 @@ and leaves the install exactly as it was before.
 Background: `workflows/windows-native.md` (§3.2 runtime, §3.3 install on a Steam tree, §4.1 VAC,
 §4.3 direct launch), `client-mcp/workflows/10-local-install.md`,
 `hammer-mcp/workflows/10-local-install.md`, `crates/mm-launch/README.md`,
-`bridge/install-rs.sh` (the file layout this crate reproduces).
+`cargo bridge install` (the file layout this crate reproduces).
 
 Status: see "Status" at the bottom and `FIXME.md`. Anything not marked **live** there is
 unverified.
@@ -23,7 +23,7 @@ cs2mcp-native status                     # session + readiness + tree state (no 
 cs2mcp-native down                       # stop the game, restore the tree, verify it
 cs2mcp-native uninstall                  # restore the tree without a session (after a crash, a reboot)
 cs2mcp-native mcp-config [--server hammer|client|both]   # print the MCP config JSON
-cs2mcp-native open <asset>               # post open_asset into the running -tools session (runtime.sh open)
+cs2mcp-native open <asset>               # post open_asset into the running -tools session (`cargo bridge runtime open`)
 cs2mcp-native fetch-gbe [--out DIR] [--archive FILE]   # Linux: download gbe_fork's pinned Linux release into <state>/gbe
 ```
 
@@ -43,7 +43,7 @@ VToolMessage channel is per logon session.
 ```
 <out>/cs2mcp-native[.exe]  client-mcp[.exe]  hammer-mcp[.exe]
 <out>/sigs/                          the servers' signature DB (their `<exe dir>/sigs` fallback)
-<out>/payload/bridge-rs/<plat>/      bridge/build-rs.sh output
+<out>/payload/bridge-rs/<plat>/      cargo bridge build output
 <out>/payload/metamod/<plat>/addons/ the Metamod build
 <out>/payload/gbe/<plat>/            scripts/stage-gbe.sh output (+ GBE_REF.txt)
 <out>/payload/vklayer/<plat>/        the capture layer (crates/cs2-vk-capture, built by package.sh)
@@ -100,7 +100,7 @@ same scan gbe's `generate_interfaces` does), so it matches the user's build.
 ## The file set
 
 Everything goes in under the install root (`.../Counter-Strike Global Offensive`). The layout
-and the generated text are byte-identical to `bridge/install-rs.sh` (wine/linux).
+and the generated text are byte-identical to `cargo bridge install` (wine/linux).
 
 | path | Windows | Linux | why |
 |---|---|---|---|
@@ -238,7 +238,7 @@ Steam account. Four independent checks:
    command-line tail**: it exits 3 with `[cs2mcp-launch] FAIL: refusing to inject without
    -insecure ...` before creating the game process. Every container launch line already passes it.
 3. On Linux, Metamod itself refuses to load in a client without `-dedicated`/`-insecure`
-   (spike client-noinsecure, `bridge/install-rs.sh` header), and the bridge is only loaded
+   (spike client-noinsecure, `cargo bridge install` header), and the bridge is only loaded
    through Metamod there.
 4. **The bridge itself** (`crates/cs2-bridge/src/vac.rs`) checks the process command line at
    both lifecycle starts: without `-insecure` (or `-dedicated`) the tool plugin's `Init` logs

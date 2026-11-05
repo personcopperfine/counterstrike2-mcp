@@ -1,20 +1,19 @@
-//! `bridge/test_map_path.c` ported to Rust, plus the differential corpus test.
+//! `test_map_path.c` (the C bridge's `map_path.h` test) ported to Rust, plus the differential
+//! corpus test. The C sources are retired (git history, commit 8cdea42); their cases and their
+//! output live on here as the spec.
 //!
-//! Three things live here:
+//! Two things live here:
 //!
-//! 1. [`c_path_cases`] / [`c_header_cases`] / [`c_eq_cases`] / [`c1_...`]: every case
-//!    `bridge/test_map_path.c` runs, ported one for one (30 path + 13 header + 20 eq + 3 C1 =
-//!    66; the count is asserted against the C's "66 cases, 0 failures" line). The C output is
-//!    the spec.
+//! 1. [`C_PATH_CASES`] / [`C_HDR_CASES`] / [`C_EQ_CASES`] / [`c1_the_session_path_is_the_text_not_the_address`]:
+//!    every case `test_map_path.c` ran, ported one for one (30 path + 13 header + 20 eq + 3 C1 =
+//!    66, the C's "66 cases, 0 failures" line). The C output is the spec.
 //! 2. [`differential_corpus`]: every corpus case - the C test's inputs plus the edge-case
 //!    extras (over-long, trailing slashes, mixed separators, drive letters, non-ASCII bytes,
 //!    degenerate header windows) - run through this crate's Rust port and compared against the
-//!    *committed* corpus (`tests/data/map_path_corpus.txt`, written by the committed generator
-//!    `tests/data/map_path_gen.c`, which includes `bridge/map_path.h` read-only).
-//! 3. [`corpus_matches_the_c_generator`]: rebuilds the committed generator with `cc` into
-//!    `$CARGO_TARGET_TMPDIR`, runs it, and requires its output to equal the committed corpus
-//!    byte for byte - the corpus cannot drift from the C. If `cc` is missing this FAILS loudly
-//!    naming `cc`; it never skips.
+//!    *committed* corpus (`tests/data/map_path_corpus.txt`). The corpus is what the compiled
+//!    `map_path.h` printed (its generator `tests/data/map_path_gen.c` went with the C, commit
+//!    8cdea42), so it is frozen: a new case's expected line is derived from the C semantics by
+//!    hand and reviewed, never from this port's own output.
 //!
 //! Refusals are checked on the EXACT reason string both here and in the corpus, which is the
 //! NEGATIVE parity the port must keep: inputs the C refuses (traversal, over-long, bad chars,
@@ -26,14 +25,14 @@ use cs2_bridge::map_path::{self, Reason, MAP_PATH_MAX, MAP_VMAP_HEADER_MAX};
 /// `content/csgo_addons/mcp_test` on a `Z:\app` install.
 const ABS: &[u8] = b"Z:\\app\\content\\csgo_addons\\mcp_test\\maps\\probe.vmap";
 
-/// One `path_case` of `bridge/test_map_path.c` (accept, or refuse with the exact reason).
+/// One `path_case` of `test_map_path.c` (accept, or refuse with the exact reason).
 struct PathCase {
     name: &'static str,
     path: &'static [u8],
     want: Result<(), Reason>,
 }
 
-/// Every `path_case` of `bridge/test_map_path.c:100-143`, in that file's order.
+/// Every `path_case` of `test_map_path.c:100-143`, in that file's order.
 const C_PATH_CASES: &[PathCase] = &[
     PathCase { name: "accept_simple", path: b"maps/probe.vmap", want: Ok(()) },
     PathCase { name: "accept_subdir", path: b"maps/a/probe.vmap", want: Ok(()) },
@@ -90,7 +89,7 @@ const C_PATH_CASES: &[PathCase] = &[
     },
 ];
 
-/// One `hdr_case` of `bridge/test_map_path.c`: a NUL-terminated header string, the window being
+/// One `hdr_case` of `test_map_path.c`: a NUL-terminated header string, the window being
 /// `strlen + 1` bytes (`test_map_path.c:56-61`).
 struct HdrCase {
     name: &'static str,
@@ -98,7 +97,7 @@ struct HdrCase {
     want: Result<(), Reason>,
 }
 
-/// Every `hdr_case` of `bridge/test_map_path.c:146-170`, in that file's order (the window is
+/// Every `hdr_case` of `test_map_path.c:146-170`, in that file's order (the window is
 /// the header bytes plus their NUL, exactly what the C hands over).
 const C_HDR_CASES: &[HdrCase] = &[
     HdrCase {
@@ -158,7 +157,7 @@ const C_HDR_CASES: &[HdrCase] = &[
     },
 ];
 
-/// One `eq_case` of `bridge/test_map_path.c` (`test_map_path.c:48-53` checks `map_path_eq` and
+/// One `eq_case` of `test_map_path.c` (`test_map_path.c:48-53` checks `map_path_eq` and
 /// its symmetry).
 struct EqCase {
     name: &'static str,
@@ -167,7 +166,7 @@ struct EqCase {
     want: bool,
 }
 
-/// Every `eq_case` of `bridge/test_map_path.c:172-195`, in that file's order.
+/// Every `eq_case` of `test_map_path.c:172-195`, in that file's order.
 const C_EQ_CASES: &[EqCase] = &[
     // the same file (both sides absolute)
     EqCase { name: "eq_same", a: ABS, b: ABS, want: true },
@@ -366,16 +365,14 @@ fn c1_the_session_path_is_the_text_not_the_address() {
 }
 
 /// The whole C test, counted: 30 `path_case` + 11 `hdr_case` + 2 window cases + 20 `eq_case`
-/// + 3 C1 = 66, the number `bridge/test_map_path.c` prints. Run the C to see it:
-///
-/// `cc -std=c11 -O1 -o ... bridge/test_map_path.c && .../test_map_path`.
+/// + 3 C1 = 66, the number `test_map_path.c` printed (`66 cases, 0 failures`).
 #[test]
 fn the_c_case_count_is_ported_in_full() {
     assert_eq!(28 + 2 + 11 + 2 + 20 + 3, 66, "the C test's total case count");
 }
 
-/// One differential corpus record, mirroring what the committed generator
-/// `tests/data/map_path_gen.c` writes: TAB-separated, one case per line, hex-encoded bytes.
+/// One differential corpus record, mirroring what the C generator (`map_path_gen.c`) wrote:
+/// TAB-separated, one case per line, hex-encoded bytes.
 #[derive(Debug)]
 enum CorpusRecord {
     /// `P <name> <pathHex> ok` / `P <name> <pathHex> err <reason>`.
@@ -521,13 +518,11 @@ const C_CASE_NAMES: &[&str] = &[
     "eq_drive_only",
 ];
 
-/// Every corpus case run through the Rust port, byte for byte.
+/// Every corpus case run through the Rust port, byte for byte against the C's committed output.
 ///
-/// The corpus is committed at `tests/data/map_path_corpus.txt`, generated by the committed
-/// `tests/data/map_path_gen.c` (its header comment has the build/run recipe); it holds every
-/// C-test input under its shape name plus the edge-case extras, TAB-separated, hex-encoded.
-/// [`corpus_matches_the_c_generator`] proves the committed corpus never drifts from the
-/// compiled C; this test proves the Rust port matches the committed corpus.
+/// The corpus is committed at `tests/data/map_path_corpus.txt`, the output of the retired C
+/// generator; it holds every C-test input under its shape name plus the edge-case extras,
+/// TAB-separated, hex-encoded.
 #[test]
 fn differential_corpus() {
     let corpus_path = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/map_path_corpus.txt");
@@ -581,75 +576,6 @@ fn differential_corpus() {
                 );
             }
         }
-    }
-}
-
-/// The corpus cannot drift from the C: rebuild the committed generator
-/// (`tests/data/map_path_gen.c`, which includes `bridge/map_path.h` read-only) with `cc` into
-/// `$CARGO_TARGET_TMPDIR`, run it, and require its stdout to equal the committed corpus byte
-/// for byte.
-///
-/// A missing `cc` is a FAILURE naming `cc` - never a skip; the C output is the spec, so a
-/// checkout without `cc` has no way to prove the corpus and must fail loudly.
-#[test]
-fn corpus_matches_the_c_generator() {
-    let gen_c = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/map_path_gen.c");
-    let exe = concat!(env!("CARGO_TARGET_TMPDIR"), "/map_path_gen");
-    let include = concat!(env!("CARGO_MANIFEST_DIR"), "/../../bridge");
-
-    let compile = std::process::Command::new("cc")
-        .args(["-std=c11", "-O1", "-Wall", "-Wextra", "-I", include, "-o", exe, gen_c])
-        .output()
-        .unwrap_or_else(|e| {
-            panic!(
-                "the C compiler `cc` is missing or unusable ({e}): the corpus test cannot run \
-                 without it, and skipping is not an option - the committed corpus \
-                 tests/data/map_path_corpus.txt would go unverified"
-            )
-        });
-    assert!(
-        compile.status.success(),
-        "cc could not build tests/data/map_path_gen.c:\n{}",
-        String::from_utf8_lossy(&compile.stderr)
-    );
-
-    let run = std::process::Command::new(exe)
-        .output()
-        .unwrap_or_else(|e| panic!("cannot run the freshly built generator {exe}: {e}"));
-    assert!(
-        run.status.success(),
-        "the generator exited {:?}:\n{}",
-        run.status.code(),
-        String::from_utf8_lossy(&run.stderr)
-    );
-    assert!(
-        run.stderr.is_empty(),
-        "the generator wrote to stderr: {}",
-        String::from_utf8_lossy(&run.stderr)
-    );
-
-    let corpus_path = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/map_path_corpus.txt");
-    let committed = std::fs::read(corpus_path)
-        .unwrap_or_else(|e| panic!("the committed corpus {corpus_path} is missing: {e}"));
-    if run.stdout != committed {
-        // Report the first differing byte with a window of context instead of dumping two
-        // whole byte arrays through assert_eq!.
-        let first = run
-            .stdout
-            .iter()
-            .zip(committed.iter())
-            .position(|(a, b)| a != b)
-            .unwrap_or(run.stdout.len().min(committed.len()));
-        panic!(
-            "the compiled C generator's output differs from the committed corpus \
-             tests/data/map_path_corpus.txt - regenerate it (see the generator's header \
-             comment): first difference at byte {first} of generated len {} / committed len {}; \
-             generated: {:?} ... committed: {:?} ...",
-            run.stdout.len(),
-            committed.len(),
-            String::from_utf8_lossy(&run.stdout[first.saturating_sub(32)..first.min(run.stdout.len())]),
-            String::from_utf8_lossy(&committed[first.saturating_sub(32)..first.min(committed.len())]),
-        );
     }
 }
 

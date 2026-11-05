@@ -12,7 +12,7 @@
 //!   size-limit violation or a `strict` FGD issue refuses with **nothing sent**. One undo group
 //!   (the bridge labels a batch with a create op `"MCP: batch"` and a set-only one
 //!   `"MCP: set keyvalues"` — its `batch_has_create`, decided on the listed ops before the group
-//!   opens (35528e8, protocol-diff-m2.15.md item 16); this tool sends only creates, so the label
+//!   opens (crates/cs2-bridge/PROTOCOL.md §10); this tool sends only creates, so the label
 //!   is `"MCP: batch"`, and the m2.15 `edit.batch` arm takes no `undoLabel` — the requested label
 //!   is echoed as `requestedUndoLabel` and the bridge's own label as `undoLabel`).
 //!   Raw `handle`s from the result are replaced by `handleIssued:true`, and the bridge's create
@@ -879,7 +879,7 @@ pub async fn create_entities(
 
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
-            "edit.batch returned a non-object result: {} (bridge/protocol-diff-m2.15.md §7)",
+            "edit.batch returned a non-object result: {} (crates/cs2-bridge/PROTOCOL.md §10)",
             reply.result
         )));
     }
@@ -942,7 +942,7 @@ pub async fn create_entities(
         json!([
             "no auto-save: run save_map to write the changes; file-backed reads remain stale until then",
             "the bridge labels the batch undo group \"MCP: batch\" for a batch with a create op \
-             (a set-only one is \"MCP: set keyvalues\", protocol-diff-m2.15.md item 16; \
+             (a set-only one is \"MCP: set keyvalues\", crates/cs2-bridge/PROTOCOL.md §10; \
              edit.batch takes no undoLabel; see requestedUndoLabel)"
         ]),
     );
@@ -1185,7 +1185,7 @@ pub async fn set_entity_keyvalues(
     let Value::Object(mut out) = reply.result else {
         return Err(ToolError::internal(format!(
             "entity.setKeyValues returned a non-object result: {} \
-             (bridge/protocol-diff-m2.15.md §7)",
+             (crates/cs2-bridge/PROTOCOL.md §9.4)",
             reply.result
         )));
     };

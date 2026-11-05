@@ -1,0 +1,226 @@
+{
+ "build": "1234567",
+ "windows": [
+  {
+   "module": "alpha.dll",
+   "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+   "time_stamp": 1793662689,
+   "size_of_image": 65536,
+   "check_sum": 43981,
+   "rsds_guid": "22222222222222222222222222222222",
+   "rsds_age": 3,
+   "entries": [
+    {
+     "name": "AVT",
+     "kind": "vtable",
+     "bridge": "AVT",
+     "locator": {
+      "type": "rtti",
+      "class": "CAlpha"
+     },
+     "notes": null,
+     "sdk": false,
+     "ident_slot": 2,
+     "value": 4096,
+     "ident_target": 8704
+    },
+    {
+     "name": "CAlpha::Foo",
+     "kind": "function",
+     "bridge": "AVS_FOO",
+     "locator": {
+      "type": "vslot",
+      "vtable": "AVT",
+      "slot": 3
+     },
+     "notes": "IAlpha::Foo",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 8192,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": []
+     }
+    },
+    {
+     "name": "CAlpha::Bar",
+     "kind": "function",
+     "bridge": "AVS_BAR",
+     "locator": {
+      "type": "vslot",
+      "vtable": "AVT",
+      "slot": 4
+     },
+     "notes": "IAlpha::Bar, same target as Foo (one PinBytes row)",
+     "sdk": true,
+     "ident_slot": null,
+     "value": 8192,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": []
+     }
+    },
+    {
+     "name": "CAlpha::Baz",
+     "kind": "function",
+     "bridge": "AVS_BAZ",
+     "locator": {
+      "type": "vslot",
+      "vtable": "AVT",
+      "slot": 5
+     },
+     "notes": "IAlpha::Baz, a relocated prologue (no PinBytes row)",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 8448,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": [
+       8456
+      ]
+     }
+    },
+    {
+     "name": "ALPHA_BIT",
+     "kind": "const",
+     "bridge": "A_CONST",
+     "locator": null,
+     "notes": "a bit with a \"quoted\" note",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 2
+    },
+    {
+     "name": "CAlpha::Do",
+     "kind": "function",
+     "bridge": "AFN_DO",
+     "locator": {
+      "type": "sig"
+     },
+     "notes": "CAlpha::Do",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 12288,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": []
+     }
+    },
+    {
+     "name": "CAlpha::m_sdk",
+     "kind": "offset",
+     "bridge": null,
+     "locator": {
+      "type": "sig"
+     },
+     "notes": null,
+     "sdk": true,
+     "ident_slot": null,
+     "value": 16
+    },
+    {
+     "name": "CAlpha::m_off",
+     "kind": "offset",
+     "bridge": "A_OFF",
+     "locator": {
+      "type": "sig"
+     },
+     "notes": "offsets carry no doc comment",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 72
+    }
+   ]
+  },
+  {
+   "module": "beta.dll",
+   "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+   "time_stamp": 1,
+   "size_of_image": 32768,
+   "check_sum": 0,
+   "rsds_guid": null,
+   "rsds_age": 0,
+   "entries": [
+    {
+     "name": "BVT",
+     "kind": "vtable",
+     "bridge": "BVT",
+     "locator": {
+      "type": "rtti",
+      "class": "CBeta"
+     },
+     "notes": null,
+     "sdk": false,
+     "ident_slot": null,
+     "value": 20480
+    },
+    {
+     "name": "g_beta",
+     "kind": "global",
+     "bridge": "BG_STATE",
+     "locator": {
+      "type": "sig"
+     },
+     "notes": "the beta state",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 24576,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": []
+     }
+    },
+    {
+     "name": "CBeta::Run",
+     "kind": "function",
+     "bridge": "BFN_RUN",
+     "locator": {
+      "type": "sig"
+     },
+     "notes": null,
+     "sdk": false,
+     "ident_slot": null,
+     "value": 28672,
+     "window": {
+      "bytes": "000102030405060708090a0b0c0d0e0f1011121314151617",
+      "relocs": []
+     }
+    }
+   ]
+  }
+ ],
+ "linux": [
+  {
+   "module": "libalpha.so",
+   "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+   "time_stamp": 0,
+   "size_of_image": 16384,
+   "entries": [
+    {
+     "name": "CAlpha",
+     "kind": "vtable",
+     "bridge": "LVT",
+     "locator": {
+      "type": "itanium_vtable",
+      "symbol": "_ZTV6CAlpha"
+     },
+     "notes": null,
+     "sdk": false,
+     "ident_slot": 1,
+     "value": 256,
+     "ident_target": 1024
+    },
+    {
+     "name": "ALPHA_CHUNK",
+     "kind": "const",
+     "bridge": "L_CONST",
+     "locator": null,
+     "notes": "a linux const",
+     "sdk": false,
+     "ident_slot": null,
+     "value": 7
+    }
+   ]
+  }
+ ]
+}

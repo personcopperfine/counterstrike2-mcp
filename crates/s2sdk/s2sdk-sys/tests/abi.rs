@@ -1,5 +1,6 @@
-//! Cross-checks the vtable slot calculator against `bridge/bridge_pins.h` (this lives in
-//! the cs2-mcp checkout, three levels above `CARGO_MANIFEST_DIR`) and against the generated
+//! Cross-checks the vtable slot calculator against the bridge's generated pin table
+//! (`crates/cs2-bridge/src/generated/pins.rs`, included below by path, so a missing or
+//! reshaped table fails the build instead of skipping the check) and against the generated
 //! `VClass` statics (`s2sdk_sys::generated`, built from the upstream headers by
 //! `gen/gen.py` — names only, in declaration order, with `overrides` copied verbatim):
 //!
@@ -50,45 +51,41 @@ fn find_type_scope_for_module_derives_to_slot_13() {
     assert!(ISCHEMASYSTEM.primary_base.is_some());
 }
 
-/// The bridge pin row must pin the method at slot 13, matching the derived slot.
+/// The bridge's pin table, included rather than copied: the rows the pins generator writes
+/// from the sigs database (the binary measurement), independent of the headers `gen.py` reads.
+#[path = "../../../cs2-bridge/src/generated/pins.rs"]
+#[allow(dead_code)]
+mod pins;
+
+/// The bridge's `PIN_SLOTS` row for `ISchemaSystem::FindTypeScopeForModule` must pin slot 13 on
+/// the schemasystem.dll vtable, the slot the ABI derivation computes from the headers.
 #[test]
 fn bridge_pins_find_type_scope_for_module() {
-    let path = format!("{}/../../../bridge/bridge_pins.h", env!("CARGO_MANIFEST_DIR"));
-    let text = match std::fs::read_to_string(&path) {
-        Ok(text) => text,
-        Err(err) => {
-            eprintln!("skipping bridge_pins.h cross-check: cannot read {path}: {err}");
-            return;
-        }
-    };
-
-    // Row shape: { 8, SSV_SCHEMASYSTEM_VT, 13, 0x11350, "ISchemaSystem::FindTypeScopeForModule" },
-    let rows: Vec<(usize, &str)> = text
-        .lines()
-        .filter(|line| line.contains("SSV_SCHEMASYSTEM_VT") && line.contains("ISchemaSystem::"))
-        .map(|line| {
-            let inner = line.split('{').nth(1).and_then(|r| r.split('}').next());
-            let fields: Vec<&str> = inner.unwrap_or("").split(',').collect();
-            let pin: usize = fields[2].trim().parse().expect("bridge pin slot field");
-            let quoted = fields[4].trim();
-            let name = quoted
-                .strip_prefix('"')
-                .and_then(|s| s.strip_suffix('"'))
-                .expect("bridge pin quoted name");
-            (pin, name)
-        })
-        .collect();
-
-    let row = rows
+    let row = pins::PIN_SLOTS
         .iter()
-        .find(|(_, name)| *name == "ISchemaSystem::FindTypeScopeForModule")
-        .expect("no ISchemaSystem::FindTypeScopeForModule row in bridge_pins.h");
+        .find(|row| row.what == "ISchemaSystem::FindTypeScopeForModule")
+        .expect("no ISchemaSystem::FindTypeScopeForModule row in pins.rs PIN_SLOTS");
 
-    // The row pins slot 13, and the ABI derivation computes exactly that slot.
-    assert_eq!(row.0, 13, "bridge_pins.h pins FindTypeScopeForModule at 13");
+    // The row reads the schema system's own vtable (the identity row's RVA)...
+    assert_eq!(row.module, pins::PIN_SCHEMA, "the row's module is schemasystem.dll");
+    assert_eq!(
+        u64::from(row.vt_rva),
+        pins::SSV_SCHEMASYSTEM_VT.value,
+        "the row's vtable is SSV_SCHEMASYSTEM_VT"
+    );
+    assert!(
+        pins::PIN_IDENTS
+            .iter()
+            .any(|ident| ident.what == "SSV_SCHEMASYSTEM_VT"
+                && ident.module == pins::PIN_SCHEMA
+                && ident.rva == row.vt_rva),
+        "SSV_SCHEMASYSTEM_VT has its PIN_IDENTS identity row"
+    );
+    // ...and pins slot 13, exactly the slot the ABI derivation computes.
+    assert_eq!(row.slot, 13, "pins.rs pins FindTypeScopeForModule at 13");
     assert_eq!(
         slot(Abi::Msvc, &ISCHEMASYSTEM, "FindTypeScopeForModule"),
-        Some(row.0)
+        Some(usize::from(row.slot))
     );
 }
 

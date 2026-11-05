@@ -16,10 +16,10 @@ all steps `[V]`): `CreateInterface("SchemaSystem_001")` -> slot 13 `FindTypeScop
 `FindRawClassBinding(name)` -> `CSchemaClassInfo` (`+0x08` name, `+0x20` size, `+0x24` field count,
 `+0x29` base count, `+0x30` fields x 0x20 {name, type, +0x10 offset}, `+0x38` bases x 0x10 {u32 offset,
 class}). Inherited fields are not copied into `m_pFields`: the bridge recurses through the bases and
-adds the base offset (`bridge/mcp_bridge_game.inc` `gs_field_in`). A field that disappears in an
+adds the base offset (`mcp_bridge_game.inc` `gs_field_in`). A field that disappears in an
 update makes the read fail loudly (`null`/error), never silently read garbage.
 
-What is pinned by signature instead (fail closed, `bridge/proposed-sigs/*.json`, all 19 entries
+What is pinned by signature instead (fail closed, the then `proposed-sigs/*.json` drafts, since merged into `sigs/signatures/`, all 19 entries
 resolve uniquely on 2000930 with `sigcheck.py resolve --strict`):
 
 | Macro | Module | What | Evidence |
@@ -196,5 +196,5 @@ the two fails are the listener checks.
 | `game.radar` cost (scan of 16k identities per call) | 3–10 ms round trip with one player |
 
 Next: a parked `sandbox` session (`../../../idabins/worknotes/vtest/run_vtest.sh sandbox` +
-`bridge/runtime.sh`-style load of the m2.9 DLL) and `research/game_state_probe.py` (to write)
+`cargo bridge runtime`-style load of the m2.9 DLL) and `research/game_state_probe.py` (to write)
 calling each method; record results here with `[V runtime]`.

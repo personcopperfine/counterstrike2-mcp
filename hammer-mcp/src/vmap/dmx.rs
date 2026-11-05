@@ -1,5 +1,5 @@
 //! The `.vmap` view of a binary DMX (`encoding binary 9`) file: the tree the oracle
-//! `bridge/vmapreader/vmap_dmx.py` (`DmxFile.parse`) builds, decoded by [`cs2_dmx`]. The
+//! `vmap_dmx.py` (`DmxFile.parse`; the retired Python oracle `vmap_dmx.py`, `git show 8cdea42:bridge/vmapreader/vmap_dmx.py`) builds, decoded by [`cs2_dmx`]. The
 //! map-specific entity view built on top of the tree lives in [`super`]. Plan: entities-plan.md
 //! §2 / §4.1 WP-R.
 //!

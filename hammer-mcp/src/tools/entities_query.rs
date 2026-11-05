@@ -275,7 +275,7 @@ pub(crate) fn read_error(error: BridgeError, node_id: i64) -> ToolError {
 /// The bridge answered something that is not a result object: be honest, never invent one.
 fn malformed(method: &str, result: &Value) -> ToolError {
     ToolError::internal(format!(
-        "{method} returned a non-object result: {result} (bridge/protocol-diff-m2.15.md §7)"
+        "{method} returned a non-object result: {result} (crates/cs2-bridge/PROTOCOL.md §9.1, §9.2)"
     ))
 }
 

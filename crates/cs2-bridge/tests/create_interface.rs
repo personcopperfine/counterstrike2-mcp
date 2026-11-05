@@ -6,7 +6,7 @@ use core::ptr;
 
 use cs2_bridge::CreateInterface;
 
-/// The interface version string the tools framework asks for (`bridge/s2sdk.h:55`).
+/// The interface version string the tools framework asks for (`s2sdk.h:55`).
 const TOOLSYSTEM2_VERSION: &core::ffi::CStr = c"ToolSystem2_001";
 
 /// `"ToolSystem2_001"` is served on Windows (the tools' tool plugin) and refused on Linux, where

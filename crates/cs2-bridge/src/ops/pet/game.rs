@@ -12,8 +12,7 @@
 //!   the same functions exist but answer the loud [`unsupported`] error: pet.dll is a Windows
 //!   DLL and this crate's Linux build has no equivalent. That path is unreachable in production
 //!   (the `-32017` gate refuses every `pet.*` row before a body runs, because `PIN_PET` and
-//!   `PIN_TF2` never verify off Windows), and it is a Rust-only answer, noted in
-//!   `bridge/protocol-diff-m3-pet.md`.
+//!   `PIN_TF2` never verify off Windows), and it is a Rust-only answer.
 //!
 //! # The main thread
 //!
@@ -390,11 +389,11 @@ pub(crate) mod platform {
     use super::super::reply::{self, Buf, ClassSchema, SchemaField, SchemaRead, TypeArray, TypeRow};
     use super::{ActiveDoc, HostRead, LiveDoc, LiveTail, PathText};
 
-    /// `S2_TOOLSYSTEM2_VERSION` (`bridge/s2sdk.h:55`): what pet.dll's `CreateInterface` answers.
+    /// `S2_TOOLSYSTEM2_VERSION` (`s2sdk.h:55`): what pet.dll's `CreateInterface` answers.
     /// A literal, because upstream has no macro for it.
     const TOOLSYSTEM2_VERSION: &str = "ToolSystem2_001";
 
-    /// `S2_SYM_CREATEINTERFACE` (`bridge/s2sdk.h:59`): upstream `tier0/interface.h`'s factory
+    /// `S2_SYM_CREATEINTERFACE` (`s2sdk.h:59`): upstream `tier0/interface.h`'s factory
     /// export name.
     const CREATEINTERFACE_SYM: &str = "CreateInterface";
 
@@ -680,7 +679,7 @@ pub(crate) mod platform {
             log::line("pet: CreateInterface export missing"); // :137
             return None;
         };
-        // `S2CreateInterfaceFn` (`bridge/s2sdk.h:58`): `void *(const char *, int *)`.
+        // `S2CreateInterfaceFn` (`s2sdk.h:58`): `void *(const char *, int *)`.
         type CreateInterfaceFn =
             unsafe extern "C" fn(*const c_char, *mut c_int) -> *mut c_void;
         // SAFETY: the export is tier0's factory over the module's interfaces, declared with this
@@ -714,12 +713,12 @@ pub(crate) mod platform {
         Some(app)
     }
 
-    /// `CPetApp_ActiveSession` (`bridge/s2sdk.h:625`): `app->m_pActiveSession`.
+    /// `CPetApp_ActiveSession` (`s2sdk.h:625`): `app->m_pActiveSession`.
     ///
     /// # Safety
     ///
     /// `app` is the identity-checked `CPetApp`, whose first base is
-    /// `CBaseEditorSharedWindowApp` -> `CBaseEditorApp` (`bridge/s2sdk.h:620-621`), so the same
+    /// `CBaseEditorSharedWindowApp` -> `CBaseEditorApp` (`s2sdk.h:620-621`), so the same
     /// address is a `CBaseEditorApp`.
     unsafe fn app_active_session(app: *mut c_void) -> *mut CPetSession {
         // SAFETY: per the contract above; `m_pActiveSession` may be null (no document open).
@@ -767,12 +766,12 @@ pub(crate) mod platform {
     // -----------------------------------------------------------------------------------------
 
     /// `session->vt->IsModified(session)` (`mcp_bridge_pet.inc:223`). The C's slot returns a
-    /// one-byte flag (`bridge/s2sdk.h:627`), read as `u8` - never a Rust `bool` from game code.
+    /// one-byte flag (`s2sdk.h:627`), read as `u8` - never a Rust `bool` from game code.
     pub fn is_modified(session: *mut c_void) -> bool {
         type IsModifiedFn = unsafe extern "C" fn(*mut CBaseEditorSession) -> u8;
         // SAFETY: `session` passed `obj_is` against the pinned CPetSession vtable, whose
         // `IsModified` slot is `S2_SLOT_CBaseEditorSession_IsModified`
-        // (`bridge/s2sdk_gen.h:2176`); the generated constant is the same number.
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2176`); the generated constant is the same number.
         unsafe {
             let f: IsModifiedFn = pet_vfn(session, CPetSession_slots::IsModified);
             f(session.cast()) != 0
@@ -782,7 +781,7 @@ pub(crate) mod platform {
     /// `session->m_bIsNew` (`:227`, `:1172`, `:1217`).
     pub fn is_new(session: *mut c_void) -> bool {
         // SAFETY: `session` is a live `CPetSession` (identity-checked); `m_bIsNew` is a one-byte
-        // MSVC `bool` (`bridge/s2sdk_gen.h:3699` spells it `u8`), read as a byte so a value other
+        // MSVC `bool` (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:3699` spells it `u8`), read as a byte so a value other
         // than 0/1 cannot be an invalid Rust `bool`.
         let raw = unsafe {
             addr_of!((*session.cast::<CPetSession>()).base.base.base.m_bIsNew)
@@ -796,7 +795,7 @@ pub(crate) mod platform {
     pub fn get_path(session: *mut c_void) -> PathText {
         type GetPathFn = unsafe extern "C" fn(*mut CBaseEditorSession) -> *const c_char;
         // SAFETY: as `is_modified`; the slot is `S2_SLOT_CBaseEditorSession_GetPath`
-        // (`bridge/s2sdk_gen.h:2178`). The callee returns a game-owned C string, read through
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2178`). The callee returns a game-owned C string, read through
         // `md_str`'s probes and kept as raw bytes: the same bytes go back to `Save` and to the
         // host gate's `CreateFileA`, so a code-page path is never decoded and re-encoded.
         unsafe {
@@ -813,7 +812,7 @@ pub(crate) mod platform {
     pub fn reload_document(session: *mut c_void) {
         type ReloadFn = unsafe extern "C" fn(*mut CBaseEditorSession);
         // SAFETY: as `is_modified`; the slot is `S2_SLOT_CBaseEditorSession_ReloadDocument`
-        // (`bridge/s2sdk_gen.h:2172`), and the caller has already run the vpcf gate the C runs
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2172`), and the caller has already run the vpcf gate the C runs
         // first (`:1177-1199`).
         unsafe {
             let f: ReloadFn = pet_vfn(session, CPetSession_slots::ReloadDocument);
@@ -834,7 +833,7 @@ pub(crate) mod platform {
             return false;
         };
         // SAFETY: as `is_modified`; the slot is `S2_SLOT_CBaseEditorSession_Save`
-        // (`bridge/s2sdk_gen.h:2183`), the two `u8` arguments are the C's `0, 0`, and `path`
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2183`), the two `u8` arguments are the C's `0, 0`, and `path`
         // outlives the call.
         unsafe {
             let f: SaveFn = pet_vfn(session, CPetSession_slots::Save);
@@ -843,11 +842,11 @@ pub(crate) mod platform {
     }
 
     /// `session->vt->SetModified(session, 0)` (`:1238`): the C's `u8` argument
-    /// (`bridge/s2sdk.h:628`).
+    /// (`s2sdk.h:628`).
     pub fn set_unmodified(session: *mut c_void) {
         type SetModifiedFn = unsafe extern "C" fn(*mut CBaseEditorSession, u8);
         // SAFETY: as `is_modified`; the slot is `S2_SLOT_CBaseEditorSession_SetModified`
-        // (`bridge/s2sdk_gen.h:2177`).
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2177`).
         unsafe {
             let f: SetModifiedFn = pet_vfn(session, CPetSession_slots::SetModified);
             f(session.cast(), 0);
@@ -860,9 +859,9 @@ pub(crate) mod platform {
             return core::ptr::null_mut();
         };
         // SAFETY: `app` is the identity-checked `CPetApp`, whose vtable is the pinned one; the
-        // slot is `S2_SLOT_CBaseEditorApp_OpenFile` (`bridge/s2sdk_gen.h:2193`) = the generated
+        // slot is `S2_SLOT_CBaseEditorApp_OpenFile` (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2193`) = the generated
         // `CBaseEditorApp_slots` name, and the flags value 1 is what the UI passes
-        // (`bridge/s2sdk.h:615`).
+        // (`s2sdk.h:615`).
         unsafe {
             type OpenFileFn =
                 unsafe extern "C" fn(*mut CBaseEditorApp, *const c_char, u32) -> *mut c_void;
@@ -926,11 +925,11 @@ pub(crate) mod platform {
     }
 
     /// `hist->vt->HasEntries(hist)` (`:880-881`, `:1104`): a one-byte flag
-    /// (`bridge/s2sdk.h:663`).
+    /// (`s2sdk.h:663`).
     pub fn has_entries(hist: *mut c_void) -> bool {
         type HasEntriesFn = unsafe extern "C" fn(*mut CUndoHistory) -> u8;
         // SAFETY: `hist` / `partner` passed `obj_is` against the pinned `CUndoHistory` vtable;
-        // the slot is `S2_SLOT_CUndoHistory_HasEntries` (`bridge/s2sdk_gen.h:2137`).
+        // the slot is `S2_SLOT_CUndoHistory_HasEntries` (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2137`).
         unsafe {
             let f: HasEntriesFn = pet_vfn(hist, CUndoHistory_slots::HasEntries);
             f(hist.cast()) != 0
@@ -992,7 +991,7 @@ pub(crate) mod platform {
         }
         type GetClassNameFn = unsafe extern "C" fn(*mut CBasePetNode) -> *const c_char;
         // SAFETY: the vptr and the slot are readable (probed above) and the slot is the node's
-        // `GetClassNameA` (`bridge/s2sdk_gen.h:2292` = slot 18).
+        // `GetClassNameA` (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:2292` = slot 18).
         let name = unsafe {
             let f: GetClassNameFn = pet_vfn(node, slot);
             f(node.cast())
@@ -1012,7 +1011,7 @@ pub(crate) mod platform {
         let mut arrays: [TypeArray; reply::ARRAY_TYPES] = core::array::from_fn(|_| TypeArray::Stopped);
         for (t, slot) in arrays.iter_mut().enumerate() {
             // SAFETY: `root` passed `obj_is` against the pinned `CPetRootNode` vtable; the two
-            // entry points are pet's own root walkers (`bridge/bridge_pins.h:127-128`).
+            // entry points are pet's own root walkers (`PETFN_ROOT_GETCHILDCOUNT`, `PETFN_ROOT_GETCHILD` in `generated/pins.rs`).
             let count = unsafe { (fns.child_count)(root, t as c_int) };
             if !(0..=4096).contains(&count) {
                 // `:191-194`: the C returns before reading another count.
@@ -1147,7 +1146,7 @@ pub(crate) mod platform {
     fn clear_selection(doc: *mut c_void) {
         // The member is the generic `CUtlVector<PetDocSelection_t>` layout; the generated
         // `CUtlVector_CEntityHandle` is that same 24-byte layout with a different element type
-        // (`bridge/s2sdk_gen.h` pins the generic shape with its member-size assert).
+        // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` pins the generic shape with its member-size assert).
         //
         // SAFETY: `doc` is the identity-checked `CPetDoc`; `m_Selection` is that layout.
         let selection = unsafe {
@@ -1179,7 +1178,7 @@ pub(crate) mod platform {
         let fns = pet_fns();
         let ctx = KV3_CTX.0.get().cast::<c_void>();
         // SAFETY: `ctx` is the 16-aligned 16 KB static buffer and the ctor takes exactly that
-        // (`bridge/bridge_pins.h:137`); the bytes are zeroed first because the ctor does not
+        // (`PETFN_KV3CTX_CTOR` in `generated/pins.rs`); the bytes are zeroed first because the ctor does not
         // clear them (`mcp_bridge_pet.inc:1025-1026`).
         unsafe {
             core::ptr::write_bytes(ctx.cast::<u8>(), 0, reply::PET_KV3CTX_BYTES);
@@ -1331,7 +1330,7 @@ pub(crate) mod platform {
         let mut err: *const c_char = core::ptr::null(); // CUtlString {char *} = {0}
         // SAFETY: `live.doc` is the identity-checked document; the entry point takes the path,
         // the error out-parameter and the 64-byte zero callback block the C passes
-        // (`bridge/bridge_pins.h:134`, `mcp_bridge_pet.inc:811-812`).
+        // (`PETFN_DOC_SAVETOFILE` in `generated/pins.rs`, `mcp_bridge_pet.inc:811-812`).
         let ok = unsafe {
             (fns.save_to_file)(
                 live.doc,
@@ -1386,12 +1385,12 @@ pub(crate) mod platform {
         {
             // `u64 idx = 0xFF` - the framework stores a 1-byte index (`:435-436`); the slot's
             // declaration is `void *(*GetToolIndexByName)(IToolFramework2 *, u64 *, const char *)`
-            // (`bridge/s2sdk.h:143`), so the pointer is a `u64 *` and the byte is its low one.
+            // (`s2sdk.h:143`), so the pointer is a `u64 *` and the byte is its low one.
             let mut idx: u64 = 0xFF;
             type FindToolFn =
                 unsafe extern "C" fn(*mut IToolFramework2, *mut u64, *const c_char) -> *mut u8;
             // SAFETY: `framework` passed `obj_is` against the pinned ToolFramework2 vtable and
-            // the slot is `S2_SLOT_IToolFramework2_FindTool` (`bridge/s2sdk.h:140`); the name
+            // the slot is `S2_SLOT_IToolFramework2_FindTool` (`s2sdk.h:140`); the name
             // is a live C string and `idx` a writable 8-byte index slot.
             let tool = unsafe {
                 let find: FindToolFn = pet_vfn(framework, IToolFramework2_slots::FindTool);
@@ -1411,7 +1410,7 @@ pub(crate) mod platform {
             type LoadToolFn =
                 unsafe extern "C" fn(*mut IToolFramework2, u8) -> *mut c_void;
             // SAFETY: as above; the slot is `S2_SLOT_IToolFramework2_LoadTool`
-            // (`bridge/s2sdk.h:141`) and `tool` is the index the framework just confirmed.
+            // (`s2sdk.h:141`) and `tool` is the index the framework just confirmed.
             let rc = unsafe {
                 let load: LoadToolFn = pet_vfn(framework, IToolFramework2_slots::LoadTool);
                 load(framework.cast(), tool)
@@ -1520,7 +1519,7 @@ pub(crate) mod platform {
             ));
         }
         // SAFETY: `PETG_PARTICLE_MGR` is a pinned global inside the verified pet.dll image
-        // (`bridge/bridge_pins.h:164`).
+        // (`generated/pins.rs`).
         let mgr = unsafe {
             (pin_addr(pins::PETG_PARTICLE_MGR) as *const *mut c_void).read_unaligned()
         };
@@ -1622,7 +1621,7 @@ pub(crate) mod platform {
             // SAFETY: the whole entry range was probed above.
             let entry = unsafe { md.cast::<u8>().add(entry_size * i) }.cast::<SchemaMetadataEntryData_t>();
             // SAFETY: as above; `m_pName` is the entry's first member
-            // (`bridge/s2sdk_gen.h:143`).
+            // (`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h:143`).
             let name = unsafe { entry.read_unaligned().m_pName };
             let (read, bytes) = read_str(name, CLASS_CAP);
             if read != StrRead::Whole {
@@ -1835,7 +1834,7 @@ pub(crate) mod platform {
         // SAFETY: `scope` passed `obj_is`; the slot is the generated
         // `S2_SLOT_ISchemaSystemTypeScope_IsGlobalScope`. The C's typedef is
         // `unsigned char (*TsIsGlobalFn)(void *)` - "bool in AL: never read it as int"
-        // (`bridge/mcp_bridge_game.inc:15`).
+        // (`mcp_bridge_game.inc:15`).
         if unsafe {
             let f: IsGlobalFn = pet_vfn(scope.cast(), ISchemaSystemTypeScope_slots::IsGlobalScope);
             f(scope) != 0
@@ -2118,8 +2117,8 @@ pub fn app_root() -> Option<String> {
 /// The C reads the raw command line. This crate's `windows-sys` feature set has no
 /// `Win32_System_Environment` (only `Win32_Storage_FileSystem` may be added for this lane), so
 /// the CRT-parsed arguments are joined with spaces instead: `-addon <name>`, `-addon=<name>` and
-/// `-addon "<name>"` all parse the same, and those are the shapes `runtime.sh` passes. Noted in
-/// `bridge/protocol-diff-m3-pet.md`.
+/// `-addon "<name>"` all parse the same, and those are the shapes `cargo bridge runtime` passes
+/// (PROTOCOL.md §17.1).
 #[must_use]
 pub fn addon_name() -> Option<String> {
     let command_line = command_line();

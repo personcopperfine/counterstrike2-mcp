@@ -585,7 +585,7 @@ async fn candidates_live(
     };
     let Some(rows) = reply.result.get("entities").and_then(Value::as_array) else {
         return Err(ToolError::internal(format!(
-            "entity.find returned a malformed result: {} (bridge/protocol-diff-m2.15.md §7)",
+            "entity.find returned a malformed result: {} (crates/cs2-bridge/PROTOCOL.md §9.2)",
             reply.result
         )));
     };

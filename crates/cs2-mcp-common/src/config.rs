@@ -86,11 +86,13 @@ pub struct CommonConfig {
     #[arg(long, env = "CS2_MCP_IMAGE", default_value = crate::runtime::docker::DEFAULT_IMAGE)]
     pub image: String,
 
-    /// `bridge/install-rs.sh` run as `ensure` before every launch. Default: derived from the
-    /// client's `docker/linux-client.sh` checkout (`<repo>/bridge/install-rs.sh`). Tests point
-    /// this at an inert stub.
-    #[arg(long, env = "CS2_MCP_INSTALL_SCRIPT")]
-    pub install_script: Option<PathBuf>,
+    /// The `cs2-bridge-tools` binary, run as `install --platform <wine|linux> ensure` before
+    /// every launch (it prepares the game tree the launch mounts). Default: the
+    /// `cs2-bridge-tools` next to this server's binary, which `cargo build --release -p
+    /// cs2-bridge-tools` puts there; a missing one fails the launch, it never skips the ensure.
+    /// Tests point this at an inert stub (an executable: it is run directly).
+    #[arg(long, env = "CS2_MCP_INSTALL_TOOL")]
+    pub install_tool: Option<PathBuf>,
 
     /// X cookie file for wine-tools sessions (default: newest /run/user/<uid>/xauth_*, as run_vtest.sh).
     #[arg(long, env = "XAUTHORITY")]
@@ -115,7 +117,7 @@ pub struct CommonConfig {
 
     /// Fallback addon for the file-route tools (under `<project>/content/csgo_addons/<addon>`):
     /// used only while no `set_addon` choice is pinned and the active Hammer document is not in
-    /// an addon. The ModelDoc container is started with `-addon <addon>` (bridge/runtime.sh).
+    /// an addon. The ModelDoc container is started with `-addon <addon>` (cargo bridge runtime).
     #[arg(long, env = "CS2_MCP_ADDON", default_value = "mcp_test")]
     pub addon: String,
 
@@ -186,15 +188,16 @@ impl CommonConfig {
             crate::bridge::discovery::default_path(&self.pfx_dir())
         })
     }
-    /// Host command that brings a tools session up (the POC's `--launch-script`): `bridge/runtime.sh up`;
-    /// on a Windows host, where there is no container, the native launcher's
+    /// Host command that brings a tools session up (the POC's `--launch-script`):
+    /// `cd <repo> && cargo bridge runtime up` (the `cargo bridge` alias resolves only inside the
+    /// checkout); on a Windows host, where there is no container, the native launcher's
     /// [`NATIVE_LAUNCH_COMMAND`] (crates/cs2-native FIXME 18).
     pub fn launch_command(&self) -> String {
         if cfg!(windows) {
             return NATIVE_LAUNCH_COMMAND.into();
         }
         format!(
-            "{}/bridge/runtime.sh up",
+            "cd {} && cargo bridge runtime up",
             crate::mcp_repo_dir(&self.project_root).display()
         )
     }

@@ -2,7 +2,7 @@
 //! (format: sigs/README.md).
 //!
 //! Rule: this crate contains NO addresses. Everything address-shaped lives in the bridge DLL,
-//! which is generated from the same database (`pins.py` -> `bridge_pins.h`, fail-closed). What
+//! which is generated from the same database (`cargo bridge pins` -> `src/generated/pins.rs`, fail-closed). What
 //! the Rust side uses the database for:
 //! * build pinning: the newest `builds` key = the build the repo is on; compared with the
 //!   bridge's `gameBuild` (hello) and the game's `steam.inf` ClientVersion -> `BuildMismatch`;

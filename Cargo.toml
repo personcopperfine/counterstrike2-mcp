@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/cs2-kv3", "crates/cs2-kv1", "crates/cs2-dmx", "crates/cs2-mcp-common", "crates/cs2-bridge", "crates/mm-testplugin", "crates/mm-launch", "crates/cs2-native", "crates/cs2-vtm", "hammer-mcp", "client-mcp", "crates/cs2-vk-capture", "crates/s2sdk/s2sdk-sys", "crates/s2sdk/s2sdk", "crates/s2sdk/s2sdk-probe"]
+members = ["crates/cs2-kv3", "crates/cs2-kv1", "crates/cs2-dmx", "crates/cs2-mcp-common", "crates/cs2-bridge", "crates/mm-testplugin", "crates/mm-launch", "crates/cs2-native", "crates/cs2-bridge-tools", "crates/cs2-vtm", "hammer-mcp", "client-mcp", "crates/cs2-vk-capture", "crates/s2sdk/s2sdk-sys", "crates/s2sdk/s2sdk", "crates/s2sdk/s2sdk-probe"]
 
 [workspace.package]
 edition = "2021"

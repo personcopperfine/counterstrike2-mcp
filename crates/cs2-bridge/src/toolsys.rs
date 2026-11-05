@@ -2,7 +2,7 @@
 //! hands the tools framework, and the vtable it ticks every frame.
 //!
 //! Ported from the C bridge's `M0Obj` / `build_vtable` / `m0_*` block
-//! (`bridge/mcp_bridge.c:6765-6839`). The C file's own note there says its vtable is
+//! (`mcp_bridge.c:6765-6839`). The C file's own note there says its vtable is
 //! "IAppSystem (generated S2_SLOT_IAppSystem_*, 11 slots) + IToolSystem2's own slots 11..16";
 //! the upstream declaration for the latter has since reached the generated bindings
 //! (`crates/s2sdk/s2sdk-sys/src/generated/toolframework2.rs`), but that module is `cfg(windows)`

@@ -31,7 +31,7 @@
 //! # Where the expectations come from
 //!
 //! The pins (module, RVA) are *read*, never copied: the generated table is `#[path]`-included
-//! below, so this test cannot drift from `pins.py`. The expected class names are the sigs
+//! below, so this test cannot drift from `cargo bridge pins`. The expected class names are the sigs
 //! database's own `locator.class`/`via` for each entry (`sigs/signatures/<module>.json`),
 //! hand-checked there; each assertion below names the entry it comes from.
 
@@ -40,8 +40,7 @@ use std::path::{Path, PathBuf};
 
 use s2sdk::rtti::{class_name, is_class, is_class_at, ImageRange, RttiError};
 
-/// The generated pin table, included rather than copied: same rows `pins.py` emits for
-/// `bridge_pins.h`.
+/// The generated pin table (`cargo bridge pins`), included rather than copied.
 #[path = "../../../cs2-bridge/src/generated/pins.rs"]
 #[allow(dead_code)]
 mod pins;
@@ -110,7 +109,7 @@ const VTABLE_PINS: &[(&str, &pins::Pin)] = &[
 /// (`sigs/signatures/<module>.json`, `entries.<name>.locator.class`, which is itself derived
 /// from the RTTI name in `via`). The table prints all 51 pins; these are the ones asserted.
 const EXPECTED: &[(&str, &str)] = &[
-    // hammer.json: HV_HAMMERAPP_VT -> CHammerApp, "pins.py VTABLES: .?AVCHammerApp@@ primary vtable"
+    // hammer.json: HV_HAMMERAPP_VT -> CHammerApp, "pins VTABLES: .?AVCHammerApp@@ primary vtable"
     ("HV_HAMMERAPP_VT", "CHammerApp"),
     // hammer.json: HV_SESSION_VT -> CHammerEditorSession
     ("HV_SESSION_VT", "CHammerEditorSession"),

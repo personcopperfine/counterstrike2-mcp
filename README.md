@@ -1,7 +1,7 @@
 # cs2-mcp
 
 Two Rust **stdio MCP servers** for Counter-Strike 2 / Source 2, built on the in-process bridge DLL
-(`bridge/`, pinned by the signature database in `sigs/`), Rust bindings of the Source 2 SDK
+(`crates/cs2-bridge`, pinned by the signature database in `sigs/`), Rust bindings of the Source 2 SDK
 (`crates/s2sdk/`), and two container images: the game client image
 `ghcr.io/personcopperfine/cs2-docker` (built by CI in
 [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker)) and the workshop
@@ -12,7 +12,8 @@ tools image published from the `workshop/` submodule:
 | [`hammer-mcp/`](hammer-mcp/) | Windows workshop tools under Proton: Hammer, ModelDoc, particle editor (pet), asset browser; SFM low priority (workshop publishing deferred) | [hammer-mcp/AGENT.md](hammer-mcp/AGENT.md) |
 | [`client-mcp/`](client-mcp/) | the game client: in-game unit tests, multiplayer, CS script / VScript, demo -> video, AI playtest | [client-mcp/AGENT.md](client-mcp/AGENT.md) |
 | [`crates/cs2-mcp-common/`](crates/cs2-mcp-common/) | shared library: bridge client, tool registry, rmcp adapter, runtime abstraction, sig-DB reader, capture, mock bridge (feature `mock`) | module docs |
-| [`bridge/`](bridge/) | the Rust bridge's pins generator (`bridge_pins.h` + `crates/cs2-bridge/src/generated/pins.rs`), build/install/runtime scripts, live tests | [bridge/README.md](bridge/README.md) |
+| [`crates/cs2-bridge/`](crates/cs2-bridge/) | the bridge DLL/.so the game loads (tool plugin + Metamod plugin) and its JSON-RPC wire contract | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md), [PROTOCOL.md](crates/cs2-bridge/PROTOCOL.md) |
+| [`crates/cs2-bridge-tools/`](crates/cs2-bridge-tools/) | `cargo bridge <command>`: the pins generator (`crates/cs2-bridge/src/generated/pins.rs`), build + export gate, install/ensure, the Wine tools runtime, the Metamod build | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md) "The commands" |
 | [`sigs/`](sigs/) | signature database the bridge pins come from, resolver and update judge | [sigs/README.md](sigs/README.md) |
 | [`crates/s2sdk/`](crates/s2sdk/) | Rust bindings generated from the s2sdk headers (`crates/s2sdk/upstream` submodule: personcopperfine/s2sdk, a fork of alliedmodders/s2sdk), safe layer, live probe | [crates/s2sdk/README.md](crates/s2sdk/README.md) |
 | [`crates/cs2-native/`](crates/cs2-native/) | `cs2mcp-native`, the launcher for a CS2 the user installed through Steam (no containers) | [crates/cs2-native/README.md](crates/cs2-native/README.md) |
@@ -46,21 +47,21 @@ deprecated alias. Runtime state lives under it and is never committed:
 ```
 <project root>/workshop/run/app     the Windows CS2 + tools tree with its Proton prefix (mounted at /app)
 <project root>/workshop/run/cache   the tools container's /cache
-<project root>/.podman/xdg          podman's XDG_RUNTIME_DIR (also the install-rs.sh locks in .podman/)
+<project root>/.podman/xdg          podman's XDG_RUNTIME_DIR (also the `cargo bridge install` locks in .podman/)
 <project root>/artifacts/           client-mcp run artifacts
 ```
 
-The shell and Python tools (`bridge/lib-root.sh`, `bridge/cs2mcp_root.py`) resolve a linked git
+`cargo bridge` (and the shell tools in `crates/cs2-native/scripts/`) resolve a linked git
 worktree to the repo's main checkout, so worktrees share one game tree; a Rust server defaults to
 the checkout it was built in (pass `--project-root` to a worktree build). A parent directory
 holding this repo as `cs2-mcp/` next to `workshop/` (the layout this repo grew up in) works when
 `CS2_MCP_PROJECT_ROOT` names it.
 
-Images: the servers and `bridge/runtime.sh` run `ghcr.io/personcopperfine/cs2-docker:latest`
+Images: the servers and `cargo bridge runtime` run `ghcr.io/personcopperfine/cs2-docker:latest`
 (podman pulls it on first use); its source is
 [personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker) (`client/`), whose
 CI publishes it. A custom build from a clone of that repo is selected with `CS2_MCP_IMAGE` /
-`--image` (servers) or `IMG` (`runtime.sh`):
+`--image` (servers) or `IMG` / `--image` (`cargo bridge runtime up`):
 
 ```sh
 git clone https://github.com/personcopperfine/cs2-docker.git <clone>
@@ -78,7 +79,8 @@ id=$(podman create ghcr.io/personcopperfine/cs2-workshop:latest /entrypoint.sh)
 mkdir -p workshop/run/app && podman cp "$id:/app/." workshop/run/app/ && podman rm "$id"
 ```
 
-`bridge/install-rs.sh` then installs the bridge, Metamod and the launcher into it (`bridge/README.md`).
+`cargo bridge install install` then installs the bridge, Metamod and the launcher into it
+([crates/cs2-bridge/README.md](crates/cs2-bridge/README.md)).
 
 ## Supported targets
 
@@ -107,7 +109,7 @@ that path is not a supported target of this repo yet.
 
 ```sh
 cargo build --workspace                 # Linux half (servers, bridge .so, tools)
-./bridge/build-rs.sh                    # the bridge for win64 + linux (needs target/game-bins*)
+cargo bridge build                      # the bridge + loader for win64 + linux (needs target/game-bins*)
 ```
 
 The win64 half (`--target x86_64-pc-windows-msvc`: the bridge DLL, the launcher, the capture

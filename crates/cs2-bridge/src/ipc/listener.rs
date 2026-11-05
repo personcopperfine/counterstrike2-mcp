@@ -1,7 +1,7 @@
 //! The listener: token, bind, discovery, accept loop, the hello handshake and the per-connection
 //! NDJSON state machine.
 //!
-//! Port of `ipc_thread` (`bridge/mcp_bridge.c:6336-6702`) and the token/path half of
+//! Port of `ipc_thread` (`mcp_bridge.c:6336-6702`) and the token/path half of
 //! `start_listener_once` (`:6730-6779`). The reject/parse/queue decisions are cited inline at
 //! each site; [`super`] lists the structural differences (thread per connection instead of one
 //! `select` loop, and the method table living in the tick).

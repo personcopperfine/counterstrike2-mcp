@@ -1,8 +1,8 @@
 //! Module identity: the Rust port of the C bridge's fail-closed verification
-//! (`bridge/mcp_bridge.c:1149-1405`).
+//! (`mcp_bridge.c:1149-1405`).
 //!
 //! The C bridge never reads a game module before it has proven the module is exactly the build
-//! the pins in `bridge/bridge_pins.h` were measured on: the PE header facts, the CodeView RSDS
+//! the pins in `crates/cs2-bridge/src/generated/pins.rs` were measured on: the PE header facts, the CodeView RSDS
 //! GUID/age, the file's SHA-256, the prologue bytes of every pinned function and the target of
 //! every pinned vtable slot. Only then does it pin the image by address
 //! (`GetModuleHandleExW(MODULE_PIN_FLAGS, ...)`) so it cannot be swapped afterwards. This module
@@ -24,7 +24,7 @@
 //!
 //! # Which image a module name means (Metamod loads a second `server.dll`)
 //!
-//! The C asked `GetModuleHandleA("server.dll")` (`bridge/mcp_bridge.c:1310`). That answers the
+//! The C asked `GetModuleHandleA("server.dll")` (`mcp_bridge.c:1310`). That answers the
 //! **first** module whose base name matches (Microsoft Learn, `GetModuleHandleA`: the name is
 //! compared case-independently to the names of the modules mapped in the calling process, and a
 //! base name that more than one module carries resolves to the one loaded first). With Metamod
@@ -57,7 +57,7 @@
 //! `PIN_MODULES` rows; byte pins are `PIN_BYTES` and slot pins `PIN_SLOTS`. The PE field offsets
 //! live in [`crate::pe`] as the `winnt.h` facts the C names. The only literals here are the C's
 //! log strings and the `Need*` bit values ([`need_bit`]), which the C spells as `NEED_*`
-//! (`bridge/mcp_bridge.c:1030-1043`); the Rust constants for those bits belong to
+//! (`mcp_bridge.c:1030-1043`); the Rust constants for those bits belong to
 //! `registry.rs` (WP2.C) and the orchestrator reconciles the two at merge.
 
 use core::ffi::c_void;
@@ -78,10 +78,10 @@ use crate::generated::pins::{
 use crate::{log, pe, registry};
 
 /// The number of pinned modules: `PIN_MODULE_COUNT` (12), the C's `PIN_MODULE_COUNT`
-/// (`bridge/mcp_bridge.c:1151` sizes `g_modState`/`g_modBase` with it).
+/// (`mcp_bridge.c:1151` sizes `g_modState`/`g_modBase` with it).
 pub const MODULE_COUNT: usize = PIN_MODULE_COUNT;
 
-/// A module's verification state - the C's `MS_*` enum (`bridge/mcp_bridge.c:1149`), same
+/// A module's verification state - the C's `MS_*` enum (`mcp_bridge.c:1149`), same
 /// discriminants so a port of the JSON status object can print them.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u32)]
@@ -97,7 +97,7 @@ pub enum State {
 }
 
 impl State {
-    /// The name the C's `mod_state_name` reports (`bridge/mcp_bridge.c:1165-1172`).
+    /// The name the C's `mod_state_name` reports (`mcp_bridge.c:1165-1172`).
     #[must_use]
     pub const fn name(self) -> &'static str {
         match self {
@@ -211,7 +211,7 @@ pub fn mask(source: &dyn ModuleViews) -> u32 {
 }
 
 /// The order the verifier walks the modules in - the C's `order` array
-/// (`bridge/mcp_bridge.c:1378`): toolframework2 first because `doc.active` only needs it and its
+/// (`mcp_bridge.c:1378`): toolframework2 first because `doc.active` only needs it and its
 /// hash is 3x smaller, then the small rising chain, then hammer and the large modules.
 ///
 /// The C's comment is a warning worth keeping: every pin must be listed exactly once - a
@@ -225,24 +225,24 @@ pub const ORDER: [u8; MODULE_COUNT] = [
 /// The `NEED_*` bit a verified module contributes to [`Modules::verified_mask`], or `0` for an
 /// index that is not a module.
 ///
-/// The C's `verified_mask` (`bridge/mcp_bridge.c:1155-1163`) maps module -> bit inline; this is
+/// The C's `verified_mask` (`mcp_bridge.c:1155-1163`) maps module -> bit inline; this is
 /// the same mapping as a table so a caller can use it per module. The bit values are the C's
 /// `NEED_*` constants:
 ///
 /// | module index | C constant | value | C line |
 /// |---|---|---|---|
-/// | [`PIN_HAMMER`] (0) | `NEED_HAMMER` | 2 | `bridge/mcp_bridge.c:1031` |
-/// | [`PIN_TF2`] (1) | `NEED_TF2` | 1 | `bridge/mcp_bridge.c:1030` |
-/// | [`PIN_SCENESYSTEM`] (2) | `NEED_SCENE` | 4 | `bridge/mcp_bridge.c:1032` |
-/// | [`PIN_ENGINE2`] (3) | `NEED_ENGINE` | 8 | `bridge/mcp_bridge.c:1033` |
-/// | [`PIN_RSV`] (4) | `NEED_RSV` | 16 | `bridge/mcp_bridge.c:1034` |
-/// | [`PIN_CLIENT`] (5) | `NEED_CLIENT` | 32 | `bridge/mcp_bridge.c:1036` |
-/// | [`PIN_SERVER`] (6) | `NEED_SERVER` | 64 | `bridge/mcp_bridge.c:1038` |
-/// | [`PIN_TIER0`] (7) | `NEED_TIER0` | 128 | `bridge/mcp_bridge.c:1039` |
-/// | [`PIN_SCHEMA`] (8) | `NEED_SCHEMA` | 256 | `bridge/mcp_bridge.c:1040` |
-/// | [`PIN_SOUND`] (9) | `NEED_SOUND` | 512 | `bridge/mcp_bridge.c:1041` |
-/// | [`PIN_MODELDOC`] (10) | `NEED_MODELDOC` | 1024 | `bridge/mcp_bridge.c:1042` |
-/// | [`PIN_PET`] (11) | `NEED_PET` | 2048 | `bridge/mcp_bridge.c:1043` |
+/// | [`PIN_HAMMER`] (0) | `NEED_HAMMER` | 2 | `mcp_bridge.c:1031` |
+/// | [`PIN_TF2`] (1) | `NEED_TF2` | 1 | `mcp_bridge.c:1030` |
+/// | [`PIN_SCENESYSTEM`] (2) | `NEED_SCENE` | 4 | `mcp_bridge.c:1032` |
+/// | [`PIN_ENGINE2`] (3) | `NEED_ENGINE` | 8 | `mcp_bridge.c:1033` |
+/// | [`PIN_RSV`] (4) | `NEED_RSV` | 16 | `mcp_bridge.c:1034` |
+/// | [`PIN_CLIENT`] (5) | `NEED_CLIENT` | 32 | `mcp_bridge.c:1036` |
+/// | [`PIN_SERVER`] (6) | `NEED_SERVER` | 64 | `mcp_bridge.c:1038` |
+/// | [`PIN_TIER0`] (7) | `NEED_TIER0` | 128 | `mcp_bridge.c:1039` |
+/// | [`PIN_SCHEMA`] (8) | `NEED_SCHEMA` | 256 | `mcp_bridge.c:1040` |
+/// | [`PIN_SOUND`] (9) | `NEED_SOUND` | 512 | `mcp_bridge.c:1041` |
+/// | [`PIN_MODELDOC`] (10) | `NEED_MODELDOC` | 1024 | `mcp_bridge.c:1042` |
+/// | [`PIN_PET`] (11) | `NEED_PET` | 2048 | `mcp_bridge.c:1043` |
 #[must_use]
 pub const fn need_bit(module: u8) -> u32 {
     match module {
@@ -263,7 +263,7 @@ pub const fn need_bit(module: u8) -> u32 {
 }
 
 /// Why [`verify_one`] failed - one variant per `logline` the C can emit for a check
-/// (`bridge/mcp_bridge.c:1304-1370`), in the C's order.
+/// (`mcp_bridge.c:1304-1370`), in the C's order.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Fail {
     /// Nothing is mapped under the module's file name any more (it unloaded after the poll saw
@@ -336,7 +336,7 @@ fn fail_stopped() -> Result<(), Fail> {
 }
 
 /// The C's failure path: the check's line(s), then `verify: FAIL -> fail closed
-/// (PrerequisiteFailed)` (`bridge/mcp_bridge.c:1366-1368`), and the reason back to the caller.
+/// (PrerequisiteFailed)` (`mcp_bridge.c:1366-1368`), and the reason back to the caller.
 fn fail(why: Fail) -> Result<(), Fail> {
     log::line(why.line());
     if let Some(detail) = why.detail() {
@@ -392,7 +392,7 @@ impl<'a> Image<'a> {
 }
 
 /// What the adapter learned about the module's file, standing in for the C's
-/// `GetModuleFileNameA` + `sha256_file` pair (`bridge/mcp_bridge.c:1330-1340`).
+/// `GetModuleFileNameA` + `sha256_file` pair (`mcp_bridge.c:1330-1340`).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FileHash {
     /// The file was found and hashed.
@@ -527,12 +527,12 @@ fn byte_pin_matches(
     found == &pin.bytes[..len]
 }
 
-/// `verify_one` (`bridge/mcp_bridge.c:1304-1370`): every check, in the C's order, with the C's
+/// `verify_one` (`mcp_bridge.c:1304-1370`): every check, in the C's order, with the C's
 /// log lines.
 ///
 /// `image` is `None` for the C's `GetModuleHandleA` failure (the module unloaded after the poll
 /// saw it); otherwise it is the mapped image. `file` is the adapter's file evidence. `pin_image`
-/// is `GetModuleHandleExW(MODULE_PIN_FLAGS, base + rva, &module)` (`bridge/mcp_bridge.c:1352-1359`),
+/// is `GetModuleHandleExW(MODULE_PIN_FLAGS, base + rva, &module)` (`mcp_bridge.c:1352-1359`),
 /// called with the RVA of the module's first byte pin - the address the C pins by, because
 /// "an RVA is only an address fact inside this image".
 ///
@@ -715,7 +715,7 @@ pub enum Poll {
 }
 
 /// The per-process module state: the C's `g_modState`, `g_modBase`, `g_capsRevision`,
-/// `g_pollThrottle` and `g_verifierRunning` (`bridge/mcp_bridge.c:1151-1154, 1372`).
+/// `g_pollThrottle` and `g_verifierRunning` (`mcp_bridge.c:1151-1154, 1372`).
 ///
 /// `Modules` is `Arc`-backed so the verifier thread can hold the state without borrowing the
 /// caller's stack; clones share the same state.
@@ -778,7 +778,7 @@ struct Inner<P: Platform> {
 
 impl<P: Platform + 'static> Modules<P> {
     /// New state with every module `not_loaded` and the caps revision at 1
-    /// (`bridge/mcp_bridge.c:1153`).
+    /// (`mcp_bridge.c:1153`).
     #[must_use]
     pub fn new(platform: P) -> Self {
         Self {
@@ -810,13 +810,13 @@ impl<P: Platform + 'static> Modules<P> {
         Some(State::from_raw(raw))
     }
 
-    /// The C's `mod_state_name` (`bridge/mcp_bridge.c:1165-1172`).
+    /// The C's `mod_state_name` (`mcp_bridge.c:1165-1172`).
     #[must_use]
     pub fn state_name(&self, module: u8) -> &'static str {
         self.state(module).unwrap_or(State::NotLoaded).name()
     }
 
-    /// The C's `mod_ok`: verified and still holding a base (`bridge/mcp_bridge.c:1156`).
+    /// The C's `mod_ok`: verified and still holding a base (`mcp_bridge.c:1156`).
     #[must_use]
     pub fn is_verified(&self, module: u8) -> bool {
         self.state(module) == Some(State::Verified)
@@ -836,7 +836,7 @@ impl<P: Platform + 'static> Modules<P> {
             .map_or(0, |base| base.load(Ordering::SeqCst))
     }
 
-    /// The C's `verified_mask` (`bridge/mcp_bridge.c:1157-1164`): one `NEED_*` bit per module
+    /// The C's `verified_mask` (`mcp_bridge.c:1157-1164`): one `NEED_*` bit per module
     /// the C's `mod_ok` accepts. [`mask`] is the one input-building path and
     /// [`registry::verified_mask`] the one mask computation.
     #[must_use]
@@ -845,7 +845,7 @@ impl<P: Platform + 'static> Modules<P> {
     }
 
     /// Every module's state in pin order, as `control.*` reports it (`mod_state_name`,
-    /// `bridge/mcp_bridge.c:1165-1172`): the raw state, not the mask's `mod_ok` fold.
+    /// `mcp_bridge.c:1165-1172`): the raw state, not the mask's `mod_ok` fold.
     #[must_use]
     pub fn views(&self) -> [registry::ModuleView; MODULE_COUNT] {
         views(self)
@@ -857,7 +857,7 @@ impl<P: Platform + 'static> Modules<P> {
         self.inner.caps_revision.load(Ordering::SeqCst)
     }
 
-    /// `caps_bump` (`bridge/mcp_bridge.c:1173`): tell a capabilities reader the state moved.
+    /// `caps_bump` (`mcp_bridge.c:1173`): tell a capabilities reader the state moved.
     pub fn bump_caps(&self) {
         self.inner.caps_revision.fetch_add(1, Ordering::SeqCst);
     }
@@ -1018,7 +1018,7 @@ impl<P: Platform + 'static> Modules<P> {
         }
     }
 
-    /// The C's `modules_poll` (`bridge/mcp_bridge.c:1392-1405`): every 32nd call, if some
+    /// The C's `modules_poll` (`mcp_bridge.c:1392-1405`): every 32nd call, if some
     /// `not_loaded` module is now loaded, start the verifier unless one already runs.
     ///
     /// The C increments the throttle before any other test, so calls 1-31 return
@@ -1085,7 +1085,7 @@ impl<P: Platform + 'static> Modules<P> {
         }
     }
 
-    /// The C's `verify_all_thread` (`bridge/mcp_bridge.c:1373-1390`) body, synchronously: walk
+    /// The C's `verify_all_thread` (`mcp_bridge.c:1373-1390`) body, synchronously: walk
     /// [`ORDER`], and for every `not_loaded` module that is loaded, mark it `verifying`, run
     /// [`verify_one`], mark it `verified`/`mismatch`, and bump the caps revision.
     ///
@@ -1126,7 +1126,7 @@ impl<P: Platform + 'static> Modules<P> {
 
     /// Verify one module end to end: resolve it through the adapter and run [`verify_one`].
     /// On success, returns the base the checks saw (the C's `g_modBase[m] = h`,
-    /// `bridge/mcp_bridge.c:1361`).
+    /// `mcp_bridge.c:1361`).
     fn verify_module(&self, module: u8) -> Result<u64, Fail> {
         let identity = &PIN_MODULES[usize::from(module)];
         let (byte_pins, slot_pins) = pins_for(module);
@@ -1258,7 +1258,7 @@ fn verify_all<P: Platform + 'static>(inner: &Arc<Inner<P>>) {
 }
 
 /// The live loader adapter: the C's `GetModuleHandleA` / `GetModuleFileNameA` /
-/// `GetModuleHandleExW(MODULE_PIN_FLAGS, ...)` (`bridge/mcp_bridge.c:1310, 1331, 1358`) plus a
+/// `GetModuleHandleExW(MODULE_PIN_FLAGS, ...)` (`mcp_bridge.c:1310, 1331, 1358`) plus a
 /// reading of the mapped image.
 ///
 /// On Windows the image is copied out section by section (headers, then each section's
@@ -1288,24 +1288,24 @@ mod windows {
 
     use super::{FileHash, Live, LoadedModule, Platform};
 
-    /// `MODULE_PIN_FLAGS` (`bridge/mcp_bridge.c:132`): pin by address, so the module named by
+    /// `MODULE_PIN_FLAGS` (`mcp_bridge.c:132`): pin by address, so the module named by
     /// an address inside it is pinned (`GET_MODULE_HANDLE_EX_FLAG_PIN`) and addressed rather
     /// than named (`GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS`). Both are `winnt.h` bits.
     const MODULE_PIN_FLAGS: u32 =
         GET_MODULE_HANDLE_EX_FLAG_PIN | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS;
 
-    /// The C's `char path[300]` (`bridge/mcp_bridge.c:1330`): a longer name is a failure, not a
+    /// The C's `char path[300]` (`mcp_bridge.c:1330`): a longer name is a failure, not a
     /// truncation.
     const MODULE_PATH_BYTES: usize = 300;
 
-    /// The C's `ReadFile` chunk (`bridge/mcp_bridge.c:1294`): 256 KiB.
+    /// The C's `ReadFile` chunk (`mcp_bridge.c:1294`): 256 KiB.
     const HASH_CHUNK: usize = 1 << 18;
 
     impl Platform for Live {
         fn module_base(&self, name: &str) -> Option<u64> {
             let name = CString::new(name).ok()?;
             // SAFETY: `name` is a NUL-terminated string that outlives the call;
-            // `GetModuleHandleA` only reads it (`bridge/mcp_bridge.c:1310`).
+            // `GetModuleHandleA` only reads it (`mcp_bridge.c:1310`).
             let handle = unsafe { GetModuleHandleA(name.as_ptr().cast()) };
             // HMODULE is a pointer type on this target (`winnt.h`).
             (!handle.is_null()).then_some(handle as usize as u64)
@@ -1341,7 +1341,7 @@ mod windows {
         fn file_hash(&self, _name: &str, base: u64) -> FileHash {
             let mut path = [0u8; MODULE_PATH_BYTES];
             // SAFETY: the handle is a loaded module and `path` is a writable buffer of the
-            // declared length (`GetModuleFileNameA`, `bridge/mcp_bridge.c:1331`).
+            // declared length (`GetModuleFileNameA`, `mcp_bridge.c:1331`).
             let len = unsafe {
                 GetModuleFileNameA(
                     base as usize as HMODULE,
@@ -1385,7 +1385,7 @@ mod windows {
             };
             let mut module: HMODULE = core::ptr::null_mut();
             // SAFETY: `address` is inside the loaded image named by `base` (an RVA from its
-            // pins), and `module` is a writable HMODULE (`bridge/mcp_bridge.c:1358`).
+            // pins), and `module` is a writable HMODULE (`mcp_bridge.c:1358`).
             let pinned = unsafe {
                 GetModuleHandleExW(
                     MODULE_PIN_FLAGS,
@@ -1631,7 +1631,7 @@ mod tests {
         );
     }
 
-    /// Every pin exactly once - the C's comment at `bridge/mcp_bridge.c:1375-1377` says a
+    /// Every pin exactly once - the C's comment at `mcp_bridge.c:1375-1377` says a
     /// duplicate means a module is never verified.
     #[test]
     fn order_is_a_permutation() {

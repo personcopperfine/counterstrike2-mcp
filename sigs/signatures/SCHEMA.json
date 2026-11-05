@@ -103,7 +103,7 @@
     "ident_slot": {
      "type": "integer",
      "minimum": 0,
-     "description": "kind=vtable only: slot whose function pointer the bridge checks for identity (contents compared, not called - catches a patched/proxied vtable). Read by bridge/pins.py when it emits the identity rows; never hand-entered there."
+     "description": "kind=vtable only: slot whose function pointer the bridge checks for identity (contents compared, not called - catches a patched/proxied vtable). Read by `cargo bridge pins` when it emits the identity rows (pins.rs PIN_SLOTS); never hand-entered there."
     },
     "struct": {
      "type": "string",
@@ -119,7 +119,7 @@
     },
     "structs": {
      "type": "boolean",
-     "description": "Retired: bridge/bridge_structs.h no longer exists (de-hardcode WP1b), so this flag changes nothing; an entry without a `bridge` macro or `sdk` is a measurement that is emitted nowhere. Kept so existing entries still validate."
+     "description": "Retired: bridge_structs.h no longer exists (de-hardcode WP1b), so this flag changes nothing; an entry without a `bridge` macro or `sdk` is a measurement that is emitted nowhere. Kept so existing entries still validate."
     },
     "locator": {
      "$ref": "#/$defs/locator"
@@ -148,12 +148,12 @@
     },
     "bridge": {
      "type": "string",
-     "description": "the name the bridge binds this symbol by: emitted as a C macro in bridge/bridge_pins.h unless the entry carries `sdk`. Either way the entry is gated, fingerprinted and pinned (bridge/pins.py), and a vslot entry's runtime proof rows are named by it."
+     "description": "the name the bridge binds this symbol by: emitted as a `pub const <name>: Pin` in crates/cs2-bridge/src/generated/pins.rs unless the entry carries `sdk`. Either way the entry is gated, fingerprinted and pinned (`cargo bridge pins`), and a vslot entry's runtime proof rows are named by it."
     },
     "sdk": {
      "type": "string",
      "pattern": "^(S2_[A-Za-z0-9_]+(\\*8)?|[0-9]+)(\\+(S2_[A-Za-z0-9_]+(\\*8)?|[0-9]+))*$",
-     "description": "the generated SDK expression that owns this number (bridge/s2sdk_gen.h, gen.py's tie syntax: a sum of S2_* macros, `S2_SLOT_<...>*8` for a slot the game calls as a vtable byte displacement, and decimal addends). The bridge compiles that macro; the entry is the binary-side measurement: bridge/pins.py does not emit it as a #define (bridge_pins.h) and refuses to write when the expression differs from the measurement (a vslot locator's slot index, else the resolved value), and sigs/scripts/sdkcheck.py reports an `sdk:` row for it. Windows entries of kind=function with a vslot locator (exactly one bare S2_SLOT_ macro), kind=offset or kind=const. Written by sigs/scripts/sdkadopt.py PIN=S2_EXPR (it checks the macro exists and equals the measurement), never typed."
+     "description": "the generated SDK expression that owns this number (crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h, gen.py's tie syntax: a sum of S2_* macros, `S2_SLOT_<...>*8` for a slot the game calls as a vtable byte displacement, and decimal addends). The bridge compiles that macro; the entry is the binary-side measurement: `cargo bridge pins` does not emit it as a pin (pins.rs) and refuses to write when the expression differs from the measurement (a vslot locator's slot index, else the resolved value), and sigs/scripts/sdkcheck.py reports an `sdk:` row for it. Windows entries of kind=function with a vslot locator (exactly one bare S2_SLOT_ macro), kind=offset or kind=const. Written by sigs/scripts/sdkadopt.py PIN=S2_EXPR (it checks the macro exists and equals the measurement), never typed."
     },
     "status": {
      "enum": [

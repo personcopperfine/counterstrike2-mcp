@@ -528,8 +528,9 @@ vtables = [
 # evaluated under both ABIs - never entered into this file. `headers` lists what
 # the expressions need, from either upstream (probe.cpp includes them in this
 # order; `core/ISmmPluginExt.h` is metamod's). A value measured from the second
-# upstream must also be listed in gen.py's C_HEADER_EXCLUDED_CONSTS: the frozen C
-# bridge cannot name it, so bridge/s2sdk_gen.h must not carry it.
+# upstream must also be listed in gen.py's C_HEADER_EXCLUDED_CONSTS:
+# crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h is frozen at the s2sdk side the retired C bridge
+# consumed, so it must not carry it.
 [consts]
 headers = [
 	"const.h",
@@ -561,16 +562,16 @@ entries = [
 	# macro and stays bridge-owned.
 	{ name = "SCHEMASYSTEM_INTERFACE_VERSION", expr = "SCHEMASYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge_game.inc asks for it by hand today." },
 	{ name = "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION", expr = "SOURCE2ENGINETOCLIENT_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge*.c asks for Source2EngineToClient001." },
-	{ name = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", expr = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", kind = "string", doc = "bridge/mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h)." },
+	{ name = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", expr = "SOURCE2SERVERCONFIG_INTERFACE_VERSION", kind = "string", doc = "mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h)." },
 	{ name = "INTERFACEVERSION_SERVERGAMEDLL", expr = "INTERFACEVERSION_SERVERGAMEDLL", kind = "string", doc = "engine2/isource2server.h:118: the server's ISource2Server (\"Source2Server001\"), the object whose GameFrame the bridge hooks for its tick on non-tools hosts." },
-	{ name = "TESTSCRIPTMANAGER_INTERFACE_VERSION", expr = "TESTSCRIPTMANAGER_INTERFACE_VERSION", kind = "string", doc = "bridge/mcp_bridge.c:2657 asks for TestScriptMgr001." },
+	{ name = "TESTSCRIPTMANAGER_INTERFACE_VERSION", expr = "TESTSCRIPTMANAGER_INTERFACE_VERSION", kind = "string", doc = "mcp_bridge.c:2657 asks for TestScriptMgr001." },
 	{ name = "INPUTSERVICE_INTERFACE_VERSION", expr = "INPUTSERVICE_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge*.c asks for InputService_001." },
 	{ name = "SOUNDOPSYSTEM_INTERFACE_VERSION", expr = "SOUNDOPSYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge mcp_bridge_game.inc asks for SoundOpSystem001." },
-	{ name = "TOOLFRAMEWORK2_INTERFACE_VERSION", expr = "TOOLFRAMEWORK2_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_TOOLFRAMEWORK2_VERSION." },
-	{ name = "SCENESYSTEM_INTERFACE_VERSION", expr = "SCENESYSTEM_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_SCENESYSTEM_VERSION." },
-	{ name = "SCENEUTILS_INTERFACE_VERSION", expr = "SCENEUTILS_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_SCENEUTILS_VERSION." },
-	{ name = "RENDERSERVICE_INTERFACE_VERSION", expr = "RENDERSERVICE_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_RENDERSERVICE_VERSION." },
-	{ name = "RENDER_DEVICE_INTERFACE_VERSION", expr = "RENDER_DEVICE_INTERFACE_VERSION", kind = "string", doc = "bridge/s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator)." },
+	{ name = "TOOLFRAMEWORK2_INTERFACE_VERSION", expr = "TOOLFRAMEWORK2_INTERFACE_VERSION", kind = "string", doc = "s2sdk.h S2_TOOLFRAMEWORK2_VERSION." },
+	{ name = "SCENESYSTEM_INTERFACE_VERSION", expr = "SCENESYSTEM_INTERFACE_VERSION", kind = "string", doc = "s2sdk.h S2_SCENESYSTEM_VERSION." },
+	{ name = "SCENEUTILS_INTERFACE_VERSION", expr = "SCENEUTILS_INTERFACE_VERSION", kind = "string", doc = "s2sdk.h S2_SCENEUTILS_VERSION." },
+	{ name = "RENDERSERVICE_INTERFACE_VERSION", expr = "RENDERSERVICE_INTERFACE_VERSION", kind = "string", doc = "s2sdk.h S2_RENDERSERVICE_VERSION." },
+	{ name = "RENDER_DEVICE_INTERFACE_VERSION", expr = "RENDER_DEVICE_INTERFACE_VERSION", kind = "string", doc = "s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator)." },
 
 	# bitmap/imageformat_declarations.h (enum ImageFormat): the pixel formats the bridge hands
 	# IRenderDevice::ReadTexturePixels and the scratch render targets (RSC_IMAGE_FMT_* in the sigs DB).
@@ -587,7 +588,7 @@ entries = [
 
 	# appframework/iappsystem.h (enums AppSystemTier_t / BuildType_t): the
 	# values the bridge's own IToolSystem2 stand-ins return - m0_GetTier and
-	# m0_GetBuildType in bridge/mcp_bridge.c. The slots themselves are bridge
+	# m0_GetBuildType in mcp_bridge.c. The slots themselves are bridge
 	# extensions with no upstream declaration (see build_vtable); only the
 	# enum values are upstream contract.
 	{ name = "APP_SYSTEM_TIER3", expr = "APP_SYSTEM_TIER3", type = "u32", doc = "public/appframework/iappsystem.h: AppSystemTier_t APP_SYSTEM_TIER3, the tier the bridge's m0_GetTier returns." },
@@ -679,7 +680,7 @@ entries = [
 
 # --------------------------------------------------------------------------- #
 # design §1.1/§1.2/§1.3 "class (a)" rows: the offsets/layouts
-# bridge/mcp_bridge_game.inc hardcodes as plain numbers today. Every one of
+# mcp_bridge_game.inc hardcodes as plain numbers today. Every one of
 # them is asserted on BOTH ABIs, because the bridge is compiled MSVC and the
 # Rust bindings are emitted from the Itanium side.
 # --------------------------------------------------------------------------- #
@@ -1082,7 +1083,7 @@ entries = [
 "consts.RENDER_DEVICE_INTERFACE_VERSION" = { value = "RenderDevice003" }
 # The acceptance list's S2_PIPELINE_TOKEN_TOOLS: MurmurHash2LowerCase("Tools",
 # STRINGTOKEN_MURMURHASH_SEED). The two render-target tokens are anchored to the
-# values bridge/s2sdk.h carries as S2_ATTR_TOKEN_COLOR/DEPTH.
+# values s2sdk.h carries as S2_ATTR_TOKEN_COLOR/DEPTH.
 "consts.TOKEN_TOOLS" = { value = 0x785BE7A7 }
 "consts.TOKEN_OUTPUT_COLOR" = { value = 226443304 }
 "consts.TOKEN_OUTPUT_DEPTH" = { value = 1884464147 }

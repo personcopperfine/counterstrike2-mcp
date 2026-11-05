@@ -8,7 +8,7 @@
 //!
 //! The expected frames come from `control::error_ext` - the crate's `build_error_ext`, which
 //! `tests/control.rs` holds to the C - with the `data` this suite writes out by hand from the
-//! `op_err` calls in `bridge/mcp_bridge_pet.inc`.
+//! `op_err` calls in `mcp_bridge_pet.inc`.
 
 use std::time::Instant;
 
@@ -128,7 +128,7 @@ fn pet_apply_refuses_every_malformed_request() {
         );
     }
 
-    // `json_text_unescape`'s own reason (`bridge/json_text.h:25`).
+    // `json_text_unescape`'s own reason (`json_text.h:25`).
     assert_eq!(
         call("pet.apply", Some(r#"{"text":"a\qb"}"#)),
         invalid_params("bad_escape")

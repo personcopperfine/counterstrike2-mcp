@@ -42,7 +42,7 @@ impl fmt::Display for Error {
 
 impl std::error::Error for Error {}
 
-/// A KV3 text payload: the header and the body in braces (runtime.sh `put_payload`;
+/// A KV3 text payload: the header and the body in braces (`cargo bridge runtime`'s `put_payload`;
 /// `cs2_mcp_common::runtime::docker::vtm_payload` writes the same bytes for the container).
 pub fn payload(body: &str) -> String {
     format!(
@@ -50,12 +50,12 @@ pub fn payload(body: &str) -> String {
     )
 }
 
-/// `"` and `\` escaped for a KV3 string (the two characters the runtime.sh recipe escapes).
+/// `"` and `\` escaped for a KV3 string (the two characters the `cargo bridge runtime` recipe escapes).
 fn escape(text: &str) -> String {
     text.replace('\\', "\\\\").replace('"', "\\\"")
 }
 
-/// The bridge load (runtime.sh `load_rs_bridge`).
+/// The bridge load (`cargo bridge runtime`'s `load_bridge`).
 pub fn bridge_request() -> String {
     payload("\t_message = \"tool_request\"\n\ttool_name = \"cs2_bridge\"\n\t_data = -1")
 }
@@ -65,7 +65,7 @@ pub fn command(cmd: &str) -> String {
     payload(&format!("\t_message = \"command\"\n\t_data = \"{}\"", escape(cmd)))
 }
 
-/// An `open_asset` (runtime.sh `open`): a content-relative asset path; a `.vmdl` loads ModelDoc.
+/// An `open_asset` (`cargo bridge runtime`'s `open`): a content-relative asset path; a `.vmdl` loads ModelDoc.
 pub fn open_asset(asset: &str) -> String {
     payload(&format!("\t_message = \"open_asset\"\n\t_data = \"{}\"", escape(asset)))
 }

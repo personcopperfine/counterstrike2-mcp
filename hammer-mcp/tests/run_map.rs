@@ -139,7 +139,7 @@ impl Drop for Tree {
 
 /// A fake `podman` under the tree (mode 0755). Kinds:
 /// * `ok` — `ps` reports `cs2tools`; `exec` copies the VToolMessage payload aside, prints the
-///   channel marker (`creator version`, what runtime.sh `wait_channel` waits for) and, for a
+///   channel marker (`creator version`, what `cargo bridge runtime` `wait_channel` waits for) and, for a
 ///   payload whose `_data` starts with `map `, appends `<tree>/engine-lines` to console.log (the
 ///   engine's own load signal), or `<tree>/idle-lines` for `disconnect` (the idle level);
 /// * `slow` — `ok`, but each `exec` takes [`SLOW_EXEC_MS`]: two concurrent calls that are not
@@ -1107,7 +1107,7 @@ async fn run_map_without_a_tools_container_is_runtime_unavailable() {
     let err = call(&server, "run_map", json!({})).await.unwrap_err();
     assert_eq!(err.name, "RuntimeUnavailable");
     assert_eq!(err.data["label"], json!("cs2mcp.tool"));
-    assert_eq!(err.data["hint"], json!("bridge/runtime.sh up"));
+    assert_eq!(err.data["hint"], json!("cargo bridge runtime up"));
     assert!(err.retry_safe);
     assert!(!tree.payload().exists());
 

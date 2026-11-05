@@ -1,5 +1,5 @@
 //! The method bodies (M4): the arms of the C's `exec_request` dispatch chain
-//! (`bridge/mcp_bridge.c:5698-6279`) and the `op_*` functions they call, one module per method
+//! (`mcp_bridge.c:5698-6279`) and the `op_*` functions they call, one module per method
 //! group.
 //!
 //! A group module exports `pub static HANDLERS: &[(&str, Handler)]` and is listed once in

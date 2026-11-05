@@ -1,25 +1,19 @@
-//! The method registry's self-test and its differential against the C table.
+//! The method registry's self-test against the C table's numbers and rules.
 //!
-//! 1. [`handoff_numbers_and_table_invariants`]: 84 rows, 69 implemented, 1 hidden (the
-//!    HANDOFF numbers - the differential below pins them against the C anyway), every name
-//!    unique, every `needs` a subset of the defined bits, and every implemented `needs == 0`
-//!    row a `control.*` method (the ones the fast path dispatches).
-//! 2. [`table_matches_the_c_row_for_row`]: the generator (the C's `k_methods[]`, compiled out
-//!    of the frozen source by `common`) prints one METHOD record per row; every field of
-//!    every row must equal this port's.
-//! 3. [`the_generator_output_compare_is_not_vacuous`]: one flipped hex digit in the C output
-//!    must break the comparison - the comparator compares.
-
-mod common;
+//! [`handoff_numbers_and_table_invariants`]: 84 rows, 69 implemented, 1 hidden (the HANDOFF
+//! numbers of the C's `k_methods[]`, which a row-for-row differential against the compiled C
+//! table pinned while the C bridge existed), every name unique, every `needs` a subset of the
+//! defined bits, and every implemented `needs == 0` row a `control.*` method (the ones the fast
+//! path dispatches). The gate and mask tests below cite the C lines (`mcp_bridge.c:NNNN`, the
+//! retired C bridge in git history, commit 8cdea42) whose behaviour they keep.
 
 use cs2_bridge::generated::pins as gen_pins;
 use cs2_bridge::registry::{
-    find, gate, gate_with, verified_mask, Gate, Method, ModState, ModuleView, METHODS,
+    find, gate, gate_with, verified_mask, Gate, ModState, ModuleView, METHODS,
     METHOD_COUNT, NEED_CLIENT, NEED_ENGINE, NEED_HAMMER, NEED_INPUT, NEED_KHOOK, NEED_MODELDOC,
     NEED_PET, NEED_RENDER, NEED_RSV, NEED_SCENE, NEED_SCHEMA, NEED_SERVER, NEED_SOUND, NEED_TF2,
     NEED_TIER0,
 };
-use std::sync::OnceLock;
 
 /// Every defined base bit (`mcp_bridge.c:1030-1044`); a row's `needs` must be a subset.
 const ALL_BITS: u32 = NEED_TF2
@@ -40,7 +34,7 @@ const ALL_BITS_WITH_RUST: u32 = ALL_BITS | NEED_KHOOK;
 
 #[test]
 fn handoff_numbers_and_table_invariants() {
-    assert_eq!(METHODS.len(), 84, "the C table has 84 rows (the differential pins each one)");
+    assert_eq!(METHODS.len(), 84, "the C table has 84 rows");
     assert_eq!(METHODS.len(), METHOD_COUNT, "METHOD_COUNT must match the table");
     assert_eq!(
         METHODS.iter().filter(|m| m.implemented).count(),
@@ -79,75 +73,6 @@ fn handoff_numbers_and_table_invariants() {
             );
         }
     }
-}
-
-/// The generator's records, cached across the tests in this binary.
-fn generator_lines() -> &'static Vec<String> {
-    static LINES: OnceLock<Vec<String>> = OnceLock::new();
-    LINES.get_or_init(common::run_generator)
-}
-
-#[test]
-fn table_matches_the_c_row_for_row() {
-    let lines = generator_lines();
-    let method_lines: Vec<&String> =
-        lines.iter().filter(|l| l.starts_with("METHOD\t") && !l.starts_with("METHODCOUNT")).collect();
-    let count_line = lines
-        .iter()
-        .find(|l| l.starts_with("METHODCOUNT\t"))
-        .expect("the generator must print METHODCOUNT");
-    let c_count: usize =
-        count_line.split('\t').nth(1).expect("METHODCOUNT carries a number").parse().expect("a number");
-    assert_eq!(c_count, METHODS.len(), "the C table and the Rust table must have the same length");
-    assert_eq!(method_lines.len(), METHODS.len(), "one METHOD record per row");
-
-    for (i, line) in method_lines.iter().enumerate() {
-        let f: Vec<&str> = line.split('\t').collect();
-        assert_eq!(f.len(), 6, "one METHOD record has six fields: {line}");
-        let m: &Method = &METHODS[i];
-        assert_eq!(m.name, f[1], "row {i}: name");
-        // NEED_KHOOK is Rust-only (the C table has no such bit): every row's C bits must match
-        // the C exactly, and the Rust bit may only be added on top.
-        let c_needs: u32 = f[2].parse().expect("a numeric needs");
-        assert_eq!(
-            m.needs & !NEED_KHOOK,
-            c_needs,
-            "row {i}: needs (the C's bits; NEED_KHOOK is this build's own)"
-        );
-        assert_eq!(m.implemented, f[3] == "1", "row {i}: impl (mcp_bridge.c:1048)");
-        assert_eq!(m.hidden, f[4] == "1", "row {i}: hidden (mcp_bridge.c:1049)");
-        assert_eq!(
-            m.blocked_on.unwrap_or("-"),
-            f[5],
-            "row {i}: blockedOn (mcp_bridge.c:1050)"
-        );
-    }
-}
-
-#[test]
-fn the_generator_output_compare_is_not_vacuous() {
-    // The C generator runs with the not_loaded scenario in effect when the table is printed;
-    // corrupt one hex digit of one METHOD record and the comparison must break.
-    let lines = generator_lines();
-    let first = lines.iter().find(|l| l.starts_with("METHOD\t")).expect("a METHOD record");
-    let mut fields: Vec<String> = first.split('\t').map(str::to_owned).collect();
-    let last = fields.last_mut().expect("a blockedOn field");
-    if last.as_str() == "-" {
-        *last = "corrupted".to_string();
-    } else {
-        last.push('x');
-    }
-    let corrupted = fields.join("\t");
-    let m = &METHODS[0];
-    let rust_row = format!(
-        "METHOD\t{}\t{}\t{}\t{}\t{}",
-        m.name,
-        m.needs,
-        u8::from(m.implemented),
-        u8::from(m.hidden),
-        m.blocked_on.unwrap_or("-")
-    );
-    assert_ne!(corrupted, rust_row, "a corrupted C record must not compare equal");
 }
 
 #[test]

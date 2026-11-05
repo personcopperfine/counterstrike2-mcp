@@ -8,12 +8,12 @@ fields resolve through the game's SchemaSystem at runtime; only entry points are
 
 ## Prerequisites
 - WineTools session with the m2.9+ bridge (`crates/cs2-bridge`, the game-state ops;
-  built by `bridge/build-rs.sh`; pins now include `schemasystem.dll` and `soundsystem.dll`).
+  built by `cargo bridge build`; pins now include `schemasystem.dll` and `soundsystem.dll`).
 - Research note: `research/game-state.md` (sources, evidence tags, what is unverified).
 - Reading: `../idabins/docs/interfaces/ISchemaSystem.md` (runtime offset recipe), `IVEngineClient2.md`
   (slots 34/39/65), `ISoundOpSystem.md` (slots 11–13, `SosStartParams_t`), `docs/data/bridge-protocol.md`.
 
-## Method spec (proposed §7 rows; full diff in `bridge/protocol-diff-m2.9.md`)
+## Method spec (proposed §7 rows; the current contract: `crates/cs2-bridge/PROTOCOL.md` §20, §18, §5)
 
 | Method | Needs | Params | Result | Errors |
 |---|---|---|---|---|
@@ -36,12 +36,12 @@ Handles are the game's `CHandle` integers (index `& 0x7FFF` = `s2sdk_sys::genera
 schema field could not be read (never a guessed value).
 
 ## Steps
-1. **Sigs** — done: `bridge/proposed-sigs/{client,engine2,schemasystem,soundsystem}.json` (19 entries,
+1. **Sigs** — done: the then `proposed-sigs/{client,engine2,schemasystem,soundsystem}.json` drafts (since merged into `sigs/signatures/`) (19 entries,
    `sigcheck.py validate` 0 problems, `resolve --strict` all unique; the `expect[]` values were
    recorded with `sigupdate.py record`, and since the files carry bridge entries `sigcheck.py
-   resolve --record` now refuses them outright). `pins.py` overlays
+   resolve --record` now refuses them outright). `cargo bridge pins` overlays
    them; merge into `../idabins/signatures/*.json` when accepted (then delete the proposed files).
-2. **Bridge** — done, compiles: `bridge/mcp_bridge_game.inc` (schema resolver + cache, identity chunks,
+2. **Bridge** — done, compiles: `mcp_bridge_game.inc` (schema resolver + cache, identity chunks,
    local controller, `game.local/weapons/radar/selectWeapon`, sound wrap + ring + `sound.*`),
    `k_methods` rows, `NEED_SCHEMA`/`NEED_SOUND`, `PIN_SCHEMA`/`PIN_SOUND`, uninstall at `PreShutdown`,
    `BRIDGE_BUILD` m2.9.
@@ -64,7 +64,7 @@ schema field could not be read (never a guessed value).
    changes `active.name`; `radar.players` lists the bots with `spotted` toggling; `sounds_drain` after a
    jump/shot contains `Player.*`/weapon events with the local pawn's entindex. Record in the research
    note and upgrade `[I]`/not-run rows to `[V runtime]`.
-5. **Protocol docs** — done 2026-10-11 (signature merge deferred by decision) — the idabins edits listed in `bridge/protocol-diff-m2.9.md` (§7 rows, §8 codes
+5. **Protocol docs** — done 2026-10-11 (signature merge deferred by decision) — the idabins edits listed in the m2.9 protocol note (folded into `crates/cs2-bridge/PROTOCOL.md` §20, §18) (§7 rows, §8 codes
    -32023/-32024, module list, m2.9 note).
 6. **Sound sink** — done (research `research/game-state.md` "Sink survey"): the game's own
    `ISoundOpSystem` slot-81 listener is implemented as `mode:"listener"`; the vtable wrap stays the

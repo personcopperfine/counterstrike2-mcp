@@ -1,30 +1,28 @@
-//! `bridge/test_json_text.c` ported to Rust, plus the differential corpus test.
+//! `test_json_text.c` (the C bridge's `json_text.h` test) ported to Rust, plus the differential
+//! corpus. The C sources are retired (git history, commit 8cdea42); their cases and their output
+//! live on here as the spec.
 //!
 //! Three things live here:
 //!
-//! 1. [`c_test_cases`]: every case `bridge/test_json_text.c` runs, ported one for one (14 of
-//!    them; the count is asserted against the C's "14 cases, 0 failures" line). The C output is
-//!    the spec.
-//! 2. [`roundtrip_probe`]: the C's `roundtrip_probe` - escape the raw probe fixture bytes with
-//!    the tiny test-side escaper (`test_json_text.c:76-95`), size with [`json_text::end`],
+//! 1. [`c_test_cases_ported_and_counted`]: every case `test_json_text.c` ran, ported one for one
+//!    (14 of them; the count is asserted against the C's "14 cases, 0 failures" line).
+//! 2. [`roundtrip_probe_fixture`]: the C's `roundtrip_probe` - escape the raw probe fixture bytes
+//!    with the tiny test-side escaper (`test_json_text.c:76-95`), size with [`json_text::end`],
 //!    unescape, require byte-identical. A missing fixture is a FAILURE, never a skip
 //!    (`test_json_text.c:7-8`).
 //! 3. [`differential_corpus`]: every corpus case - the C test's inputs plus the negative and
 //!    passthrough extras - run through this crate's Rust port and compared byte for byte
-//!    against the *committed* corpus
-//!    (`tests/data/json_text_corpus.txt`, written by the committed generator
-//!    `tests/data/json_text_gen.c`, which includes `bridge/json_text.h` read-only).
-//! 4. [`corpus_matches_the_c_generator`]: rebuilds the committed generator with `cc` into
-//!    `$CARGO_TARGET_TMPDIR`, runs it, and requires its output to equal the committed corpus
-//!    byte for byte - the corpus cannot drift from the C. If `cc` is missing this FAILS
-//!    loudly naming `cc`; it never skips.
+//!    against the *committed* corpus (`tests/data/json_text_corpus.txt`). The corpus is what the
+//!    compiled `json_text.h` printed (its generator `tests/data/json_text_gen.c` went with the C,
+//!    commit 8cdea42), so it is frozen: a new case's expected line is derived from the C
+//!    semantics by hand and reviewed, never from this port's own output.
 //!
 //! Negative parity (buffer limits, invalid UTF-8, control bytes) is asserted twice: explicitly
 //! in [`c_rejects_truncates_and_passes_through`], and differentially in the corpus.
 
 use cs2_bridge::json_text::{self, Reason};
 
-/// One ported `check`/`check_cap` case of `bridge/test_json_text.c`.
+/// One ported `check`/`check_cap` case of `test_json_text.c`.
 struct Case {
     /// The case name in the C test's PASS/FAIL lines.
     name: &'static str,
@@ -48,7 +46,7 @@ enum Want {
     Refuse(&'static str),
 }
 
-/// Every case of `bridge/test_json_text.c:185-196` (`check` + `check_cap`), in order.
+/// Every case of `test_json_text.c:185-196` (`check` + `check_cap`), in order.
 const C_CHECK_CASES: &[Case] = &[
     // check("unescape_short_escapes", "\\n\\t\\r\\\"\\\\\\/", ..., "\"\n\t\r\"\\/")
     Case {
@@ -139,7 +137,7 @@ fn run_case(case: &Case) {
     }
 }
 
-/// All 14 cases of `bridge/test_json_text.c`, counted: the 11 `check`/`check_cap` cases of the
+/// All 14 cases of `test_json_text.c`, counted: the 11 `check`/`check_cap` cases of the
 /// table above, the 2 `end_cases` (`test_json_text.c:116-137`), and `roundtrip_probe`
 /// (`:140-177`, its own test below). If a case is added to the C test this number stops
 /// matching and this assert names the mismatch.
@@ -229,7 +227,7 @@ fn roundtrip_probe_fixture() {
 
 /// The NEGATIVE parity gate: inputs the C rejects/truncates/passes-through behave identically.
 /// Each assertion cites the C line that fixes the behaviour; the corpus cases below re-prove
-/// every one of them against the compiled C header.
+/// every one of them against the compiled C header's committed output.
 #[test]
 fn c_rejects_truncates_and_passes_through() {
     // Control bytes < 0x20 are refused, control_byte (json_text.h:103).
@@ -254,8 +252,8 @@ fn c_rejects_truncates_and_passes_through() {
     assert_eq!(&out[..6], b"a\x80\xC3\x28\xff\0");
 }
 
-/// One differential corpus record, mirroring what the committed generator
-/// `tests/data/json_text_gen.c` writes: TAB-separated, one case per line, hex-encoded bytes.
+/// One differential corpus record, mirroring what the C generator (`json_text_gen.c`) wrote:
+/// TAB-separated, one case per line, hex-encoded bytes.
 #[derive(Debug)]
 enum CorpusRecord {
     /// `U <name> <srcHex> <cap> ok <outHexInclNul>` / `U ... err <reason>`.
@@ -322,13 +320,11 @@ fn parse_corpus(text: &str) -> Vec<CorpusRecord> {
     records
 }
 
-/// Every C case run through both implementations, byte for byte.
+/// Every C case run through the Rust port, byte for byte against the C's committed output.
 ///
-/// The corpus is committed at `tests/data/json_text_corpus.txt`, generated by the committed
-/// `tests/data/json_text_gen.c` (its header comment has the build/run recipe); it holds the
-/// 14 C-test cases under their C names plus the negative/passthrough extras, TAB-separated,
-/// hex-encoded. [`corpus_matches_the_c_generator`] below proves the committed corpus never
-/// drifts from the compiled C; this test proves the Rust port matches the committed corpus.
+/// The corpus is committed at `tests/data/json_text_corpus.txt`, the output of the retired C
+/// generator; it holds the 14 C-test cases under their C names plus the negative/passthrough
+/// extras, TAB-separated, hex-encoded.
 #[test]
 fn differential_corpus() {
     let corpus_path =
@@ -410,90 +406,4 @@ fn hex(bytes: &[u8]) -> String {
         s.push_str(&format!("{b:02x}"));
     }
     s
-}
-
-/// The corpus cannot drift from the C: rebuild the committed generator
-/// (`tests/data/json_text_gen.c`, which includes `bridge/json_text.h` read-only) with `cc`
-/// into `$CARGO_TARGET_TMPDIR`, run it against the probe fixture, and require its stdout to
-/// equal the committed corpus byte for byte.
-///
-/// A missing `cc` is a FAILURE naming `cc` - never a skip; the C output is the spec, so a
-/// checkout without `cc` has no way to prove the corpus and must fail loudly.
-#[test]
-fn corpus_matches_the_c_generator() {
-    let manifest = env!("CARGO_MANIFEST_DIR");
-    let gen_c = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/json_text_gen.c");
-    let exe = concat!(env!("CARGO_TARGET_TMPDIR"), "/json_text_gen");
-    let include = format!("{manifest}/../../bridge");
-
-    let compile = std::process::Command::new("cc")
-        .args([
-            "-std=c11",
-            "-O1",
-            "-Wall",
-            "-Wextra",
-            "-I",
-            &include,
-            "-o",
-            exe,
-            gen_c,
-        ])
-        .output()
-        .unwrap_or_else(|e| {
-            panic!(
-                "the C compiler `cc` is missing or unusable ({e}): the corpus test cannot run \
-                 without it, and skipping is not an option - the committed corpus \
-                 tests/data/json_text_corpus.txt would go unverified"
-            )
-        });
-    assert!(
-        compile.status.success(),
-        "cc could not build tests/data/json_text_gen.c:\n{}",
-        String::from_utf8_lossy(&compile.stderr)
-    );
-
-    let probe = probe_path();
-    let run = std::process::Command::new(exe)
-        .arg(&probe)
-        .output()
-        .unwrap_or_else(|e| panic!("cannot run the freshly built generator {exe}: {e}"));
-    assert!(
-        run.status.success(),
-        "the generator exited {:?}:\n{}",
-        run.status.code(),
-        String::from_utf8_lossy(&run.stderr)
-    );
-    assert!(
-        run.stderr.is_empty(),
-        "the generator wrote to stderr: {}",
-        String::from_utf8_lossy(&run.stderr)
-    );
-
-    let corpus_path = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/json_text_corpus.txt");
-    let committed = std::fs::read(corpus_path)
-        .unwrap_or_else(|e| panic!("the committed corpus {corpus_path} is missing: {e}"));
-    if run.stdout != committed {
-        // Report the first differing byte with a window of context instead of dumping two
-        // whole byte arrays through assert_eq!.
-        let first = run
-            .stdout
-            .iter()
-            .zip(committed.iter())
-            .position(|(a, b)| a != b)
-            .unwrap_or(run.stdout.len().min(committed.len()));
-        panic!(
-            "the compiled C generator's output differs from the committed corpus \
-             tests/data/json_text_corpus.txt - regenerate it (see the generator's header \
-             comment): first difference at byte {first} of generated len {} / committed len {}; \
-             generated: {:?} ... committed: {:?} ...",
-            run.stdout.len(),
-            committed.len(),
-            String::from_utf8_lossy(
-                &run.stdout[first.saturating_sub(32)..first.min(run.stdout.len())]
-            ),
-            String::from_utf8_lossy(
-                &committed[first.saturating_sub(32)..first.min(committed.len())]
-            ),
-        );
-    }
 }

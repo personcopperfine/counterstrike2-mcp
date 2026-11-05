@@ -41,8 +41,8 @@
 //!
 //! The loader is not a plugin: on Windows it exports nothing the engine could call (only
 //! `DllMain`, which the loader finds through the PE entry point), on Linux exactly the one
-//! interposed `dlopen`. `bridge/check-loader-exports.sh` is the gate, run by `bridge/build-rs.sh`
-//! on the staged files.
+//! interposed `dlopen`. `cargo bridge check-exports --loader` is the gate, run by `cargo bridge
+//! build` on the staged files.
 #![deny(unsafe_op_in_unsafe_fn)]
 
 pub mod cmdline;

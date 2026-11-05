@@ -4,7 +4,7 @@
 //!
 //! Two C functions ask the same table the same questions in different places:
 //!
-//! * `exec_request` (`bridge/mcp_bridge.c:5657-5698`, the main thread) - unknown ->
+//! * `exec_request` (`mcp_bridge.c:5657-5698`, the main thread) - unknown ->
 //!   `-32601`, `!impl` -> `-32011` with `blockedOn`, then the verified-mask check ->
 //!   `-32017 PrerequisiteFailed`;
 //! * `ipc_thread` (`:6603-6623`, the IPC thread) - unknown -> `-32601`, `!impl` -> `-32011`,

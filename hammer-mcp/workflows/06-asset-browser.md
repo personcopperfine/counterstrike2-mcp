@@ -16,7 +16,7 @@ right tool (map -> Hammer, `.vmdl` -> ModelDoc, `.vpcf` -> pet), and report what
    over `<app>/content/<addon>/` and `game/csgo/` (compiled), mapping extensions to tools; cached
    index with mtime invalidation; host->Windows path rendering for later bridge calls.
 2. **Open via VToolMessage** (`vtmsend.exe` `_message="open_asset" _data="maps/x.vmap"`): the proven
-   Phase-1 verb, routed by the framework to the owning tool (`runtime.sh cmd_open`). Tool `open_asset`
+   Phase-1 verb, routed by the framework to the owning tool (`cargo bridge runtime open`). Tool `open_asset`
    with the Hammer session-leak pre-check (`doc.list` when advertised; else warn) and
    `AssetNotFound` on a failed lookup.
 3. **Bridge route** (`file.open_asset`, `-32011` in m2.8): same tool, preferred when implemented
@@ -40,5 +40,5 @@ right tool (map -> Hammer, `.vmdl` -> ModelDoc, `.vpcf` -> pet), and report what
 - Whether a generic KV3 writer belongs in hammer-mcp or in a shared "files" tool group.
 
 ## Evidence
-- VToolMessage `open_asset`/`command` verbs [V, used daily by `runtime.sh`]; `file.open_asset` guard
+- VToolMessage `open_asset`/`command` verbs [V, used daily by `cargo bridge runtime`]; `file.open_asset` guard
   analysis [V static]; asset browser running under Wine (`worknotes/evidence/2026-10-05-asset-browser-wine.png`).

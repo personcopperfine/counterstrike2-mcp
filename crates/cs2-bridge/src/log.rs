@@ -1,7 +1,7 @@
 //! The bridge log.
 //!
 //! One prefixed line per call, opened/appended/closed each time, exactly like the C bridge's
-//! `logline` (`bridge/mcp_bridge.c:198`: `Z:\app\mcp_bridge.log`, append, share read) - the
+//! `logline` (`mcp_bridge.c:198`: `Z:\app\mcp_bridge.log`, append, share read) - the
 //! Wine tools can be killed at any moment, so a buffered handle would lose the last lines that
 //! prove the plugin was ticked.
 //!
@@ -9,7 +9,7 @@
 //! `[cs2-bridge mm+tool] `, `[cs2-bridge none] `); see [`Roles`].
 //!
 //! Writing the log is the *only* silent failure in this crate: a log line that cannot be
-//! written must not disturb the game. Everything else fails loudly (`check-exports.sh`, the
+//! written must not disturb the game. Everything else fails loudly (`cargo bridge check-exports`, the
 //! tests).
 
 use core::sync::atomic::{AtomicU8, Ordering};
@@ -34,7 +34,7 @@ use std::path::{Path, PathBuf};
 ///
 /// # The tag is a contract
 ///
-/// `bridge/runtime.sh` waits for `[cs2-bridge (mm+)?tool] Init`: the tool role must be in the
+/// `cargo bridge runtime` waits for `[cs2-bridge (mm+)?tool] Init`: the tool role must be in the
 /// tag for the tool half to be considered up, and `mm` may precede it. The exact forms are
 /// `[cs2-bridge mm]`, `[cs2-bridge tool]`, `[cs2-bridge mm+tool]` and `[cs2-bridge none]`,
 /// roles joined by `+` in that order (`mm` first).
@@ -103,7 +103,7 @@ impl Roles {
 
     /// The shorter form every log line carries: the names joined by `+`, `"none"` when empty.
     ///
-    /// This is the `bridge/runtime.sh` contract; see [`Role`].
+    /// This is the `cargo bridge runtime` contract; see [`Role`].
     #[must_use]
     pub const fn tag(self) -> &'static str {
         match self.0 {
@@ -476,7 +476,7 @@ mod tests {
         std::fs::remove_file(&path).expect("clean up");
     }
 
-    /// The four role sets' tags, byte for byte: this exact form is the `bridge/runtime.sh`
+    /// The four role sets' tags, byte for byte: this exact form is the `cargo bridge runtime`
     /// contract (`grep -E '\[cs2-bridge (mm\+)?tool\] Init'`), and the JSON array the status
     /// line reports is the same set in the same order.
     #[test]

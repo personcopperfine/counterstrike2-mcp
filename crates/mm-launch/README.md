@@ -72,9 +72,10 @@ paths today.
 
 ## Build and gates
 
-`bridge/build-rs.sh` builds this crate for both targets, stages
+`cargo bridge build` builds this crate for both targets, stages
 `target/bridge-rs/{win64/cs2mcp_launch.exe,win64/cs2mcp_mmload.dll,linuxsteamrt64/libcs2mcp_mmload.so}`
-and runs `bridge/check-loader-exports.sh` on the two loader images: the DLL must export exactly
+and runs the loader's export gate (`cargo bridge check-exports --loader <file>`) on the two loader
+images: the DLL must export exactly
 `DllMain` (the PE entry point's callback, not a plugin entry point) and no ordinal-only names, the
 `.so` exactly `dlopen`. The DLL is also held to `+crt-static` for the same reason as the bridge.
 

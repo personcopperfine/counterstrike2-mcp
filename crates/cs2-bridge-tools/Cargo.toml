@@ -1,0 +1,30 @@
+[package]
+name = "cs2-bridge-tools"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Operator tooling for the bridge (`cargo bridge <command>`): the pins generator, the build + export gate, install/ensure into the game trees, the Wine tools runtime and the Metamod build"
+publish = false
+
+[[bin]]
+name = "cs2-bridge-tools"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2 = "0.10"
+# runtime: the VToolMessage payloads (the same bytes cs2mcp-native and hammer-mcp post)
+cs2-vtm = { path = "../cs2-vtm" }
+# runtime: pet's settings.txt crash flags
+regex.workspace = true
+# build/testplugin: the cargo builds' address-space cap (setrlimit RLIMIT_AS) and the deadline's
+# process-group signal, the two things `ulimit -v` + `timeout` did in the shell
+libc = "0.2"
+
+[dev-dependencies]
+# exports/metamod tests: scratch trees for the synthesized images and the stub podman
+tempfile = "3"
