@@ -14,3 +14,6 @@ RUN rustup target add x86_64-pc-windows-msvc x86_64-pc-windows-gnu \
  && cargo install xwin --version 0.10.0 --locked --root /usr/local \
  && rm -rf /usr/local/cargo/registry
 RUN git config --global --add safe.directory '*'
+# the win64 linker of release.yml: rustc's own lld (current). Debian's lld-link 14 writes an empty
+# ordinal-0 slot into the export table, which `cargo bridge build`'s export gate refuses.
+ENV CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER=rust-lld
