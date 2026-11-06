@@ -87,6 +87,11 @@ package made from that says so in its BUILDINFO).
 default `git describe`). A package whose `payload/gbe` lacks the host's files still runs
 `--steam gbe` on Linux after `cs2mcp-native fetch-gbe` (below).
 
+On a Linux host without an MSVC sysroot, `scripts/win-build/build.sh [--msi-tools]` builds the
+Windows package in a container from a clean clone of HEAD (the release's toolchain; the xwin
+sysroot stays in the podman volume `cs2mcp-xwin`); only the results come out, to
+`target/win-build/out/`.
+
 The installers wrap that directory unchanged (`crates/cs2-launcher/packaging/packager.py`, see
 `crates/cs2-launcher/README.md`): the per-user MSI installs it to
 `%LOCALAPPDATA%\Programs\cs2-mcp`, the .deb to `/opt/cs2mcp`, the AppImage carries it at

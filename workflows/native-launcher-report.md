@@ -357,3 +357,73 @@ link are not verified through it (they would be `~/.steam`'s); `~/.steam` is has
 Not verified: the Linux GUI (no X display on this host); a run with `--cleanup-legacy` against
 this volume (it would change the shared volume for good); the host-built binaries need glibc
 2.39, the image has 2.41 (a release builds on ubuntu-22.04, 2.35).
+
+## Windows acceptance on the VM `cs2-wintest` (round 2), 2026-11-06
+
+Package: `crates/cs2-native/scripts/win-build/build.sh --msi-tools` (the Windows package
+cross-built in a container; the xwin sysroot only in the podman volume `cs2mcp-xwin`), pins gate
+passed against `target/game-bins` + `target/game-bins-linux-2000940`. MSI: on the VM,
+`packaging/packager.py --format wix` (cargo-packager 0.11.8, embeddable Python 3.15.2), version
+`v0.0.1-acceptance`. The installed copy is fd2820a (SHA256SUMS: 38 files, 0 bad). The VM was shut
+off before and is shut off again. **live** = seen on the VM; the screenshots are in
+`~/libvirt/cs2-wintest/shots/r2-*.png` (outside the repo).
+
+Found and fixed on the way:
+
+- **light.exe failed the MSI with ICE69** (the desktop shortcut pointed at a file of another
+  component). The shortcut targets `[INSTALLDIR]cs2mcp-launcher.exe` now (2748c19).
+- **The GUI's readiness ✔ rendered as a missing glyph**: readiness is drawn as disabled
+  checkboxes (aa3dc01).
+- **GUI Stop warned `terminate pid …: Access is denied`** when the game was already exiting:
+  `terminate()` now waits on the handle and takes a process that is exiting (aa3dc01).
+- **The error dialog never showed**: the message (`--steam client: …`) was a separate argument
+  and clap parsed it as an option, so `show-dialog` exited without a box. Values are passed as
+  `--name=value` now, and a test holds that the argv parses (fd2820a).
+- **`status --preflight` listed the build warning twice** (status and the preflight both add it;
+  seen in the GUI's Status panel on 2000942). Duplicates are left out now (65d7849, unit test;
+  not re-run on the VM).
+
+Live:
+
+- **MSI, per user, no UAC**: `MSI_LUA: Package is marked as LUA installation capable with no
+  elevation required`, consent.exe never ran (`r2-msi-installing.png`). Same-version upgrades
+  (RemoveExistingProducts) worked twice.
+- **`--steam gbe --tools`, CLI** (game build 2000940): `up` rc 0, readiness ProcessUp 0.0,
+  ConsoleLogExists 47.3, MetamodLoaded 84.6, ToolChannel 139.4, DiscoveryFresh 378.7,
+  BridgeHello 379.4 s. hammer-mcp and client-mcp `session_status`: connected, protocol 1,
+  gameBuild 2000940, 9 of 12 modules verified. `down`: `byteForByte: true`, 20 checked, 0
+  verify failures, 0 conflicts, `treeClean`. Tree diff: only the 4 Workshop Tools files the
+  tools rewrite with the same bytes (mtime only) plus the tools' report dir added.
+- **The first `session_status` showed every module `not_loaded`**: not a regression. The bridge
+  verifies modules lazily; that read was at status revision 1, right after the hello. Re-asked
+  later (revision 10): 9 verified; hammer.dll, modeldoc_editor.dll and pet.dll stay `not_loaded`
+  until those tools are opened.
+- **`--steam gbe --tools`, GUI** (Start-menu shortcut, driven through UI Automation): BridgeHello
+  at 78.7 s, both servers connected with 9 of 12 verified, Stop restored byte for byte (20
+  checked, 0/0), tree 4349 → 4349 with only the 4 same-byte tools files changed
+  (`r2-gui-start.png`, `r2-gui-gbe-waiting.png`, `r2-gui-gbe-stopped.png`).
+- **Error dialog**: `up --steam client` with Steam not running gives the JSON error, rc 1 and
+  a MessageBox (`r2-error-dialog.png`). With `--no-dialog`: rc 1, no dialog process.
+- **Steam updated CS2 during the run** (19:29, before the client tests): buildid 26393695 →
+  26445667, `ClientVersion=2000942`, client.dll and server.dll changed. The client tests ran on
+  2000942 against a release for 2000940, which is the build-mismatch case:
+- **`--steam client`, CLI** (real Steam, the VM's logged-in account, as approved): `up --steam
+  client --map de_dust2` rc 0, the `buildMismatch` warning, 13 manifest entries, MetamodLoaded
+  24.9, DiscoveryFresh 127.2, BridgeHello 127.3 s; console.log `CClientSteamContext init ok,
+  logged on = 1`, `-insecure` in the command line. Both servers connected; client.dll
+  `mismatch`, server.dll `verifying`, engine2/rendersystemvulkan/scenesystem/schemasystem/tier0
+  verified: the bridge refuses what it cannot verify, as the warning says. `down` rc 0:
+  `byteForByte: true`, 13 checked, 0 failures, 0 conflicts, `treeClean`; tree 4349 → 4349,
+  `identical: true`.
+- **`--steam client`, GUI**: "my Steam client" plus Map `de_dust2`, Prepare + Launch: BridgeHello
+  at 73.8 s, Status "applied (13 entries, steam client)" / "running", both servers connected
+  (same module states), the game in de_dust2 (`r2-gui-client-start.png`,
+  `r2-gui-client-ready.png`). Then the window was closed while prepared: the ConfirmClose dialog
+  ("Restore the install before closing?") was read through UI Automation. It is not in
+  `r2-gui-client-confirmclose.png` because the game and Steam covered the window. "Stop, restore
+  and close": the window closed after the restore, report 13 checked, 0 failures, 0 conflicts,
+  no manifest left, tree 4349 → 4349 `identical: true`.
+
+Not verified: the 2000942 game update itself (pins and signatures are for 2000940; a
+`workflows/game-update.md` run is needed before a release), the Linux GUI, the
+`status --preflight` fix on the VM (unit test only).
