@@ -4,7 +4,8 @@
 
 use clap::{Parser, Subcommand};
 use cs2_native::manifest;
-use cs2_native::session::{emit, say};
+use cs2_native::events::Events;
+use cs2_native::session::emit;
 use serde_json::{json, Value};
 use std::path::{Path, PathBuf};
 
@@ -45,7 +46,7 @@ enum Cmd {
 fn main() {
     let cli = Cli::parse();
     if let Err(e) = run(cli.cmd) {
-        say(format!("error: {e:#}"));
+        Events::stderr().info(format!("error: {e:#}"));
         std::process::exit(1);
     }
 }
@@ -93,7 +94,7 @@ fn tree_hash(root: &Path, out: &Path, sha_max: u64) -> anyhow::Result<()> {
         }
         Ok(())
     })?;
-    say(format!("{} entries", m.len()));
+    Events::stderr().info(format!("{} entries", m.len()));
     std::fs::write(out, serde_json::to_vec(&Value::Object(m))?)?;
     Ok(())
 }

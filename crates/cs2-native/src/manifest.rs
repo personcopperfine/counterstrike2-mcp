@@ -372,12 +372,102 @@ pub struct Report {
     /// `removed: …` by size or mtime against the listing taken at prepare). Not undone: Workshop
     /// Tools write settings, thumbnail and bake caches into the install on every run.
     pub game_written: Vec<String>,
+    /// entries whose backup was missing or damaged and that the user declared lost
+    /// (`--forget-missing-backups`): our bytes were removed where they were still ours, the
+    /// user's bytes could not be put back
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub lost: Vec<String>,
+    /// the manifest's state before this restore (`applying`: a prepare that crashed mid-way)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_state: Option<State>,
 }
 
 impl Report {
     pub fn byte_for_byte(&self) -> bool {
-        self.verify_failures.is_empty() && self.conflicts.is_empty()
+        self.verify_failures.is_empty() && self.conflicts.is_empty() && self.lost.is_empty()
     }
+
+    /// The restore's outcome as findings: conflicts (Steam changed our files: a decision, since
+    /// the tree is not the user's old one), lost backups, verify failures.
+    pub fn findings(&self) -> Vec<crate::findings::Finding> {
+        use crate::findings::{Code, Finding, Severity, VERIFY_ADVICE};
+        let mut v = Vec::new();
+        if !self.conflicts.is_empty() {
+            v.push(
+                Finding::new(
+                    Code::Conflicts,
+                    Severity::Decision,
+                    format!(
+                        "{} path(s) changed by someone else since we wrote them (a Steam update or \"Verify integrity\" during the session); left as they are",
+                        self.conflicts.len()
+                    ),
+                )
+                .paths(self.conflicts.iter().cloned())
+                .advice("Steam's newer bytes were kept; the user's older copies are kept in the archived manifest's backup/ dir")
+                .advice(VERIFY_ADVICE)
+                .advice("--accept-conflicts (GUI: Accept) acknowledges this"),
+            );
+        }
+        if !self.lost.is_empty() {
+            v.push(
+                Finding::new(Code::LostBackups, Severity::Warn, format!("{} file(s) recorded as lost: their backups were gone", self.lost.len()))
+                    .paths(self.lost.iter().cloned())
+                    .advice(VERIFY_ADVICE),
+            );
+        }
+        if !self.verify_failures.is_empty() {
+            v.push(
+                Finding::new(Code::VerifyFailed, Severity::Blocker, "the restored tree does not verify; the manifest stays recorded")
+                    .paths(self.verify_failures.iter().cloned())
+                    .advice("fix or remove the files listed, then `cs2mcp-native uninstall` (GUI: Repair)")
+                    .advice(VERIFY_ADVICE),
+            );
+        }
+        v
+    }
+}
+
+/// How [`restore`] treats backups that are gone.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct RestoreOpts {
+    /// restore everything else; for an entry without its backup, remove our bytes where they are
+    /// still ours and record the path as lost (`--forget-missing-backups`)
+    pub forget_missing_backups: bool,
+}
+
+/// `(entry path, reason)` for every backup `m` names that is missing or no longer hashes to its
+/// record.
+pub fn missing_backups(store: &Store, m: &Manifest) -> Vec<(String, String)> {
+    let mut v = Vec::new();
+    for e in &m.entries {
+        let Some(b) = &e.before else { continue };
+        let p = under(&store.dir, &b.backup);
+        match hash_file(&p) {
+            Ok(Some(h)) if h.sha256 == b.sha256 => {}
+            Ok(Some(_)) => v.push((e.path.clone(), format!("{} is damaged (sha256 differs from the record)", b.backup))),
+            Ok(None) => v.push((e.path.clone(), format!("{} is missing", b.backup))),
+            Err(err) => v.push((e.path.clone(), format!("{}: {err:#}", b.backup))),
+        }
+    }
+    v
+}
+
+fn missing_backups_stop(store: &Store, missing: &[(String, String)]) -> crate::findings::Stopped {
+    use crate::findings::{Code, Finding, Severity, Stopped, VERIFY_ADVICE};
+    let f = Finding::new(
+        Code::MissingBackups,
+        Severity::Blocker,
+        format!(
+            "{} records a prepared tree, but the backups of {} file(s) are gone: those files cannot be put back. Nothing was changed.",
+            store.manifest_path().display(),
+            missing.len()
+        ),
+    )
+    .paths(missing.iter().map(|(p, why)| format!("{p}: {why}")))
+    .advice("if you still have the state dir's backup/ files elsewhere, put them back and retry")
+    .advice("otherwise: --forget-missing-backups (GUI: Mark as lost, after confirming) restores everything else, removes our bytes from these paths and records them as lost")
+    .advice(VERIFY_ADVICE);
+    Stopped { message: f.title.clone(), findings: vec![f] }
 }
 
 fn put_back(store: &Store, root: &Path, e: &Entry, b: &Before) -> anyhow::Result<()> {
@@ -406,13 +496,32 @@ fn put_back(store: &Store, root: &Path, e: &Entry, b: &Before) -> anyhow::Result
     Ok(())
 }
 
+/// Remove our `sdkenginetools.txt` entry in place when that gives exactly the bytes `before`
+/// records (sha256); `false` (file unchanged) otherwise.
+fn unedit_matches(target: &Path, before: Option<&String>) -> bool {
+    let Some(want) = before else { return false };
+    let Ok(text) = std::fs::read_to_string(target) else { return false };
+    let Some(orig) = crate::layout::sdkenginetools_unedit(&text) else { return false };
+    if &hash_bytes(orig.as_bytes()).sha256 != want {
+        return false;
+    }
+    write_atomic(target, orig.as_bytes()).is_ok()
+}
+
 /// Restore the tree from the store's manifest, verify it, and archive the manifest. `Ok(None)`
 /// when there is nothing to restore. `logs` receives the game-written files of the session.
-pub fn restore(root: &Path, store: &Store, logs: &Path) -> anyhow::Result<Option<Report>> {
+pub fn restore(root: &Path, store: &Store, logs: &Path, opts: RestoreOpts) -> anyhow::Result<Option<Report>> {
     let Some(mut m) = store.load()? else { return Ok(None) };
+    // before anything is touched: a restore that would stop half-way on a missing backup leaves
+    // a tree worse than the one it found
+    let missing = missing_backups(store, &m);
+    if !missing.is_empty() && !opts.forget_missing_backups {
+        return Err(missing_backups_stop(store, &missing).into());
+    }
+    let lost: Vec<&str> = missing.iter().map(|(p, _)| p.as_str()).collect();
+    let mut r = Report { previous_state: Some(m.state), ..Report::default() };
     m.state = State::Restoring;
     store.save(&m)?;
-    let mut r = Report::default();
     let stamp = now_secs();
     for e in m.entries.iter().rev() {
         let target = under(root, &e.path);
@@ -429,6 +538,31 @@ pub fn restore(root: &Path, store: &Store, logs: &Path) -> anyhow::Result<Option
                 Err(err) if err.kind() == std::io::ErrorKind::NotFound => r.unchanged.push(e.path.clone()),
                 Err(err) => return Err(err).with_context(|| format!("read_dir {}", target.display())),
             },
+            (Kind::File, Role::Ours) if lost.contains(&e.path.as_str()) => {
+                let cur = hash_file(&target)?;
+                let after = e.after.as_ref().map(|a| &a.sha256);
+                let b = e.before.as_ref().map(|b| &b.sha256);
+                match cur {
+                    Some(c) if Some(&c.sha256) == b => r.unchanged.push(e.path.clone()),
+                    // our one edit can be undone without the backup: the result is checked
+                    // against the recorded sha256 of the user's bytes, like a put_back
+                    Some(c) if Some(&c.sha256) == after && e.path.ends_with("sdkenginetools.txt") && unedit_matches(&target, b) => {
+                        r.restored.push(e.path.clone());
+                    }
+                    Some(c) if Some(&c.sha256) == after => {
+                        remove_file_retrying(&target).with_context(|| format!("remove {}", target.display()))?;
+                        r.lost.push(format!("{}: our copy removed; the original could not be put back", e.path));
+                    }
+                    None => r.lost.push(format!("{}: missing; the original could not be put back", e.path)),
+                    Some(_) => r.conflicts.push(format!(
+                        "{}: changed by someone else since we wrote it (a Steam update or Verify?); left as is",
+                        e.path
+                    )),
+                }
+            }
+            (Kind::File, Role::Runtime) if lost.contains(&e.path.as_str()) => {
+                r.lost.push(format!("{}: the game's copy of this session left in place; the earlier one could not be put back", e.path));
+            }
             (Kind::File, Role::Ours) => {
                 let cur = hash_file(&target)?;
                 let after = e.after.as_ref().map(|a| &a.sha256);
@@ -495,7 +629,8 @@ pub fn restore(root: &Path, store: &Store, logs: &Path) -> anyhow::Result<Option
     }
     // verify: every entry not in conflict is back to the user's state
     for e in &m.entries {
-        if r.conflicts.iter().any(|c| c.starts_with(&format!("{}:", e.path))) {
+        let tagged = |list: &[String]| list.iter().any(|c| c.starts_with(&format!("{}:", e.path)));
+        if tagged(&r.conflicts) || tagged(&r.lost) {
             continue;
         }
         let target = under(root, &e.path);
@@ -528,7 +663,7 @@ pub fn restore(root: &Path, store: &Store, logs: &Path) -> anyhow::Result<Option
         }
         let bk = store.dir.join("backup");
         if bk.exists() {
-            if r.conflicts.is_empty() {
+            if r.conflicts.is_empty() && r.lost.is_empty() {
                 std::fs::remove_dir_all(&bk)?;
             } else {
                 std::fs::rename(&bk, hist.join("backup"))?; // keep the user's old bytes
@@ -637,14 +772,14 @@ mod tests {
         assert!(paths.contains(&("game/csgo/addons", Kind::Dir)));
         // the game writes its log during the session
         put(&root.join("game/csgo/console.log"), b"session log");
-        let r = restore(&root, &store, &logs).unwrap().unwrap();
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
         assert!(r.byte_for_byte(), "{r:?}");
         assert_eq!(snapshot(&root), before);
         assert_eq!(r.saved_runtime.len(), 1);
         assert_eq!(std::fs::read(&r.saved_runtime[0]).unwrap(), b"session log");
         assert!(store.load().unwrap().is_none());
         assert!(!store.dir.join("backup").exists());
-        assert!(restore(&root, &store, &logs).unwrap().is_none());
+        assert!(restore(&root, &store, &logs, RestoreOpts::default()).unwrap().is_none());
     }
 
     #[test]
@@ -652,7 +787,7 @@ mod tests {
         let (root, store, logs, plan) = setup("manifest-conflict");
         apply(&plan, &root, &store, &header()).unwrap();
         put(&root.join("game/bin/win64/steam_api64.dll"), b"valve api v2");
-        let r = restore(&root, &store, &logs).unwrap().unwrap();
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
         assert!(!r.byte_for_byte());
         assert_eq!(r.conflicts.len(), 1, "{r:?}");
         assert!(r.verify_failures.is_empty(), "{r:?}");
@@ -668,7 +803,7 @@ mod tests {
         apply(&plan, &root, &store, &header()).unwrap();
         assert!(apply(&plan, &root, &store, &header()).unwrap_err().to_string().contains("restore it first"));
         std::fs::remove_file(root.join("game/bin/sdkenginetools.txt")).unwrap();
-        let r = restore(&root, &store, &logs).unwrap().unwrap();
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
         assert!(r.byte_for_byte(), "{r:?}");
         assert_eq!(std::fs::read_to_string(root.join("game/bin/sdkenginetools.txt")).unwrap(), MAN);
     }
@@ -681,9 +816,56 @@ mod tests {
         let before_bad = snapshot(&root);
         assert!(apply(&plan, &root, &store, &header()).is_err());
         assert_eq!(store.load().unwrap().unwrap().state, State::Applying);
-        let r = restore(&root, &store, &logs).unwrap().unwrap();
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
         assert!(r.byte_for_byte(), "{r:?}");
         assert_eq!(snapshot(&root), before_bad);
+    }
+
+    #[test]
+    fn missing_backups_stop_before_anything_changes_and_can_be_declared_lost() {
+        use crate::findings::{Code, Stopped};
+        let (root, store, logs, plan) = setup("manifest-missing-backup");
+        apply(&plan, &root, &store, &header()).unwrap();
+        let applied = snapshot(&root);
+        // the state dir lost its backups (a cleanup tool, a sync, a hand)
+        std::fs::remove_dir_all(store.dir.join("backup")).unwrap();
+        let e = restore(&root, &store, &logs, RestoreOpts::default()).unwrap_err();
+        let stop = e.downcast_ref::<Stopped>().expect("a findings stop");
+        assert_eq!(stop.findings[0].code, Code::MissingBackups);
+        assert_eq!(stop.findings[0].paths.len(), 3, "{:?}", stop.findings[0].paths);
+        assert_eq!(snapshot(&root), applied, "nothing was touched");
+        assert_eq!(store.load().unwrap().unwrap().state, State::Applied);
+
+        let r = restore(&root, &store, &logs, RestoreOpts { forget_missing_backups: true }).unwrap().unwrap();
+        // Valve's DLL: our copy removed, the original lost (Verify integrity brings it back)
+        assert!(!root.join("game/bin/win64/steam_api64.dll").exists());
+        assert!(r.lost.iter().any(|l| l.starts_with("game/bin/win64/steam_api64.dll:")), "{r:?}");
+        // the one edit is undone without its backup, and checked against the recorded hash
+        assert!(r.restored.contains(&"game/bin/sdkenginetools.txt".to_string()), "{r:?}");
+        assert_eq!(std::fs::read_to_string(root.join("game/bin/sdkenginetools.txt")).unwrap(), MAN);
+        // what we created is removed as always
+        assert!(!root.join("game/csgo/addons/metamod/cs2mcp.vdf").exists());
+        assert!(r.verify_failures.is_empty(), "{r:?}");
+        assert!(!r.byte_for_byte());
+        assert!(store.load().unwrap().is_none(), "archived");
+        assert!(r.findings().iter().any(|f| f.code == Code::LostBackups));
+    }
+
+    #[test]
+    fn a_steam_verify_mid_session_is_a_decision_with_the_verify_advice() {
+        use crate::findings::{Code, Severity};
+        let (root, store, logs, plan) = setup("manifest-verify-mid");
+        apply(&plan, &root, &store, &header()).unwrap();
+        // Steam rewrote both the DLL and the manifest file while the session ran
+        put(&root.join("game/bin/win64/steam_api64.dll"), b"valve api, new build");
+        put(&root.join("game/bin/sdkenginetools.txt"), b"new tools list");
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
+        let f = r.findings();
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert_eq!((f[0].code, f[0].severity), (Code::Conflicts, Severity::Decision));
+        assert_eq!(f[0].paths.len(), 2);
+        assert!(f[0].advice.iter().any(|a| a.contains("Verify integrity")));
+        assert_eq!(r.previous_state, Some(State::Applied));
     }
 
     #[test]
@@ -692,6 +874,6 @@ mod tests {
         plan.ops = vec![Op { rel: "game/bin/win64/steam_api64.dll".into(), source: Source::Text("valve api".into()) }];
         let m = apply(&plan, &root, &store, &header()).unwrap();
         assert!(m.entries.iter().all(|e| e.role == Role::Runtime));
-        assert!(restore(&root, &store, &logs).unwrap().unwrap().byte_for_byte());
+        assert!(restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap().byte_for_byte());
     }
 }

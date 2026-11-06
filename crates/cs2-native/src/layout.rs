@@ -37,6 +37,21 @@ pub fn sdkenginetools_edit(text: &str) -> Option<String> {
     Some(text.replacen(&anchor, &(entry + &anchor), 1))
 }
 
+/// The inverse of [`sdkenginetools_edit`]: remove the one entry it inserts (with the file's own
+/// line ending). `None` when the entry is not there in exactly that form.
+pub fn sdkenginetools_unedit(text: &str) -> Option<String> {
+    let eol = if text.contains("\r\n") { "\r\n" } else { "\n" };
+    let entry = format!(
+        "\t\t{{{eol}\t\t\tm_Name = \"cs2_bridge\"{eol}\t\t\tm_FriendlyName = \"CS2 Bridge (Rust)\"{eol}\t\t\tm_Library = \"tools/cs2_bridge.dll\"{eol}\t\t\tm_bShowInToolsMenu = false{eol}\t\t}},{eol}"
+    );
+    text.contains(&entry).then(|| text.replacen(&entry, "", 1))
+}
+
+/// Does this `sdkenginetools.txt` carry our entry (in any form)?
+pub fn has_bridge_entry(text: &str) -> bool {
+    text.contains(ENTRY_MARKER)
+}
+
 /// gbe `steam_settings/configs.main.ini`: the container's settings (workshop tools install),
 /// nothing else changed.
 pub const GBE_CONFIGS_MAIN: &str = "# GBE main configuration for CS2 (appid 730), written by cs2mcp-native\n\
@@ -142,6 +157,10 @@ mod tests {
         let expect = "\"ToolList\"\n{\n\tm_Tools =\n\t[\n\t\t{\n\t\t\tm_Name = \"cs2_bridge\"\n\t\t\tm_FriendlyName = \"CS2 Bridge (Rust)\"\n\t\t\tm_Library = \"tools/cs2_bridge.dll\"\n\t\t\tm_bShowInToolsMenu = false\n\t\t},\n\t\t{\n\t\t\tm_Name = \"hammer\"\n\t\t\tm_Library = \"tools/hammer.dll\"\n\t\t},\n\t]\n}\n";
         assert_eq!(edited, expect);
         assert_eq!(sdkenginetools_edit(&edited).unwrap(), edited);
+        assert_eq!(sdkenginetools_unedit(&edited).unwrap(), MANIFEST);
+        assert_eq!(sdkenginetools_unedit(MANIFEST), None);
+        let crlf = MANIFEST.replace('\n', "\r\n");
+        assert_eq!(sdkenginetools_unedit(&sdkenginetools_edit(&crlf).unwrap()).unwrap(), crlf);
     }
 
     #[test]

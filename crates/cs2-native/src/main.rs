@@ -1,15 +1,22 @@
 //! `cs2mcp-native`: see the crate README. Results go to stdout as JSON, progress to stderr.
+//!
+//! Exit codes: 0 done; 1 an error; 2 stopped on (or finished with) findings that need the user's
+//! decision (`findings.rs`; the JSON lists them); `run`: the game's exit code, 3 when the volume
+//! could not be restored.
 
-use anyhow::Context;
 use clap::{Args, Parser, Subcommand};
 use cs2_native::args::GameArgs;
-use cs2_native::install::{self, Os};
-use cs2_native::mcpconfig::{self, Which};
-use cs2_native::plan::{Artifacts, SteamMode};
-use cs2_native::session::{self, emit, say, Ctx, UpOpts};
-use cs2_native::state::{self, Dirs, Strategy};
+use cs2_native::events::Events;
+use cs2_native::findings::{self, Finding, Policy, Stopped};
+use cs2_native::install::Os;
+use cs2_native::mcpconfig::{self, Servers, Transport, Which};
+use cs2_native::plan::SteamMode;
+use cs2_native::selfexe::NativeCmd;
+use cs2_native::session::{self, emit, Ctx, CtxOpts, UpOpts};
+use cs2_native::state::{self, Strategy};
 use serde_json::{json, Value};
 use std::path::PathBuf;
+use std::sync::atomic::AtomicBool;
 use std::time::Duration;
 
 #[derive(Parser, Debug)]
@@ -32,7 +39,7 @@ struct Global {
     /// State dir. Default: %LOCALAPPDATA%\cs2mcp-native / $XDG_STATE_HOME/cs2mcp-native.
     #[arg(long, global = true)]
     state_dir: Option<PathBuf>,
-    /// How files reach the game: overlay (Linux default), in-place (Windows default).
+    /// How files reach the game: overlay (Linux default), in-place (Windows default; `run` always).
     #[arg(long, global = true, value_enum, default_value_t = Strategy::Auto)]
     strategy: Strategy,
     /// `bridge/build-rs.sh` output (win64/, linuxsteamrt64/).
@@ -50,6 +57,17 @@ struct Global {
     /// The bridge's discovery file. Default: %LOCALAPPDATA%\cs2mcpbridge\session.json / $XDG_RUNTIME_DIR/cs2mcpbridge/session.json.
     #[arg(long, global = true, env = "CS2_MCP_DISCOVERY")]
     discovery: Option<PathBuf>,
+    /// gbe's save dir (`local_save_path`). Default: <state>/gbe-saves.
+    #[arg(long, global = true, env = "CS2MCP_GBE_SAVE_DIR")]
+    gbe_save_dir: Option<PathBuf>,
+    /// Go on past findings that need a decision: keep leftovers of an older install as the tree's
+    /// own, accept a restore that left Steam's newer files in place (exit 0 instead of 2).
+    #[arg(long, global = true)]
+    accept_conflicts: bool,
+    /// The manifest's backups are gone: restore everything else and record those files as lost
+    /// (our bytes are removed from them; Verify integrity in Steam brings Valve's back).
+    #[arg(long, global = true)]
+    forget_missing_backups: bool,
 }
 
 #[derive(Args, Debug, Clone)]
@@ -97,6 +115,26 @@ enum Cmd {
         #[arg(last = true)]
         extra: Vec<String>,
     },
+    /// Container mode (Linux): prepare in place, run the game in the foreground, restore and
+    /// verify the volume on exit or on SIGTERM/SIGINT; exits with the game's code.
+    Run {
+        #[command(flatten)]
+        mode: Mode,
+        #[arg(long)]
+        map: Option<String>,
+        #[arg(long)]
+        addon: Option<String>,
+        /// Do not load the capture layer (a container runtime that mounts its own sets it up).
+        #[arg(long)]
+        no_capture: bool,
+        /// First move the old container layout's leftovers out of the volume (install-rs.sh's
+        /// files, setup_gbe.sh's emulator in place of Valve's library: put back from its backup).
+        #[arg(long)]
+        cleanup_legacy: bool,
+        /// Extra game arguments (after `--`). `-insecure` is always added; `-secure` is refused.
+        #[arg(last = true)]
+        extra: Vec<String>,
+    },
     /// Wait for the running session's readiness ladder.
     Wait {
         #[arg(long, default_value_t = 900)]
@@ -116,13 +154,22 @@ enum Cmd {
     },
     /// Restore the tree without a session (after a crash or a reboot).
     Uninstall,
+    /// Move leftovers no manifest records (our files after a deleted state dir, an older
+    /// install-rs.sh layout) out of the install, into the state dir. Without --yes: only list.
+    Cleanup {
+        #[arg(long)]
+        yes: bool,
+    },
     /// Print the MCP client config (`mcpServers`) for this install.
     McpConfig {
         #[arg(long, value_enum, default_value_t = Which::Both)]
         server: Which,
-        /// Directory with hammer-mcp / client-mcp. Default: next to this exe, else <repo>/target/release.
+        /// Directory with hammer-mcp / client-mcp. Default: the package dir, else <repo>/target/release.
         #[arg(long)]
         server_dir: Option<PathBuf>,
+        /// stdio (the MCP client starts the servers); http is not available yet.
+        #[arg(long, value_enum, default_value_t = Transport::Stdio)]
+        transport: Transport,
     },
     /// (internal) the session supervisor.
     #[command(hide = true)]
@@ -146,59 +193,80 @@ enum Cmd {
     },
 }
 
-fn ctx(g: &Global) -> anyhow::Result<Ctx> {
-    let install = install::discover(g.game_root.as_deref(), &g.library)?;
-    let root = state::state_root(g.state_dir.as_deref())?;
-    let dirs = Dirs::new(&root, &install.root);
-    let strategy = g.strategy.resolve(Os::host())?;
-    let fetched = cs2_native::gbe::fetched_dir(&root);
-    let artifacts = Artifacts::resolve(
-        g.bridge_dir.clone(),
-        g.metamod_dir.clone(),
-        g.gbe_dir.clone(),
-        Some(fetched),
-        g.vk_layer_dir.clone(),
-    );
-    let discovery = g
-        .discovery
-        .clone()
-        .or_else(cs2_native::probe::default_discovery)
-        .context("no discovery path (set --discovery)")?;
-    Ok(Ctx { install, dirs, strategy, artifacts, discovery })
+fn opts(g: &Global, strategy: Option<Strategy>) -> CtxOpts {
+    CtxOpts {
+        game_root: g.game_root.clone(),
+        library: g.library.clone(),
+        state_dir: g.state_dir.clone(),
+        strategy: strategy.or(Some(g.strategy)),
+        bridge_dir: g.bridge_dir.clone(),
+        metamod_dir: g.metamod_dir.clone(),
+        gbe_dir: g.gbe_dir.clone(),
+        vk_layer_dir: g.vk_layer_dir.clone(),
+        discovery: g.discovery.clone(),
+        gbe_save_dir: g.gbe_save_dir.clone(),
+        policy: Policy { accept_conflicts: g.accept_conflicts, forget_missing_backups: g.forget_missing_backups },
+    }
 }
 
 fn main() {
     let cli = Cli::parse();
-    match run(cli) {
-        Ok(()) => {}
+    let ev = Events::stderr();
+    match run(cli, &ev) {
+        Ok(code) => std::process::exit(code),
         Err(e) => {
-            say(format!("error: {e:#}"));
+            if let Some(st) = e.downcast_ref::<Stopped>() {
+                // the findings are the answer: the JSON a script or the GUI reads, exit 2
+                let _ = emit(&json!({"error": st.message, "findings": st.findings}));
+                ev.warn(format!("stopped: {} (exit 2; see the findings)", st.message));
+                std::process::exit(2);
+            }
+            ev.warn(format!("error: {e:#}"));
             std::process::exit(1);
         }
     }
 }
 
-fn run(cli: Cli) -> anyhow::Result<()> {
+/// 2 when the result still holds a decision the policy did not accept (a restore with conflicts).
+fn finished(v: &Value, policy: Policy) -> i32 {
+    let f: Vec<Finding> = serde_json::from_value(v["findings"].clone()).unwrap_or_default();
+    findings::exit_code(&f, policy)
+}
+
+fn run(cli: Cli, ev: &Events) -> anyhow::Result<i32> {
     match cli.cmd {
-        Cmd::Supervise { session_file } => return session::supervise(&session_file),
+        Cmd::Supervise { session_file } => return session::supervise(&session_file, ev).map(|()| 0),
         Cmd::Open { asset } => {
             let seq = cs2_native::vtm::post(&cs2_native::vtm::open_asset(&asset)).map_err(anyhow::Error::msg)?;
-            return emit(&json!({"posted": seq, "asset": asset}));
+            emit(&json!({"posted": seq, "asset": asset}))?;
+            return Ok(0);
         }
-        Cmd::FetchGbe { out, archive } => return fetch_gbe(&cli.g, out, archive),
+        Cmd::FetchGbe { out, archive } => return fetch_gbe(&cli.g, out, archive, ev).map(|()| 0),
         _ => {}
     }
-    let c = ctx(&cli.g)?;
+    // the container mode is always in place (an explicit overlay is refused by `run`)
+    let strategy = matches!(cli.cmd, Cmd::Run { .. }).then(|| if cli.g.strategy == Strategy::Auto { Strategy::InPlace } else { cli.g.strategy });
+    let o = opts(&cli.g, strategy);
+    let c = Ctx::open(&o, ev.clone())?;
+    let mut code = 0;
     let v = match cli.cmd {
-        Cmd::Discover => json!({
-            "root": c.install.root, "library": c.install.library, "build": c.install.build,
-            "tools": c.install.has_tools, "gameBinary": c.install.has_game_binary,
-            "os": Os::host(), "strategy": c.strategy, "stateDir": c.dirs.dir,
-            "artifacts": {"bridge": c.artifacts.bridge, "metamod": c.artifacts.metamod, "gbe": c.artifacts.gbe,
-                          "vklayer": c.artifacts.vklayer,
-                          "captureLayer": cs2_native::capture::layer_dir(&c.artifacts.vklayer, Os::host())},
-            "discovery": c.discovery,
-        }),
+        Cmd::Discover => {
+            let pre = c.preflight()?;
+            for f in &pre {
+                f.report(ev);
+            }
+            json!({
+                "root": c.install.root, "library": c.install.library, "build": c.install.build,
+                "targetBuild": cs2_native::install::target_build(), "otherInstalls": c.other_installs,
+                "tools": c.install.has_tools, "gameBinary": c.install.has_game_binary,
+                "os": Os::host(), "strategy": c.strategy, "stateDir": c.dirs.dir, "packageDir": c.package_dir,
+                "artifacts": {"bridge": c.artifacts.bridge, "metamod": c.artifacts.metamod, "gbe": c.artifacts.gbe,
+                              "vklayer": c.artifacts.vklayer,
+                              "captureLayer": cs2_native::capture::layer_dir(&c.artifacts.vklayer, Os::host())},
+                "discovery": c.discovery,
+                "findings": pre,
+            })
+        }
         Cmd::Prepare { mode } => session::prepare(&c, mode.steam, mode.tools)?,
         Cmd::Up { mode, map, addon, timeout, keep_installed, no_wait, no_capture, extra } => {
             let o = UpOpts {
@@ -209,20 +277,45 @@ fn run(cli: Cli) -> anyhow::Result<()> {
                 keep_installed,
                 wait: !no_wait,
                 capture: !no_capture,
+                launcher: NativeCmd::current()?,
             };
             let mut v = session::up(&c, &o)?;
-            v["mcpConfig"] = mcp_config(&c, Which::Both, None);
+            v["mcpConfig"] = session::mcp_config(&c, Which::Both, &mcpconfig::default_servers());
             v
         }
-        Cmd::Wait { timeout } => session::wait_ready(&c, Duration::from_secs(timeout))?,
+        Cmd::Run { mode, map, addon, no_capture, cleanup_legacy, extra } => {
+            let o = cs2_native::run::RunOpts {
+                steam: mode.steam,
+                tools: mode.tools,
+                game: GameArgs { tools: mode.tools, map, addon, extra },
+                capture: !no_capture,
+                cleanup_legacy,
+            };
+            let (v, game_code) = cs2_native::run::run(&c, &o)?;
+            emit(&v)?;
+            return Ok(game_code);
+        }
+        Cmd::Wait { timeout } => session::wait_ready(&c, Duration::from_secs(timeout), &AtomicBool::new(false))?,
         Cmd::Status { hello } => session::status(&c, hello)?,
-        Cmd::Down { timeout } => session::down(&c, Duration::from_secs(timeout))?,
-        Cmd::Uninstall => session::uninstall(&c)?,
-        Cmd::McpConfig { server, server_dir } => {
-            let dir = server_dir_or_default(server_dir);
-            let v = mcp_config(&c, server, Some(dir.clone()));
-            for n in mcpconfig::notes(Os::host(), &dir) {
-                say(format!("note: {n}"));
+        Cmd::Down { timeout } => {
+            let v = session::down(&c, Duration::from_secs(timeout))?;
+            code = finished(&v, o.policy);
+            v
+        }
+        Cmd::Uninstall => {
+            let v = session::uninstall(&c)?;
+            code = finished(&v, o.policy);
+            v
+        }
+        Cmd::Cleanup { yes } => session::cleanup(&c, yes)?,
+        Cmd::McpConfig { server, server_dir, transport } => {
+            if !transport.available() {
+                anyhow::bail!("--transport http is not available yet: the servers speak stdio only (the MCP client starts them)");
+            }
+            let servers = server_dir.map(Servers::Dir).unwrap_or_else(mcpconfig::default_servers);
+            let v = session::mcp_config(&c, server, &servers);
+            for n in mcpconfig::notes(Os::host(), &servers) {
+                ev.info(format!("note: {n}"));
             }
             v
         }
@@ -230,10 +323,11 @@ fn run(cli: Cli) -> anyhow::Result<()> {
             unreachable!()
         }
     };
-    emit(&v)
+    emit(&v)?;
+    Ok(code)
 }
 
-fn fetch_gbe(g: &Global, out: Option<PathBuf>, archive: Option<PathBuf>) -> anyhow::Result<()> {
+fn fetch_gbe(g: &Global, out: Option<PathBuf>, archive: Option<PathBuf>, ev: &Events) -> anyhow::Result<()> {
     use cs2_native::gbe;
     if Os::host() != Os::Linux {
         anyhow::bail!("fetch-gbe fetches gbe's Linux libraries; on Windows the package carries payload/gbe/win64 (scripts/stage-gbe.sh)");
@@ -242,32 +336,9 @@ fn fetch_gbe(g: &Global, out: Option<PathBuf>, archive: Option<PathBuf>) -> anyh
     let dest = out.unwrap_or_else(|| gbe::fetched_dir(&root));
     let cache = gbe::cache_dir(&root);
     let o = gbe::FetchOpts { dest: &dest, cache: &cache, archive: archive.as_deref() };
-    let v = gbe::fetch_linux(&o, say)?;
+    let v = gbe::fetch_linux(&o, |s| ev.info(s))?;
     if g.gbe_dir.is_some() {
-        say("note: --gbe-dir / CS2MCP_GBE_DIR is set and wins over the fetched dir");
+        ev.info("note: --gbe-dir / CS2MCP_GBE_DIR is set and wins over the fetched dir");
     }
     emit(&v)
-}
-
-fn server_dir_or_default(d: Option<PathBuf>) -> PathBuf {
-    d.unwrap_or_else(mcpconfig::default_server_dir)
-}
-
-fn mcp_config(c: &Ctx, which: Which, server_dir: Option<PathBuf>) -> Value {
-    let dir = server_dir_or_default(server_dir);
-    let console = c.dirs.console_log(&c.install.root, c.strategy);
-    let project = c.dirs.dir.join("mcp");
-    let capture = c.dirs.capture();
-    let capture = capture.as_path();
-    mcpconfig::render(&mcpconfig::Input {
-        os: Os::host(),
-        server_dir: &dir,
-        discovery: &c.discovery,
-        console_log: &console,
-        app_root: (c.strategy != Strategy::Overlay).then_some(c.install.root.as_path()),
-        project_root: (Os::host() == Os::Windows).then_some(project.as_path()),
-        build: c.install.build.as_deref(),
-        capture_dir: cs2_native::capture::layer_dir(&c.artifacts.vklayer, Os::host()).map(|_| capture),
-        which,
-    })
 }

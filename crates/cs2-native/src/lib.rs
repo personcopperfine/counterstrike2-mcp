@@ -4,15 +4,22 @@
 
 pub mod args;
 pub mod capture;
+pub mod events;
+pub mod findings;
 pub mod gbe;
 pub mod install;
 pub mod layout;
+pub mod leftovers;
 pub mod manifest;
 pub mod mcpconfig;
 #[cfg(target_os = "linux")]
 pub mod overlay;
+pub mod payload;
 pub mod plan;
 pub mod probe;
+pub mod procid;
+pub mod run;
+pub mod selfexe;
 pub mod session;
 pub mod state;
 pub mod tree;

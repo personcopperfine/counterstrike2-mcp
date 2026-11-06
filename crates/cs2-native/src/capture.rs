@@ -68,6 +68,20 @@ pub fn game_env(c: &Capture, os: Os, add_path: Option<OsString>, layers: Option<
     ]
 }
 
+/// Copy the layer (manifest + library) into `<state>/vklayer/<plat>/` and return that dir: the
+/// session must not name a directory that can go away while the game runs (an AppImage's mount,
+/// a package replaced by an upgrade).
+pub fn stage_layer(layer_dir: &Path, state_dir: &Path, os: Os) -> std::io::Result<PathBuf> {
+    let dst = state_dir.join("vklayer").join(plat(os));
+    std::fs::create_dir_all(&dst)?;
+    for f in [MANIFEST, library(os)] {
+        let tmp = dst.join(format!("{f}.cs2mcp-tmp"));
+        std::fs::copy(layer_dir.join(f), &tmp)?;
+        std::fs::rename(&tmp, dst.join(f))?;
+    }
+    Ok(dst)
+}
+
 /// Create the capture dir before the game starts (the layer never creates it). Unix: 0700, the
 /// layer refuses anything else; Windows: the state dir's ACL (under `%LOCALAPPDATA%`, private).
 pub fn ensure_dir(dir: &Path) -> std::io::Result<()> {
@@ -104,5 +118,8 @@ mod tests {
         std::fs::write(root.join("win64/cs2_vk_capture.dll"), "").unwrap();
         assert_eq!(layer_dir(&root, Os::Windows), Some(root.join("win64")));
         assert_eq!(layer_dir(&root, Os::Linux), None);
+        let state = root.join("state");
+        let staged = stage_layer(&root.join("win64"), &state, Os::Windows).unwrap();
+        assert_eq!(layer_dir(&state.join("vklayer"), Os::Windows), Some(staged));
     }
 }

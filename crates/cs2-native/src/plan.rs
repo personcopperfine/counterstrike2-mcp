@@ -33,10 +33,10 @@ pub struct Artifacts {
 }
 
 impl Artifacts {
-    /// Defaults: `<exe dir>/payload/{bridge-rs,metamod,gbe,vklayer}` when that exists (a packaged
-    /// launcher), else this repo's `target/{bridge-rs,metamod,gbe,vklayer}`. gbe falls back to
-    /// `fetched` (`cs2mcp-native fetch-gbe`'s `<state root>/gbe`) when the bundled dir lacks this
-    /// OS's files.
+    /// Defaults: `<package dir>/payload/{bridge-rs,metamod,gbe,vklayer}` when there is a package
+    /// (`selfexe::package_dir`: next to the exe, or `$APPDIR/opt/cs2mcp` in an AppImage), else
+    /// this repo's `target/{bridge-rs,metamod,gbe,vklayer}`. gbe falls back to `fetched`
+    /// (`cs2mcp-native fetch-gbe`'s `<state root>/gbe`) when the bundled dir lacks this OS's files.
     pub fn resolve(
         bridge: Option<PathBuf>,
         metamod: Option<PathBuf>,
@@ -44,10 +44,7 @@ impl Artifacts {
         fetched: Option<PathBuf>,
         vklayer: Option<PathBuf>,
     ) -> Artifacts {
-        let payload = std::env::current_exe()
-            .ok()
-            .and_then(|e| e.parent().map(|d| d.join("payload")))
-            .filter(|p| p.is_dir());
+        let payload = crate::selfexe::package_dir().map(|d| d.join("payload")).filter(|p| p.is_dir());
         let base = payload.unwrap_or_else(|| {
             PathBuf::from(concat!(env!("CARGO_MANIFEST_DIR"), "/../../target"))
         });
@@ -249,7 +246,7 @@ fn hint_for(rel: &str) -> &'static str {
 }
 
 /// Every file under `dir`, relative to `base`, with forward slashes.
-fn walk_files(base: &Path, dir: &Path, out: &mut Vec<String>) -> std::io::Result<()> {
+pub(crate) fn walk_files(base: &Path, dir: &Path, out: &mut Vec<String>) -> std::io::Result<()> {
     for e in std::fs::read_dir(dir)? {
         let e = e?;
         let p = e.path();

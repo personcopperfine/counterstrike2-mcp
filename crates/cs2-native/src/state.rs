@@ -1,8 +1,10 @@
 //! The launcher's own state, outside the game tree: `%LOCALAPPDATA%\cs2mcp-native\<id>\` /
 //! `$XDG_STATE_HOME/cs2mcp-native/<id>/` (README "Windows ... backup + restore").
 
+use crate::events::Events;
 use crate::install::Os;
 use crate::manifest::{under, write_atomic, Store};
+use crate::procid::ProcIdentity;
 use crate::plan::SteamMode;
 use anyhow::Context;
 use serde::{Deserialize, Serialize};
@@ -73,6 +75,46 @@ impl Strategy {
 #[derive(Debug)]
 pub struct StateLock {
     _file: std::fs::File,
+    owner: PathBuf,
+}
+
+impl Drop for StateLock {
+    fn drop(&mut self) {
+        // only our own record: a holder after us has rewritten it
+        if LockOwner::load(&self.owner).is_some_and(|o| o.pid == std::process::id()) {
+            let _ = std::fs::remove_file(&self.owner);
+        }
+    }
+}
+
+/// `<state>/lock.owner`: who holds the lock, so a waiting command can say which command (and
+/// which installed copy of the launcher) it waits for. Advisory: the OS lock decides.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LockOwner {
+    pub pid: u32,
+    /// `up`, `prepare`, `down`, `uninstall`, `run`, `cleanup`, `gui`
+    pub command: String,
+    pub exe: Option<PathBuf>,
+    pub since: f64,
+    #[serde(default)]
+    pub identity: ProcIdentity,
+}
+
+impl LockOwner {
+    pub fn load(p: &Path) -> Option<LockOwner> {
+        serde_json::from_slice(&std::fs::read(p).ok()?).ok()
+    }
+    /// One line for a waiting command.
+    pub fn describe(&self) -> String {
+        let me = std::env::current_exe().ok();
+        let other_install = match (&self.exe, &me) {
+            (Some(a), Some(b)) if a != b => format!(" - another copy of the launcher: {}", a.display()),
+            _ => String::new(),
+        };
+        let age = (now_f64() - self.since).max(0.0);
+        format!("`cs2mcp-native {}` (pid {}, for {:.0} s){other_install}", self.command, self.pid, age)
+    }
 }
 
 /// The per-install state directory.
@@ -98,6 +140,18 @@ impl Dirs {
     pub fn lock_file(&self) -> PathBuf {
         self.dir.join("lock")
     }
+    /// `<state>/lock.owner`, see [`LockOwner`]
+    pub fn lock_owner_file(&self) -> PathBuf {
+        self.dir.join("lock.owner")
+    }
+    /// Who holds the lock right now (`None`: free, or a holder that left no record).
+    pub fn lock_holder(&self) -> Option<LockOwner> {
+        let f = std::fs::OpenOptions::new().create(false).write(true).open(self.lock_file()).ok()?;
+        match f.try_lock() {
+            Ok(()) => None,
+            Err(_) => LockOwner::load(&self.lock_owner_file()),
+        }
+    }
     /// Take the install's state lock, polling until `timeout` (FIXME 6). `prepare`, `up` (until
     /// the supervisor has recorded its pid and the launcher's), `down` and `uninstall` hold it,
     /// so a `down` can never read a session that has no pids yet and restore under a starting
@@ -105,7 +159,7 @@ impl Dirs {
     /// not take it (`down` holds it while it waits for the supervisor's restore). An OS file lock
     /// (`flock` / `LockFileEx`): it goes away with the process that held it, so a crash leaves no
     /// stale lock; the file itself stays.
-    pub fn lock(&self, timeout: Duration) -> anyhow::Result<StateLock> {
+    pub fn lock(&self, timeout: Duration, command: &str, ev: &Events) -> anyhow::Result<StateLock> {
         std::fs::create_dir_all(&self.dir)?;
         let path = self.lock_file();
         let file = std::fs::OpenOptions::new()
@@ -116,20 +170,38 @@ impl Dirs {
             .with_context(|| format!("open {}", path.display()))?;
         let until = Instant::now() + timeout;
         let mut said = false;
+        let holder = || LockOwner::load(&self.lock_owner_file()).map(|o| o.describe()).unwrap_or_else(|| "another cs2mcp-native command".into());
         loop {
             match file.try_lock() {
-                Ok(()) => return Ok(StateLock { _file: file }),
+                Ok(()) => {
+                    let me = std::process::id();
+                    let owner = LockOwner {
+                        pid: me,
+                        command: command.to_string(),
+                        exe: std::env::current_exe().ok(),
+                        since: now_f64(),
+                        identity: crate::procid::of(me),
+                    };
+                    let _ = write_atomic(&self.lock_owner_file(), &serde_json::to_vec_pretty(&owner)?);
+                    return Ok(StateLock { _file: file, owner: self.lock_owner_file() });
+                }
                 Err(std::fs::TryLockError::WouldBlock) if Instant::now() < until => {
                     if !said {
                         said = true;
-                        eprintln!("[cs2mcp-native] waiting for {} (another cs2mcp-native command holds it)", path.display());
+                        ev.info(format!("waiting for {} (held by {})", path.display(), holder()));
                     }
                     std::thread::sleep(Duration::from_millis(100));
                 }
                 Err(std::fs::TryLockError::WouldBlock) => anyhow::bail!(
-                    "another cs2mcp-native command (up, prepare, down or uninstall) still holds {} after {} s; wait for it to finish",
+                    "{} still holds {} after {} s; wait for it to finish{}",
+                    holder(),
                     path.display(),
-                    timeout.as_secs()
+                    timeout.as_secs(),
+                    if LockOwner::load(&self.lock_owner_file()).is_some_and(|o| o.command == "run") {
+                        " (a container session: stop the container, or send SIGTERM to that pid)"
+                    } else {
+                        ""
+                    }
                 ),
                 Err(std::fs::TryLockError::Error(e)) => {
                     return Err(e).with_context(|| format!("lock {}", path.display()))
@@ -216,6 +288,25 @@ pub struct Session {
     /// `up --no-capture`)
     #[serde(default)]
     pub capture: Option<crate::capture::Capture>,
+    /// who recorded `supervisor_pid` (start time, boot, PID namespace): a pid from another boot
+    /// or another container is not ours (`procid`)
+    #[serde(default)]
+    pub supervisor_id: Option<ProcIdentity>,
+    /// the identities of `game_pids`, index by index
+    #[serde(default)]
+    pub game_ids: Vec<ProcIdentity>,
+    /// `up` (a detached supervisor) or `run` (a foreground container session)
+    #[serde(default)]
+    pub kind: Option<String>,
+}
+
+impl Session {
+    /// Is the recorded supervisor or the game still running, as the processes recorded (not
+    /// merely some process with the same pid)?
+    pub fn alive(&self) -> bool {
+        self.supervisor_pid.is_some_and(|p| crate::procid::alive_as(p, self.supervisor_id.as_ref()))
+            || self.game_pids.iter().enumerate().any(|(i, &p)| crate::procid::alive_as(p, self.game_ids.get(i)))
+    }
 }
 
 impl Session {
@@ -250,10 +341,16 @@ mod tests {
         let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/scratch/cs2-native-lock");
         let _ = std::fs::remove_dir_all(&dir);
         let d = Dirs { dir };
-        let held = d.lock(Duration::from_millis(0)).expect("first lock");
-        let e = d.lock(Duration::from_millis(300)).expect_err("second lock while held");
+        let ev = Events::null();
+        let held = d.lock(Duration::from_millis(0), "up", &ev).expect("first lock");
+        assert_eq!(d.lock_holder().map(|o| o.command), Some("up".to_string()));
+        let e = d.lock(Duration::from_millis(300), "down", &ev).expect_err("second lock while held");
+        // the waiting command says which one holds it
+        assert!(e.to_string().contains("`cs2mcp-native up` (pid"), "{e}");
         assert!(e.to_string().contains("still holds"), "{e}");
         drop(held);
-        d.lock(Duration::from_millis(0)).expect("free again after drop");
+        assert!(!d.lock_owner_file().exists(), "the owner record goes with the lock");
+        assert!(d.lock_holder().is_none());
+        d.lock(Duration::from_millis(0), "up", &ev).expect("free again after drop");
     }
 }

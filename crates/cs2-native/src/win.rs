@@ -17,7 +17,7 @@ use windows_sys::Win32::System::JobObjects::{
 };
 use windows_sys::Win32::System::Registry::{RegGetValueW, HKEY, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, RRF_RT_REG_SZ};
 use windows_sys::Win32::System::Threading::{
-    GetCurrentProcess, GetExitCodeProcess, OpenProcess, QueryFullProcessImageNameW,
+    GetCurrentProcess, GetExitCodeProcess, GetProcessTimes, OpenProcess, QueryFullProcessImageNameW,
     TerminateProcess, WaitForSingleObject, PROCESS_QUERY_LIMITED_INFORMATION,
     PROCESS_SYNCHRONIZE, PROCESS_TERMINATE,
 };
@@ -167,6 +167,24 @@ pub fn pid_alive(pid: u32) -> bool {
     let mut code = 0u32;
     // SAFETY: our handle.
     unsafe { GetExitCodeProcess(h.0, &mut code) != 0 && code == STILL_ACTIVE }
+}
+
+/// The creation time of `pid` (100 ns units since 1601, `GetProcessTimes`): with the pid it names
+/// one process for good, so a recorded pid that Windows reused is told apart (`procid`).
+pub fn process_start(pid: u32) -> Option<u64> {
+    use windows_sys::Win32::Foundation::FILETIME;
+    // SAFETY: plain query.
+    let h = Handle(unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid) });
+    if h.0.is_null() {
+        return None;
+    }
+    let z = FILETIME { dwLowDateTime: 0, dwHighDateTime: 0 };
+    let (mut created, mut exited, mut kernel, mut user) = (z, z, z, z);
+    // SAFETY: our handle and four out pointers.
+    if unsafe { GetProcessTimes(h.0, &mut created, &mut exited, &mut kernel, &mut user) } == 0 {
+        return None;
+    }
+    Some((u64::from(created.dwHighDateTime) << 32) | u64::from(created.dwLowDateTime))
 }
 
 /// Terminate `pid` (exit code 1). `Ok(false)` when it was already gone.

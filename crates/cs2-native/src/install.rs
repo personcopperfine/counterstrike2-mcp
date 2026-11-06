@@ -81,6 +81,32 @@ impl Install {
     }
 }
 
+/// The game build the shipped signatures and bridge pins were made for (`sigs/CURRENT_BUILD`, the
+/// same number as `PIN_GAME_BUILD` in the bridge's generated pins; a test holds them equal).
+pub fn target_build() -> &'static str {
+    include_str!("../../../sigs/CURRENT_BUILD").trim()
+}
+
+/// The finding for an install whose build is not [`target_build`]: allowed, with the note.
+pub fn build_finding(build: Option<&str>) -> Option<crate::findings::Finding> {
+    use crate::findings::{Code, Finding, Severity};
+    let want = target_build();
+    match build {
+        Some(b) if b == want => None,
+        b => Some(
+            Finding::new(
+                Code::BuildMismatch,
+                Severity::Warn,
+                format!(
+                    "this install is game build {}, this release's signatures and bridge pins are for build {want}",
+                    b.unwrap_or("(unknown: no game/csgo/steam.inf)")
+                ),
+            )
+            .advice("the session still starts; the bridge refuses every game module it cannot verify, so the tools that need one answer not_loaded/mismatch until a release for this build exists"),
+        ),
+    }
+}
+
 /// `ClientVersion=2000940` from `steam.inf`.
 pub fn build_from_steam_inf(text: &str) -> Option<String> {
     text.lines().find_map(|l| {
@@ -202,15 +228,29 @@ pub fn install_in_library(library: &Path) -> Option<PathBuf> {
 
 /// Resolve the install: `--game-root` wins, then every `--library`, then the Steam libraries.
 pub fn discover(game_root: Option<&Path>, extra_libraries: &[PathBuf]) -> anyhow::Result<Install> {
+    discover_with_others(game_root, extra_libraries).map(|(i, _)| i)
+}
+
+/// [`discover`], plus the roots of every other CS2 install the libraries name (two Steam
+/// libraries can both hold one; the launcher says which one it took).
+pub fn discover_with_others(game_root: Option<&Path>, extra_libraries: &[PathBuf]) -> anyhow::Result<(Install, Vec<PathBuf>)> {
     if let Some(root) = game_root {
-        return Install::at(root, None);
+        return Ok((Install::at(root, None)?, Vec::new()));
     }
     let mut libs: Vec<PathBuf> = extra_libraries.to_vec();
     libs.extend(libraries(&steam_roots()));
+    let mut found: Vec<(PathBuf, PathBuf)> = Vec::new();
     for lib in &libs {
         if let Some(root) = install_in_library(lib) {
-            return Install::at(&root, Some(lib.clone()));
+            let c = std::fs::canonicalize(&root).unwrap_or_else(|_| root.clone());
+            if !found.iter().any(|(r, _)| std::fs::canonicalize(r).unwrap_or_else(|_| r.clone()) == c) {
+                found.push((root, lib.clone()));
+            }
         }
+    }
+    if let Some((root, lib)) = found.first() {
+        let others = found[1..].iter().map(|(r, _)| r.clone()).collect();
+        return Ok((Install::at(root, Some(lib.clone()))?, others));
     }
     bail!(
         "no CS2 install found (looked in {} Steam librar{}: {}); pass --game-root <.../Counter-Strike Global Offensive> or --library <steam library>",
@@ -223,6 +263,16 @@ pub fn discover(game_root: Option<&Path>, extra_libraries: &[PathBuf]) -> anyhow
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_target_build_is_the_bridge_pins_build_and_another_build_is_a_warning() {
+        let pins = include_str!("../../cs2-bridge/src/generated/pins.rs");
+        assert!(pins.contains(&format!("pub const PIN_GAME_BUILD: &str = \"{}\";", target_build())));
+        assert!(build_finding(Some(target_build())).is_none());
+        let f = build_finding(Some("1")).unwrap();
+        assert_eq!(f.severity, crate::findings::Severity::Warn);
+        assert!(build_finding(None).is_some());
+    }
 
     #[test]
     fn steam_inf_build() {
