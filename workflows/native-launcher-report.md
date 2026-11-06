@@ -284,3 +284,76 @@ copied to `C:\cs2test\cap`. **live** = seen in this run.
   stale servers; whether the previous round's VM servers matched c8fea16 was not checked.
 - **Not verified live:** `up --no-capture`; a payload without the layer; an elevated game; the Linux
   supervisor path (FIXME 3). The VM is shut off.
+
+## Linux acceptance: the native-test image on `cs2-home` (round 2), 2026-11-06
+
+Image `client-mcp/docker/native-test/` (`build.sh`: the client image
+`ghcr.io/personcopperfine/cs2-docker:latest` + the Linux package of `package.sh --os linux` at
+48aa096: pins gate passed against `target/game-bins` + `target/game-bins-linux-2000940`, official
+Metamod `mmsource-2.0.0-git1483-linux.tar.gz` sha256 `0fdcccaa…7776`, gbe_fork
+release-2026_09_16_2). Game build 2000940 in the volume. **live** = seen in these runs; the
+evidence files are in `target/native-test/run{1..4}/` (gitignored).
+
+Before: no container running, `podman ps -a --filter volume=cs2-home` empty. The volume holds the
+client image's old layout: setup_gbe.sh's gbe as `libsteam_api.so` (Valve's in
+`~/.steam/gbe_orig_libsteam_api.so`), `bin/linuxsteamrt64/steam_settings` a symlink into
+`~/.steam/sdk64/`, and install-rs.sh files no manifest records. The runs use
+`CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 CS2MCP_NATIVE_CLEANUP_LEGACY=0` so that layout is kept and must
+come back as found (`--cleanup-legacy`, the default, would move it out for good).
+
+Found and fixed on the way (each run before the fix, then again after):
+
+- **The steam_settings symlink was written through** (found reading the code before the first
+  run): prepare would have written our gbe settings into `~/.steam/sdk64/steam_settings`. Now a
+  `link` manifest entry (cae7907). live: mid-session the path is a real dir and `~/.steam` is
+  identical to before; after restore the link is back with its old target and mtime.
+- **`--steam gbe` refused a tree whose libsteam_api.so is already gbe** even with the decision
+  accepted (run 1: `error: … is already a Steam emulator (gbe)`, nothing changed). It now reads
+  the interfaces from setup_gbe.sh's backup (5341291).
+- **linux-client.sh deleted `csgo/console.log`** before the launcher could back it up (run 1:
+  the only changed path, `removed: game/csgo/console.log`). Kept in launcher mode now (1cd1bd3).
+- **Restore left root's file where uid 1000's was** (run 2: `libsteam_api.so 1000:1000 -> 0:0`,
+  bytes, mode and mtime right). Owners are recorded and put back now; `tree-hash` records
+  `uid:gid mode` (48aa096). The run-2 owner was put back by hand (`chown 1000:1000`, mtime kept).
+
+Run 3 + 4 (48aa096), live:
+
+```
+wait-for: MetamodLoaded ([cs2mcp-mmload] redirect:) after 6s
+wait-for: BridgeHello (a discovery file newer than the start) after 7s
+control.hello: {"bridgeVersion": "m3.18", "gameBuild": "2000940", "methods": 10, "protocol": 1}
+session: running manifest: applied 13 entries
+```
+
+(`status --hello` inside the container: the Linux client's discovery file is
+`/home/steam/.local/share/cs2mcpbridge/session.json`; client-mcp does not attach to a Linux
+session from the host.) Then `podman kill`: exit 137, empty run JSON, manifest left `applied`
+(13 entries), `steam_settings` still our directory. Started again (run 4):
+
+```
+an earlier prepare is still recorded (… a crash, a reboot, or --keep-installed); restoring it first
+restore: 6 restored, 7 removed, 0 unchanged, 0 conflicts, 1 game-written files saved
+every file we touched is byte-for-byte the user's again (9 entries checked)
+```
+
+then prepared again, the same ladder, `podman stop -t 90` (3 s): `signal 15`, `treeClean: true`,
+`checked 9`, `verifyFailures: []`, `conflicts: []`, restored `steam_settings` (the link),
+`libsteam_api.so`, the three Metamod files and `libcs2_bridge.so`; removed our gbe settings,
+`steamclient.so` and the session's `console.log` (saved to the state dir's `logs/`).
+
+`tree-hash` before run 3 vs after run 4 (3888 → 3898 entries; `~/.steam`: identical):
+
+```
+added   game/bin/linuxsteamrt64/WINDOWSTEMPDIR_FONTCONFIG_CACHE/<uuid>-le64.cache-7   (10: 5 per session)
+changed game/bin/linuxsteamrt64/steam_appid.txt   same size + sha256, new mtime
+changed game/csgo/ServerConfig.vdf                same size + sha256, new mtime
+changed game/csgo/cfg/boot.vcfg                   same size + sha256, new mtime
+```
+
+All of these are the game's own writes and each session's `gameWritten` lists them; nothing the
+launcher wrote differs (bytes, mtime, owner, mode). The 4 settings files under the re-created
+link are not verified through it (they would be `~/.steam`'s); `~/.steam` is hashed instead.
+
+Not verified: the Linux GUI (no X display on this host); a run with `--cleanup-legacy` against
+this volume (it would change the shared volume for good); the host-built binaries need glibc
+2.39, the image has 2.41 (a release builds on ubuntu-22.04, 2.35).
