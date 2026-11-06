@@ -1,4 +1,6 @@
-//! `cs2mcp-native`: see the crate README. Results go to stdout as JSON, progress to stderr.
+//! `cs2mcp-native`: see the crate README. Results go to stdout as JSON, progress to stderr
+//! (`--events jsonl`: one JSON [`Event`](cs2_native::events::Event) per line, for the GUI).
+//! An error is a JSON result too: `{"error": "...", "findings": [...]}` on stdout.
 //!
 //! Exit codes: 0 done; 1 an error; 2 stopped on (or finished with) findings that need the user's
 //! decision (`findings.rs`; the JSON lists them); `run`: the game's exit code, 3 when the volume
@@ -6,12 +8,12 @@
 
 use clap::{Args, Parser, Subcommand};
 use cs2_native::args::GameArgs;
+use cs2_native::dialog;
 use cs2_native::events::Events;
 use cs2_native::findings::{self, Finding, Policy, Stopped};
 use cs2_native::install::Os;
 use cs2_native::mcpconfig::{self, Servers, Transport, Which};
 use cs2_native::plan::SteamMode;
-use cs2_native::selfexe::NativeCmd;
 use cs2_native::session::{self, emit, Ctx, CtxOpts, UpOpts};
 use cs2_native::state::{self, Strategy};
 use serde_json::{json, Value};
@@ -68,6 +70,21 @@ struct Global {
     /// (our bytes are removed from them; Verify integrity in Steam brings Valve's back).
     #[arg(long, global = true)]
     forget_missing_backups: bool,
+    /// Progress on stderr: `text` (`[cs2mcp-native] ...` lines) or `jsonl` (one JSON event per
+    /// line: `{"kind":"info"|"warn","text":...}`, `{"kind":"stage","stage":...,"seconds":...}`).
+    #[arg(long, global = true, value_enum, default_value_t = EventsFormat::Text, env = "CS2MCP_EVENTS")]
+    events: EventsFormat,
+    /// Never show a native error dialog (also `CS2MCP_NO_DIALOG=1`). Without it, a failed
+    /// prepare/up/wait/down/uninstall/open shows one on a desktop (zenity/kdialog, MessageBoxW);
+    /// never in a container, over ssh (Windows), or for `run`.
+    #[arg(long, global = true)]
+    no_dialog: bool,
+}
+
+#[derive(clap::ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
+enum EventsFormat {
+    Text,
+    Jsonl,
 }
 
 #[derive(Args, Debug, Clone)]
@@ -145,6 +162,9 @@ enum Cmd {
         /// Also try a control.hello on the discovery file.
         #[arg(long)]
         hello: bool,
+        /// Also the preflight findings `discover` reports (payload, leftovers, the game build).
+        #[arg(long)]
+        preflight: bool,
     },
     /// Stop the game, restore the tree, verify it.
     Down {
@@ -174,6 +194,14 @@ enum Cmd {
     /// (internal) the session supervisor.
     #[command(hide = true)]
     Supervise { session_file: PathBuf },
+    /// (internal) the Windows error dialog, run as a detached child (dialog.rs).
+    #[command(hide = true)]
+    ShowDialog {
+        #[arg(long)]
+        title: String,
+        #[arg(long)]
+        text: String,
+    },
     /// Post an `open_asset` into the running `-tools` session (runtime.sh `open`): a map opens in
     /// Hammer, a `.vmdl` loads ModelDoc. Run it on the game's desktop (the channel is per logon session).
     Open {
@@ -211,44 +239,91 @@ fn opts(g: &Global, strategy: Option<Strategy>) -> CtxOpts {
 
 fn main() {
     let cli = Cli::parse();
-    let ev = Events::stderr();
-    match run(cli, &ev) {
-        Ok(code) => std::process::exit(code),
-        Err(e) => {
-            if let Some(st) = e.downcast_ref::<Stopped>() {
-                // the findings are the answer: the JSON a script or the GUI reads, exit 2
-                let _ = emit(&json!({"error": st.message, "findings": st.findings}));
-                ev.warn(format!("stopped: {} (exit 2; see the findings)", st.message));
-                std::process::exit(2);
+    let ev = match cli.g.events {
+        EventsFormat::Text => Events::stderr(),
+        EventsFormat::Jsonl => Events::jsonl(),
+    };
+    // the commands whose failure leaves the install not as the user asked: a desktop user gets a
+    // dialog (dialog.rs decides whether one can be shown). Never `run` (a container) or `supervise`.
+    let dialog_cmd = matches!(cli.cmd, Cmd::Prepare { .. } | Cmd::Up { .. } | Cmd::Wait { .. } | Cmd::Down { .. } | Cmd::Uninstall | Cmd::Open { .. });
+    let no_dialog = cli.g.no_dialog;
+    let (code, error, findings) = match run(cli, &ev) {
+        Ok(Done { code, unresolved: None }) => std::process::exit(code),
+        // a restore that finished with an open decision (conflicts, a tree that did not verify):
+        // the JSON result is already out, the dialog repeats it
+        Ok(Done { code, unresolved: Some(f) }) => {
+            if dialog_cmd {
+                if let Some(tool) = dialog::choose(&dialog::Facts::gather(no_dialog)) {
+                    dialog::show(tool, dialog::TITLE, &dialog::message("The install was restored, but needs your attention", &f));
+                }
             }
-            ev.warn(format!("error: {e:#}"));
-            std::process::exit(1);
+            std::process::exit(code)
         }
+        Err(e) => match e.downcast::<Stopped>() {
+            // the findings are the answer: the JSON a script or the GUI reads, exit 2
+            Ok(st) => {
+                ev.warn(format!("stopped: {} (exit 2; see the findings)", st.message));
+                (2, st.message, st.findings)
+            }
+            Err(e) => {
+                ev.warn(format!("error: {e:#}"));
+                (1, format!("{e:#}"), Vec::new())
+            }
+        },
+    };
+    let _ = emit(&json!({"error": error, "findings": findings}));
+    if dialog_cmd {
+        if let Some(tool) = dialog::choose(&dialog::Facts::gather(no_dialog)) {
+            dialog::show(tool, dialog::TITLE, &dialog::message(&error, &findings));
+        }
+    }
+    std::process::exit(code);
+}
+
+/// How a command ended without an error: its exit code and, for a restore that left a decision
+/// open, the findings behind it.
+struct Done {
+    code: i32,
+    unresolved: Option<Vec<Finding>>,
+}
+
+impl From<i32> for Done {
+    fn from(code: i32) -> Done {
+        Done { code, unresolved: None }
     }
 }
 
-/// 2 when the result still holds a decision the policy did not accept (a restore with conflicts).
-fn finished(v: &Value, policy: Policy) -> i32 {
+/// 2 (with the findings) when the result still holds a decision the policy did not accept (a
+/// restore with conflicts).
+fn finished(v: &Value, policy: Policy) -> Done {
     let f: Vec<Finding> = serde_json::from_value(v["findings"].clone()).unwrap_or_default();
-    findings::exit_code(&f, policy)
+    let code = findings::exit_code(&f, policy);
+    Done { code, unresolved: (code != 0).then_some(f) }
 }
 
-fn run(cli: Cli, ev: &Events) -> anyhow::Result<i32> {
+fn run(cli: Cli, ev: &Events) -> anyhow::Result<Done> {
     match cli.cmd {
-        Cmd::Supervise { session_file } => return session::supervise(&session_file, ev).map(|()| 0),
+        Cmd::Supervise { session_file } => return session::supervise(&session_file, ev).map(|()| 0.into()),
+        Cmd::ShowDialog { title, text } => {
+            #[cfg(windows)]
+            cs2_native::win::message_box(&title, &text);
+            #[cfg(not(windows))]
+            eprintln!("{title}: {text}");
+            return Ok(0.into());
+        }
         Cmd::Open { asset } => {
             let seq = cs2_native::vtm::post(&cs2_native::vtm::open_asset(&asset)).map_err(anyhow::Error::msg)?;
             emit(&json!({"posted": seq, "asset": asset}))?;
-            return Ok(0);
+            return Ok(0.into());
         }
-        Cmd::FetchGbe { out, archive } => return fetch_gbe(&cli.g, out, archive, ev).map(|()| 0),
+        Cmd::FetchGbe { out, archive } => return fetch_gbe(&cli.g, out, archive, ev).map(|()| 0.into()),
         _ => {}
     }
     // the container mode is always in place (an explicit overlay is refused by `run`)
     let strategy = matches!(cli.cmd, Cmd::Run { .. }).then(|| if cli.g.strategy == Strategy::Auto { Strategy::InPlace } else { cli.g.strategy });
     let o = opts(&cli.g, strategy);
     let c = Ctx::open(&o, ev.clone())?;
-    let mut code = 0;
+    let mut code = Done::from(0);
     let v = match cli.cmd {
         Cmd::Discover => {
             let pre = c.preflight()?;
@@ -277,7 +352,8 @@ fn run(cli: Cli, ev: &Events) -> anyhow::Result<i32> {
                 keep_installed,
                 wait: !no_wait,
                 capture: !no_capture,
-                launcher: NativeCmd::current()?,
+                // `$APPIMAGE cs2mcp-native` inside an AppImage (the supervisor outlives this mount), else this exe
+                launcher: cs2_native::selfexe::native_command()?,
             };
             let mut v = session::up(&c, &o)?;
             v["mcpConfig"] = session::mcp_config(&c, Which::Both, &mcpconfig::default_servers());
@@ -293,10 +369,21 @@ fn run(cli: Cli, ev: &Events) -> anyhow::Result<i32> {
             };
             let (v, game_code) = cs2_native::run::run(&c, &o)?;
             emit(&v)?;
-            return Ok(game_code);
+            return Ok(game_code.into());
         }
         Cmd::Wait { timeout } => session::wait_ready(&c, Duration::from_secs(timeout), &AtomicBool::new(false))?,
-        Cmd::Status { hello } => session::status(&c, hello)?,
+        Cmd::Status { hello, preflight } => {
+            let mut v = session::status(&c, hello)?;
+            if preflight {
+                let pre = c.preflight()?;
+                if let Some(f) = v["findings"].as_array_mut() {
+                    f.extend(pre.iter().filter_map(|x| serde_json::to_value(x).ok()));
+                } else {
+                    v["findings"] = serde_json::to_value(&pre)?;
+                }
+            }
+            v
+        }
         Cmd::Down { timeout } => {
             let v = session::down(&c, Duration::from_secs(timeout))?;
             code = finished(&v, o.policy);
@@ -319,7 +406,7 @@ fn run(cli: Cli, ev: &Events) -> anyhow::Result<i32> {
             }
             v
         }
-        Cmd::Supervise { .. } | Cmd::Open { .. } | Cmd::FetchGbe { .. } => {
+        Cmd::Supervise { .. } | Cmd::ShowDialog { .. } | Cmd::Open { .. } | Cmd::FetchGbe { .. } => {
             unreachable!()
         }
     };

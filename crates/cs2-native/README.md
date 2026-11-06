@@ -33,7 +33,24 @@ cs2mcp-native fetch-gbe [--out DIR] [--archive FILE]   # Linux: download gbe_for
 `up` = `prepare` (lay the files down), start the supervisor, `wait` (the readiness ladder).
 `prepare` and `wait` also exist on their own for debugging; `up --no-wait` skips the ladder.
 Global flags for the cases the launcher will not decide alone (see "Findings"):
-`--accept-conflicts` and `--forget-missing-backups`.
+`--accept-conflicts` and `--forget-missing-backups`. `status --preflight` adds the preflight
+findings `discover` reports.
+
+### Output, errors and dialogs
+
+* stdout: one JSON result per command. An error is a result too:
+  `{"error": "<message>", "findings": [...]}` (exit 1; exit 2 when it stopped on a decision).
+* stderr: progress, `[cs2mcp-native] ...` lines, or with `--events jsonl` (`CS2MCP_EVENTS=jsonl`)
+  one JSON event per line: `{"kind":"info"|"warn","text":...}`,
+  `{"kind":"stage","stage":"BridgeHello","seconds":49.1}`. The desktop app reads this.
+* A failed `prepare`, `up`, `wait`, `down`, `uninstall` or `open` (or a restore that finished
+  with an open decision) also shows a **native error dialog** when a person can see one
+  (`src/dialog.rs`): Linux with `DISPLAY` or `WAYLAND_DISPLAY` set, zenity, else kdialog, else
+  none; Windows `MessageBoxW` in an interactive desktop session only (not over ssh, not in
+  session 0, only on a visible window station). Never in a container, never for `run`,
+  `supervise` or the read-only commands, never with `--no-dialog` / `CS2MCP_NO_DIALOG=1` (the
+  desktop app passes `--no-dialog` and shows its own). The dialog is a detached child holding
+  none of our handles, so the command still exits at once.
 `open` (a map opens in Hammer, a `.vmdl` loads ModelDoc) has to run on the game's desktop: the
 VToolMessage channel is per logon session.
 

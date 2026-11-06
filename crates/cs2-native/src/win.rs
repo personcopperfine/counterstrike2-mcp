@@ -79,6 +79,45 @@ pub fn no_inherit_std_handles() {
     }
 }
 
+/// This process's Terminal Services session id (0: the services' session).
+pub fn session_id() -> Option<u32> {
+    use windows_sys::Win32::System::RemoteDesktop::ProcessIdToSessionId;
+    use windows_sys::Win32::System::Threading::GetCurrentProcessId;
+    let mut id = 0u32;
+    // SAFETY: a query on this process into a local u32.
+    let ok = unsafe { ProcessIdToSessionId(GetCurrentProcessId(), &mut id) };
+    (ok != 0).then_some(id)
+}
+
+/// This process's window station is the visible, interactive one (`WinSta0` of a logged-on
+/// desktop), not a service's or a non-interactive logon's.
+pub fn window_station_visible() -> bool {
+    use windows_sys::Win32::System::StationsAndDesktops::{GetProcessWindowStation, GetUserObjectInformationW, UOI_FLAGS, USEROBJECTFLAGS};
+    const WSF_VISIBLE: u32 = 1;
+    // SAFETY: the station handle is not owned (not closed); the query writes into a local struct.
+    unsafe {
+        let ws = GetProcessWindowStation();
+        if ws.is_null() {
+            return false;
+        }
+        let mut flags: USEROBJECTFLAGS = std::mem::zeroed();
+        let mut need = 0u32;
+        let ok = GetUserObjectInformationW(ws, UOI_FLAGS, (&mut flags as *mut USEROBJECTFLAGS).cast(), std::mem::size_of::<USEROBJECTFLAGS>() as u32, &mut need);
+        ok != 0 && flags.dwFlags & WSF_VISIBLE != 0
+    }
+}
+
+/// An error message box (blocks until it is closed: run it in a detached `show-dialog` child).
+pub fn message_box(title: &str, text: &str) {
+    use windows_sys::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_ICONERROR, MB_OK, MB_SETFOREGROUND, MB_TOPMOST};
+    let w = |s: &str| s.encode_utf16().chain(std::iter::once(0)).collect::<Vec<u16>>();
+    let (t, m) = (w(title), w(text));
+    // SAFETY: both strings are NUL-terminated and outlive the call.
+    unsafe {
+        MessageBoxW(std::ptr::null_mut(), m.as_ptr(), t.as_ptr(), MB_OK | MB_ICONERROR | MB_SETFOREGROUND | MB_TOPMOST);
+    }
+}
+
 pub fn steam_path_from_registry() -> Vec<PathBuf> {
     let mut v = Vec::new();
     if let Some(p) = reg_string(HKEY_CURRENT_USER, r"Software\Valve\Steam", "SteamPath") {

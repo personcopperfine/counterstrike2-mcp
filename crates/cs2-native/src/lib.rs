@@ -4,6 +4,7 @@
 
 pub mod args;
 pub mod capture;
+pub mod dialog;
 pub mod events;
 pub mod findings;
 pub mod gbe;

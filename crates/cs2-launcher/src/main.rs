@@ -1,10 +1,10 @@
-//! `cs2mcp-launcher`: the desktop app over `cs2mcp-native` (README.md).
+//! `cs2mcp-launcher`: the desktop app over the `cs2mcp-native` CLI (README.md). Every action is
+//! a CLI run in a child process (worker.rs); the window only renders it.
 //!
 //! It is also the AppImage's entry point, so it dispatches first:
 //! `cs2mcp-launcher cs2mcp-native|client-mcp|hammer-mcp ...` runs that binary of the package
-//! (`<AppImage> client-mcp ...` is what the MCP config names); `cs2mcp-launcher supervise <file>`
-//! is the session supervisor, for a build without a `cs2mcp-native` next to it. No argument: the
-//! window.
+//! (`<AppImage> client-mcp ...` is what the MCP config names, `<AppImage> cs2mcp-native
+//! supervise ...` the session supervisor that outlives the window). No argument: the window.
 
 #![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
@@ -17,18 +17,6 @@ fn main() {
     let args: Vec<OsString> = std::env::args_os().collect();
     if let Some((bin, rest)) = cs2_native::selfexe::multicall_target(&args) {
         std::process::exit(exec(&bin, &rest));
-    }
-    if args.get(1).is_some_and(|a| a == "supervise") {
-        let Some(sf) = args.get(2) else {
-            eprintln!("usage: cs2mcp-launcher supervise <session file>");
-            std::process::exit(1);
-        };
-        let r = cs2_native::session::supervise(std::path::Path::new(sf), &cs2_native::events::Events::stderr());
-        if let Err(e) = r {
-            eprintln!("[cs2mcp-native] error: {e:#}");
-            std::process::exit(1);
-        }
-        return;
     }
     if let Some(a) = args.get(1) {
         eprintln!(

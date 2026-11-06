@@ -37,7 +37,10 @@ windows-sys = { version = "0.61", default-features = false, features = [
     "Win32_System_Diagnostics_ToolHelp",
     "Win32_System_JobObjects",
     "Win32_System_Registry",
+    "Win32_System_RemoteDesktop",
+    "Win32_System_StationsAndDesktops",
     "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
 ] }
 
 # Linux: the user + mount namespace and the overlay mount (src/overlay.rs), process groups.

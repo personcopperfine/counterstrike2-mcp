@@ -4,12 +4,12 @@
 //! ([`Events::channel`]) and never blocks on them. Machine-readable results stay the commands'
 //! JSON return values.
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::sync::mpsc;
 use std::sync::Arc;
 
 /// One progress line.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
 pub enum Event {
     /// what the launcher is doing
@@ -48,6 +48,15 @@ impl Events {
     /// The CLI sink: `[cs2mcp-native] <line>` on stderr.
     pub fn stderr() -> Events {
         Events::new(|e| eprintln!("[cs2mcp-native] {}", e.line()))
+    }
+
+    /// The machine-readable CLI sink (`--events jsonl`): one JSON [`Event`] per line on stderr.
+    pub fn jsonl() -> Events {
+        Events::new(|e| {
+            if let Ok(s) = serde_json::to_string(&e) {
+                eprintln!("{s}");
+            }
+        })
     }
 
     /// Drop everything (tests).
@@ -109,5 +118,15 @@ mod tests {
         let got: Vec<Event> = rx.try_iter().collect();
         assert_eq!(got.len(), 3);
         assert_eq!(got[1], Event::Warn { text: "b".into() });
+    }
+
+    #[test]
+    fn jsonl_events_round_trip() {
+        for e in [Event::Info { text: "a \"q\"\nb".into() }, Event::Warn { text: "w".into() }, Event::Stage { stage: "BridgeHello".into(), seconds: 1.5 }] {
+            let s = serde_json::to_string(&e).unwrap();
+            assert!(!s.contains('\n'), "one line: {s}");
+            assert_eq!(serde_json::from_str::<Event>(&s).unwrap(), e);
+        }
+        assert_eq!(serde_json::to_string(&Event::Stage { stage: "X".into(), seconds: 2.0 }).unwrap(), r#"{"kind":"stage","stage":"X","seconds":2.0}"#);
     }
 }
