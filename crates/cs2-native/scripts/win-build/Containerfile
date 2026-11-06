@@ -1,0 +1,16 @@
+# The Windows cross-build environment of crates/cs2-native/scripts/win-build/build.sh: the same
+# toolchain as .github/workflows/release.yml's build-linux job (Rust 1.99.0 + the msvc target,
+# xwin 0.10.0, lld-link, llvm for the export gates, 7z for gbe_fork's Windows release), plus
+# python3-numpy for the pins gate and mingw-w64 for a cargo-packager.exe (a Windows build tool
+# for the MSI, not shipped). The xwin sysroot is NOT in the image: build.sh keeps it in the podman
+# volume cs2mcp-xwin, so Microsoft's CRT/SDK never land on the host's file system.
+FROM docker.io/library/rust:1.99.0-bookworm
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends llvm lld p7zip-full python3 python3-numpy \
+        gcc-mingw-w64-x86-64 zip git \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s "$(command -v lld-link || ls /usr/bin/lld-link-* | head -n1)" /usr/local/bin/lld-link 2>/dev/null || true
+RUN rustup target add x86_64-pc-windows-msvc x86_64-pc-windows-gnu \
+ && cargo install xwin --version 0.10.0 --locked --root /usr/local \
+ && rm -rf /usr/local/cargo/registry
+RUN git config --global --add safe.directory '*'
