@@ -15,7 +15,8 @@
 #
 # The versions are not pinned yet (clang's MS compatibility version either), so
 # a re-run can move the STL under a layout; the MSVC pass records the clang
-# version and the sysroot it used for that reason.
+# version and the sysroot it used for that reason. XWIN_VERSION=<x.y.z> pins the
+# xwin tool itself (CI does, to key its sysroot cache on it).
 #
 #   ./s2sdk/s2sdk-sys/gen/fetch-xwin.sh        # from the repository root
 #   python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py --abi msvc --ir-only
@@ -31,7 +32,7 @@ if [ -d target/xwin/crt/include ] && [ -d target/xwin/sdk/include/ucrt ]; then
 fi
 
 echo "fetch-xwin: installing xwin into target/xwin-bin (cargo)"
-cargo install xwin --locked --root target/xwin-bin
+cargo install xwin --locked ${XWIN_VERSION:+--version "$XWIN_VERSION"} --root target/xwin-bin
 echo "fetch-xwin: downloading the MSVC CRT/STL + Windows SDK into target/xwin (accepting Microsoft's license)"
 target/xwin-bin/bin/xwin --accept-license --cache-dir target/xwin-cache --arch x86_64 splat --output target/xwin
 
