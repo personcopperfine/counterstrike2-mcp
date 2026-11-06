@@ -55,6 +55,24 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
     which refuses without `-insecure` itself, and on Linux Metamod refuses a client without
     `-insecure`/`-dedicated` before it loads plugins. The tool-role refusal is live (see Fixed).
 
+21. **Container mode is not live-tested.** `run` was exercised on a fake game tree only
+    (`target/smoke/`: a stand-in `cs2.sh`): prepare, SIGTERM -> TERM to the group -> restore ->
+    a byte-identical tree, the game's exit code passed through, a killed `run` recovered by
+    `uninstall`, a tampered payload refused with exit 2. client-mcp's `--native-package` path
+    (`linux-client.sh` running `cs2mcp-native run` in the cs2-docker image, `podman stop -t 60`)
+    has golden-argv tests only; it never ran with the game. Whether the image's glibc runs the
+    package's binaries (built on ubuntu-22.04 by the release workflow, glibc <= 2.35) is
+    **unverified** as well.
+22. **Legacy-cleanup churn on a shared volume.** Dedicated-server sessions still install with
+    `bridge/install-rs.sh` into the same `cs2-home` volume (never at the same time as a launcher
+    client: `may_conflict`). The next `run --cleanup-legacy` then moves those files away again,
+    into a new `<state>/cleanup-<ts>/` each time; nothing prunes those directories. Either the
+    dedicated path moves to `run` too, or cleanup learns to drop byte-identical copies of our
+    own payload.
+23. **Leftover detection knows the layouts we shipped** (`leftovers.rs`: the current
+    install-rs.sh one, the gameinfo-era one, setup_gbe.sh's). A hand-made install of other files
+    is not recognised as ours.
+
 ## Test-harness hacks (the live VM run, not shipped)
 
 11. **The Windows servers are driven from the host over ssh stdio**
@@ -101,6 +119,13 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
   out the exe, the servers, `sigs/`, `payload/{bridge-rs,metamod,gbe}` and `SHA256SUMS`
   (**live**: the VM run used `target/cs2mcp-native-windows` copied as it is to
   `C:\cs2test\fixmes`).
+* 13, continued (release packaging): `package.sh` ships `cs2mcp-launcher` and `BUILDINFO.txt`,
+  and `--archive` writes the portable zip / tarball; the MSI, AppImage and .deb wrap the same
+  directory (`crates/cs2-launcher/packaging/`), built by `.github/workflows/release.yml`. **Run
+  here**: package.sh (Linux), the AppImage (its `opt/cs2mcp` checked against `SHA256SUMS`; `up`
+  and `down` through it on a fake game tree, the stand-in game's environment free of the AppRun
+  variables) and the .deb. The MSI and the win64 link were not (no WiX, no xwin sysroot here);
+  see `RELEASING.md`.
 * 14 (gbe's Windows DLL copied from the Wine install): `scripts/stage-gbe.sh` takes it from
   gbe_fork's own release for `GBE_REF` (the user's choice, 2026-11-05, over a Visual Studio
   build: gbe_fork builds Windows only with MSVC). Pinned in the script: tag

@@ -11,6 +11,8 @@ Read this first, then the guide for the part you were asked to touch. Each crate
 | work on the bridge DLL (Wine/Hammer side) | [bridge/README.md](bridge/README.md) |
 | work on the client MCP server | [client-mcp/AGENT.md](client-mcp/AGENT.md) |
 | work on the Hammer/tools MCP server | [hammer-mcp/AGENT.md](hammer-mcp/AGENT.md) |
+| work on the native launcher (CLI) or its desktop app | [crates/cs2-native/README.md](crates/cs2-native/README.md), [crates/cs2-launcher/README.md](crates/cs2-launcher/README.md) |
+| cut a release (the user tags; agents never push) | [RELEASING.md](RELEASING.md) |
 | spawn a reverse-engineering (IDA) agent | [workflows/re-brief.md](workflows/re-brief.md): front-load its prompt from the skeleton there |
 
 ## Layout
@@ -30,6 +32,8 @@ cs2-mcp/
 │   │                   second gen.py upstream (METAMOD.lock), Metamod plugin + KHook interfaces
 │   ├── cs2-bridge/     the Rust bridge (cdylib, Linux + win64): tool plugin now, Metamod plugin next
 │   ├── cs2-mcp-common/ shared crate
+│   ├── cs2-native/     cs2mcp-native: prepares/launches/restores the user's own Steam CS2 install
+│   ├── cs2-launcher/   cs2mcp-launcher: the desktop app over it, + packaging/ (MSI, AppImage, .deb)
 │   ├── cs2-kv3/        KV3 text (Valve layout writer; reads ValveKeyValue's KV3 grammar too)
 │   ├── cs2-kv1/        KeyValues1 text + binary (port of ValveResourceFormat/ValveKeyValue)
 │   ├── cs2-dmx/        DMX binary 1-5/9 + keyvalues2 1-4 (port of ValveResourceFormat/Datamodel.NET)

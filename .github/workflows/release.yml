@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       metamod_win64_sha256:
-        description: "Refuse the downloaded Metamod win64 dev build unless it has this SHA-256 (empty: record whatever 'latest' is)"
+        description: "Refuse the downloaded Metamod win64 dev build unless it has this SHA-256 (empty: the MM_WIN64_SHA256 variable, else record whatever 'latest' is)"
         required: false
         default: ""
 
@@ -125,7 +125,8 @@ jobs:
 
       - name: Metamod:Source win64 (the official dev build, recorded)
         env:
-          MM_WIN64_SHA256: ${{ inputs.metamod_win64_sha256 }}
+          # the dispatch input, else the repository variable MM_WIN64_SHA256 (RELEASING.md)
+          MM_WIN64_SHA256: ${{ inputs.metamod_win64_sha256 || vars.MM_WIN64_SHA256 }}
         run: |
           bridge/metamod/fetch-metamod-win64.sh
           cat target/metamod/win64/BUILDINFO-download.txt

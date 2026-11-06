@@ -4,7 +4,8 @@
 Windows, without our podman containers. It prepares the game tree (bridge, Metamod, launcher,
 optionally the gbe Steam emulator), launches the game the way the containers do, waits until the
 bridge answers, and prints the MCP server config for the user's client. `down` stops the game
-and leaves the install exactly as it was before.
+and leaves the install exactly as it was before. The desktop app (`crates/cs2-launcher`,
+`cs2mcp-launcher`) is a GUI over this crate; `run` is the same thing for a container.
 
 Background: `workflows/windows-native.md` (§3.2 runtime, §3.3 install on a Steam tree, §4.1 VAC,
 §4.3 direct launch), `client-mcp/workflows/10-local-install.md`,
@@ -22,13 +23,17 @@ cs2mcp-native up    --steam gbe|client [--tools] [--map <m>] [-- <extra game arg
 cs2mcp-native status                     # session + readiness + tree state (no changes)
 cs2mcp-native down                       # stop the game, restore the tree, verify it
 cs2mcp-native uninstall                  # restore the tree without a session (after a crash, a reboot)
-cs2mcp-native mcp-config [--server hammer|client|both]   # print the MCP config JSON
+cs2mcp-native run   --steam gbe [--cleanup-legacy] [-- <args>]   # container mode (Linux), below
+cs2mcp-native cleanup [--yes]            # list (move away with --yes) our files no manifest records
+cs2mcp-native mcp-config [--server hammer|client|both] [--transport stdio]   # print the MCP config JSON
 cs2mcp-native open <asset>               # post open_asset into the running -tools session (runtime.sh open)
 cs2mcp-native fetch-gbe [--out DIR] [--archive FILE]   # Linux: download gbe_fork's pinned Linux release into <state>/gbe
 ```
 
 `up` = `prepare` (lay the files down), start the supervisor, `wait` (the readiness ladder).
 `prepare` and `wait` also exist on their own for debugging; `up --no-wait` skips the ladder.
+Global flags for the cases the launcher will not decide alone (see "Findings"):
+`--accept-conflicts` and `--forget-missing-backups`.
 `open` (a map opens in Hammer, a `.vmdl` loads ModelDoc) has to run on the game's desktop: the
 VToolMessage channel is per logon session.
 
@@ -37,23 +42,102 @@ VToolMessage channel is per logon session.
 
 ### Packaging
 
-`scripts/package.sh [--os windows|linux] [--out DIR] [--no-build]` builds (`cargo --release`,
-`-j${JOBS:-2}`) and lays out a self-contained directory, the layout the defaults below read:
+`scripts/package.sh [--os windows|linux] [--out DIR] [--no-build] [--archive]` builds
+(`cargo --release`, `-j${JOBS:-2}`) and lays out a self-contained directory, the layout the
+defaults below read:
 
 ```
+<out>/cs2mcp-launcher[.exe]          the desktop app (crates/cs2-launcher)
 <out>/cs2mcp-native[.exe]  client-mcp[.exe]  hammer-mcp[.exe]
 <out>/sigs/                          the servers' signature DB (their `<exe dir>/sigs` fallback)
 <out>/payload/bridge-rs/<plat>/      bridge/build-rs.sh output
-<out>/payload/metamod/<plat>/addons/ the Metamod build
+<out>/payload/metamod/<plat>/addons/ the Metamod build (+ payload/metamod/BUILDINFO-<plat>.txt)
 <out>/payload/gbe/<plat>/            scripts/stage-gbe.sh output (+ GBE_REF.txt)
 <out>/payload/vklayer/<plat>/        the capture layer (crates/cs2-vk-capture, built by package.sh)
-<out>/SHA256SUMS
+<out>/BUILDINFO.txt                  version, git sha (+ dirty), toolchain, target game build, the
+                                     pins gate's outcome, gbe, Metamod source/version/sha256s and
+                                     the hl2sdk commit, "code_signing=none"
+<out>/SHA256SUMS                     every file above
 ```
 
 Inputs: `BRIDGE_DIR`, `METAMOD_DIR`, `GBE_DIR` (defaults `<repo>/target/{bridge-rs,metamod,gbe}`,
 Metamod falling back to the main checkout's). Nothing is fetched; a missing input stops it.
-A package whose `payload/gbe` lacks the host's files still runs `--steam gbe` on Linux after
-`cs2mcp-native fetch-gbe` (below).
+Metamod for Linux is `bridge/metamod/build-metamod.sh linux` (built from source in a container);
+for Windows it is the official AlliedModders dev build, `bridge/metamod/fetch-metamod-win64.sh`
+(AMBuild cannot cross-build win64 here), recorded with its version, URL and SHA-256.
+`--archive` also writes `target/dist/cs2mcp-<VERSION>-<os>-x86_64.{zip,tar.gz}` (`VERSION`,
+default `git describe`). A package whose `payload/gbe` lacks the host's files still runs
+`--steam gbe` on Linux after `cs2mcp-native fetch-gbe` (below).
+
+The installers wrap that directory unchanged (`crates/cs2-launcher/packaging/packager.py`, see
+`crates/cs2-launcher/README.md`): the per-user MSI installs it to
+`%LOCALAPPDATA%\Programs\cs2-mcp`, the .deb to `/opt/cs2mcp`, the AppImage carries it at
+`$APPDIR/opt/cs2mcp` and is a multicall binary (`<AppImage> cs2mcp-native|client-mcp|hammer-mcp
+...`; the supervisor and the MCP config name `$APPIMAGE`, because the mount path changes on every
+start). The AppImage's `AppRun` environment (`APPDIR`, `APPIMAGE`, a `LD_LIBRARY_PATH` into the
+mount) is removed before the game or a server is started (`selfexe::scrub_appimage_env`). The
+release workflow (`.github/workflows/release.yml`, `RELEASING.md`) builds all of them.
+
+**Payload integrity.** A package's `payload/` is checked against its `SHA256SUMS` before
+`prepare` copies anything (`src/payload.rs`): a missing, changed or extra file (a partial
+download, a zip unpacked over an older version) is a `payloadTampered` blocker; a development
+tree without `SHA256SUMS` is reported as `payloadUnverified` and goes on.
+
+## Findings: nothing is decided by guessing
+
+Whatever differs from what the launcher expected is a finding (`src/findings.rs`), printed and
+in the JSON result (`"findings": [...]`); the GUI shows it as a dialog.
+
+| severity | what happens |
+|---|---|
+| `info`, `warn` | reported; the command goes on |
+| `decision` | before anything changes (`prepare`, `up`, `run`): the command stops, exit code 2, unless `--accept-conflicts` (GUI: "Continue anyway"). After a restore (`down`, `uninstall`, `run`): the restore is done, the exit code is 2 unless `--accept-conflicts` |
+| `blocker` | refused; only the flag the finding names resolves it, or nothing does |
+
+The cases (`code`): `recovered` (an unfinished manifest from a crashed session was restored
+first), `conflicts` (files Steam changed under a session: Steam's bytes are kept, the finding
+says to verify the game files), `missingBackups` (a blocker: the manifest's backups are gone or
+damaged; `--forget-missing-backups` restores the rest and records those files as `lostBackups`,
+our bytes are removed from them and Steam's "Verify integrity" brings Valve's back),
+`verifyFailed`, `buildMismatch` (the game build is not `sigs/CURRENT_BUILD`: a warning, the bridge
+may not resolve its signatures), `legacy` / `orphans` (below), `replacedGameFile`,
+`payloadTampered` / `payloadUnverified` (above), `multipleInstalls`. A command stopped on a
+finding prints `{"error": ..., "findings": [...]}` and exits 2; other errors exit 1.
+
+**Leftovers** (`src/leftovers.rs`): our files in a tree that no manifest records, because the
+state dir was deleted while the tree was prepared, or because `bridge/install-rs.sh` (current or
+the old gameinfo-era layout) or the client image's `setup_gbe.sh` installed into it. `discover`,
+`status` and `prepare` report them (`orphans`, `legacy`; a decision: without a choice a new
+`prepare` would record them as the user's own files). `cleanup` lists them; `cleanup --yes`
+moves them into `<state root>/cleanup-<ts>/` (never deletes), puts Valve's library back from
+setup_gbe's own backup, un-edits `sdkenginetools.txt` only when that gives the byte-exact Valve
+file back, and never touches `gameinfo.gi` (`install-rs.sh uninstall` owns that).
+
+**Recorded pids carry their identity** (`src/procid.rs`): the start time, the boot id and the
+PID namespace (Linux), the creation time (Windows). A pid in an old `session.json` after a reboot,
+or from another container on the same volume, is stale, not "the game is still running", so
+`down` never kills an unrelated process and `uninstall` is not refused because of one. The state
+lock records its holder (pid, command, start time); a command waiting on it names that holder.
+
+## Container mode: `run`
+
+`cs2mcp-native run --steam gbe [--cleanup-legacy] [--no-capture] -- <game args>` (Linux) is one
+foreground session for a container on the game's volume (`src/run.rs`): prepare **in place**
+with the manifest (container runtimes refuse the user namespace the overlay needs; `--strategy
+auto` becomes `in-place`), run the game in its own process group, wait, then restore and verify
+the volume before it exits. SIGTERM / SIGINT / SIGHUP stop the game the way `down` does (TERM to
+the group, KILL after 15 s), then restore. The exit code is the game's (128 + signal when it was
+killed), 3 when the volume could not be restored, 2 for an open decision. The JSON result goes to
+stdout, the game's own stdout to stderr. It may be PID 1: it becomes a child subreaper and reaps
+everything it inherits.
+
+The state dir belongs on the same volume (`--state-dir <volume>/.cs2mcp-native`): a container
+killed before its restore leaves the manifest there and the next `run` restores it first; a
+second container on the same volume waits on the lock. `--cleanup-legacy` first moves the old
+container layout out of the volume (install-rs.sh's files, setup_gbe.sh's emulator; the same
+moves as `cleanup --yes`). client-mcp uses it with `--native-package <dir>` for `linux-client`
+sessions (`client-mcp/docker/README.md`, "Launcher mode"): the package is mounted read-only and
+`podman stop -t 60` leaves the restore its time.
 
 ## Steam modes (`--steam`)
 
@@ -291,9 +375,13 @@ Steam account. Four independent checks:
 
 The servers already speak stdio and attach to a running bridge through the discovery file, so
 the launcher does not run them; the MCP client does. `mcp-config` prints a ready-to-paste
-`mcpServers` block with absolute paths (the server dir: `--server-dir`, else next to
-`cs2mcp-native` when `hammer-mcp` is there, else the building repo's `target/release` when it
-exists on this machine, else next to `cs2mcp-native`):
+`mcpServers` block with absolute paths (the server dir: `--server-dir`, else the package dir,
+or `cs2mcp-native`'s own dir outside a package, when `hammer-mcp` is there, else the building
+repo's `target/release` when it exists on this machine, else that same dir;
+from an AppImage the command is `$APPIMAGE` with `client-mcp`/`hammer-mcp` as its first
+argument). `--transport stdio` is the only transport so far; `http` is refused with "not
+available yet". The desktop app writes the same block into Claude Desktop's config or registers
+it with Claude Code (`crates/cs2-launcher/README.md`):
 
 ```json
 { "mcpServers": {
