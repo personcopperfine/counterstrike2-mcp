@@ -44,13 +44,13 @@ pub const SCHEMASYSTEM_INTERFACE_VERSION: &str = "SchemaSystem_001";
 /// bridge mcp_bridge*.c asks for Source2EngineToClient001.
 pub const SOURCE2ENGINETOCLIENT_INTERFACE_VERSION: &str = "Source2EngineToClient001";
 
-/// bridge/mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h).
+/// mcp_bridge.c:2596 asks for Source2ServerConfig001; the interface the engine group describes (upstream interfaces/interfaces.h spells the same string as INTERFACEVERSION_SERVERCONFIG in engine2/isource2serverconfig.h).
 pub const SOURCE2SERVERCONFIG_INTERFACE_VERSION: &str = "Source2ServerConfig001";
 
 /// engine2/isource2server.h:118: the server's ISource2Server ("Source2Server001"), the object whose GameFrame the bridge hooks for its tick on non-tools hosts.
 pub const INTERFACEVERSION_SERVERGAMEDLL: &str = "Source2Server001";
 
-/// bridge/mcp_bridge.c:2657 asks for TestScriptMgr001.
+/// mcp_bridge.c:2657 asks for TestScriptMgr001.
 pub const TESTSCRIPTMANAGER_INTERFACE_VERSION: &str = "TestScriptMgr001";
 
 /// bridge mcp_bridge*.c asks for InputService_001.
@@ -59,19 +59,19 @@ pub const INPUTSERVICE_INTERFACE_VERSION: &str = "InputService_001";
 /// bridge mcp_bridge_game.inc asks for SoundOpSystem001.
 pub const SOUNDOPSYSTEM_INTERFACE_VERSION: &str = "SoundOpSystem001";
 
-/// bridge/s2sdk.h S2_TOOLFRAMEWORK2_VERSION.
+/// s2sdk.h S2_TOOLFRAMEWORK2_VERSION.
 pub const TOOLFRAMEWORK2_INTERFACE_VERSION: &str = "ToolFramework2_002";
 
-/// bridge/s2sdk.h S2_SCENESYSTEM_VERSION.
+/// s2sdk.h S2_SCENESYSTEM_VERSION.
 pub const SCENESYSTEM_INTERFACE_VERSION: &str = "SceneSystem_002";
 
-/// bridge/s2sdk.h S2_SCENEUTILS_VERSION.
+/// s2sdk.h S2_SCENEUTILS_VERSION.
 pub const SCENEUTILS_INTERFACE_VERSION: &str = "SceneUtils_001";
 
-/// bridge/s2sdk.h S2_RENDERSERVICE_VERSION.
+/// s2sdk.h S2_RENDERSERVICE_VERSION.
 pub const RENDERSERVICE_INTERFACE_VERSION: &str = "RenderService_001";
 
-/// bridge/s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator).
+/// s2sdk.h S2_RENDERDEVICE_VERSION (upstream spells this one without a separator).
 pub const RENDER_DEVICE_INTERFACE_VERSION: &str = "RenderDevice003";
 
 /// public/bitmap/imageformat_declarations.h: the format the bridge reads screenshots back in.

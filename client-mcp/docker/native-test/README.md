@@ -25,6 +25,6 @@ Readiness: `[cs2mcp-mmload] redirect:` in `podman logs`, then a
 `cs2mcp-native-dev tree-hash` through `podman unshare` (the volume belongs to a subuid).
 
 The two variables keep an old client-image layout in the volume (setup_gbe.sh's gbe and
-`steam_settings` link, install-rs.sh files) and put it back as found; without them the run stops
+`steam_settings` link, `cargo bridge install` files) and put it back as found; without them the run stops
 on those findings (`CS2MCP_NATIVE_ACCEPT_CONFLICTS=0`) or moves them out of the volume for good
 (`--cleanup-legacy`, linux-client.sh's default).

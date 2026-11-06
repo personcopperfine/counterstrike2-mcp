@@ -8,8 +8,9 @@ keep the stable facts as they are (update this file when one of them stops being
 
 ## What the spawner gathers first (cheap, before spawning)
 
-- **Per item**: the current value and pin name (`bridge/bridge_pins.h`, `sigs/signatures/<module>.json`),
-  every bridge site that uses it (`grep -n PIN bridge/*.c bridge/*.inc bridge/s2sdk.h`), the header
+- **Per item**: the current value and pin name (`crates/cs2-bridge/src/generated/pins.rs`,
+  `sigs/signatures/<module>.json`), every bridge site that uses it
+  (`git grep -n PIN crates/cs2-bridge/src`), the header
   and line where the class is or would be declared, and what earlier RE already found, as file +
   line ranges (`grep -n -i <class> target/orch/*/re/*.md target/orch/*/wp*-re.md`), including old
   function addresses when the build number is the same.
@@ -56,21 +57,20 @@ You are an RE worker for cs2-mcp. Everything you need is below; don't read broad
 1. Commit the header; set crates/s2sdk/s2sdk-sys/UPSTREAM.lock `commit =` to the submodule HEAD.
 2. Add the class to crates/s2sdk/s2sdk-sys/gen/allowlist.toml next to its group's classes.
 3. python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py; --check; (cd crates/s2sdk/s2sdk-sys/gen && python3 -I gen_selftest.py).
-4. The new S2_OFF_/S2_SIZEOF_/S2_SLOT_ in bridge/s2sdk_gen.h must equal the pin.
+4. The new S2_OFF_/S2_SIZEOF_/S2_SLOT_ in crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h must equal the pin.
 5. python3 sigs/scripts/sdkadopt.py PIN=S2_EXPR (refuses if the binary measurement disagrees);
-   the Rust bridge reads the generated s2sdk_sys value instead of the pin; python3 bridge/pins.py --rust crates/cs2-bridge/src/generated/pins.rs.
+   the Rust bridge reads the generated s2sdk_sys value instead of the pin; cargo bridge pins.
 6. python3 sigs/scripts/sdkcheck.py (0 FAIL, the new sdk: row PASS) and --self-test;
-   sigcheck.py validate, resolve --strict; bridge/test_*.py --static (no new failures).
-7. ./bridge/build-rs.sh (the /Brepro byte-identical rename check was
-   a C-bridge property; for the Rust bridge compare the pins diff and the export gate instead).
+   sigcheck.py validate, resolve --strict.
+7. cargo bridge build (compare the pins diff and the export gate).
 8. One worktree commit per item, ending with the Co-Authored-By line for your model.
 Cargo only at the end, -j2, one command at a time, CARGO_TARGET_DIR=$PWD/target/cargo, and only if
 `podman ps` shows no game (OOM guard).
 
 # Report
 Per item: done / stopped and why, submodule + worktree commits, names and their evidence, generated
-value vs pin, sdkcheck row. Overall: `grep -c '^#define' bridge/bridge_pins.h`, sdkcheck totals,
-DLL sha identical?, cargo results, judgement calls.
+value vs pin, sdkcheck row. Overall: `grep -c ': Pin = ' crates/cs2-bridge/src/generated/pins.rs`,
+sdkcheck totals, cargo results, judgement calls.
 ```
 
 The WP7 brief of the de-hardcode project (`target/orch/dehardcode/`, notes in `wp7-re.md`) is a

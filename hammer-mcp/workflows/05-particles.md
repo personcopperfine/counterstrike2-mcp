@@ -9,7 +9,7 @@ below) as the one verified way to *see* the system.
 ## Status (first pass, 2026-10-13, build 2000930): done, verified live
 13 `particle_*` tools (after the ModelDoc tools, `PET_TOOL_ORDER`), bridge **m2.12** `pet.*`
 (7 methods; `sigs/signatures/pet.json`, 23 entries, all verified). The documented loop below ran
-end to end live (`bridge/test_pet.py`). Live node edits with in-editor undo are the second pass
+end to end live (`test_pet.py`). Live node edits with in-editor undo are the second pass
 (below) — done too now, verified live.
 
 | Tool | What | Live |
@@ -38,15 +38,14 @@ ModelDoc).
 Pieces: `hammer-mcp/src/vpcf/` (the KV3 layer: parse/write, the nine arrays, ops, schema,
 template), `src/tools/particle_file.rs` (file route), `particle_live.rs` (live half),
 `particle_live_edit.rs` (second-pass live-edit/undo tools), `particle_render.rs` (render tool),
-`particles.rs` (order), bridge m2.13 `pet.*` (12 methods; `bridge/protocol-diff-m2.12.md` +
-`-m2.13.md`, live tests `bridge/test_pet.py`, `test_pet_live.py`, `test_pet_render.py`), sigs
+`particles.rs` (order), bridge m2.13 `pet.*` (12 methods; `crates/cs2-bridge/PROTOCOL.md` §17), sigs
 `sigs/signatures/pet.json` (59 entries: 55 verified, 4 proposed). RE: `research/pet-re.md`; older static
 notes (`../idabins/docs/flows/particles-edit.md`, `docs/modules/pet.md`) only fill in what
 pet-re.md does not carry.
 
 ## Second pass (2026-10-13, build 2000930, bridge m2.13): done, verified live
 Five more tools (`PET_TOOL_ORDER` = 18); the bridge gains `pet.text/apply/undo/redo/render`
-(12 `pet.*` methods total). Verified live: `bridge/test_pet.py` 17/17, `bridge/test_pet_live.py`
+(12 `pet.*` methods total). Verified live: `test_pet.py` 17/17, `test_pet_live.py`
 (core and `--render`, `--namedvalue`, `--depth`) all PASS, and the MCP loop
 `particle_open` -> `particle_live_read` -> `particle_live_edit` -> `particle_render` ->
 `particle_undo` -> `particle_redo` -> `particle_save` -> `particle_read` -> an unknown-class
@@ -140,7 +139,7 @@ full default config with `m_ConfigValue = null`; a non-string `m_ValueType` beco
   (1) `particle_open` / `particle_reload` take the bridge lock, check the dirty state, then parse +
   validate the file and send at once (parse and structure are never skippable; `skipSchema` only
   skips the class/field checks pet tolerates); (2) the bridge checks the file itself before
-  `OpenFile` and `ReloadDocument` (`bridge/kv3_check.h`: KV3 grammar + root `_class`, host path for
+  `OpenFile` and `ReloadDocument` (`kv3_check.h`: KV3 grammar + root `_class`, host path for
   `pet.open` = `<app>\content\csgo_addons\<-addon>\<path>`) and answers
   `-32602 UnloadableFile {reason, path}` (also `read_failed` for a missing file, which would be a
   modal). `cargo test -p cs2-bridge --test kv3_corpus` (needs the Wine content tree) runs the checker over every KV3 file in the content tree
@@ -153,11 +152,11 @@ full default config with `m_ConfigValue = null`; a non-string `m_ValueType` beco
   `content/_toolsautosave/pet/<addon path>/<name>001.vpcf_autosave`. After an unclean exit (any
   killed/wedged runtime) `game/_toolsettings/pet/settings.txt` carries
   `"Closed Correctly" = false` (+ per-file `"ClosedCorrectly N"`), and the next `pet.open`
-  blocks the main thread on the modal "Recover Files?". `runtime.sh up` resets those flags
+  blocks the main thread on the modal "Recover Files?". `cargo bridge runtime up` resets those flags
   (autosaves kept) before the launch; verified live after a kill.
 - **One tools container.** pet runs in the default tools container (`cs2tools`,
-  `bridge/runtime.sh up`). The crash-flag reset is skipped when another tools container shares
-  the tree (runtime.sh cannot know whether pet is open there), so do not run two tools
+  `cargo bridge runtime up`). The crash-flag reset is skipped when another tools container shares
+  the tree (`cargo bridge runtime` cannot know whether pet is open there), so do not run two tools
   containers against the same workshop tree. `pet.load` issued immediately after `up` can
   return without loading (toolframework2 not yet verified): retry once `control.ping` shows
   toolframework2 verified.
@@ -168,7 +167,7 @@ full default config with `m_ConfigValue = null`; a non-string `m_ValueType` beco
 `ParticleNamedValueConfiguration_t`, which the `m_NamedValueLocals` default-config check needs). Refresh in a live session with
 `particle_types {writeSnapshot:true}`: it fetches `pet.schema` for every registered class plus
 the root and the two structural ones and writes the file atomically; a failed lookup aborts the
-write (never a partial snapshot); identical on a second live run. `bridge/test_pet.py
+write (never a partial snapshot); identical on a second live run. `test_pet.py
 --write-snapshot <file>` produces the same shape. With no usable file at that path the built-in
 copy (compiled from the same file) is used and `schemaSource` says `built-in (build 2000930)`;
 a snapshot that is placeholder/malformed fails closed with `SchemaUnavailable` — `skipSchema`

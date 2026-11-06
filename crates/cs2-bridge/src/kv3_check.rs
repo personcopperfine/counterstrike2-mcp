@@ -1,4 +1,4 @@
-//! `bridge/kv3_check.h` in Rust: the bridge's pre-load gate for KV3 text, plus `pet.open`'s
+//! `kv3_check.h` in Rust: the bridge's pre-load gate for KV3 text, plus `pet.open`'s
 //! host-path derivation.
 //!
 //! # Why the gate exists
@@ -58,7 +58,7 @@
 use core::fmt;
 
 /// The deepest nesting [`kv3_check`] accepts: the number of open `{` / `[` in the raw token
-/// stream. `KV3_CHECK_DEPTH_CAP` in `bridge/kv3_check.h`; 256 is far deeper than any real
+/// stream. `KV3_CHECK_DEPTH_CAP` in `kv3_check.h`; 256 is far deeper than any real
 /// document (19 is the deepest in the installed content tree).
 pub const DEPTH_CAP: usize = 256;
 
@@ -108,7 +108,7 @@ pub enum Reason {
 }
 
 impl Reason {
-    /// The reason exactly as the C bridge reports it (`bridge/kv3_check.h`).
+    /// The reason exactly as the C bridge reports it (`kv3_check.h`).
     pub const fn as_str(self) -> &'static str {
         match self {
             Reason::NoKv3Header => "no_kv3_header",

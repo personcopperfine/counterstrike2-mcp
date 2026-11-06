@@ -19,7 +19,7 @@ fn unreachable_note() -> &'static str {
          passes -insecure and loads the bridge; `cs2mcp-native status` shows its readiness), or load \
          it in a running -insecure -tools session (tool_request cs2_bridge)"
     } else {
-        "bridge not reachable: load it in a live tools session (tool_request cs2_bridge {}) or use the launch path (bridge/runtime.sh up); see docs/WORKFLOW.md §11"
+        "bridge not reachable: load it in a live tools session (tool_request cs2_bridge {}) or use the launch path (cargo bridge runtime up); see docs/WORKFLOW.md §11"
     }
 }
 

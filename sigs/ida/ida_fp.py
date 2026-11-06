@@ -24,7 +24,7 @@ Two details matter for the bridge gate (sigs/scripts/sigupdate.py --bridge-gate)
   jump target that has to stay masked so the pattern survives a rebuild. Entries without a `bridge`
   macro keep the plain 24-byte prologue.
 * A kind=vtable entry with `ident_slot` gets a second fingerprint under "<name>#<slot>": the
-  function the slot must still hold. bridge/pins.py emits the identity row by reading that slot
+  function the slot must still hold. `cargo bridge pins` emits the identity row by reading that slot
   from the same binary, so that check is self-confirming on its own.
 """
 import json

@@ -1,5 +1,5 @@
 //! The map lifecycle group (`map.open`, `map.reload`, `map.save`): the C bridge's
-//! `bridge/mcp_bridge_map.inc` and the three dispatch arms `bridge/mcp_bridge.c:6083-6233`,
+//! `mcp_bridge_map.inc` and the three dispatch arms `mcp_bridge.c:6083-6233`,
 //! ported method for method onto the HAMMER-R core ([`crate::ops::hammer`]).
 //!
 //! `map.run` is a blocked row (`registry.rs`, `implemented: false`) and is deliberately not
@@ -47,7 +47,7 @@ const RELOAD_PATH_CAP: usize = 512;
 /// `map.save`'s reply path has NO C buffer: the C hands the doc's raw `char *` straight to
 /// `sb_addjson` (`mcp_bridge.c:6204`), reading to the NUL unguarded. This port probes it with
 /// [`md_str`] at this cap - the same 4096 cap the hammer lane's `doc_facts` chose for the
-/// same shape (`bridge/protocol-diff-m3-hammer.md` records it there). A path beyond 4095
+/// same shape (PROTOCOL.md §8.4). A path beyond 4095
 /// bytes answers cut instead of whole; no Hammer-resolved path is.
 const SAVE_PATH_PROBE: usize = 4096;
 
@@ -409,7 +409,7 @@ pub(crate) struct DocSessionFacts {
     pub path_ptr: usize,
     /// `*pathp` when `path_ptr` is live and readable, else 0. The C derefs `*pathp` unguarded
     /// (`mcp_bridge.c:6186`); this port probes the byte with `mem_ok` first - a memory-safety
-    /// fix that cannot change a byte for any readable path (protocol-diff).
+    /// fix that cannot change a byte for any readable path.
     pub path_first: u8,
 }
 
@@ -441,7 +441,7 @@ pub(crate) trait Game {
     /// empty / unreadable / cut - an unusable path is not an error (review L6).
     fn session_path(&self, session: usize, out: &mut [u8]) -> bool;
 
-    /// `CHammerApp_ActiveSession` (`bridge/s2sdk.h:340`).
+    /// `CHammerApp_ActiveSession` (`s2sdk.h:340`).
     fn active_session(&self, app: usize) -> usize;
 
     /// The reload/save doc facts (`mcp_bridge.c:6116-6119`).
@@ -730,7 +730,7 @@ mod live {
         }
 
         fn save(&self, session: usize, path_ptr: usize) -> bool {
-            // The C header's own signature (`bridge/s2sdk.h:355-360`):
+            // The C header's own signature (`s2sdk.h:355-360`):
             // `u8 (*Save)(this, pszOldPath, pszNewPath, u8, u8)`. The generated typed field
             // returns a Rust `bool`, but the C reads `u8 rc` and tests `rc ? 1 : 0`
             // (`mcp_bridge.c:6191-6192`) - a Rust `bool` cannot hold a flag byte other

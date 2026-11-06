@@ -1,5 +1,5 @@
 //! Golden tests for the Rust `.vmap` reader against the Python oracle
-//! (`bridge/vmapreader/vmap_dmx.py`), plus the required negative cases.
+//! (the retired Python oracle `vmap_dmx.py`, `git show 8cdea42:bridge/vmapreader/vmap_dmx.py`), plus the required negative cases.
 //!
 //! The goldens are checked in as `fixtures/vmap/<name>.entities.json`; they are the oracle's own
 //! `Entity.to_dict` records for every entity of the map, with keyvalues
@@ -166,7 +166,7 @@ fn second_load_is_a_cache_hit() {
 
 #[test]
 fn element_index_matches_the_oracle_for_the_whole_file() {
-    // `python3 -I bridge/vmapreader/vmap_dmx.py <file> info` on the same fixtures: the header,
+    // `python3 -I vmap_dmx.py <file> info` (the retired oracle) on the same fixtures: the header,
     // prefix attributes and the full class histogram of the element index. This catches a stream
     // desync that the entity view alone could miss (it also proves the synthetic-stub path stayed
     // unused: no element is appended for either file).
@@ -511,7 +511,7 @@ fn children_of_unknown_or_childless_node_ids_are_none() {
 /// bytes):
 ///
 /// ```text
-/// python3 -I bridge/vmapreader/vmap_dmx.py \
+/// python3 -I vmap_dmx.py \
 ///   <install>/content/csgo/maps/templates/template_wingman.vmap find "logic_auto" --json
 /// =>
 /// {"outputName": "OnMapSpawn", "targetType": 7, "targetName": "script.2v2",

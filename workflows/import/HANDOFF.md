@@ -53,7 +53,7 @@ streamline style: a weaker model finishes the task with MCP tools only, and the 
 
 - Sonnet implements per WP in its own worktree (absolute paths); Opus/Fable reviews every diff before merge into import/models.
 - OOM guard: game DOWN before workspace builds, `-j2`, `ulimit -v 12000000`, ≤2 parallel builds.
-- ModelDoc: one instance only (`TOOL=modeldoc bridge/runtime.sh up`). Podman: `XDG_RUNTIME_DIR=<project root>/.podman/xdg`;
+- ModelDoc: one instance only (`TOOL=modeldoc cargo bridge runtime up`). Podman: `XDG_RUNTIME_DIR=<project root>/.podman/xdg`;
   stale `pause.pid` -> rename to `pause.pid.stale-<pid>`.
 - Live driver: main checkout `target/orch/mcp_session.py` (+ `target/orch/c.sh`); test addon accept_p4.
 - Bridge installed: m3.17 (backup of m3.16 in main `target/bridge/backup-2026-10-28-m316/`).

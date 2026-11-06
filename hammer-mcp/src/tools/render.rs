@@ -1,6 +1,6 @@
 //! `render_view` / `render_world` (WP-D): the POC's camera plumbing over `view.render` /
 //! `world.render` (mcp_bridge.c `op_view_render` / `op_world_render`; live-verified
-//! `bridge/test_view_render.py` for `view.render` — the orchestrator re-runs the live halves).
+//! `test_view_render.py` for `view.render` — the orchestrator re-runs the live halves).
 //!
 //! The two tools share [`camera_shape`] (the POC `h_render_view`/`h_render_world` camera code)
 //! and the file/inline pipeline ([`super::particle_render`] — the same one `model_render` uses),

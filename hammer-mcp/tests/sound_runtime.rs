@@ -3,7 +3,7 @@
 //! Everything goes through `MockBridge`'s `sound.drain` / `sound.status` responders (no mock
 //! source change): the tool is a passthrough plus a local filter and the packed-params decoder, so
 //! the mock's job is to hand back the exact object the C bridge writes
-//! (`bridge/mcp_bridge_game.inc` `op_sound`) — field for field, with the live captured
+//! (`mcp_bridge_game.inc` `op_sound`) — field for field, with the live captured
 //! `params.hex` from the R3 probe (`target/orch/re-snd.md`).
 //!
 //! "nothing sent" means no `sound.*` request: the registry's capability gate and the client's

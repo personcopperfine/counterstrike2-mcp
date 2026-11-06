@@ -12,7 +12,7 @@
 //! for this plugin's events alone.
 //!
 //! Writing the log is the only silent failure in this crate: a log line that cannot be written
-//! must not disturb the game. Everything else fails loudly (the tests, `check-exports.sh`).
+//! must not disturb the game. Everything else fails loudly (the tests, `cargo bridge check-exports`).
 
 use std::path::{Path, PathBuf};
 

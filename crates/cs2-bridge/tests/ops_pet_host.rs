@@ -1,6 +1,6 @@
 //! `pet_open_gate`'s host derivation and the path bytes, with the C's own buffer sizes.
 //!
-//! The C's `pet_open_gate` (`bridge/mcp_bridge_pet.inc:378-414`) declares `char app[1024]`,
+//! The C's `pet_open_gate` (`mcp_bridge_pet.inc:378-414`) declares `char app[1024]`,
 //! `char addon[64]` and `char host[2048]` and passes each `sizeof` to the `kv3_check.h` helper.
 //! `kv3_check`'s own wrappers use the host test's 512-byte buffer, so the port must call the
 //! `*_into` variants with the C's sizes; these cases pin the difference:
@@ -17,7 +17,7 @@ use cs2_bridge::kv3_check;
 use cs2_bridge::ops::pet::game;
 use cs2_bridge::ops::pet::reply;
 
-/// A `.vpcf` that passes `vpcf_check` (`bridge/kv3_check.h`: header, grammar, root `_class`).
+/// A `.vpcf` that passes `vpcf_check` (`kv3_check.h`: header, grammar, root `_class`).
 const OK_DOC: &[u8] =
     b"<!-- kv3 encoding:text:format:vpcf -->\n{ _class = \"CParticleSystemDefinition\" }";
 

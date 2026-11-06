@@ -1,4 +1,4 @@
-//! The shared `pet.render` / `modeldoc.render` tail (`bridge/mcp_bridge_pet_render.inc:35-167`).
+//! The shared `pet.render` / `modeldoc.render` tail (`mcp_bridge_pet_render.inc:35-167`).
 //!
 //! Both ops are the same call on the same statically linked tools-lib function, one copy per
 //! module: `CToolScene::Render(scene, camera, IToolSceneWindow *wnd|0, swapchain|0,

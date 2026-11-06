@@ -1,6 +1,6 @@
 //! The PE32+ facts [`crate::modules`] gates a module on, and SHA-256.
 //!
-//! Direct port of the C bridge's `PeInfo` / `pe_info` block (`bridge/mcp_bridge.c:1241-1302`)
+//! Direct port of the C bridge's `PeInfo` / `pe_info` block (`mcp_bridge.c:1241-1302`)
 //! and of `sha256_file` (`:1276-1298`): read the facts the Windows loader itself read
 //! (`TimeDateStamp`, `SizeOfImage`, `CheckSum`, the CodeView RSDS GUID/age), never a field the
 //! loader relocates. The constants are file-format facts from `winnt.h` - named after the field
@@ -21,41 +21,41 @@
 //! `crates/s2sdk/s2sdk/src/hash.rs` is MurmurHash2, not SHA-2.
 
 /// `IMAGE_DOS_HEADER::e_lfanew` (`winnt.h`): offset of the PE header, from the image base
-/// (`bridge/mcp_bridge.c:1248`).
+/// (`mcp_bridge.c:1248`).
 pub const PE_E_LFANEW_OFF: usize = 0x3C;
 /// `IMAGE_NT_SIGNATURE` (`winnt.h`): the PE header starts with `"PE\0\0"`
-/// (`bridge/mcp_bridge.c:1249`).
+/// (`mcp_bridge.c:1249`).
 pub const PE_SIG: u32 = 0x0000_4550;
-/// `IMAGE_FILE_HEADER::TimeDateStamp`, from the PE header (`bridge/mcp_bridge.c:1250`):
+/// `IMAGE_FILE_HEADER::TimeDateStamp`, from the PE header (`mcp_bridge.c:1250`):
 /// `IMAGE_NT_SIGNATURE` (4) + `Machine` (2) + `NumberOfSections` (2).
 pub const PE_TIME_DATE_STAMP_OFF: usize = 8;
 /// The optional header starts after the signature (4) and `IMAGE_FILE_HEADER` (20)
-/// (`bridge/mcp_bridge.c:1251`).
+/// (`mcp_bridge.c:1251`).
 pub const PE_OPTIONAL_HDR_OFF: usize = 24;
 /// `IMAGE_OPTIONAL_HEADER64::Magic` value for PE32+ (`winnt.h` `IMAGE_NT_OPTIONAL_HDR64_MAGIC`;
-/// `bridge/mcp_bridge.c:1252`).
+/// `mcp_bridge.c:1252`).
 pub const PE32PLUS_MAGIC: u16 = 0x20B;
-/// `IMAGE_OPTIONAL_HEADER64::SizeOfImage` (`bridge/mcp_bridge.c:1253`).
+/// `IMAGE_OPTIONAL_HEADER64::SizeOfImage` (`mcp_bridge.c:1253`).
 pub const PE32PLUS_SIZEOFIMAGE: usize = 56;
-/// `IMAGE_OPTIONAL_HEADER64::CheckSum` (`bridge/mcp_bridge.c:1254`).
+/// `IMAGE_OPTIONAL_HEADER64::CheckSum` (`mcp_bridge.c:1254`).
 pub const PE32PLUS_CHECKSUM: usize = 64;
-/// `IMAGE_OPTIONAL_HEADER64::NumberOfRvaAndSizes` (`bridge/mcp_bridge.c:1255`).
+/// `IMAGE_OPTIONAL_HEADER64::NumberOfRvaAndSizes` (`mcp_bridge.c:1255`).
 pub const PE32PLUS_NRVA_OFF: usize = 0x6C;
-/// `IMAGE_OPTIONAL_HEADER64::DataDirectory` (`bridge/mcp_bridge.c:1256`).
+/// `IMAGE_OPTIONAL_HEADER64::DataDirectory` (`mcp_bridge.c:1256`).
 pub const PE32PLUS_DATADIR_OFF: usize = 0x70;
-/// `IMAGE_DIRECTORY_ENTRY_DEBUG` (`winnt.h`; `bridge/mcp_bridge.c:1257`).
+/// `IMAGE_DIRECTORY_ENTRY_DEBUG` (`winnt.h`; `mcp_bridge.c:1257`).
 pub const PE_DATADIR_DEBUG: usize = 6;
-/// `sizeof(IMAGE_DATA_DIRECTORY)` (`bridge/mcp_bridge.c:1258`).
+/// `sizeof(IMAGE_DATA_DIRECTORY)` (`mcp_bridge.c:1258`).
 pub const PE_DATADIR_STRIDE: usize = 8;
-/// `sizeof(IMAGE_DEBUG_DIRECTORY)` (`bridge/mcp_bridge.c:1259`).
+/// `sizeof(IMAGE_DEBUG_DIRECTORY)` (`mcp_bridge.c:1259`).
 pub const PE_DBGDIR_BYTES: usize = 28;
-/// `IMAGE_DEBUG_DIRECTORY::Type` (`bridge/mcp_bridge.c:1260`).
+/// `IMAGE_DEBUG_DIRECTORY::Type` (`mcp_bridge.c:1260`).
 pub const PE_DBGDIR_TYPE_OFF: usize = 12;
-/// `IMAGE_DEBUG_TYPE_CODEVIEW` (`bridge/mcp_bridge.c:1261`).
+/// `IMAGE_DEBUG_TYPE_CODEVIEW` (`mcp_bridge.c:1261`).
 pub const PE_DBGDIR_TYPE_CODEVIEW: u32 = 2;
-/// `IMAGE_DEBUG_DIRECTORY::AddressOfRawData` - an RVA (`bridge/mcp_bridge.c:1262`).
+/// `IMAGE_DEBUG_DIRECTORY::AddressOfRawData` - an RVA (`mcp_bridge.c:1262`).
 pub const PE_DBGDIR_ADDRRAW_OFF: usize = 20;
-/// The CodeView RSDS record: `"RSDS"` (4) + GUID (16) + Age (`bridge/mcp_bridge.c:1263`).
+/// The CodeView RSDS record: `"RSDS"` (4) + GUID (16) + Age (`mcp_bridge.c:1263`).
 pub const CV_RSDS_AGE_OFF: usize = 20;
 
 // The rest are only needed to build the RVA-indexed layout from a file; the C never maps a file
@@ -82,7 +82,7 @@ pub const PE_SECTION_RAW_SIZE_OFF: usize = 16;
 pub const PE_SECTION_RAW_PTR_OFF: usize = 20;
 
 /// The mapped-image facts `verify_one` compares, mirroring the C's `PeInfo`
-/// (`bridge/mcp_bridge.c:1244`). `rsds` is `None` when no CodeView RSDS record was found; the C
+/// (`mcp_bridge.c:1244`). `rsds` is `None` when no CodeView RSDS record was found; the C
 /// keeps that as `haveRsds` and fails the same check.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct PeInfo {
@@ -111,7 +111,7 @@ fn u64_at(bytes: &[u8], off: usize) -> Option<u64> {
     Some(u64::from_le_bytes(bytes.get(off..off + 8)?.try_into().ok()?))
 }
 
-/// `pe_info` (`bridge/mcp_bridge.c:1265-1301`): the mapped image's never-relocated PE facts.
+/// `pe_info` (`mcp_bridge.c:1265-1301`): the mapped image's never-relocated PE facts.
 ///
 /// `None` is the C's `return 0` - not an `MZ` image, not `"PE\0\0"`, or not PE32+ (the checks
 /// the C's `pe_info` itself makes). A missing or malformed debug directory is **not** a parse
@@ -305,7 +305,7 @@ const SHA256_H0: [u32; 8] = [
 ];
 
 /// SHA-256 state, so the live adapter can hash a module file in `sha256_file`'s 256 KiB chunks
-/// (`bridge/mcp_bridge.c:1294`) instead of reading a 100 MB DLL into memory.
+/// (`mcp_bridge.c:1294`) instead of reading a 100 MB DLL into memory.
 #[derive(Clone)]
 pub struct Sha256 {
     state: [u32; 8],

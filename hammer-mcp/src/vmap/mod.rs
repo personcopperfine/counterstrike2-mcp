@@ -1,5 +1,5 @@
 //! File-backed reads of the SAVED `.vmap` (binary DMX, `encoding binary 9`): entities with their
-//! keyvalues and I/O connections. A Rust port of `bridge/vmapreader/vmap_dmx.py` (the oracle;
+//! keyvalues and I/O connections. A Rust port of `vmap_dmx.py` (the retired Python oracle `vmap_dmx.py`, `git show 8cdea42:bridge/vmapreader/vmap_dmx.py`; the oracle;
 //! golden-tested against `fixtures/vmap/`). Reads always report `staleRead` (unsaved bridge edits
 //! since the last save) and `source.fromDisk: true` at the tool layer (`tools::entities_file`).
 //!

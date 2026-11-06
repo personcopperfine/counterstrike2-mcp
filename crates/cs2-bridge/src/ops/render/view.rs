@@ -1,4 +1,4 @@
-//! `view.render`: Hammer's own offscreen render to a PNG (`bridge/mcp_bridge.c:2500-2857`).
+//! `view.render`: Hammer's own offscreen render to a PNG (`mcp_bridge.c:2500-2857`).
 //!
 //! The C arm (`mcp_bridge.c:6063-6077`) first resolves the active document (`active_doc`), then
 //! `op_view_render` walks document -> session -> view manager -> preferred 3D view, reads the
@@ -290,7 +290,7 @@ mod live {
             (hfn.camera_get_angles)(cam.cast(), v_angles.as_mut_ptr());
         }
         // SAFETY: `cam` came from the verified getter; the frustum is the embedded member at the
-        // generated offset (the C's `CCamera_Frustum`, `bridge/s2sdk.h:533`). Every field is read
+        // generated offset (the C's `CCamera_Frustum`, `s2sdk.h:533`). Every field is read
         // unaligned through a raw pointer - no reference into game memory is formed.
         let fr = unsafe {
             (cam as *const u8).add(offset_of!(ToolCameraUnk_t, m_Frustum)) as *const CFrustum
@@ -437,7 +437,7 @@ mod live {
         };
         // SAFETY: `mgr` passed `obj_is(HV_MAPVIEWMGR_VT)`; `m_Views` is the generated
         // CUtlVector's bytes and its first word is the C's `m_Size` (`CMapViewMgr_ViewCount`,
-        // `bridge/s2sdk.h:530`).
+        // `s2sdk.h:530`).
         let views = unsafe {
             let m = mgr as *const u8;
             (m.add(offset_of!(CMapViewMgr, m_Views)) as *const i32).read_unaligned() as u32

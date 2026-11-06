@@ -4,7 +4,7 @@
 //! Before this module nothing called the M2/M3 pieces. It wires the C bridge's three sites
 //! together:
 //!
-//! * the tick - C `m0_Slot13` (`bridge/mcp_bridge.c:6809-6826`): record `g_lastTick`, poll the
+//! * the tick - C `m0_Slot13` (`mcp_bridge.c:6809-6826`): record `g_lastTick`, poll the
 //!   modules, sample the Hammer document fingerprint, start the listener once, drain the
 //!   main-thread queue;
 //! * `exec_request` (`:5650-5700`, the main thread): the method gate over

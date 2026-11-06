@@ -6,7 +6,7 @@ use cs2_mcp_common::mock::podman::FakePodman;
 use cs2_mcp_common::mock::MockBridge;
 use cs2_mcp_common::runtime::docker::{
     bridge_request_payload, channel_probe_payload, ensure_argv, exec_argv, exec_in_argv,
-    install_script_for, logs_argv, newest_xauth_in, parse_mounts, parse_ps, parse_ps_entries,
+    install_tool_beside, logs_argv, newest_xauth_in, parse_mounts, parse_ps, parse_ps_entries,
     ps_argv, ps_label_argv, rm_argv, run_argv, sh_quote, shared_mount_conflict, stderr_tail,
     stop_argv, stop_argv_grace, valid_container_name, valid_name, vtmsend_argv, wait_argv, DockerOptions,
     DockerRuntime, RunPlan, RuntimeError, StopOutcome, DEFAULT_LINUX_GAME_DIR,
@@ -837,13 +837,13 @@ async fn opt_out_and_no_layer_dir_both_launch_without_the_layer() {
 fn options(fake: &FakePodman, project: &Path, max: usize) -> DockerOptions {
     DockerOptions {
         linux_client_script: linux_script(),
-        // a stand-in for bridge/install-rs.sh (lane C1 owns the real `ensure`)
-        install_script: Some(install_stub(fake, project, 0, "", 0)),
+        // a stand-in for `cs2-bridge-tools install ... ensure` (its own tests own the real one)
+        install_tool: Some(install_stub(fake, project, 0, "", 0)),
         ..DockerOptions::new(project.to_path_buf(), fake.bin.clone(), max)
     }
 }
 
-/// A stand-in for `bridge/install-rs.sh ensure`: records its argv, whether the launch lock is
+/// A stand-in for `cs2-bridge-tools install --platform <p> ensure`: records its argv, whether the launch lock is
 /// held, the podman env it got, then exits `rc` after printing `stderr` (and sleeping `sleep_secs`).
 fn install_stub(
     fake: &FakePodman,
@@ -853,7 +853,7 @@ fn install_stub(
     sleep_secs: u32,
 ) -> PathBuf {
     let dir = fake.dir();
-    let path = dir.join(format!("install-rs-{rc}-{sleep_secs}.sh"));
+    let path = dir.join(format!("install-tool-{rc}-{sleep_secs}"));
     let log = dir.join("install.log");
     let lock = project.join(".podman/cs2mcp-launch.lock");
     let body = format!(
@@ -874,16 +874,16 @@ fn install_stub(
         stderr,
         rc
     );
-    std::fs::write(&path, body).unwrap();
+    write_executable(&path, &body);
     path
 }
 
-/// A stand-in for a repairing `bridge/install-rs.sh ensure`: starts a long-lived grandchild,
+/// A stand-in for a repairing install ensure: starts a long-lived grandchild,
 /// records the script's pid, its process group id, the grandchild's pid and whether the launch lock
 /// is held, then blocks for a minute (the test times it out / cancels it and checks the group died).
 fn install_group_stub(fake: &FakePodman, project: &Path) -> PathBuf {
     let dir = fake.dir();
-    let path = dir.join("install-rs-group.sh");
+    let path = dir.join("install-tool-group");
     let pids = dir.join("install-group.txt");
     let lock = project.join(".podman/cs2mcp-launch.lock");
     let body = format!(
@@ -896,8 +896,15 @@ fn install_group_stub(fake: &FakePodman, project: &Path) -> PathBuf {
         pids.display(),
         lock.display()
     );
-    std::fs::write(&path, body).unwrap();
+    write_executable(&path, &body);
     path
+}
+
+/// Write a stub the runtime executes directly (no `bash <file>`): it needs its exec bit.
+fn write_executable(path: &Path, body: &str) {
+    use std::os::unix::fs::PermissionsExt;
+    std::fs::write(path, body).unwrap();
+    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o755)).unwrap();
 }
 
 /// The pids `install_group_stub` recorded.
@@ -1717,7 +1724,7 @@ async fn wine_client_launch_runs_ensure_then_run_with_the_wine_client_argv() {
     assert!(launched.container.starts_with("cs2mcp-wine-client-"));
     // the shared wine tree is ensured first (wine platform, CS2_GAME named), under the lock
     let log = install_log(&fake);
-    assert!(log.contains("argv=--platform wine ensure"), "{log}");
+    assert!(log.contains("argv=install --platform wine ensure"), "{log}");
     assert!(log.contains("held=yes"), "{log}");
     assert!(
         log.contains(&format!(
@@ -2456,45 +2463,40 @@ async fn exec_in_background_refs_a_missing_podman_as_unavailable_and_a_bad_name(
     let _ = std::fs::remove_dir_all(&proj);
 }
 
-// ----- install-rs.sh ensure at launch ----------------------------------------------------------
+// ----- the install ensure at launch ------------------------------------------------------------
 
 #[test]
 fn ensure_argv_names_the_platform_for_every_launch_kind() {
     assert_eq!(
         ensure_argv(&SessionKind::WineTools { addon: None }),
-        s(&["--platform", "wine", "ensure"])
+        s(&["install", "--platform", "wine", "ensure"])
     );
     // the WineClient launcher (lane F) reuses the same Wine tree ensure
     assert_eq!(
         ensure_argv(&SessionKind::WineClient),
-        s(&["--platform", "wine", "ensure"])
+        s(&["install", "--platform", "wine", "ensure"])
     );
     assert_eq!(
         ensure_argv(&SessionKind::LinuxClient),
-        s(&["--platform", "linux", "ensure"])
+        s(&["install", "--platform", "linux", "ensure"])
     );
     assert_eq!(
         ensure_argv(&SessionKind::LinuxDedicated),
-        s(&["--platform", "linux", "ensure"])
+        s(&["install", "--platform", "linux", "ensure"])
     );
 }
 
 #[test]
-fn install_script_is_derived_from_the_linux_script_checkout() {
+fn the_default_install_tool_is_the_cs2_bridge_tools_next_to_the_server() {
+    // cargo builds every binary of a profile into one directory
     assert_eq!(
-        install_script_for(Path::new("/repo/client-mcp/docker/linux-client.sh")),
-        Some(PathBuf::from("/repo/bridge/install-rs.sh"))
+        install_tool_beside(Path::new("/repo/target/release/client-mcp")),
+        PathBuf::from("/repo/target/release/cs2-bridge-tools")
     );
-    // an unset script (DockerOptions::new) has no checkout to walk up from
-    assert_eq!(install_script_for(Path::new("linux-client.sh")), None);
-    // the real checkout this test runs in derives its own bridge/install-rs.sh
-    let derived = install_script_for(&linux_script()).expect("derived from the real script");
-    assert!(
-        derived.ends_with("bridge/install-rs.sh"),
-        "{}",
-        derived.display()
+    assert_eq!(
+        install_tool_beside(Path::new("hammer-mcp")),
+        PathBuf::from("cs2-bridge-tools")
     );
-    assert!(derived.is_file(), "{}", derived.display());
 }
 
 #[test]
@@ -2515,7 +2517,10 @@ async fn launch_runs_ensure_under_the_lock_and_before_podman_run() {
     let rt = runtime(&fake, &proj, 3);
     let launched = rt.launch(&linux_spec(false, &[])).await.unwrap();
     let log = install_log(&fake);
-    assert!(log.contains("argv=--platform linux ensure"), "{log}");
+    assert!(
+        log.contains("argv=install --platform linux ensure"),
+        "{log}"
+    );
     // `ensure` ran while this process held the cross-process launch lock
     assert!(
         log.contains("held=yes"),
@@ -2542,7 +2547,7 @@ async fn ensure_for_wine_names_the_runtime_wine_tree_outside_the_canonical_check
     let rt = wine_runtime(&fake, &proj);
     rt.launch(&wine_spec(None, &[])).await.unwrap();
     let log = install_log(&fake);
-    assert!(log.contains("argv=--platform wine ensure"), "{log}");
+    assert!(log.contains("argv=install --platform wine ensure"), "{log}");
     assert!(log.contains("held=yes"), "{log}");
     let app = std::fs::canonicalize(proj.join("workshop/run/app")).expect("the runtime's app dir");
     assert!(
@@ -2608,10 +2613,10 @@ async fn reused_refused_and_busy_launches_never_run_ensure() {
 async fn ensure_exit_4_stops_the_launch_names_the_containers_and_starts_nothing() {
     let fake = FakePodman::new("ensure-busy");
     let proj = project(&fake);
-    let stderr = "[install-rs] FAIL: cs2-home is mounted by cs2tools, cs2mcp-linux-client-aaaa; \
+    let stderr = "[install] FAIL: cs2-home is mounted by cs2tools, cs2mcp-linux-client-aaaa; \
                   stale: cs2_bridge.dll for build 2000933";
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(install_stub(&fake, &proj, 4, stderr, 0));
+    opts.install_tool = Some(install_stub(&fake, &proj, 4, stderr, 0));
     let rt = DockerRuntime::new(opts);
     let err = rt.launch(&linux_spec(false, &[])).await.unwrap_err();
     match downcast(&err) {
@@ -2644,10 +2649,10 @@ async fn ensure_exit_1_carries_the_code_and_stderr_and_starts_nothing() {
         &fake,
         &proj,
         1,
-        "[install-rs] FAIL: target/bridge-rs/win64/cs2_bridge.dll is missing",
+        "[install] FAIL: target/bridge-rs/win64/cs2_bridge.dll is missing",
         0,
     );
-    opts.install_script = Some(stub.clone());
+    opts.install_tool = Some(stub.clone());
     let rt = DockerRuntime::new(opts);
     let err = rt.launch(&linux_spec(false, &[])).await.unwrap_err();
     match downcast(&err) {
@@ -2658,7 +2663,7 @@ async fn ensure_exit_1_carries_the_code_and_stderr_and_starts_nothing() {
             path,
         } => {
             assert_eq!(*code, 1);
-            assert_eq!(args, "--platform linux ensure");
+            assert_eq!(args, "install --platform linux ensure");
             assert_eq!(path, &stub.display().to_string());
             assert!(stderr.contains("cs2_bridge.dll is missing"), "{stderr}");
         }
@@ -2675,14 +2680,14 @@ async fn a_timed_out_ensure_stops_the_launch_and_starts_nothing() {
     let fake = FakePodman::new("ensure-timeout");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(install_stub(&fake, &proj, 0, "", 30));
+    opts.install_tool = Some(install_stub(&fake, &proj, 0, "", 30));
     opts.install_timeout = Duration::from_secs(1);
     let rt = DockerRuntime::new(opts);
     let err = rt.launch(&linux_spec(false, &[])).await.unwrap_err();
     match downcast(&err) {
         RuntimeError::InstallTimeout { secs, args, .. } => {
             assert_eq!(*secs, 1);
-            assert_eq!(args, "--platform linux ensure");
+            assert_eq!(args, "install --platform linux ensure");
         }
         other => panic!("{other:?}"),
     }
@@ -2701,7 +2706,7 @@ async fn a_timed_out_ensure_kills_the_whole_process_group() {
     let fake = FakePodman::new("ensure-pg");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(install_group_stub(&fake, &proj));
+    opts.install_tool = Some(install_group_stub(&fake, &proj));
     opts.install_timeout = Duration::from_secs(1);
     let rt = DockerRuntime::new(opts);
     // an outer bound: a regression that fails to kill the group would otherwise run the stub out
@@ -2746,7 +2751,7 @@ async fn a_cancelled_launch_kills_the_ensure_process_group_too() {
     let fake = FakePodman::new("ensure-cancel");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(install_group_stub(&fake, &proj));
+    opts.install_tool = Some(install_group_stub(&fake, &proj));
     opts.install_timeout = Duration::from_secs(120);
     let rt = DockerRuntime::new(opts);
     let pids_path = fake.dir().join("install-group.txt");
@@ -2792,7 +2797,7 @@ async fn a_cancelled_launch_kills_the_ensure_process_group_too() {
 /// when the leader is still alive leaves this writer running past the launch lock.
 fn install_sigterm_ignoring_stub(fake: &FakePodman, project: &Path) -> PathBuf {
     let dir = fake.dir();
-    let path = dir.join("install-rs-term-ignore.sh");
+    let path = dir.join("install-tool-term-ignore");
     let pids = dir.join("install-group.txt");
     let marker = dir.join("term-ignore-marker");
     let lock = project.join(".podman/cs2mcp-launch.lock");
@@ -2808,7 +2813,7 @@ fn install_sigterm_ignoring_stub(fake: &FakePodman, project: &Path) -> PathBuf {
         marker.display(),
         lock.display()
     );
-    std::fs::write(&path, body).unwrap();
+    write_executable(&path, &body);
     path
 }
 
@@ -2821,7 +2826,7 @@ async fn a_timed_out_ensure_kills_members_that_ignore_sigterm() {
     let fake = FakePodman::new("ensure-term-ignore");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(install_sigterm_ignoring_stub(&fake, &proj));
+    opts.install_tool = Some(install_sigterm_ignoring_stub(&fake, &proj));
     opts.install_timeout = Duration::from_secs(1);
     let rt = DockerRuntime::new(opts);
     let err = tokio::time::timeout(Duration::from_secs(20), rt.launch(&linux_spec(false, &[])))
@@ -2845,14 +2850,14 @@ async fn a_timed_out_ensure_kills_members_that_ignore_sigterm() {
 }
 
 /// With the launcher package configured, a Linux client prepares its own tree in the container:
-/// no install-rs.sh ensure runs (a missing script is no error) and the package is mounted. (The
+/// no `cargo bridge install` ensure runs (a missing install tool is no error) and the package is mounted. (The
 /// client/server volume rule for this mode: the `may_conflict` unit test.)
 #[tokio::test]
-async fn a_launcher_package_client_skips_install_rs_and_mounts_the_package() {
+async fn a_launcher_package_client_skips_the_install_ensure_and_mounts_the_package() {
     let fake = FakePodman::new("native-client");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    opts.install_script = Some(proj.join("no-such-install-rs.sh"));
+    opts.install_tool = Some(proj.join("no-such-cs2-bridge-tools"));
     let pkg = proj.join("cs2mcp-package");
     std::fs::create_dir_all(&pkg).unwrap();
     opts.native_package = Some(pkg.clone());
@@ -2866,16 +2871,16 @@ async fn a_launcher_package_client_skips_install_rs_and_mounts_the_package() {
 }
 
 #[tokio::test]
-async fn a_missing_install_script_fails_the_launch_instead_of_skipping_ensure() {
+async fn a_missing_install_tool_fails_the_launch_instead_of_skipping_ensure() {
     let fake = FakePodman::new("ensure-missing");
     let proj = project(&fake);
     let mut opts = options(&fake, &proj, 3);
-    let missing = proj.join("no-such-install-rs.sh");
-    opts.install_script = Some(missing.clone());
+    let missing = proj.join("no-such-cs2-bridge-tools");
+    opts.install_tool = Some(missing.clone());
     let rt = DockerRuntime::new(opts);
     let err = rt.launch(&linux_spec(false, &[])).await.unwrap_err();
     match downcast(&err) {
-        RuntimeError::InstallScriptMissing { path } => {
+        RuntimeError::InstallToolMissing { path } => {
             assert_eq!(path, &missing.display().to_string());
         }
         other => panic!("{other:?}"),

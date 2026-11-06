@@ -1,5 +1,5 @@
 //! The sound group (`sound.status` / `sound.subscribe` / `sound.drain` /
-//! `sound.uninstall`): the C's `op_sound` (`bridge/mcp_bridge_game.inc:1094-1205`) with its
+//! `sound.uninstall`): the C's `op_sound` (`mcp_bridge_game.inc:1094-1205`) with its
 //! CSoundOpSystem start hooks ported onto KHook.
 //!
 //! # Mechanism
@@ -59,13 +59,13 @@
 //! to run; `sound.status` and `sound.drain` run the same selection **when the KHook API is
 //! present**, because real clients rely on the C's "the first status/drain arms the wrap"
 //! (`client-mcp`'s `drain_sounds` / `sounds_status`, `hammer-mcp`'s `installOnly`,
-//! `bridge/test_sound_params.py`). They carry no `NEED_KHOOK` bit, so after a Metamod unload
+//! `test_sound_params.py`). They carry no `NEED_KHOOK` bit, so after a Metamod unload
 //! they must still answer: without the API the **wrap half** of the selection is skipped (the
 //! wrap cannot be armed without it) while the **listener half** still follows `mode` - the
 //! listener is a bridge-owned object and needs no KHook, so the C's `{mode:"both"}` still
 //! registers it - and the reply adds `"blockedOn":"metamod: KHook not loaded"`: a note, never
 //! an error. `sound.uninstall` only tears down and keeps answering either way. See
-//! `target/protocol-diff-b3.md`.
+//! PROTOCOL.md §18.2.
 //!
 //! `sound.subscribe {mode:"listener"}` installs no KHook hook, but the row keeps the
 //! `NEED_KHOOK` bit: the gate is per ROW, not per request, and a row that can install a hook
@@ -1472,7 +1472,7 @@ fn op_sound(method: &[u8], params: Option<&[u8]>, out: &mut Sb<'_>) -> Result<()
     }
     // `sound.status` / `sound.drain` run the same selection (real clients rely on the first of
     // them arming the wrap: `client-mcp`'s `drain_sounds`/`sounds_status`, `hammer-mcp`'s
-    // `installOnly`, `bridge/test_sound_params.py`), but they carry no `NEED_KHOOK` bit, so
+    // `installOnly`, `test_sound_params.py`), but they carry no `NEED_KHOOK` bit, so
     // they must still answer after a Metamod unload: without the API the wrap half of the
     // selection is skipped (the wrap cannot be armed without it) while the listener half - a
     // bridge-owned object that needs no KHook - still follows `mode` (the C's `{mode:"both"}`

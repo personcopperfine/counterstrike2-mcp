@@ -18,10 +18,12 @@ async fn linux_args_round_trip_through_the_podman_argv() {
         env!("CARGO_MANIFEST_DIR"),
         "/../../client-mcp/docker/linux-client.sh"
     ));
-    // stand-in for bridge/install-rs.sh ensure (the real one belongs to the game install)
-    let stub = fake.dir().join("install-rs.sh");
+    // stand-in for `cs2-bridge-tools install ... ensure` (the real one changes the game install);
+    // the runtime executes it directly, so it needs its exec bit
+    let stub = fake.dir().join("install-tool");
     std::fs::write(&stub, "#!/bin/bash\nexit 0\n").unwrap();
-    opts.install_script = Some(stub);
+    std::fs::set_permissions(&stub, std::os::unix::fs::PermissionsExt::from_mode(0o755)).unwrap();
+    opts.install_tool = Some(stub);
     let rt = DockerRuntime::new(opts);
     let spec = LaunchSpec {
         kind: SessionKind::LinuxClient,

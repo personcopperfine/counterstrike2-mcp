@@ -38,9 +38,9 @@ pub enum Code {
     VerifyFailed,
     /// the game build is not the one the shipped signatures/pins target
     BuildMismatch,
-    /// files of an older install layout (`bridge/install-rs.sh`, the image's setup_gbe.sh)
+    /// files of an older install layout (`cargo bridge install` / install-rs.sh, the image's setup_gbe.sh)
     Legacy,
-    /// our files in a tree that has no manifest (the state dir is gone, or an install-rs.sh install)
+    /// our files in a tree that has no manifest (the state dir is gone, or a `cargo bridge install` one)
     Orphans,
     /// a Valve file replaced or edited outside a manifest
     ReplacedGameFile,

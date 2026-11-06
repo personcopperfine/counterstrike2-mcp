@@ -1,7 +1,7 @@
 {
  "module": "tier0.dll",
  "image_base": 6442450944,
- "_doc": "tier0.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "tier0.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "4e0dcb0af3f6953f",

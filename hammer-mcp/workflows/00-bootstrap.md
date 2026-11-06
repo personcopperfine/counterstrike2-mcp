@@ -27,7 +27,7 @@ bridge. No game needed.
 4. **`session_status`** — done: `hammer-mcp/src/tools/session.rs` (+ `crates/cs2-mcp-common/src/status.rs`
    for the bridge half): never raises; bridge/discovery (token never included), capabilities,
    version, status, liveness, active document + mapped host path (`paths::PathMap`), unsaved-edit
-   counter, `launch.command` (`bridge/runtime.sh up`) when down.
+   counter, `launch.command` (`cargo bridge runtime up`) when down.
 5. **Tests** — done: `crates/cs2-mcp-common/tests/bridge_client.rs` (hello/caps, explicit deadline, unknown
    method, Busy, raw-frame wire errors, protocol/build mismatch, missing/stale discovery, dead pid,
    bad token, no document, QueueTimeout vs OutcomeUnknown vs ConnectionLost + recovery, the whole
@@ -61,4 +61,4 @@ bridge. No game needed.
 
 ## Evidence
 - POC contract and tests: `../idabins/worknotes/mcpserver/{server.py,bridge_client.py,mock_bridge.py,tests/}` [proven, 104 mock tests].
-- Protocol: `../idabins/docs/data/bridge-protocol.md` rev m2.8 (method table generated from `bridge/mcp_bridge.c` `k_methods`).
+- Protocol: `../idabins/docs/data/bridge-protocol.md` rev m2.8 (method table generated from `mcp_bridge.c` `k_methods`).

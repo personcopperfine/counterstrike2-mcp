@@ -89,7 +89,7 @@
    "via": "libclient.so!0xf0cde7 (shr $0x9,%r11; and $0x3f,%r11d; mov (%r14,%r11,8),%r11) in the same identity lookup as CG_ENTITY_CHUNKS: the identity index is split into a chunk index (index >> bits) and an in-chunk offset (index & 0x1FF); the `disp` step reads the shift immediate (0x09) out of the instruction",
    "tag": "V",
    "status": "verified",
-   "notes": "CEntityIdentity chunk geometry on Linux: 512 identities per chunk = 1<<9, mask 0x1FF - the same value as CCONST_IDENTITY_CHUNK_BITS on Windows build 2000930 (bridge/mcp_bridge_game.inc:124-133). The stride multiply at 0xf0ce01 is imul 0x70 = 112, also the Windows identity size",
+   "notes": "CEntityIdentity chunk geometry on Linux: 512 identities per chunk = 1<<9, mask 0x1FF - the same value as CCONST_IDENTITY_CHUNK_BITS on Windows build 2000930 (mcp_bridge_game.inc:124-133). The stride multiply at 0xf0ce01 is imul 0x70 = 112, also the Windows identity size",
    "expect": {
     "2000908": 9,
     "2000930": 9,

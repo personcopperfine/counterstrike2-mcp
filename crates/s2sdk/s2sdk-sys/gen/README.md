@@ -7,37 +7,32 @@ upstream headers (`../UPSTREAM.lock`, the `crates/s2sdk/upstream` submodule) int
 | file | what it is |
 |---|---|
 | `gen.py` | the generator (stdlib only; run it as `python3 -I gen.py`) |
-
-Besides `../ir/*.json` and the Rust bindings, a full run (or `--check`) also emits
-`../../../../bridge/s2sdk_gen.h` from the IR's **msvc** side: the flat macro set
-(`S2_SIZEOF_`/`S2_ALIGNOF_`/`S2_OFF_`, `S2_SLOT_`/`S2_VTLEN_`,
-`S2_CONST_`/`S2_IFACE_`) and padded structs for the records the bridge reads
-member-wise. The bridge compiles these numbers directly; they are not asserted against
-`bridge_pins.h` any more (the pin-tie table `C_HEADER_PIN_TIES` and the
-`S2SDK_GEN_REQUIRE_PINS` early-tie block were removed by De-hardcode WP5). The binary side is the
-sigs entry's `sdk` field, which names a generated expression and is held to the game binary by
-`pins.py` and `sdkcheck.py` (`sigs/README.md`).
-
-`../../../../bridge/s2sdk_gen_ties.h` carries the ties that remain, for bridge-side values defined
-below the include site (s2sdk.h's `S2_UTLVEC_EXTERNAL` alias and its `S2HandleVec` typedef); it is
-included at the END of the bridge TU and fail closes on them. The rows are name-only tables in gen.py
-(`C_HEADER_CONST_TIES`, `C_HEADER_STRING_TIES`, `C_HEADER_SIZEOF_TIES`); every value is the IR's or parsed
-out of the bridge files, never spelled here, and a row whose bridge-side duplicate a migration
-pruned is pruned with it (tie-by-replacement: the C1b string/token/typedef-size rows went when B2
-deleted the duplicates).
-The syntax `sdk` entries use is gen.py's tie syntax and stays here: a plain macro, `S2_SLOT_X*8` for
-a pin that is a vtable *byte offset* (pet's `call [rax+0C0h]`; `slot_bytes("S2_SLOT_X_Y")`,
-read back by `split_tie_scale()`, only `S2_SLOT_*` with the factor 8), `S2_OFF_X+8`, and
-`S2_OFF_A+S2_OFF_B` (`tie_terms()`); `sigcheck.sdk_eval` evaluates it against the emitted header.
-The header is freestanding C (no `#include`; the bridge's `u8/u16/u32/u64`
-typedefs) and both headers are committed but never hand-edited, like
-`bridge_pins.h`; `gen.py --check` (in the AGENTS.md checks list) verifies
-them. The C bridge that smoke-compiled them is retired; the Rust bridge reads
-`s2sdk_sys` directly.
-
+| `gen_selftest.py` | its self-test suite (`gen.py --self-test`, or `python3 -I gen_selftest.py` alone) |
 | `allowlist.toml` | what is generated, grouped `tier0`/`schema`/`entity`/`cvar`/`events`/`engine`/`toolframework2`/`rendersystem`/`scenesystem`/`soundsystem`/`particles`/`client`/`datamodel`/`toolutils2`/`pet`/`modeldoc_editor`/`mapdoclib`/`hammer`/`metamod`/`consts` |
 | `probe.cpp` | the translation unit clang is pointed at; it *uses* the allowlisted types, because clang only prints a layout or a vtable for a type it was asked to lay out |
 | `fetch-xwin.sh` | fetches the Windows sysroot the `--abi msvc` pass needs into `<repo>/target/xwin` |
+
+Besides `../ir/*.json` and the Rust bindings, a full run (or `--check`) also emits
+`crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` from the IR's **msvc** side: the flat macro set
+(`S2_SIZEOF_`/`S2_ALIGNOF_`/`S2_OFF_`, `S2_SLOT_`/`S2_VTLEN_`,
+`S2_CONST_`/`S2_IFACE_`) and padded structs for the records the C bridge read
+member-wise. The C bridge that compiled it is retired (its source is in git history); the Rust
+bridge reads `s2sdk_sys` directly. The header stays because it is what a sigs entry's `sdk`
+field is evaluated against: `sigs/scripts/sigcheck.py` (`sdk_defines`/`sdk_eval`), `sdkcheck.py`,
+`sdkadopt.py` and the pins generator read its macros, and the entry is the binary measurement
+that holds a generated number to the game (`sigs/README.md`).
+
+The syntax `sdk` entries use is gen.py's former tie syntax and stays here: a plain macro,
+`S2_SLOT_X*8` for a pin that is a vtable *byte offset* (pet's `call [rax+0C0h]`;
+`slot_bytes("S2_SLOT_X_Y")`, read back by `split_tie_scale()`, only `S2_SLOT_*` with the
+factor 8), `S2_OFF_X+8`, and `S2_OFF_A+S2_OFF_B` (`tie_terms()`); `sigcheck.sdk_eval`
+evaluates it against the emitted header. The tie tables, the late-ties header
+(`s2sdk_gen_ties.h`) and the name-disjointness scan of the bridge sources went with the C bridge.
+The header is freestanding C (no `#include`; written against `u8/u16/u32/u64` typedefs of the
+MSVC x64 widths, `C_SMOKE_TYPEDEFS`), committed but never hand-edited; `gen.py --check` (in the
+AGENTS.md checks list) verifies it byte for byte and smoke-compiles it with clang on the MSVC
+target (`-ffreestanding -fsyntax-only -Werror=macro-redefined`), so every padded struct's
+`_Static_assert`s run.
 
 `gen.py --self-test` exercises the dump parsers and the emitters on inline
 samples (the suite lives in `gen_selftest.py`, next to `gen.py`; it can also be
@@ -101,11 +96,11 @@ handled:
   resolve at all - the method's type fails closed, exactly as an unknown name
   did before the second upstream existed, instead of landing on the wrong
   declaration.
-* **Not in the C header.** `bridge/s2sdk_gen.h` is generated from
+* **Not in the C header.** `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` is generated from
   `c_header_groups()`, which excludes the group (`C_HEADER_EXCLUDED_GROUPS`): the
-  frozen C bridge consumes the s2sdk IR and cannot name a metamod type, so a
-  `S2_SIZEOF_ISmmAPI` would be a change to a checked-in generated header for no
-  consumer. The same holds per `[consts]` entry: a value measured from the
+  header is frozen at the s2sdk IR the retired C bridge consumed, and no sigs `sdk`
+  expression names a metamod type, so a `S2_SIZEOF_ISmmAPI` would be a change to a
+  checked-in generated header for no consumer. The same holds per `[consts]` entry: a value measured from the
   metamod headers is listed in `C_HEADER_EXCLUDED_CONSTS`, so
   `S2_CONST_METAMOD_PLAPI_VERSION` is never emitted (`c_header_consts`), while the
   entry stays in `consts.json`/`consts.rs` for the Rust plugin. Everything else is
@@ -282,7 +277,7 @@ modeldoc_editor). To add one: add the group name to `GROUPS` in gen.py, a `[grou
   `msvc_length`, ...) and `decl_index`; an Itanium key is a generator error;
 - a group for both platforms whose record/vtable names a type of a Windows-only group
   (base, field type, method signature) is a generator error;
-- `bridge/s2sdk_gen.h` is built from the msvc side only, so it needs nothing;
+- `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` is built from the msvc side only, so it needs nothing;
 - `sdkcheck.py --platform linux` SKIPs the group (`group:<name>` and its `vt:` rows)
   with the reason; the windows lane checks it like any other group.
 
@@ -324,7 +319,7 @@ same number a second time).
 The values are emitted into `src/generated/consts.rs` (all targets; a `per_abi`
 entry becomes two `cfg`-gated consts) and their expectations live in `[checks]`
 under the `consts` group, where `value` may be a number or a string. They are also
-emitted into `bridge/s2sdk_gen.h` as `S2_CONST_<name>` (`S2_IFACE_<name>` for a
+emitted into `crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h` as `S2_CONST_<name>` (`S2_IFACE_<name>` for a
 string whose name ends in `_INTERFACE_VERSION`), except the names in
 `C_HEADER_EXCLUDED_CONSTS`: a value measured from the **second upstream**
 (`METAMOD_PLAPI_VERSION`, `METAMOD_PLAPI_NAME` from `core/ISmmPluginExt.h`,

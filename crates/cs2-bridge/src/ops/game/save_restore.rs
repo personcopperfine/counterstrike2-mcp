@@ -1,4 +1,4 @@
-//! `game.saveRestore` (the `op_test` arm, `bridge/mcp_bridge.c:5055-5061`) and its
+//! `game.saveRestore` (the `op_test` arm, `mcp_bridge.c:5055-5061`) and its
 //! `ISource2ServerConfig::AllowSaveRestore` hook.
 //!
 //! Mechanism: `AllowSaveRestore` (the generated slot
@@ -442,7 +442,7 @@ fn write_reply(sb: &mut Sb<'_>, enabled: bool, conflicts: u64) {
     sb.add(b"}");
 }
 
-/// `game.saveRestore` handler (the `op_test` arm's body, `bridge/mcp_bridge.c:5055-5061`).
+/// `game.saveRestore` handler (the `op_test` arm's body, `mcp_bridge.c:5055-5061`).
 ///
 /// The reply is `{"enabled":bool,"conflicts":N}`: `conflicts` is the number of calls since the
 /// last arm on which another value changer met ours (see the module docs). That member is a
@@ -463,8 +463,7 @@ pub(crate) fn save_restore(r: &Request) -> String {
         Ok(())
     })();
     // The C's test arm has no overflow branch (`mcp_bridge.c:5996-6008`) and this reply is
-    // < 60 bytes - the same `finish` use as the group's other test-arm rows (see
-    // protocol-diff-m3-game.md).
+    // < 60 bytes - the same `finish` use as the group's other test-arm rows.
     finish(&r.id, outcome, &sb, GAME_OVERFLOW)
 }
 

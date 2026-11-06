@@ -1,4 +1,4 @@
-//! `bridge/map_path.h` in Rust: the pure helpers of `map.open` (m2.16).
+//! `map_path.h` in Rust: the pure helpers of `map.open` (m2.16).
 //!
 //! # What map.open needs from these
 //!
@@ -27,7 +27,7 @@
 //!   first and answers `existing:true` instead of calling OpenFile.
 //!
 //! All three are pure: no Windows API, no game objects, no libc. The C host unit test
-//! (`bridge/test_map_path.c`, wired into `bridge/build.sh:48-49`) covers the C text; the Rust
+//! (`test_map_path.c`, wired into `build.sh:48-49`) covers the C text; the Rust
 //! twin `crates/cs2-bridge/tests/map_path.rs` ports it case for case and adds a differential
 //! corpus the compiled C header produces.
 //!
@@ -46,23 +46,23 @@ use core::fmt;
 
 /// The bound `map_open_path_ok` puts on the addon-relative path: 512, the same bound
 /// `modeldoc.open`/`pet.open` put on theirs (the Rust tools refuse a longer one before
-/// dispatch). `MAP_PATH_MAX` in `bridge/map_path.h:41`.
+/// dispatch). `MAP_PATH_MAX` in `map_path.h:41`.
 pub const MAP_PATH_MAX: usize = 512;
 
 /// How many leading bytes of a `.vmap` [`vmap_header_ok`] needs: the header is
 /// `<!-- dmx encoding binary 9 format <fmt> <ver> -->` plus the NUL that ends it, and the
 /// `<fmt>`/`<ver>` tail is not fixed, so the caller hands over a window and the helper looks
 /// for the NUL inside it. 512 is far more than any DMX header (live: 43 bytes for a vmap) and a
-/// caller can always grow it. `MAP_VMAP_HEADER_MAX` in `bridge/map_path.h:48`.
+/// caller can always grow it. `MAP_VMAP_HEADER_MAX` in `map_path.h:48`.
 pub const MAP_VMAP_HEADER_MAX: usize = 512;
 
-/// 1 when `c` is an ASCII separator in either spelling (`bridge/map_path.h:51`).
+/// 1 when `c` is an ASCII separator in either spelling (`map_path.h:51`).
 fn sep(c: u8) -> bool {
     c == b'\\' || c == b'/'
 }
 
 /// ASCII whitespace: the byte-level twin of the reader's `split_whitespace` for a DMX header
-/// (`bridge/map_path.h:56`). Rust's `char::is_whitespace` also accepts the Unicode spaces and
+/// (`map_path.h:56`). Rust's `char::is_whitespace` also accepts the Unicode spaces and
 /// the reader accepts 0x85/0xA0; no DMX writer emits one inside the header, and a refusal there
 /// is the safe direction.
 fn hdr_ws(c: u8) -> bool {
@@ -70,7 +70,7 @@ fn hdr_ws(c: u8) -> bool {
 }
 
 /// Lowercase an ASCII byte (only ASCII is folded: a UTF-8 byte passes through)
-/// (`bridge/map_path.h:61`).
+/// (`map_path.h:61`).
 fn lc(b: u8) -> u8 {
     if b.is_ascii_uppercase() {
         b | 0x20
@@ -87,56 +87,56 @@ fn lc(b: u8) -> u8 {
 /// and are only logged).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Reason {
-    /// The path is empty (`bridge/map_path.h:83`).
+    /// The path is empty (`map_path.h:83`).
     Empty,
-    /// The path is over [`MAP_PATH_MAX`] bytes (`bridge/map_path.h:88`).
+    /// The path is over [`MAP_PATH_MAX`] bytes (`map_path.h:88`).
     TooLong,
-    /// The path starts with a separator or a drive letter (`bridge/map_path.h:92`).
+    /// The path starts with a separator or a drive letter (`map_path.h:92`).
     Absolute,
-    /// A byte below 0x20 or 0x7F in the path (`bridge/map_path.h:98`).
+    /// A byte below 0x20 or 0x7F in the path (`map_path.h:98`).
     Control,
     /// A `:` in the path: what it would name on Windows is an alternate data stream, never a
-    /// map (`bridge/map_path.h:104`).
+    /// map (`map_path.h:104`).
     Colon,
     /// A `\` in the path: the canonical spelling uses `/` only (review M1,
-    /// `bridge/map_path.h:111`).
+    /// `map_path.h:111`).
     Backslash,
-    /// The path does not end in `.vmap` (case-insensitive) (`bridge/map_path.h:117`).
+    /// The path does not end in `.vmap` (case-insensitive) (`map_path.h:117`).
     NotVmap,
-    /// The path is not under `maps/` (case-insensitive) (`bridge/map_path.h:122`).
+    /// The path is not under `maps/` (case-insensitive) (`map_path.h:122`).
     NotUnderMaps,
-    /// `maps/.vmap`: a file directly under `maps/` with no basename (`bridge/map_path.h:127`).
+    /// `maps/.vmap`: a file directly under `maps/` with no basename (`map_path.h:127`).
     NoBasename,
     /// Two consecutive dots anywhere in the path - the same `..` rule `modeldoc.open`/
-    /// `pet.open` use (`bridge/map_path.h:132`).
+    /// `pet.open` use (`map_path.h:132`).
     DotDot,
-    /// An empty path segment: `//` (review M1, `bridge/map_path.h:144`).
+    /// An empty path segment: `//` (review M1, `map_path.h:144`).
     EmptySegment,
-    /// A `.` or `..` segment (review M1, `bridge/map_path.h:148`).
+    /// A `.` or `..` segment (review M1, `map_path.h:148`).
     DotSegment,
-    /// A segment ending in `.` or a space (review M1, `bridge/map_path.h:152`).
+    /// A segment ending in `.` or a space (review M1, `map_path.h:152`).
     TrailingDotSpace,
-    /// The header window is empty (`bridge/map_path.h:181`).
+    /// The header window is empty (`map_path.h:181`).
     EmptyFile,
     /// The window holds no NUL, so there is no NUL-terminated header inside it
-    /// (`bridge/map_path.h:186`).
+    /// (`map_path.h:186`).
     NoNul,
-    /// The header does not start with `<!-- dmx ` (`bridge/map_path.h:191`).
+    /// The header does not start with `<!-- dmx ` (`map_path.h:191`).
     NotDmx,
-    /// The header's first word is not `encoding` (`bridge/map_path.h:205`).
+    /// The header's first word is not `encoding` (`map_path.h:205`).
     FirstWord,
-    /// The header's second word is not `binary` (`bridge/map_path.h:212`).
+    /// The header's second word is not `binary` (`map_path.h:212`).
     NotBinary,
-    /// The header's third word does not parse as a number (`bridge/map_path.h:219`/`:224`).
+    /// The header's third word does not parse as a number (`map_path.h:219`/`:224`).
     VersionNotNumber,
-    /// The header's encoding version is not 9 (`bridge/map_path.h:231`).
+    /// The header's encoding version is not 9 (`map_path.h:231`).
     VersionNot9,
-    /// Fewer than six words in the header (`bridge/map_path.h:237`).
+    /// Fewer than six words in the header (`map_path.h:237`).
     TooFewWords,
 }
 
 impl Reason {
-    /// The reason exactly as the C header reports it (`bridge/map_path.h`).
+    /// The reason exactly as the C header reports it (`map_path.h`).
     pub const fn as_str(self) -> &'static str {
         match self {
             Reason::Empty => "path: a non-empty path relative to the addon content root \
@@ -174,7 +174,7 @@ impl fmt::Display for Reason {
 }
 
 /// 1 when `path` is a usable addon-content-relative map path, 0 = `*reason` names the gate that
-/// refused it (`bridge/map_path.h:79`). Ported statement for statement; every gate below cites
+/// refused it (`map_path.h:79`). Ported statement for statement; every gate below cites
 /// the C line it mirrors.
 pub fn open_path_ok(path: &[u8]) -> Result<(), Reason> {
     // `if (!path || !path[0])` (map_path.h:82): a null pointer cannot reach Rust; the empty
@@ -256,10 +256,10 @@ pub fn open_path_ok(path: &[u8]) -> Result<(), Reason> {
 }
 
 /// 1 when `head` (a window into the first bytes of a `.vmap`) carries a DMX header binary v9
-/// accepts, 0 = `*reason` names why not (`bridge/map_path.h:177`).
+/// accepts, 0 = `*reason` names why not (`map_path.h:177`).
 ///
-/// This mirrors the reader's own precondition (`hammer-mcp/src/vmap/dmx.rs`, oracle
-/// `bridge/vmapreader/vmap_dmx.py`): the file starts with the bytes of the header up to a NUL,
+/// This mirrors the reader's own precondition (`hammer-mcp/src/vmap/dmx.rs`, the retired
+/// oracle `vmap_dmx.py`): the file starts with the bytes of the header up to a NUL,
 /// the header starts with `<!-- dmx `, its first three whitespace-separated words are
 /// `encoding`, `binary` and the encoding version, and there are at least six words (encoding,
 /// binary, 9, format, <fmt>, <ver>). The first 16 bytes are NOT enough to tell a `binary 9`
@@ -347,7 +347,7 @@ pub fn vmap_header_ok(head: &[u8]) -> Result<(), Reason> {
 }
 
 /// Byte equality of `n` bytes, folding ASCII case and both separator spellings
-/// (`bridge/map_path.h:244`).
+/// (`map_path.h:244`).
 fn path_eq_n(a: &[u8], b: &[u8], n: usize) -> bool {
     for i in 0..n {
         let mut ca = lc(a[i]);
@@ -367,7 +367,7 @@ fn path_eq_n(a: &[u8], b: &[u8], n: usize) -> bool {
 
 /// 1 when the two paths name the same file. Separators (`\` and `/`) and ASCII case are folded
 /// and a trailing separator is dropped; after that the two must be byte-equal
-/// (`bridge/map_path.h:267`).
+/// (`map_path.h:267`).
 ///
 /// REVIEW L2: there is no relative-tail rule. OpenFileInternal always stores a full path (it
 /// uses either `V_IsAbsolutePath` or the CONTENT/GAME `RelativePathToFullPath`, and returns 0

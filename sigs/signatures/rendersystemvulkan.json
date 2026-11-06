@@ -1,7 +1,7 @@
 {
  "module": "rendersystemvulkan.dll",
  "image_base": 6442450944,
- "_doc": "rendersystemvulkan.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "rendersystemvulkan.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "8a7eb13b49f59d65",
@@ -638,7 +638,7 @@
   "RSC_IMAGE_FMT_COLOR_SCRATCH": {
    "kind": "const",
    "sdk": "S2_CONST_IMAGE_FORMAT_BGRA8888",
-   "via": "bridge/mcp_bridge.c:1771 (WR_COLOR_FMT 9, \"Hammer's offscreen colour scratch format\"; used in fmts[0] at :1878)",
+   "via": "mcp_bridge.c:1771 (WR_COLOR_FMT 9, \"Hammer's offscreen colour scratch format\"; used in fmts[0] at :1878)",
    "tag": "V",
    "expect": {
     "2000930": 9,
@@ -652,7 +652,7 @@
   "RSC_IMAGE_FMT_DEPTH48": {
    "kind": "const",
    "sdk": "S2_CONST_IMAGE_FORMAT_D32FS8",
-   "via": "bridge/mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is nonzero; the reverse-depth flag (RenderSystem/UseReverseDepth): depth-stencil creation swaps LESS/GREATER on it)",
+   "via": "mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is nonzero; the reverse-depth flag (RenderSystem/UseReverseDepth): depth-stencil creation swaps LESS/GREATER on it)",
    "tag": "V",
    "expect": {
     "2000930": 48,
@@ -666,7 +666,7 @@
   "RSC_IMAGE_FMT_DEPTH42": {
    "kind": "const",
    "sdk": "S2_CONST_IMAGE_FORMAT_D24S8",
-   "via": "bridge/mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is zero)",
+   "via": "mcp_bridge.c:1878 (fmts[1] when IRenderDevice::IsUsingReverseDepth is zero)",
    "tag": "V",
    "expect": {
     "2000930": 42,
@@ -680,7 +680,7 @@
   "RSC_IMAGE_FMT_RGBA8888": {
    "kind": "const",
    "sdk": "S2_CONST_IMAGE_FORMAT_RGBA8888",
-   "via": "bridge/s2sdk.h:226 (S2_IMAGE_RGBA8888 0; used by mcp_bridge.c:1924 ReadTexturePixels, \"format 0 (RGBA8888)\")",
+   "via": "s2sdk.h:226 (S2_IMAGE_RGBA8888 0; used by mcp_bridge.c:1924 ReadTexturePixels, \"format 0 (RGBA8888)\")",
    "tag": "V",
    "expect": {
     "2000930": 0,

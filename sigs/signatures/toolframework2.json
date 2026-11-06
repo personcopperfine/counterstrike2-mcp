@@ -1,7 +1,7 @@
 {
  "module": "toolframework2.dll",
  "image_base": 6442450944,
- "_doc": "toolframework2.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "toolframework2.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "28fc0cb55e4bc926",

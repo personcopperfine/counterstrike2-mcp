@@ -20,7 +20,7 @@ pub enum SteamMode {
 /// Where the build artefacts come from.
 #[derive(Debug, Clone)]
 pub struct Artifacts {
-    /// `bridge/build-rs.sh`'s output: `win64/{cs2_bridge.dll,cs2mcp_launch.exe,cs2mcp_mmload.dll}`,
+    /// `cargo bridge build`'s output: `win64/{cs2_bridge.dll,cs2mcp_launch.exe,cs2mcp_mmload.dll}`,
     /// `linuxsteamrt64/{libcs2_bridge.so,libcs2mcp_mmload.so}`
     pub bridge: PathBuf,
     /// the Metamod builds: `win64/addons/metamod/...`, `linux/addons/metamod/...`
@@ -161,11 +161,11 @@ pub fn build(input: &PlanInput<'_>, art: &Artifacts) -> anyhow::Result<Plan> {
             let dst = "game/csgo/addons/cs2mcp/bin/linuxsteamrt64";
             ops.push(copy(&format!("{dst}/libcs2_bridge.so"), b.join("libcs2_bridge.so")));
             ops.push(copy(&format!("{dst}/libcs2mcp_mmload.so"), b.join("libcs2mcp_mmload.so")));
-            // the whole Linux Metamod build, as install-rs.sh --platform linux copies it
+            // the whole Linux Metamod build, as `cargo bridge install --platform linux` copies it
             let mm = art.metamod.join("linux/addons/metamod");
             let mut files = Vec::new();
             walk_files(&mm, &mm, &mut files)
-                .with_context(|| format!("Metamod build {} (bridge/metamod/fetch-metamod.sh linux fetches it)", mm.display()))?;
+                .with_context(|| format!("Metamod build {} (crates/metamod/fetch-metamod.sh linux fetches it)", mm.display()))?;
             files.sort();
             for f in files {
                 ops.push(copy(&format!("game/csgo/addons/metamod/{f}"), mm.join(&f)));
@@ -248,9 +248,9 @@ fn hint_for(rel: &str) -> &'static str {
     if rel.contains("steam_api") || rel.contains("steamclient") {
         "run `cs2mcp-native fetch-gbe` (Linux) or crates/cs2-native/scripts/stage-gbe.sh, or pass --gbe-dir"
     } else if rel.contains("addons/metamod") {
-        "bridge/metamod/fetch-metamod.sh linux|win64 fetches it, or pass --metamod-dir"
+        "crates/metamod/fetch-metamod.sh linux|win64 fetches it, or pass --metamod-dir"
     } else {
-        "build it with bridge/build-rs.sh, or pass --bridge-dir"
+        "build it with cargo bridge build, or pass --bridge-dir"
     }
 }
 
@@ -397,6 +397,6 @@ mod tests {
         let save = root.join("saves");
         let input = PlanInput { os: Os::Windows, steam: SteamMode::Client, tools: false, root: &root, gbe_save_dir: &save, valve_api: None };
         let e = build(&input, &art).unwrap_err().to_string();
-        assert!(e.contains("bridge/build-rs.sh"), "{e}");
+        assert!(e.contains("cargo bridge build"), "{e}");
     }
 }

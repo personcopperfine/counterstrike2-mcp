@@ -1,6 +1,6 @@
 //! The writer thread: the outbound queue's only reader.
 //!
-//! Port of `writer_thread` (`bridge/mcp_bridge.c:1539-1562`): pop with a 100 ms wake interval
+//! Port of `writer_thread` (`mcp_bridge.c:1539-1562`): pop with a 100 ms wake interval
 //! (`out_pop_blocking(&o, 100)`), deliver only to the connection whose generation produced the
 //! record (`o.gen == g_clientGen && g_authedClient != INVALID_SOCKET`), and log a send failure
 //! or a stale-generation drop. The thread exits when a pop finds nothing and the bridge is

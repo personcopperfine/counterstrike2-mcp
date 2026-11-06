@@ -3,7 +3,7 @@
 //! Every tool validates its arguments before anything is sent (a validation failure never reaches
 //! the bridge). Bridge requests take the bridge lock first and then the per-call budget deadline
 //! (AGENT.md convention 4). Wire shapes: `../idabins/docs/data/bridge-protocol.md` §7; C handlers
-//! in `bridge/mcp_bridge.c` (`op_input`, `op_test`, `json_float3`, `in_each_name`).
+//! in `mcp_bridge.c` (`op_input`, `op_test`, `json_float3`, `in_each_name`).
 use crate::state::ClientState;
 use cs2_mcp_common::bridge::{BridgeClient, BridgeError, RequestOpts};
 use cs2_mcp_common::tools::{CallCtx, ToolError, ToolOutput};

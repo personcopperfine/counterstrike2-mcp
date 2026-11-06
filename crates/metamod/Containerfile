@@ -1,0 +1,28 @@
+# Build image for Metamod:Source 2.0-dev against the cs2 SDK (linux + win64 cross).
+#
+# The base is the exact image upstream CI uses for the Linux half of
+# .github/workflows/build-release.yml (ghcr.io/alliedmodders/build-containers/debian11-clang22).
+# Upstream gets AMBuild from support/checkout-deps.sh (a `git clone` of
+# alliedmodders/ambuild master); we clone the same repo but at a pinned commit and install it
+# into the image, so a build only needs this one image and the mounted dependency cache.
+#
+# Build (done automatically by `cargo bridge metamod` when the tag is missing, or explicitly with
+# `cargo bridge metamod image`). Nothing is copied in, so the build context is an empty directory
+# (target/metamod-deps/image-context), not this one: crates/metamod/ also holds the
+# metamod-source submodule. By hand:
+#   podman build -t localhost/mmsource-build:debian11-clang22 -f crates/metamod/Containerfile <empty dir>
+#
+# BASE_IMAGE is the MM_BASE_IMAGE override (`--build-arg BASE_IMAGE=...`); the default is
+# upstream's image.
+ARG BASE_IMAGE=ghcr.io/alliedmodders/build-containers/debian11-clang22:latest
+FROM ${BASE_IMAGE}
+
+# Pinned alliedmodders/ambuild commit (master, 2026-10-19). Bump: change the hash, rebuild.
+ARG AMBUILD_COMMIT=01212cb57c96561f664b6dfb2ee10e66de6f81e4
+
+RUN set -eux; \
+    git clone --quiet https://github.com/alliedmodders/ambuild /opt/ambuild; \
+    git -C /opt/ambuild checkout --quiet "$AMBUILD_COMMIT"; \
+    git -C /opt/ambuild rev-parse HEAD > /opt/ambuild-commit.txt; \
+    python3 -m pip install --no-cache-dir /opt/ambuild; \
+    python3 -c "import ambuild2, sys; print('ambuild2 import ok on', sys.version)"

@@ -1,6 +1,6 @@
 //! The game group's result builders, as pure functions over plain inputs (the brief's test 1):
-//! each one transcribes a C `sb_add` sequence from `bridge/mcp_bridge_game.inc` /
-//! `bridge/mcp_bridge.c` member for member, so a test can pin the exact bytes against values
+//! each one transcribes a C `sb_add` sequence from `mcp_bridge_game.inc` /
+//! `mcp_bridge.c` member for member, so a test can pin the exact bytes against values
 //! read off the C. The game-memory half of every call site is a thin reader in [`super`]/
 //! [`super::schema`] that fills the plain structs these builders take; the builders themselves
 //! never touch game memory.

@@ -23,7 +23,7 @@ that nothing is code-signed and that the game always runs with `-insecure`.
 ## 1. Before tagging: the checks a runner cannot do
 
 A runner has no game binaries, so the release workflow builds the bridge with
-`bridge/build-rs.sh --no-pins-check`, and every BUILDINFO.txt says `pins gate SKIPPED`. The pins
+`cargo bridge build --no-pins-check`, and every BUILDINFO.txt says `pins gate SKIPPED`. The pins
 and signatures are held to the game **here, by you, on the commit you are about to tag**, with
 the game binaries in `target/game-bins` and `target/game-bins-linux-<build>` (`sigs/README.md`,
 "Binaries"):
@@ -41,7 +41,8 @@ python3 -I crates/s2sdk/s2sdk-sys/gen/gen.py --check
 python3 sigs/scripts/sdkcheck.py                 # needs target/game-bins
 python3 sigs/scripts/sigcheck.py validate
 python3 sigs/scripts/sigcheck.py resolve --strict   # needs target/game-bins
-./bridge/build-rs.sh                             # WITH the pins gate: "pins gate: passed"
+cargo bridge pins --check                        # needs target/game-bins + target/game-bins-linux-<build>
+cargo bridge build                               # WITH the pins gate: "pins gate: passed"
 ```
 
 These are the AGENTS.md checks (plus cs2-native and cs2-launcher in the win64 ones). Every one
@@ -70,7 +71,7 @@ git push origin v0.1.0
 the MSI allows same-version upgrades, so installing the final over the rc works.
 
 Metamod (Linux and Windows) is the newest AlliedModders dev build at build time, on purpose
-(`bridge/metamod/fetch-metamod.sh linux|win64`); the notes record which one. To hold a release
+(`crates/metamod/fetch-metamod.sh linux|win64`); the notes record which one. To hold a release
 to the builds you tested, set the repository variables `MM_LINUX_SHA256` / `MM_WIN64_SHA256`
 (Settings → Secrets and variables → Actions → Variables) to those archives' SHA-256 (the dry
 run's BUILDINFO-linux.txt / BUILDINFO-windows.txt have them): a different build then fails the

@@ -10,7 +10,7 @@
 # against target/game-bins + target/game-bins-linux-<CURRENT_BUILD> (read-only mounts); without
 # them, NO_PINS_CHECK=1 builds with --no-pins-check (recorded as SKIPPED). Inputs, read-only:
 # target/metamod (fetch-metamod.sh win64), target/gbe (stage-gbe.sh).
-# podman runs with XDG_RUNTIME_DIR=<project root>/.podman/xdg (bridge/lib-root.sh).
+# podman runs with XDG_RUNTIME_DIR=<project root>/.podman/xdg (crates/cs2-native/scripts/lib-root.sh).
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/../../../.." && pwd)"
@@ -21,15 +21,15 @@ for a in "$@"; do
         *) echo "build.sh: unknown argument $a" >&2; exit 2 ;;
     esac
 done
-# shellcheck source-path=SCRIPTDIR source=../../../../bridge/lib-root.sh
-. "$repo/bridge/lib-root.sh"
+# shellcheck source-path=SCRIPTDIR source=../lib-root.sh
+. "$repo/crates/cs2-native/scripts/lib-root.sh"
 XDG_RUNTIME_DIR="$(cs2mcp_project_root "$repo")/.podman/xdg"
 export XDG_RUNTIME_DIR
 build="$(cat "$repo/sigs/CURRENT_BUILD")"
 img=localhost/cs2mcp-win-build:latest
 out="$repo/target/win-build/out"
 need() { [ -e "$1" ] || { echo "build.sh: missing $1 ($2)" >&2; exit 1; }; }
-need "$repo/target/metamod/win64/addons/metamod" "bridge/metamod/fetch-metamod.sh win64"
+need "$repo/target/metamod/win64/addons/metamod" "crates/metamod/fetch-metamod.sh win64"
 need "$repo/target/gbe/win64/steam_api64.dll" "crates/cs2-native/scripts/stage-gbe.sh"
 mounts=(-v "$repo:$repo:ro" -v "$repo/target/metamod:/in/metamod:ro" -v "$repo/target/gbe:/in/gbe:ro")
 # a linked worktree's .git names the main checkout's: mount that too (read-only)
@@ -63,9 +63,9 @@ podman run --rm --network=host "${mounts[@]}" \
         rm -rf target/bridge-rs target/cs2mcp-native-windows target/dist
         if [ "$PINS" = 1 ]; then
             ln -sfn /in/game-bins target/game-bins && ln -sfn /in/game-bins-linux "target/game-bins-linux-$BUILD"
-            bridge/build-rs.sh
+            cargo bridge build
         else
-            bridge/build-rs.sh --no-pins-check
+            cargo bridge build --no-pins-check
         fi
         METAMOD_DIR=/in/metamod GBE_DIR=/in/gbe crates/cs2-native/scripts/package.sh --os windows --archive
         cp -r target/cs2mcp-native-windows /out/

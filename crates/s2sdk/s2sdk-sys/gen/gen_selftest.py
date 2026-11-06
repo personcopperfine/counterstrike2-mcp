@@ -14,9 +14,9 @@ module object of the gen.py that is *executing*:
     second import of gen.py;
   - run directly, gen_selftest imports gen.py itself (`_load_gen`).
 
-That matters because the suite monkeypatches gen.py globals (C_HEADER_CONST_TIES,
-C_HEADER_STRING_TIES) whose reader (emit_c_ties_header) is a function
-defined in gen.py and therefore reads its own module's globals. A patch that lands on any other module object (e.g. on
+That matters because the suite monkeypatches gen.py globals (sdk_head) whose
+reader (locked_heads) is a function defined in gen.py and therefore reads its
+own module's globals. A patch that lands on any other module object (e.g. on
 gen_selftest's copies created by `_inherit`) is a silent no-op: the code under
 test sees the unpatched value and checks that should fail would pass. Every
 patch below therefore writes `gen.<GLOBAL> = ...` and restores it in a finally;
@@ -55,8 +55,8 @@ def _inherit(gen: types.ModuleType) -> None:
     moved suite body keeps referring to parse_record_layouts, emit_c_header,
     GenError etc. by bare name (the move is otherwise verbatim). Functions and
     classes come by reference: the suite exercises exactly the code gen.py
-    runs. The two monkeypatched globals are deliberately NOT touched through
-    these copies - self_test writes `gen.<GLOBAL>` and gen.py's emit functions
+    runs. A monkeypatched global is deliberately NOT touched through
+    these copies - self_test writes `gen.<GLOBAL>` and gen.py's functions
     read the same attribute (module docstring)."""
     for name, value in vars(gen).items():
         if name.startswith("__"):
@@ -474,7 +474,7 @@ def self_test(gen: types.ModuleType | None = None) -> int:
     """Run the suite against the gen module `gen`; imports gen.py when None.
 
     `gen` must be the module object of the gen.py the caller executes, because
-    the monkeypatches below (the fail-closed tie tables) write attributes on it
+    the monkeypatches below (sdk_head) write attributes on it
     and gen.py's emit functions read the same attributes from their own module:
     a patch on any other module object is a silent no-op (module docstring)."""
     if gen is None:
@@ -1688,7 +1688,7 @@ def self_test(gen: types.ModuleType | None = None) -> int:
     )
     ok(
         "metamod" in gen.C_HEADER_EXCLUDED_GROUPS,
-        "the metamod group stays out of bridge/s2sdk_gen.h (the frozen C bridge cannot name it)",
+        "the metamod group stays out of crates/s2sdk/s2sdk-sys/include/s2sdk_gen.h (frozen at the s2sdk groups)",
     )
 
     def raised(call) -> str:
@@ -2125,7 +2125,7 @@ def self_test(gen: types.ModuleType | None = None) -> int:
         "an override that claims a new slot fails closed",
     )
 
-    # the C header the bridge compiles (WP C1) -------------------------------- #
+    # the C header, s2sdk_gen.h (WP C1) ---------------------------------------- #
     def c_ir() -> dict:
         """The committed dual-ABI IR with one struct mutated to leave a gap, so
         the pad-and-assert code path is exercised against the real
@@ -2149,8 +2149,6 @@ def self_test(gen: types.ModuleType | None = None) -> int:
     ok(c_int_literal(16384, True) == "16384u", "an unsigned int const keeps the u suffix")
     ok(c_int_literal(0xFFFFFFFF, True) == "0xFFFFFFFFu", "a wide const is spelled in hex")
     ok(c_int_literal(29, False) == "29", "a signed int const has no suffix")
-    # the real run reads the committed bridge headers; the fails() cases below
-    # pass explicit pin values so the emitter stays hermetic here otherwise
     c_header = emit_c_header(c_ir())
     ok(
         "typedef struct S2_Vector S2_Vector;" in c_header,
@@ -2257,47 +2255,8 @@ def self_test(gen: types.ModuleType | None = None) -> int:
         "#define S2_CONST_TOKEN_TOOLS 0x785BE7A7u" in c_header,
         "a wide const is spelled in hex like the bridge's literals",
     )
-    # review F4: the generated names must be disjoint from every name the
-    # bridge's own sources #define / typedef / declare a tag for (a vtable RVA:
-    # bridge_pins.h keeps those whatever the SDK takes over)
-    bridge_names = bridge_c_names()
-    ok(
-        bridge_names.get("SV_SCENESYSTEM_VT") == "a #define in bridge/bridge_pins.h"
-        and bridge_names.get("S2HandleVec") == "a declaration in bridge/s2sdk.h"
-        and bridge_names.get("u8") == "a typedef in bridge/mcp_bridge.c"
-        and bridge_names.get("GS_PAGE_MASK") == "a #define in bridge/mcp_bridge_game.inc"
-        and bridge_names.get("S2_UTLVEC_EXTERNAL") == "a #define in bridge/s2sdk.h",
-        f"the bridge name scan covers defines, typedefs, tags and the .inc "
-        f"({len(bridge_names)} names)",
-    )
-    ok(
-        fails(
-            lambda: refuse_c_name_collisions(
-                {"SV_SCENESYSTEM_VT": "a generated macro"}, bridge_names
-            )
-        ),
-        "a generated macro colliding with a bridge pin is refused",
-    )
-    ok(
-        fails(
-            lambda: refuse_c_name_collisions(
-                {"S2HandleVec": "a generated typedef"}, bridge_names
-            )
-        ),
-        "a generated typedef colliding with a bridge typedef is refused",
-    )
-    ok(
-        not fails(
-            lambda: refuse_c_name_collisions(
-                {"S2_SIZEOF_Vector": "a generated macro"}, bridge_names
-            )
-        ),
-        "a plain generated name does not collide (and emit_c_header's own runs "
-        "below prove the real 0-overlap state compiles)",
-    )
-
-    # the sdk field's grammar (tie_terms / split_tie_scale): pin ties are gone, but sigcheck.sdk_eval
-    # and sdkcheck read the same syntax
+    # the sdk field's grammar (tie_terms / split_tie_scale): the tie tables are gone with the C
+    # bridge, but sigcheck.sdk_eval and sdkcheck read the same syntax
     ok(
         gen.split_tie_scale(gen.slot_bytes("S2_SLOT_A_b")) == ("S2_SLOT_A_b", 8)
         and gen.split_tie_scale("S2_OFF_A_b") == ("S2_OFF_A_b", 1),
@@ -2332,275 +2291,48 @@ def self_test(gen: types.ModuleType | None = None) -> int:
         "WP5: s2sdk_gen.h carries no pin-tie block and no REQUIRE_PINS machinery",
     )
 
-    c_ties = emit_c_ties_header(committed_ir)
     ok(
-        "S2SDK_GEN_REQUIRE_PINS" not in c_ties,
-        "the ties header needs no REQUIRE_PINS macro (no pin ties are left)",
-    )
-    ok(
-        "SRVCFG_VT_SLOTS" not in committed_header and "SRVCFG_VT_SLOTS" not in c_ties,
-        "the pruned SRVCFG_VT_SLOTS anchor is gone from both generated headers "
+        "SRVCFG_VT_SLOTS" not in committed_header,
+        "the pruned SRVCFG_VT_SLOTS anchor is gone from the generated header "
         "(the code uses S2_VTLEN_ISource2ServerConfig; the runtime copy is "
         "built from the pinned vftable)",
     )
-    # the C1c retarget: the alias tie survives B2, the tie-by-replacement rows
-    # (bridge-side duplicates B2 deleted) are gone from the emitted header
     ok(
-        "#ifndef S2_UTLVEC_EXTERNAL" in c_ties
-        and "S2_CONST_EXTERNAL_CONST_BUFFER_MARKER == S2_UTLVEC_EXTERNAL" in c_ties,
-        "the S2_UTLVEC_EXTERNAL alias tie survives B2 (it must spell the "
-        "generated marker, not the plain EXTERNAL_BUFFER_MARKER)",
+        "s2sdk.h" not in committed_header
+        and "build.sh" not in committed_header
+        and "s2sdk_gen_ties" not in committed_header
+        and "_Static_assert(sizeof(S2HandleVec)" not in committed_header,
+        "the header names no file of the retired C bridge and carries none of its ties",
     )
     ok(
-        "RSC_IMAGE_FMT_" not in c_ties and "GSVC_GAMECONFIG_VT_SLOTS" not in c_ties,
-        "WP1b: the bridge spells the generated ImageFormat consts and vftable length "
-        "itself, so the ties header carries none of their pins",
-    )
-    ok(
-        "_Static_assert(sizeof(S2HandleVec) == S2_SIZEOF_CUtlVector_CEntityHandle,"
-        in c_ties,
-        "the S2HandleVec shape stays tied to the generated CUtlVector<CEntityHandle>",
-    )
-    for pin in (
-        "S2_TOOLFRAMEWORK2_VERSION",
-        "S2_SCENESYSTEM_VERSION",
-        "S2_SCENEUTILS_VERSION",
-        "S2_RENDERSERVICE_VERSION",
-        "S2_RENDERDEVICE_VERSION",
-        "S2_PIPELINE_TOKEN_TOOLS",
-        "S2_ATTR_TOKEN_COLOR",
-        "S2_ATTR_TOKEN_DEPTH",
-        "S2Vector",
-        "S2QAngle",
-        "S2Viewport",
-        "CUtlSymbolLarge",
-    ):
-        ok(pin not in c_ties, f"the pruned {pin} tie is gone (B2 replaced the bridge copy)")
-
-    # the string-tie emitter with a synthetic row: no real string tie remains
-    # after the C1c retarget (B2 deleted every S2_*_VERSION copy), but the
-    # emitter is table-driven and must keep failing closed for a future row
-    # patch the gen module object itself (gen.py's emitters read its globals)
-    saved_string_ties = gen.C_HEADER_STRING_TIES
-    gen.C_HEADER_STRING_TIES = (
-        (
-            "S2_IFACE_TOOLFRAMEWORK2",
-            "S2_TOOLFRAMEWORK2_VERSION",
-            "toolframework2.dll CToolFramework2",
-        ),
-    )
-    try:
-        synth_ties = emit_c_ties_header(
-            committed_ir, string_pins={"S2_TOOLFRAMEWORK2_VERSION": "ToolFramework2_002"}
-        )
-        ok(
-            "_Static_assert(sizeof(S2_IFACE_TOOLFRAMEWORK2) == "
-            "sizeof(S2_TOOLFRAMEWORK2_VERSION)," in synth_ties
-            and "S2_IFACE_TOOLFRAMEWORK2[0] == S2_TOOLFRAMEWORK2_VERSION[0]" in synth_ties
-            and "S2_IFACE_TOOLFRAMEWORK2[17] == S2_TOOLFRAMEWORK2_VERSION[17]" in synth_ties,
-            "a string tie is sizeof equality plus every character (18-char string)",
-        )
-        # review F7 (Q4.2): the string tie must actually COMPILE, not only
-        # carry the right text - the per-character asserts are not a C11
-        # integer constant expression, and clang folds them as a GNU
-        # extension. Both facts are proven here: the tie compiles with the
-        # build's flags, and under -Wpedantic clang spells the folding warning
-        # (the reason build.sh refuses a non-clang compiler).
-        cc = os.environ.get("CC", "clang")
-        if shutil.which(cc):
-            tie_scratch = SCRATCH / "selftest-c1d-stringtie"
-            tie_scratch.mkdir(parents=True, exist_ok=True)
-            # a shadow dir searched first: the committed generated headers plus
-            # a shadow s2sdk.h that carries the synthetic pin (the real
-            # headers fall through to bridge/)
-            (tie_scratch / "s2sdk_gen.h").write_text(committed_header, encoding="utf-8")
-            (tie_scratch / "s2sdk_gen_ties.h").write_text(synth_ties, encoding="utf-8")
-            (tie_scratch / "s2sdk.h").write_text(
-                (REPO_ROOT / "bridge" / "s2sdk.h").read_text(
-                    encoding="utf-8", errors="replace"
-                )
-                + "#define S2_TOOLFRAMEWORK2_VERSION \"ToolFramework2_002\""
-                + " /* synthetic pin (self-test string tie) */\n",
-                encoding="utf-8",
-            )
-            tie_tu = tie_scratch / "c1d_string_tie.c"
-            tie_tu.write_text(
-                "\n".join(
-                    [
-                        *bridge_c_typedefs(),
-                        '#include "bridge_pins.h"',
-                        '#include "s2sdk_gen.h"',
-                        '#include "s2sdk.h"',
-                        '#include "s2sdk_gen_ties.h"',
-                    ]
-                ),
-                encoding="utf-8",
-            )
-            done = subprocess.run(
-                [
-                    cc,
-                    "--target=x86_64-pc-windows-msvc",
-                    "-ffreestanding",
-                    "-fsyntax-only",
-                    f"-I{tie_scratch}",
-                    f"-I{REPO_ROOT / 'bridge'}",
-                    str(tie_tu),
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-            ok(
-                done.returncode == 0,
-                f"the synthetic string tie compiles ({done.stderr.strip()})",
-            )
-            done = subprocess.run(
-                [
-                    cc,
-                    "--target=x86_64-pc-windows-msvc",
-                    "-ffreestanding",
-                    "-fsyntax-only",
-                    "-Wpedantic",
-                    f"-I{tie_scratch}",
-                    f"-I{REPO_ROOT / 'bridge'}",
-                    str(tie_tu),
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-            ok(
-                done.returncode == 0 and "gnu-folding-constant" in done.stderr,
-                "under -Wpedantic the per-char asserts are a folded GNU "
-                "extension, not a C11 ICE (still exit 0; documented reliance)",
-            )
-        ok(
-            fails(
-                lambda: emit_c_ties_header(
-                    committed_ir,
-                    string_pins={"S2_TOOLFRAMEWORK2_VERSION": "ToolFramework2_009"},
-                )
-            ),
-            "a drifted interface string is refused at generation time",
-        )
-        ok(
-            fails(lambda: emit_c_ties_header(committed_ir, string_pins={})),
-            "a deleted interface string is refused at generation time",
-        )
-    finally:
-        gen.C_HEADER_STRING_TIES = saved_string_ties
-    # the alias tie's failure directions (WP C1c)
-    ok(
-        fails(
-            lambda: emit_c_ties_header(
-                committed_ir,
-                alias_pins={"S2_UTLVEC_EXTERNAL": "S2_CONST_EXTERNAL_BUFFER_MARKER"},
-            )
-        ),
-        "an alias pointed at the wrong marker is refused at generation time",
-    )
-    ok(
-        fails(
-            lambda: emit_c_ties_header(
-                committed_ir, alias_pins={"S2_UTLVEC_EXTERNAL": "S2_NOT_A_MACRO"}
-            )
-        ),
-        "an alias whose target resolves to nothing is refused at generation time",
-    )
-    ok(
-        fails(
-            lambda: emit_c_ties_header(
-                committed_ir,
-                int_pins={**bridge_int_defines()[0], "S2_UTLVEC_EXTERNAL": 1},
-            )
-        ),
-        "a drifted alias value is refused at generation time",
+        all(line not in committed_header for line in C_SMOKE_TYPEDEFS),
+        "the header stays freestanding: the u8/u16/u32/u64 typedefs come from its includer",
     )
 
-    # the real include order as an actual clang compile of the committed headers
-    # (WP C1b): the ties compile, and a missing alias does not. Skipped only when
-    # no clang is on PATH; --check and build.sh compile the same TU.
+    # the smoke compile --check runs, as an actual clang compile: the committed
+    # header passes, and a drifted number trips its own _Static_assert. Skipped
+    # only when no clang is on PATH; --check needs clang anyway.
     cc = os.environ.get("CC", "clang")
     if shutil.which(cc):
-        ties_scratch = SCRATCH / "selftest-c1b"
-        ties_scratch.mkdir(parents=True, exist_ok=True)
-        bridge_inc = str(REPO_ROOT / "bridge")
-
-        def c1b_tu(name: str, *body: str) -> Path:
-            path = ties_scratch / name
-            path.write_text("\n".join([*bridge_c_typedefs(), "", *body]), encoding="utf-8")
-            return path
-
-        def c1b_syntax(path: Path) -> tuple[bool, str]:
-            done = subprocess.run(
-                [
-                    cc,
-                    "--target=x86_64-pc-windows-msvc",
-                    "-ffreestanding",
-                    "-fsyntax-only",
-                    f"-I{bridge_inc}",
-                    str(path),
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-            return done.returncode == 0, done.stderr
-
-        good, err = c1b_syntax(
-            c1b_tu(
-                "c1b_full_order_ok.c",
-                '#include "bridge_pins.h"',
-                '#include "s2sdk_gen.h"',
-                '#include "s2sdk.h"',
-                '#include "s2sdk_gen_ties.h"',
-            )
+        smoke_scratch = SCRATCH / "selftest-c-header-smoke"
+        ok(
+            not fails(lambda: smoke_compile_c_header(committed_header, smoke_scratch)),
+            "the committed header compiles freestanding on the MSVC target",
         )
-        ok(good, f"the real include order compiles every tie ({err.strip()})")
-        # the missing-alias demo (WP C1c): a shadow copy of s2sdk.h without the
-        # S2_UTLVEC_EXTERNAL alias makes the ties header #error naming it (the
-        # shadow dir is searched first, so the other headers fall through to
-        # bridge/ or are copied in verbatim)
-        shadow = ties_scratch / "c1c_alias_missing"
-        shadow.mkdir(parents=True, exist_ok=True)
-        (shadow / "s2sdk.h").write_text(
-            "\n".join(
-                line
-                for line in (REPO_ROOT / "bridge" / "s2sdk.h")
-                .read_text(encoding="utf-8", errors="replace")
-                .splitlines()
-                if not line.startswith("#define S2_UTLVEC_EXTERNAL")
-            )
-            + "\n",
-            encoding="utf-8",
-        )
-        for header in ("s2sdk_gen.h", "s2sdk_gen_ties.h"):
-            shutil.copy(REPO_ROOT / "bridge" / header, shadow / header)
-        done = subprocess.run(
-            [
-                cc,
-                "--target=x86_64-pc-windows-msvc",
-                "-ffreestanding",
-                "-fsyntax-only",
-                f"-I{shadow}",
-                f"-I{bridge_inc}",
-                str(
-                    c1b_tu(
-                        "c1c_alias_missing.c",
-                        '#include "bridge_pins.h"',
-                        '#include "s2sdk_gen.h"',
-                        '#include "s2sdk.h"',
-                        '#include "s2sdk_gen_ties.h"',
-                    )
-                ),
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+        drifted = committed_header.replace(
+            "#define S2_SIZEOF_Vector 12\n", "#define S2_SIZEOF_Vector 16\n"
         )
         ok(
-            done.returncode != 0 and "S2_UTLVEC_EXTERNAL must be #defined" in done.stderr,
-            "a missing alias is a #error naming it at the end of the TU",
+            drifted != committed_header
+            and fails(lambda: smoke_compile_c_header(drifted, smoke_scratch)),
+            "a size macro that disagrees with its padded struct fails the smoke compile",
+        )
+        redefined = committed_header.replace(
+            "#endif /* S2SDK_GEN_H */", "#define S2_SIZEOF_Vector 13\n#endif /* S2SDK_GEN_H */"
+        )
+        ok(
+            fails(lambda: smoke_compile_c_header(redefined, smoke_scratch)),
+            "a macro redefinition is an error in the smoke compile, not a warning",
         )
 
     # the per-ABI emitters --------------------------------------------------- #

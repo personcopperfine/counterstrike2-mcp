@@ -399,7 +399,7 @@ pub async fn set_node_transform(
     if !reply.result.is_object() {
         return Err(ToolError::internal(format!(
             "node.setTransform returned a non-object result: {} \
-             (bridge/protocol-diff-m2.18.md §3)",
+             (crates/cs2-bridge/PROTOCOL.md §11.3)",
             reply.result
         )));
     }

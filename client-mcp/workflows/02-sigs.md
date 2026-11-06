@@ -5,7 +5,7 @@ No address in this crate; a game update is a drill with a precise to-do list; ad
 capability (new bridge method) follows one documented path from IDA to tool.
 
 ## Prerequisites
-- Read `sigs/README.md`, `workflows/game-update.md`, `bridge/pins.py` (modules pinned: hammer,
+- Read `sigs/README.md`, `workflows/game-update.md`, `cargo bridge pins` (modules pinned: hammer,
   toolframework2, scenesystem, engine2, rendersystemvulkan, **client**, **server**, **tier0**).
 
 ## Steps
@@ -22,7 +22,7 @@ capability (new bridge method) follows one documented path from IDA to tool.
 5. **New-method procedure** (this is the one client-mcp will use most — write it as a checklist in
    `research/NEW-METHOD.md`): e.g. `game.state` (local pawn origin/angles/health):
    IDA (`client.dll.i64`) -> name functions/vtables -> `ida_sigs.dump_auto([...])` entries in
-   `signatures/client.json` with `bridge` macros -> `pins.py --rust` -> `crates/cs2-bridge` (`registry.rs` row + `ops/` handler,
+   `signatures/client.json` with `bridge` macros -> `cargo bridge pins` -> `crates/cs2-bridge` (`registry.rs` row + `ops/` handler,
    `NEED_CLIENT`) -> `bridge-protocol.md` §7 row with `[V runtime]` evidence -> tool here, gated on
    the capability. Examples that followed exactly this path: `input.*` (m2.7), `test.*`,
    `console.exec`, `game.tick` (m2.8).

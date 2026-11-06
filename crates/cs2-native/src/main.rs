@@ -44,7 +44,7 @@ struct Global {
     /// How files reach the game: overlay (Linux default), in-place (Windows default; `run` always).
     #[arg(long, global = true, value_enum, default_value_t = Strategy::Auto)]
     strategy: Strategy,
-    /// `bridge/build-rs.sh` output (win64/, linuxsteamrt64/).
+    /// `cargo bridge build` output (win64/, linuxsteamrt64/).
     #[arg(long, global = true, env = "CS2MCP_BRIDGE_DIR")]
     bridge_dir: Option<PathBuf>,
     /// Metamod builds (win64/addons/metamod, linux/addons/metamod).
@@ -144,7 +144,7 @@ enum Cmd {
         /// Do not load the capture layer (a container runtime that mounts its own sets it up).
         #[arg(long)]
         no_capture: bool,
-        /// First move the old container layout's leftovers out of the volume (install-rs.sh's
+        /// First move the old container layout's leftovers out of the volume (`cargo bridge install`'s
         /// files, setup_gbe.sh's emulator in place of Valve's library: put back from its backup).
         #[arg(long)]
         cleanup_legacy: bool,
@@ -175,7 +175,7 @@ enum Cmd {
     /// Restore the tree without a session (after a crash or a reboot).
     Uninstall,
     /// Move leftovers no manifest records (our files after a deleted state dir, an older
-    /// install-rs.sh layout) out of the install, into the state dir. Without --yes: only list.
+    /// `cargo bridge install` layout) out of the install, into the state dir. Without --yes: only list.
     Cleanup {
         #[arg(long)]
         yes: bool,
@@ -202,7 +202,7 @@ enum Cmd {
         #[arg(long)]
         text: String,
     },
-    /// Post an `open_asset` into the running `-tools` session (runtime.sh `open`): a map opens in
+    /// Post an `open_asset` into the running `-tools` session (`cargo bridge runtime`'s `open`): a map opens in
     /// Hammer, a `.vmdl` loads ModelDoc. Run it on the game's desktop (the channel is per logon session).
     Open {
         /// Content-relative asset path (`maps/x.vmap`, `models/x.vmdl`).

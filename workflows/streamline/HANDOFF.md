@@ -53,7 +53,7 @@ Written 2026-10-26 by the planning session. Read this, then `PLAN.md` (same fold
   `(ulimit -v 6000000; timeout 900 cargo … -j4)` with `--test-threads=4`. Max ~2 parallel workers
   while the game runs. Build targets under `target/<name>/`, never `/tmp` (16 GB tmpfs).
 - Podman needs `XDG_RUNTIME_DIR=<project root>/.podman/xdg`. At most ~3 game
-  containers; one ModelDoc instance only (`TOOL=modeldoc bridge/runtime.sh up`, never replace one).
+  containers; one ModelDoc instance only (`TOOL=modeldoc cargo bridge runtime up`, never replace one).
 - Wait on signals with deadlines, never fixed sleeps.
 - Generated files are never hand-edited (AGENTS.md rule 1). Valve binaries never go into git.
 - No push, PR or issue without the user. Commit only files you changed. Log every hack/throwaway
@@ -133,9 +133,9 @@ nothing pushed.
 - User said to skip live checks: no bridge install, no acceptance run 5. Unverified live: reload marker,
   `.js` -> `.vjs_c` compile, `build` with a map running. Merge to main still needs the user's go.
 - **Next (user, 2026-10-27):** install & test, then list every tool call available.
-  1. Game down -> `bridge/install-rs.sh status`; back up the installed m3.16 to the main checkout's
-     `target/bridge/backup-2026-10-27-m316/`; `bridge/install-rs.sh install` (m3.17).
-  2. `TOOL=hammer ADDON=accept_p4 bridge/runtime.sh up`; `target/orch/mcp_session.py start
+  1. Game down -> `cargo bridge install status`; back up the installed m3.16 to the main checkout's
+     `target/bridge/backup-2026-10-27-m316/`; `cargo bridge install install` (m3.17).
+  2. `TOOL=hammer ADDON=accept_p4 cargo bridge runtime up`; `target/orch/mcp_session.py start
      target/debug/hammer-mcp --project-root <project root> --addon accept_p4`.
   3. Live: `cs_script init` -> write -> build (with `run_map` loaded: reload marker) -> place point_script
      (`create_entities`, keyvalue cs_script=maps/scripts/main.vjs) -> save/compile_map/run_map -> console

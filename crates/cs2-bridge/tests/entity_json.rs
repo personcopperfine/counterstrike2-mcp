@@ -1,27 +1,24 @@
-//! `bridge/test_entity_json.c` ported to Rust, case for case, plus the differential corpus the
-//! C region and this port must agree on.
+//! `test_entity_json.c` (the C bridge's region test) ported to Rust, case for case, plus the
+//! differential corpus the C region produced and this port must still reproduce.
 //!
-//! Three checks live here:
+//! The C bridge is retired (its sources are in git history, commit 8cdea42); its cases and its
+//! output live on here as the spec:
 //!
-//! 1. [`c_test_cases_ported_one_for_one`]: every case of `bridge/test_entity_json.c` (the C
-//!    prints `125 cases, 0 failures`; one of them is its own `region_in_source` check), ported to
-//!    the Rust API. The count is asserted on both sides: the C case count is read back from the
-//!    rebuilt C test by [`c_region_test_passes`], and this test asserts its own.
-//! 2. [`c_region_test_passes`]: the C test is rebuilt exactly as `bridge/build.sh:58-78` builds
-//!    it (the region is lifted verbatim out of `bridge/mcp_bridge.c` into a generated header) and
-//!    run; `0 failures` is required, and a missing marker or missing `cc` FAILS naming what is
-//!    missing.
-//! 3. [`differential_corpus_matches_the_c`]: `tests/data/entity_json_cases.txt` is a case list
-//!    driven through the *compiled C region* (`tests/data/entity_json_gen.c`, rebuilt with `cc`
-//!    against the same extracted header) and through this port; both outputs must equal the
-//!    committed `tests/data/entity_json_corpus.txt` byte for byte.
+//! 1. [`c_test_cases_ported_one_for_one`]: every case of `test_entity_json.c` (the C printed
+//!    `125 cases, 0 failures`; one of them was its own `region_in_source` check, which went with
+//!    the C source), ported to the Rust API; the count of the other 124 is asserted.
+//! 2. [`differential_corpus`]: `tests/data/entity_json_cases.txt` is a case list driven through
+//!    this port; the output must equal the committed `tests/data/entity_json_corpus.txt` byte for
+//!    byte. That corpus is what the *compiled C region* printed for the same list (the generator
+//!    was `tests/data/entity_json_gen.c`, also in commit 8cdea42), so it is frozen: a new case
+//!    goes into both files, with the expected line derived from the C's semantics by hand and
+//!    reviewed, never from this port's own output.
 //!
 //! [`one_byte_corruption_is_detected`] is the negative half: a single flipped byte in the
-//! committed corpus must break both comparisons.
+//! committed corpus must break the comparison.
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
 use cs2_bridge::entity_json::{
     batch_has_create, batch_node_recorded, batch_op_next, batch_record_decision, conn_array_parse,
@@ -34,123 +31,9 @@ use cs2_bridge::entity_json::{
     JSON_INT_MAX,
 };
 
-const MARK_BEGIN: &str = "/* ---- entity JSON region begin ---- */";
-const MARK_END: &str = "/* ---- entity JSON region end ---- */";
-
-/// The repository root (`.../crates/cs2-bridge/../..`).
-fn repo_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../..")
-        .canonicalize()
-        .expect("the repository root must exist")
-}
-
-/// `bridge/mcp_bridge.c`, the source of truth for the region.
-fn bridge_source() -> PathBuf {
-    repo_root().join("bridge/mcp_bridge.c")
-}
-
 /// `crates/cs2-bridge/tests/data`.
 fn data_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/data")
-}
-
-/// The region, lifted out of `bridge/mcp_bridge.c` exactly as `bridge/build.sh:58-76` lifts it.
-fn extract_region() -> String {
-    let path = bridge_source();
-    let text = std::fs::read_to_string(&path)
-        .unwrap_or_else(|error| panic!("the C region source {} must be readable: {error}", path.display()));
-    extract_region_from(&text, &path.display().to_string())
-}
-
-/// The extraction itself (`bridge/build.sh:64-74`): exactly one of each marker, hex-literal free,
-/// and carrying the scanners. Every failure names what is missing - there is no skip.
-fn extract_region_from(text: &str, what: &str) -> String {
-    assert_eq!(
-        text.matches(MARK_BEGIN).count(),
-        1,
-        "{what} must carry exactly one `{MARK_BEGIN}` (build.sh:64)"
-    );
-    assert_eq!(
-        text.matches(MARK_END).count(),
-        1,
-        "{what} must carry exactly one `{MARK_END}` (build.sh:64)"
-    );
-    let body = text
-        .split_once(MARK_BEGIN)
-        .expect("the begin marker is present")
-        .1
-        .split_once(MARK_END)
-        .expect("the end marker is present")
-        .0;
-    for needed in ["json_find_top", "kv_next", "batch_op_next", "sb_addjson"] {
-        assert!(body.contains(needed), "the region must carry {needed} (build.sh:71)");
-    }
-    assert!(
-        !has_hex_literal(body),
-        "the region must not carry a hex literal (build.sh:67)"
-    );
-    body.to_string()
-}
-
-/// The `bridge/build.sh:67-70` check: a `0x`/`0X` followed by a hex digit and not preceded by an
-/// identifier byte (the build's `\b0[xX][0-9a-fA-F]+`). The region's comments may say the words
-/// "a 0x literal"; a real literal fails.
-fn has_hex_literal(body: &str) -> bool {
-    let bytes = body.as_bytes();
-    for i in 0..bytes.len().saturating_sub(2) {
-        let boundary = i == 0 || !(bytes[i - 1].is_ascii_alphanumeric() || bytes[i - 1] == b'_');
-        if bytes[i] == b'0'
-            && (bytes[i + 1] | 0x20) == b'x'
-            && boundary
-            && bytes[i + 2].is_ascii_hexdigit()
-        {
-            return true;
-        }
-    }
-    false
-}
-
-/// Writes the extracted region into the cargo target tmpdir and returns the header path.
-fn write_region_header() -> PathBuf {
-    let dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
-    std::fs::create_dir_all(&dir).expect("the cargo target tmpdir is writable");
-    let header = dir.join("entity_json_region.h");
-    std::fs::write(&header, extract_region()).expect("the extracted region header is writable");
-    header
-}
-
-/// `cc`, or a failure naming `cc` (AGENTS.md: a gate that cannot run fails loudly).
-fn cc() -> &'static str {
-    "cc"
-}
-
-/// Compiles `source` with `cc` and returns the binary path. `-std=c11 -O1 -Wall -Wextra` is what
-/// `bridge/build.sh:77` uses.
-fn compile(source: &Path, name: &str, include: &Path) -> PathBuf {
-    let out = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(name);
-    let result = Command::new(cc())
-        .arg("-std=c11")
-        .arg("-O1")
-        .arg("-Wall")
-        .arg("-Wextra")
-        .arg("-I")
-        .arg(include)
-        .arg("-o")
-        .arg(&out)
-        .arg(source)
-        .output();
-    let output = match result {
-        Ok(output) => output,
-        Err(error) => panic!("cc must be available to build {}: {error}", source.display()),
-    };
-    assert!(
-        output.status.success(),
-        "cc failed for {}:\n{}",
-        source.display(),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    out
 }
 
 // =====================================================================================
@@ -1267,8 +1150,8 @@ fn rm_cases(steps: &mut Steps) {
     );
 }
 
-/// Every case of `bridge/test_entity_json.c` except its own `region_in_source` check (which
-/// [`extract_region`] covers): `125 cases, 0 failures` in the C, 124 here.
+/// Every case of `test_entity_json.c` except its own `region_in_source` check (which read the C
+/// source itself): `125 cases, 0 failures` in the C, 124 here.
 #[test]
 fn c_test_cases_ported_one_for_one() {
     let mut steps = Steps { cases: 0 };
@@ -1291,36 +1174,8 @@ fn c_test_cases_ported_one_for_one() {
     );
 }
 
-/// The C test itself: rebuilt exactly as `bridge/build.sh:58-78` builds it and run. `0 failures`
-/// is required, and the case count is returned so the ported test's count can be held against it.
-#[test]
-fn c_region_test_passes() {
-    let include = write_region_header()
-        .parent()
-        .expect("the header has a parent")
-        .to_path_buf();
-    let test_src = repo_root().join("bridge/test_entity_json.c");
-    assert!(test_src.is_file(), "{} must exist", test_src.display());
-    let binary = compile(&test_src, "test_entity_json", &include);
-    let output = Command::new(&binary)
-        .arg(bridge_source())
-        .output()
-        .expect("the C region test runs");
-    let stdout = String::from_utf8_lossy(&output.stdout);
-    let last = stdout.lines().last().unwrap_or("");
-    assert!(
-        output.status.success(),
-        "the C entity JSON region test must pass:\n{stdout}\n{}",
-        String::from_utf8_lossy(&output.stderr)
-    );
-    assert!(
-        last == "125 cases, 0 failures",
-        "the C test's summary must be `125 cases, 0 failures`, got `{last}`"
-    );
-}
-
 // =====================================================================================
-// 3. the differential corpus
+// 2. the differential corpus
 // =====================================================================================
 
 fn put_hex(out: &mut String, bytes: &[u8]) {
@@ -1377,8 +1232,8 @@ fn parse_ids(token: &str) -> Vec<i32> {
 
 /// Drive one case line through the Rust port, producing the same line the C generator prints.
 ///
-/// The C generator (`tests/data/entity_json_gen.c`) is the mirror image of this match: a new op
-/// must be added to both, and the corpus test fails if they disagree.
+/// The C generator (`entity_json_gen.c`, in history) was the mirror image of this match: a new op
+/// needs its expected corpus lines written by hand from the C semantics (module docs).
 fn run_case(op: &str, args: &[&str]) -> String {
     let mut out = String::new();
     let _ = write!(out, "{op}");
@@ -1757,8 +1612,10 @@ fn read_cases() -> String {
         .unwrap_or_else(|error| panic!("the corpus case list {} must be readable: {error}", path.display()))
 }
 
+/// The committed corpus is the compiled C region's output for `entity_json_cases.txt`; the Rust
+/// port must reproduce it byte for byte.
 #[test]
-fn differential_corpus_matches_the_c() {
+fn differential_corpus() {
     let cases = read_cases();
     let committed_path = data_dir().join("entity_json_corpus.txt");
     let committed = std::fs::read_to_string(&committed_path)
@@ -1769,30 +1626,7 @@ fn differential_corpus_matches_the_c() {
         committed.lines().count(),
         cases.lines().count()
     );
-
-    // The C side: rebuild tests/data/entity_json_gen.c against the extracted region and run it.
-    let include = write_region_header()
-        .parent()
-        .expect("the header has a parent")
-        .to_path_buf();
-    let generator = data_dir().join("entity_json_gen.c");
-    assert!(generator.is_file(), "{} must be committed", generator.display());
-    let binary = compile(&generator, "entity_json_gen", &include);
-    let output = Command::new(&binary)
-        .arg(data_dir().join("entity_json_cases.txt"))
-        .output()
-        .expect("the C generator runs");
-    assert!(
-        output.status.success(),
-        "the C generator must run:\n{}",
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let c_out = String::from_utf8(output.stdout).expect("the C generator writes UTF-8");
-    corpus_diff("c", &c_out, &committed);
-
-    // The Rust side: the same cases through the port.
-    let rust_out = rust_corpus(&cases);
-    corpus_diff("rust", &rust_out, &committed);
+    corpus_diff("rust", &rust_corpus(&cases), &committed);
 }
 
 /// Compares two corpus texts, naming the first differing line: the whole corpus is too big to
@@ -1820,57 +1654,6 @@ fn corpus_diff(label: &str, got: &str, want: &str) {
         );
     }
     panic!("the {label} corpus must equal the committed one:\n{detail}");
-}
-
-/// The extraction gate itself: `bridge/build.sh:64-74` (and the copied logic here) must refuse a
-/// missing marker, a missing scanner and an injected hex literal - each FAILS naming what is
-/// missing, never silently skipping.
-#[test]
-fn region_extraction_refuses_a_broken_region() {
-    let text = std::fs::read_to_string(bridge_source()).expect("bridge/mcp_bridge.c is readable");
-    assert!(
-        extract_region_from(&text, "bridge/mcp_bridge.c").contains("static const char *kv_next("),
-        "the real source must extract"
-    );
-
-    let previous = std::panic::take_hook();
-    std::panic::set_hook(Box::new(|_| {}));
-    let cases: [(&str, String, &str); 4] = [
-        ("missing end marker", text.replace(MARK_END, ""), MARK_END),
-        ("duplicated begin marker", format!("{text}{MARK_BEGIN}"), MARK_BEGIN),
-        (
-            "missing scanner",
-            text.replace("batch_op_next", "batch_op_step"),
-            "batch_op_next",
-        ),
-        ("hex literal", text.replace(MARK_BEGIN, &format!("{MARK_BEGIN}\nstatic int injected = 0x10;\n")), "hex literal"),
-    ];
-    let mut failures = Vec::new();
-    for (name, mutated, needle) in cases {
-        let message = match std::panic::catch_unwind(|| extract_region_from(&mutated, name)) {
-            Ok(_) => String::from("the extraction accepted a broken region"),
-            Err(payload) => panic_message(payload),
-        };
-        failures.push((name, needle, message));
-    }
-    std::panic::set_hook(previous);
-    for (name, needle, message) in failures {
-        assert!(
-            message.contains(needle),
-            "`{name}` must fail naming `{needle}`, got: {message}"
-        );
-    }
-}
-
-/// The message of a caught panic payload.
-fn panic_message(payload: Box<dyn std::any::Any + Send>) -> String {
-    if let Some(text) = payload.downcast_ref::<String>() {
-        return text.clone();
-    }
-    if let Some(text) = payload.downcast_ref::<&str>() {
-        return (*text).to_string();
-    }
-    String::from("(no message)")
 }
 
 /// The negative half: one flipped byte of the committed corpus must break both comparisons.

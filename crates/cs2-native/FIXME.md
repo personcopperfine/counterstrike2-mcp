@@ -55,22 +55,21 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
     which refuses without `-insecure` itself, and on Linux Metamod refuses a client without
     `-insecure`/`-dedicated` before it loads plugins. The tool-role refusal is live (see Fixed).
 
-21. **Container mode is not live-tested.** `run` was exercised on a fake game tree only
-    (`target/smoke/`: a stand-in `cs2.sh`): prepare, SIGTERM -> TERM to the group -> restore ->
-    a byte-identical tree, the game's exit code passed through, a killed `run` recovered by
-    `uninstall`, a tampered payload refused with exit 2. client-mcp's `--native-package` path
-    (`linux-client.sh` running `cs2mcp-native run` in the cs2-docker image, `podman stop -t 60`)
-    has golden-argv tests only; it never ran with the game. Whether the image's glibc runs the
-    package's binaries (built on ubuntu-22.04 by the release workflow, glibc <= 2.35) is
-    **unverified** as well.
+21. **Container mode: live only through the native-test image.** `linux-client.sh` running
+    `cs2mcp-native run` ran the real game on the `cs2-home` volume in
+    `client-mcp/docker/native-test/` (`workflows/native-launcher-report.md`, round 2): the
+    bridge's hello, `podman kill` + recovery, `podman stop` + a verified restore. Still
+    unverified: client-mcp's own `--native-package` launch (golden-argv tests only), and the
+    release-built binaries (ubuntu-22.04, glibc <= 2.35) in the image; the run used host-built
+    ones (glibc 2.39, the image has 2.41).
 22. **Legacy-cleanup churn on a shared volume.** Dedicated-server sessions still install with
-    `bridge/install-rs.sh` into the same `cs2-home` volume (never at the same time as a launcher
+    `cargo bridge install` into the same `cs2-home` volume (never at the same time as a launcher
     client: `may_conflict`). The next `run --cleanup-legacy` then moves those files away again,
     into a new `<state>/cleanup-<ts>/` each time; nothing prunes those directories. Either the
     dedicated path moves to `run` too, or cleanup learns to drop byte-identical copies of our
     own payload.
 23. **Leftover detection knows the layouts we shipped** (`leftovers.rs`: the current
-    install-rs.sh one, the gameinfo-era one, setup_gbe.sh's). A hand-made install of other files
+    `cargo bridge install` (install-rs.sh) one, the gameinfo-era one, setup_gbe.sh's). A hand-made install of other files
     is not recognised as ours.
 
 ## Test-harness hacks (the live VM run, not shipped)
@@ -84,7 +83,7 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
     wrappers that redirect `up`'s output to files. The scheduled task's job is the one that
     refuses breakaway (item 10).
 13. *(packaging itself is fixed, see below)* `target/game-bins` and `target/game-bins-linux-2000940`
-    are hard links of the `native-launcher-windows-fixes` worktree's copies (for `build-rs.sh`);
+    are hard links of the `native-launcher-windows-fixes` worktree's copies (for `cargo bridge build`);
     the Metamod payload comes from the main checkout's `target/metamod` (`package.sh` falls back
     to it).
 
@@ -151,7 +150,7 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
   Steam here, FIXME 3; no container run used them either).
 * 15 (hidden diagnostics in the shipped binary): moved to the `cs2mcp-native-dev` binary (not
   packaged): `tree-hash`, `tree-diff`, `vtm-command`, `vtm-bridge-request`, `gbe-interfaces`,
-  `wait-pid`. `cs2mcp-native open <asset>` is public (the runtime.sh `open` post).
+  `wait-pid`. `cs2mcp-native open <asset>` is public (the `cargo bridge runtime open` post).
 * 16 (bridge renders need an ASCII path): `write_file_atomic` uses the wide-char APIs and the
   renders dir takes any non-empty value (**live**: `CS2_BRIDGE_RENDERS=C:\cs2test\fixmes\renders-Jörg`,
   `render_world` wrote `...\renders-Jörg\fixmes_jorg.png` and client-mcp read it back; the
@@ -176,6 +175,6 @@ Remove an entry when it is fixed (the numbers stay; "Fixed" at the bottom lists 
   lists capture as available; another session name is refused. `down` was `treeClean` after both.
   Found on the way, fixed: `package.sh` built only `cs2mcp-native` (`--bin` limits every package),
   so it shipped stale `client-mcp.exe`/`hammer-mcp.exe` from whatever build was in `target/`.
-* 18 (session-status texts name `bridge/runtime.sh`): on Windows `launch.command` is
+* 18 (session-status texts name `cargo bridge runtime`): on Windows `launch.command` is
   `cs2mcp-native up --steam gbe --tools` and the unreachable note names `cs2mcp-native up`
   (**live**); `model_status` hints `cs2mcp-native open models/<file>.vmdl`.

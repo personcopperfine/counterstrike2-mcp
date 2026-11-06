@@ -1,7 +1,7 @@
 //! Class identity from an object's vtable, through the module's own RTTI.
 //!
 //! The C bridge proves an object's class by comparing its vptr with a pinned vtable RVA
-//! (`obj_is`, `bridge/mcp_bridge.c:1622-1641`). Those RVAs move with every game update; the
+//! (`obj_is`, `mcp_bridge.c:1622-1641`). Those RVAs move with every game update; the
 //! RTTI record the compiler wrote next to the vtable does not. [`class_name`] reads that record
 //! and returns the class, [`is_class`] is the boolean form of the same question.
 //!

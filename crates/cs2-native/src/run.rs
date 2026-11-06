@@ -22,7 +22,7 @@ pub struct RunOpts {
     pub tools: bool,
     pub game: GameArgs,
     pub capture: bool,
-    /// move leftovers of the old container layout (install-rs.sh, setup_gbe.sh) out first
+    /// move leftovers of the old container layout (`cargo bridge install`, setup_gbe.sh) out first
     pub cleanup_legacy: bool,
 }
 

@@ -10,7 +10,7 @@ and leaves the install exactly as it was before. The desktop app (`crates/cs2-la
 Background: `workflows/windows-native.md` (§3.2 runtime, §3.3 install on a Steam tree, §4.1 VAC,
 §4.3 direct launch), `client-mcp/workflows/10-local-install.md`,
 `hammer-mcp/workflows/10-local-install.md`, `crates/mm-launch/README.md`,
-`bridge/install-rs.sh` (the file layout this crate reproduces).
+`cargo bridge install` (the file layout this crate reproduces).
 
 Status: see "Status" at the bottom and `FIXME.md`. Anything not marked **live** there is
 unverified.
@@ -26,7 +26,7 @@ cs2mcp-native uninstall                  # restore the tree without a session (a
 cs2mcp-native run   --steam gbe [--cleanup-legacy] [-- <args>]   # container mode (Linux), below
 cs2mcp-native cleanup [--yes]            # list (move away with --yes) our files no manifest records
 cs2mcp-native mcp-config [--server hammer|client|both] [--transport stdio]   # print the MCP config JSON
-cs2mcp-native open <asset>               # post open_asset into the running -tools session (runtime.sh open)
+cs2mcp-native open <asset>               # post open_asset into the running -tools session (`cargo bridge runtime open`)
 cs2mcp-native fetch-gbe [--out DIR] [--archive FILE]   # Linux: download gbe_fork's pinned Linux release into <state>/gbe
 ```
 
@@ -67,7 +67,7 @@ defaults below read:
 <out>/cs2mcp-launcher[.exe]          the desktop app (crates/cs2-launcher)
 <out>/cs2mcp-native[.exe]  client-mcp[.exe]  hammer-mcp[.exe]
 <out>/sigs/                          the servers' signature DB (their `<exe dir>/sigs` fallback)
-<out>/payload/bridge-rs/<plat>/      bridge/build-rs.sh output
+<out>/payload/bridge-rs/<plat>/      cargo bridge build output
 <out>/payload/metamod/<plat>/addons/ the Metamod build (+ payload/metamod/BUILDINFO-<plat>.txt)
 <out>/payload/gbe/<plat>/            scripts/stage-gbe.sh output (+ GBE_REF.txt)
 <out>/payload/vklayer/<plat>/        the capture layer (crates/cs2-vk-capture, built by package.sh)
@@ -80,9 +80,9 @@ defaults below read:
 Inputs: `BRIDGE_DIR`, `METAMOD_DIR`, `GBE_DIR` (defaults `<repo>/target/{bridge-rs,metamod,gbe}`,
 Metamod falling back to the main checkout's). Nothing is fetched; a missing input stops it.
 Metamod on both platforms is AlliedModders' newest official dev build,
-`bridge/metamod/fetch-metamod.sh linux|win64`, recorded with its build name, URL and SHA-256
-(`bridge/metamod/build-metamod.sh linux` still builds Linux from source for development; a
-package made from that says so in its BUILDINFO).
+`crates/metamod/fetch-metamod.sh linux|win64`, recorded with its build name, URL and SHA-256
+(`cargo bridge metamod linux` still builds Linux from source for development; a package made
+from that says so in its BUILDINFO).
 `--archive` also writes `target/dist/cs2mcp-<VERSION>-<os>-x86_64.{zip,tar.gz}` (`VERSION`,
 default `git describe`). A package whose `payload/gbe` lacks the host's files still runs
 `--steam gbe` on Linux after `cs2mcp-native fetch-gbe` (below).
@@ -128,13 +128,13 @@ may not resolve its signatures), `legacy` / `orphans` (below), `replacedGameFile
 finding prints `{"error": ..., "findings": [...]}` and exits 2; other errors exit 1.
 
 **Leftovers** (`src/leftovers.rs`): our files in a tree that no manifest records, because the
-state dir was deleted while the tree was prepared, or because `bridge/install-rs.sh` (current or
-the old gameinfo-era layout) or the client image's `setup_gbe.sh` installed into it. `discover`,
+state dir was deleted while the tree was prepared, or because `cargo bridge install` (formerly
+`bridge/install-rs.sh`; current or the old gameinfo-era layout) or the client image's `setup_gbe.sh` installed into it. `discover`,
 `status` and `prepare` report them (`orphans`, `legacy`; a decision: without a choice a new
 `prepare` would record them as the user's own files). `cleanup` lists them; `cleanup --yes`
 moves them into `<state root>/cleanup-<ts>/` (never deletes), puts Valve's library back from
 setup_gbe's own backup, un-edits `sdkenginetools.txt` only when that gives the byte-exact Valve
-file back, and never touches `gameinfo.gi` (`install-rs.sh uninstall` owns that).
+file back, and never touches `gameinfo.gi` (Steam's Verify integrity reverts those lines).
 Accepted instead (`--accept-conflicts`), setup_gbe.sh's `steam_settings` symlink (into
 `~/.steam/sdk64`) is a `link` entry in the manifest: `prepare` removes the link before it writes
 our settings into a real directory there, so nothing is written through it, and restore creates
@@ -161,7 +161,7 @@ everything it inherits.
 The state dir belongs on the same volume (`--state-dir <volume>/.cs2mcp-native`): a container
 killed before its restore leaves the manifest there and the next `run` restores it first; a
 second container on the same volume waits on the lock. `--cleanup-legacy` first moves the old
-container layout out of the volume (install-rs.sh's files, setup_gbe.sh's emulator; the same
+container layout out of the volume (`cargo bridge install`'s files, setup_gbe.sh's emulator; the same
 moves as `cleanup --yes`). client-mcp uses it with `--native-package <dir>` for `linux-client`
 sessions (`client-mcp/docker/README.md`, "Launcher mode"): the package is mounted read-only and
 `podman stop -t 60` leaves the restore its time.
@@ -211,7 +211,7 @@ same scan gbe's `generate_interfaces` does), so it matches the user's build.
 ## The file set
 
 Everything goes in under the install root (`.../Counter-Strike Global Offensive`). The layout
-and the generated text are byte-identical to `bridge/install-rs.sh` (wine/linux).
+and the generated text are byte-identical to `cargo bridge install` (wine/linux).
 
 | path | Windows | Linux | why |
 |---|---|---|---|
@@ -349,7 +349,7 @@ Steam account. Four independent checks:
    command-line tail**: it exits 3 with `[cs2mcp-launch] FAIL: refusing to inject without
    -insecure ...` before creating the game process. Every container launch line already passes it.
 3. On Linux, Metamod itself refuses to load in a client without `-dedicated`/`-insecure`
-   (spike client-noinsecure, `bridge/install-rs.sh` header), and the bridge is only loaded
+   (spike client-noinsecure, `cargo bridge install` header), and the bridge is only loaded
    through Metamod there.
 4. **The bridge itself** (`crates/cs2-bridge/src/vac.rs`) checks the process command line at
    both lifecycle starts: without `-insecure` (or `-dedicated`) the tool plugin's `Init` logs

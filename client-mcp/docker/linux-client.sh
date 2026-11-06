@@ -18,7 +18,7 @@
 #     command (not exported: the preamble's audio libs / s2sdk probe keep their place and only the
 #     game process carries the loader). It redirects the engine's first dlopen of
 #     csgo/bin/linuxsteamrt64/libserver.so to csgo/addons/metamod/... . The script refuses to
-#     launch when that loader is missing, and nothing edits csgo/gameinfo.gi any more (bridge/metamod/
+#     launch when that loader is missing, and nothing edits csgo/gameinfo.gi any more (crates/metamod/
 #     README.md, "Launching");
 #   * console.log is mirrored to /work (the host artifacts dir) for the host-side readiness check;
 #   * the game's output stays on stdout, so `podman logs` shows it.
@@ -31,9 +31,10 @@
 # with the game's code (3: the tree was not restored; the next run restores it first). Then:
 #   * the preamble's gbe steps ([0c] settings + steam_settings link, [0d] setup_gbe.sh) are
 #     skipped (CS2MCP_NATIVE_GBE=1);
-#   * install-rs.sh is not run on the host for this kind, and --cleanup-legacy moves an older
-#     install-rs.sh / setup_gbe.sh layout out of the volume first (into the state dir; Valve's
-#     libsteam_api.so comes back from setup_gbe.sh's own copy in ~/.steam);
+#   * `cargo bridge install` is not run on the host for this kind, and --cleanup-legacy moves an
+#     older `cargo bridge install` (install-rs.sh) / setup_gbe.sh layout out of the volume first
+#     (into the state dir; Valve's libsteam_api.so comes back from setup_gbe.sh's own copy in
+#     ~/.steam);
 #     CS2MCP_NATIVE_CLEANUP_LEGACY=0 leaves it (with CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 the session
 #     then runs over it and puts it back as found: the native-test image's acceptance run);
 #   * CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 passes --accept-conflicts (leftovers it cannot place are
@@ -65,13 +66,13 @@ cs2mcp_unlock
 
 # Metamod loads gameinfo-free (nothing edits csgo/gameinfo.gi any more): the loader .so is prepended
 # to LD_PRELOAD on the cs2.sh command below. It redirects the engine's first dlopen of
-# csgo/bin/linuxsteamrt64/libserver.so to csgo/addons/metamod/... (bridge/metamod/README.md "Launching"). Without it the
+# csgo/bin/linuxsteamrt64/libserver.so to csgo/addons/metamod/... (crates/metamod/README.md "Launching"). Without it the
 # engine loads its own server image and Metamod never loads, so refuse to start instead of
 # running a bridge-less session.
 MMLOAD="csgo/addons/cs2mcp/bin/linuxsteamrt64/libcs2mcp_mmload.so"
 # launcher mode: cs2mcp-native run installs the loader itself (and prepends it to LD_PRELOAD)
 if [ -z "$NATIVE" ] && [ ! -f "$G/$MMLOAD" ]; then
-    echo "[cs2mcp-mmload] FAIL: $G/$MMLOAD is missing; Metamod would not load - run 'bridge/install-rs.sh --platform linux ensure' (or install) and retry" >&2
+    echo "[cs2mcp-mmload] FAIL: $G/$MMLOAD is missing; Metamod would not load - run 'cargo bridge install --platform linux ensure' (or install) and retry" >&2
     exit 1
 fi
 

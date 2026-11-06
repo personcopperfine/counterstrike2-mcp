@@ -242,7 +242,7 @@ async fn a_vmdl_write_is_allowed_with_a_warning_when_modeldoc_runs_on_another_ad
     assert!(tree.app.join("content/csgo_addons/mcp_test/models/mcp_new/probe.vmdl").is_file());
     // ... the result says the running ModelDoc will not show it
     let warnings = out["warnings"].to_string();
-    assert!(warnings.contains("ModelDoc") && warnings.contains("other") && warnings.contains("runtime.sh"), "{warnings}");
+    assert!(warnings.contains("ModelDoc") && warnings.contains("other") && warnings.contains("cargo bridge runtime"), "{warnings}");
     assert!(!warnings.contains("set_addon"), "the hint is to restart ModelDoc: {warnings}");
 
     // model_edit warns the same way (the file written is the one asked for)
@@ -273,7 +273,7 @@ async fn model_open_is_refused_when_modeldoc_runs_on_another_addon() {
     assert_eq!(err.data["selectedAddon"], json!("mcp_test"));
     assert_eq!(err.data["modeldocAddon"], json!("other"));
     let hint = err.data["hint"].as_str().unwrap();
-    assert!(hint.contains("runtime.sh") && hint.contains("ADDON=mcp_test"), "{hint}");
+    assert!(hint.contains("cargo bridge runtime") && hint.contains("ADDON=mcp_test"), "{hint}");
     // useInstead is the common {tool, why, args} object, never a shell command
     assert_eq!(err.data["useInstead"]["tool"], json!("set_addon"));
     assert_eq!(err.data["useInstead"]["args"], json!({"addon": "other"}));

@@ -1,5 +1,5 @@
 //! The game-state schema resolver and entity readers: `gs_*`
-//! (`bridge/mcp_bridge_game.inc:12-485`), over the generated `s2sdk_sys` types.
+//! (`mcp_bridge_game.inc:12-485`), over the generated `s2sdk_sys` types.
 //!
 //! No netvar offset is compiled in: every entity field is resolved at runtime through the
 //! game's own SchemaSystem (class + field name -> offset) exactly as the C does, so this

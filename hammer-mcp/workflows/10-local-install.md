@@ -19,7 +19,7 @@ behavioural difference above the `Runtime` trait.
    `%LOCALAPPDATA%\cs2mcpbridge\session.json` and the named-pipe binding (protocol §1) later.
 3. **Launcher**: with the Steam client running, `steam -applaunch 730 -tools ...` (Steam owns the
    Proton env); without it, derive the env as `workshop/entrypoint.sh` does from a Proton dir.
-   Bridge install = `install-rs.sh install` against the local tree (manifest entry + DLL); back up and restore
+   Bridge install = `cargo bridge install install` against the local tree (manifest entry + DLL); back up and restore
    the manifest on `down` so the user's install is left clean.
 4. **Path map**: `Z:` = `/`, so Windows paths from `doc.active` map to host paths directly; `C:` ->
    `<pfx>/drive_c`.

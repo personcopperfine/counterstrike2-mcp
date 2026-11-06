@@ -1797,7 +1797,7 @@ fn read_tie(result: &Value, class_fallback: &str) -> Result<Tie, ToolError> {
     let Some(map) = result.as_object() else {
         return Err(ToolError::internal(format!(
             "entity.tieMeshes returned a non-object result: {result} \
-             (bridge/protocol-diff-m2.19.md)"
+             (crates/cs2-bridge/PROTOCOL.md §9.8)"
         )));
     };
     let Some(entity) = map.get("nodeID").and_then(Value::as_i64) else {
@@ -2201,7 +2201,7 @@ pub async fn move_to_world(
         other => {
             return Err(ToolError::internal(format!(
                 "entity.untie returned a non-object result: {other} \
-                 (bridge/protocol-diff-m2.19.md)"
+                 (crates/cs2-bridge/PROTOCOL.md §9.9)"
             )))
         }
     };

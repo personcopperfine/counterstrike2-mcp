@@ -1,6 +1,6 @@
 # P1 live re-check after the live fixes (2026-10-26, streamline/agent-ux at 5c0cfcb, bridge m3.16)
 
-One Hammer tools session (`TOOL=hammer bridge/runtime.sh up`, addon `mcp_test`), driven through the
+One Hammer tools session (`TOOL=hammer cargo bridge runtime up`, addon `mcp_test`), driven through the
 worktree's `target/debug/hammer-mcp`. I only tested and recorded; no code was changed. The raw
 evidence is under `target/live-p1b/` in the worktree. `<NN>-*.txt` holds every JSON-RPC reply in
 order, `scripts/` holds the drivers, and `bin/two.py` is a two-process driver (clients A and B,
@@ -9,7 +9,7 @@ timestamps on every line). `console-session.log` is the game console.log of the 
 ## Versions
 
 - hammer-mcp / client-mcp: `cargo build -j2` debug at 5c0cfcb (`build.log`).
-- Bridge: `bridge/build-rs.sh` OK, export gates passed (`build-rs.log`). `bridgeVersion` **m3.16**,
+- Bridge: `cargo bridge build` OK, export gates passed (`build-rs.log`). `bridgeVersion` **m3.16**,
   game build 2000933. Installed `cs2_bridge.dll` sha256 `4b3454d9…50d8`. The launcher and mmload are
   unchanged (`da0551c9…822f`, `e0f8b76d…737a`), see `install-status-after.txt`.
 - The previously installed m3.15 (`ff1084ee…672c`, with launcher and mmload) is backed up to
@@ -77,7 +77,7 @@ killed the engine.
 - `set_addon {addon:"addon_template"}`, then `open_map {path:"maps/xxx_mapname_xxx.vmap"}` →
   `-32602 WrongEngineAddon`, `data {engineAddon:"mcp_test", engineAddonSource:"container",
   selectedAddon:"addon_template", reason:"wrong_engine_addon"}`. The message gives the way out
-  (`ADDON=addon_template bridge/runtime.sh up` + `--addon`). Nothing was sent, and the document stayed
+  (`ADDON=addon_template cargo bridge runtime up` + `--addon`). Nothing was sent, and the document stayed
   p1_test.
 - `set_addon {addon:null}`, then `open_map {path:"maps/compile_test.vmap"}` → `opened:true`,
   `engineAddon:"mcp_test", engineAddonSource:"container"`, a new document `d2`, epoch 2.
@@ -142,10 +142,10 @@ A. **open_map cannot open the first map of a session.** On a fresh `runtime.sh u
    loaded, so `map.open` is not advertised. `open_map {path:"maps/p1_test.vmap"}` returns
    `NotImplemented` / `CapabilityMissing`, `missing:["map.open"]`, `blockedOn: "docs/data/bridge-protocol.md
    §7 method table"` (`02a-open_map-before-hammer.txt`). Nothing tells the caller what to do. The only
-   way in was `bridge/runtime.sh open maps/p1_test.vmap`. After that, open_map works. A weak agent with
+   way in was `cargo bridge runtime open maps/p1_test.vmap`. After that, open_map works. A weak agent with
    only the MCP tools would be stuck here. Either open_map should fall back to the VToolMessage
    `open_asset` post when hammer.dll is not loaded, or the error should name that step.
-   **Repro:** `TOOL=hammer bridge/runtime.sh up`, then `open_map {path:"maps/p1_test.vmap"}`.
+   **Repro:** `TOOL=hammer cargo bridge runtime up`, then `open_map {path:"maps/p1_test.vmap"}`.
 
 B. **The local console limit (1023) is about twice the engine's (510).** Single commands of
    511-1023 bytes pass the local check, go out, and are dropped by the engine. The new

@@ -1,6 +1,6 @@
 //! cs2-mcp-common: everything the two servers share.
 //!
-//! * [`bridge`]   — client for the in-process bridge (`../../bridge/mcp_bridge.c`, protocol
+//! * [`bridge`]   — client for the in-process bridge (`mcp_bridge.c`, protocol
 //!   `../idabins/docs/data/bridge-protocol.md`): discovery, hello, NDJSON, deadlines, the modal
 //!   gate, capability refresh and the error taxonomy (port of the Python POC `bridge_client.py`).
 //! * [`tools`]    — transport-agnostic tool registry with the shared policies (capability gating,
@@ -44,7 +44,7 @@ pub mod mock;
 /// parent directory that holds this repo as `cs2-mcp/`.
 pub const DEFAULT_PROJECT_ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
 
-/// This repo's own files (research snapshots, `target/`, `bridge/runtime.sh`) under a project
+/// This repo's own files (research snapshots, `target/`, `cargo bridge runtime`) under a project
 /// root: `<root>/cs2-mcp` when the root is the older parent layout (a directory holding this
 /// repo's checkout as `cs2-mcp/`), else the root itself (the default: the root is this checkout).
 pub fn mcp_repo_dir(project_root: &std::path::Path) -> std::path::PathBuf {

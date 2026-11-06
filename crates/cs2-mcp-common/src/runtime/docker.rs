@@ -1,6 +1,6 @@
 //! podman backend (phase 1).
 //!
-//! Facts it encodes (from bridge/runtime.sh, ../idabins/worknotes/vtest/run_vtest.sh,
+//! Facts it encodes (from `cargo bridge runtime`, ../idabins/worknotes/vtest/run_vtest.sh,
 //! the client image's https://github.com/personcopperfine/cs2-docker/blob/main/client/entrypoint.sh, an earlier harness/run-cs2.sh not in this repo):
 //! * userland image [`DEFAULT_IMAGE`] (steamrt4 + lavapipe fork + Xvfb + gbe);
 //! * Wine sessions mount `<project>/workshop/run/app` at `/app` and `.../run/cache` at `/cache`,
@@ -10,7 +10,7 @@
 //!   (Xvfb dies: BAD_EDID -> DXVK divide-by-zero, hammer-mcp 08). Container PID 1 is the launcher
 //!   (`crates/mm-launch`), not the game: it starts `cs2.exe` suspended, injects the Metamod loader
 //!   (`cs2mcp_mmload.dll`, loader path in `CS2MCP_MM_LOADER`), then waits and exits with the
-//!   game's code - the gameinfo-free Metamod load (bridge/metamod/README.md, "Launching");
+//!   game's code - the gameinfo-free Metamod load (crates/metamod/README.md, "Launching");
 //! * Linux sessions run `client-mcp/docker/linux-client.sh` (mounted read-only at /cs2mcp/), a port of
 //!   harness/run-cs2.sh with an in-container Xvfb :99 and console.log mirrored into the artifacts dir.
 //!   The game lives in the `cs2-home` volume (`/home/steam/steamapps/...`, run-cs2.sh:9); both Linux
@@ -34,8 +34,8 @@
 //! stops them (`podman stop -t 0`, detached, never killed by us), waits for the exit with
 //! `podman wait`, then removes them (`podman rm`, no `-f`). podman is never killed mid-stop.
 //!
-//! Wine readiness mirrors bridge/runtime.sh: `wait_channel` (vtmsend posts a probe command and
-//! prints `creator version` once the VToolMessage mutex exists) and `load_rs_bridge` (a
+//! Wine readiness mirrors `cargo bridge runtime`: `wait_channel` (vtmsend posts a probe command and
+//! prints `creator version` once the VToolMessage mutex exists) and `load_bridge` (a
 //! tool_request for `cs2_bridge`, re-posted every 5 s until the discovery file is fresh; then
 //! `control.hello`).
 
@@ -101,10 +101,10 @@ pub const WINE_APP_DEST: &str = "/app";
 pub const LINUX_WORK_DEST: &str = "/work";
 pub const DEFAULT_SHORT_TIMEOUT: Duration = Duration::from_secs(10);
 pub const DEFAULT_RUN_TIMEOUT: Duration = Duration::from_secs(60);
-/// Upper bound for `bridge/install-rs.sh ensure` at launch (a first install copies the bridge,
-/// Metamod and the SDK entry; a read-only "current?" check returns in a second).
+/// Upper bound for `cs2-bridge-tools install ensure` at launch (a first install copies the
+/// bridge, Metamod and the SDK entry; a read-only "current?" check returns in a second).
 pub const DEFAULT_INSTALL_TIMEOUT: Duration = Duration::from_secs(120);
-/// Grace a timed-out `install-rs.sh ensure` process group gets between SIGTERM and SIGKILL.
+/// Grace a timed-out ensure's process group gets between SIGTERM and SIGKILL.
 const INSTALL_KILL_GRACE: Duration = Duration::from_secs(5);
 /// How many stderr lines of a failed ensure are quoted back to the model.
 pub const INSTALL_STDERR_LINES: usize = 20;
@@ -176,12 +176,13 @@ pub enum RuntimeError {
         status: String,
         stderr: String,
     },
-    /// `install-rs.sh ensure` refused because a running container mounts the tree it would repair
-    /// (exit 4). `stderr` names the containers and what is missing/stale.
-    #[error("the game tree needs (re)installing but containers mount it; stop them or run `bridge/install-rs.sh ensure` by hand: {stderr}")]
+    /// The install ensure refused because a running container mounts the tree it would repair
+    /// (exit 4), or another install holds the tree's install lock. `stderr` names the containers
+    /// (or the lock) and what is missing/stale.
+    #[error("the game tree needs (re)installing but containers mount it; stop them or run `cargo bridge install ensure` by hand: {stderr}")]
     InstallBusy { stderr: String },
-    /// Any other non-zero ensure exit: carries the exit code and the script's stderr tail.
-    #[error("install script {path} {args} failed (exit {code}): {stderr}")]
+    /// Any other non-zero ensure exit: carries the exit code and the tool's stderr tail.
+    #[error("install tool {path} {args} failed (exit {code}): {stderr}")]
     InstallFailed {
         path: String,
         args: String,
@@ -189,15 +190,16 @@ pub enum RuntimeError {
         stderr: String,
     },
     #[error(
-        "install script {path} {args} did not finish within {secs} s (the launch was not started)"
+        "install tool {path} {args} did not finish within {secs} s (the launch was not started)"
     )]
     InstallTimeout {
         path: String,
         args: String,
         secs: u64,
     },
-    #[error("install script not found: {path} (configuration error: set DockerOptions.install_script, or point the client at a checkout that has client-mcp/docker/linux-client.sh)")]
-    InstallScriptMissing { path: String },
+    /// No install tool to run before a launch: a configuration error, never a skipped ensure.
+    #[error("install tool not found: {path} (configuration error: build it with `cargo build --release -p cs2-bridge-tools` so it sits next to this server's binary, or pass --install-tool / set DockerOptions.install_tool)")]
+    InstallToolMissing { path: String },
 }
 
 /// Options for [`DockerRuntime::new`].
@@ -224,17 +226,20 @@ pub struct DockerOptions {
     /// Configured s2sdk probe directory. When `Some`, Linux sessions mount it read-only and
     /// preload the probe (see [`s2sdk_probe_argv`]); `None`: no probe, byte-identical argv.
     pub s2sdk_probe_dir: Option<PathBuf>,
-    /// `bridge/install-rs.sh`, run as `ensure` before every launch. `None`: derived from
-    /// `linux_client_script` (repo root + `bridge/install-rs.sh`, see [`install_script_for`]).
-    pub install_script: Option<PathBuf>,
+    /// The `cs2-bridge-tools` binary, run as `install --platform <p> ensure` before every
+    /// launch. `None`: the `cs2-bridge-tools` next to the running server's binary (see
+    /// [`default_install_tool`]); cargo builds every binary of a profile into one directory, so
+    /// that is where a `cargo build --release -p cs2-bridge-tools` puts it.
+    pub install_tool: Option<PathBuf>,
     /// Upper bound for that ensure call (see [`DEFAULT_INSTALL_TIMEOUT`]).
     pub install_timeout: Duration,
     /// A cs2mcp package dir (`crates/cs2-native/scripts/package.sh` output). When `Some`, a
     /// LinuxClient session is prepared by the launcher inside the container (`cs2mcp-native run`:
     /// bridge, Metamod and gbe in place on the volume, reverted before the container exits): the
-    /// dir is mounted read-only at [`CONTAINER_NATIVE_DIR`], `install-rs.sh ensure` is skipped for
-    /// that kind, its stop waits [`NATIVE_STOP_SECS`], and it never shares the volume with a
-    /// running dedicated server (whose tree install-rs.sh keeps). `None`: install-rs.sh as before.
+    /// dir is mounted read-only at [`CONTAINER_NATIVE_DIR`], the install tool's `ensure` is
+    /// skipped for that kind, its stop waits [`NATIVE_STOP_SECS`], and it never shares the volume
+    /// with a running dedicated server (whose tree the install tool keeps). `None`: the install
+    /// tool as before.
     pub native_package: Option<PathBuf>,
 }
 
@@ -255,7 +260,7 @@ impl DockerOptions {
             run_timeout: DEFAULT_RUN_TIMEOUT,
             vk_layer_dir: None,
             s2sdk_probe_dir: None,
-            install_script: None,
+            install_tool: None,
             install_timeout: DEFAULT_INSTALL_TIMEOUT,
             native_package: None,
         }
@@ -436,8 +441,8 @@ pub struct DockerRuntime {
     pub vk_layer_dir: Option<PathBuf>,
     /// s2sdk probe directory (see [`DockerOptions::s2sdk_probe_dir`])
     pub s2sdk_probe_dir: Option<PathBuf>,
-    /// `bridge/install-rs.sh` (see [`DockerOptions::install_script`])
-    pub install_script: Option<PathBuf>,
+    /// the install tool (see [`DockerOptions::install_tool`])
+    pub install_tool: Option<PathBuf>,
     /// the launcher package for LinuxClient sessions (see [`DockerOptions::native_package`])
     pub native_package: Option<PathBuf>,
     install_timeout: Duration,
@@ -484,7 +489,7 @@ pub struct RunPlan<'a> {
     /// (Linux sessions only); `None`: no probe. Consumed by [`linux_argv`] only.
     pub s2sdk_probe: Option<&'a Path>,
     /// LinuxClient: the cs2mcp package dir ([`DockerOptions::native_package`]), mounted read-only
-    /// at [`CONTAINER_NATIVE_DIR`] with `CS2MCP_NATIVE` naming it. `None`: the install-rs.sh flow.
+    /// at [`CONTAINER_NATIVE_DIR`] with `CS2MCP_NATIVE` naming it. `None`: the install tool's flow.
     pub native_package: Option<&'a Path>,
 }
 
@@ -674,15 +679,24 @@ pub fn sibling_script(script: &Path, name: &str) -> PathBuf {
     script.with_file_name(name)
 }
 
-/// `bridge/install-rs.sh` derived from the Linux script's checkout:
-/// `<repo>/client-mcp/docker/linux-client.sh` -> `<repo>/bridge/install-rs.sh`. `None` when the
-/// path has fewer ancestors (an unset/relative script), which `launch` reports by name.
-pub fn install_script_for(linux_script: &Path) -> Option<PathBuf> {
-    let repo = linux_script.parent()?.parent()?.parent()?;
-    Some(repo.join("bridge/install-rs.sh"))
+/// The binary name of the bridge's operator tool (`crates/cs2-bridge-tools`).
+pub const INSTALL_TOOL_NAME: &str = "cs2-bridge-tools";
+
+/// The install tool next to `exe`: the servers and `cs2-bridge-tools` are binaries of one cargo
+/// workspace, built into the same `target/<profile>/` directory. Pure.
+pub fn install_tool_beside(exe: &Path) -> PathBuf {
+    exe.with_file_name(INSTALL_TOOL_NAME)
 }
 
-/// The `install-rs.sh` arguments that make a kind's tree current. Every kind this runtime launches
+/// The install tool next to the running binary (`None` when the OS cannot say which binary that
+/// is). Used when no explicit [`DockerOptions::install_tool`] is configured.
+pub fn default_install_tool() -> Option<PathBuf> {
+    std::env::current_exe()
+        .ok()
+        .map(|exe| install_tool_beside(&exe))
+}
+
+/// The install tool's arguments that make a kind's tree current. Every kind this runtime launches
 /// has one: Wine (tools and client) and the Linux kinds (client and dedicated share `cs2-home`)
 /// each get their platform's ensure. A launch must not start on a tree that was not prepared. Pure.
 pub fn ensure_argv(kind: &SessionKind) -> Vec<String> {
@@ -690,7 +704,12 @@ pub fn ensure_argv(kind: &SessionKind) -> Vec<String> {
         SessionKind::WineTools { .. } | SessionKind::WineClient => "wine",
         SessionKind::LinuxClient | SessionKind::LinuxDedicated => "linux",
     };
-    vec!["--platform".into(), platform.into(), "ensure".into()]
+    vec![
+        "install".into(),
+        "--platform".into(),
+        platform.into(),
+        "ensure".into(),
+    ]
 }
 
 /// Join the concurrent stderr reader of an ensure child, bounded: a straggler that still holds the
@@ -705,13 +724,14 @@ async fn collect_stderr(task: &mut tokio::task::JoinHandle<Vec<u8>>) -> (String,
     }
 }
 
-/// A `bash install-rs.sh` child in its own process group (see [`DockerRuntime::ensure_install`]).
+/// An install-ensure child in its own process group (see [`DockerRuntime::ensure_install`]).
 ///
-/// The child's `kill_on_drop` only signals the script itself. An ensure that repairs a tree spawns
-/// writers of its own (`podman`/`rsync`/`cp`), so a cancelled launch would otherwise leave them
-/// running after the lock is gone. `Drop` therefore SIGKILLs the whole group when the ensure future
-/// is dropped mid-flight; a cancelled launch may leave a partial install behind, which the next
-/// ensure's hash check repairs.
+/// The child's `kill_on_drop` only signals the tool itself. An ensure that repairs a tree spawns
+/// children of its own (the export gate; on Linux `podman unshare` and the tool's namespace half,
+/// which does the writing), so a cancelled launch would otherwise leave them running after the
+/// lock is gone. `Drop` therefore SIGKILLs the whole group when the ensure future is dropped
+/// mid-flight; a cancelled launch may leave a partial install behind, which the next ensure's
+/// hash check repairs.
 #[cfg(unix)]
 struct InstallGroup {
     /// The child's pid, which is also its process group id (`process_group(0)`).
@@ -845,7 +865,7 @@ impl InstallGroup {
     }
 }
 
-/// Non-Unix stand-in: no process groups, so only the script itself is ended (`kill_on_drop`
+/// Non-Unix stand-in: no process groups, so only the tool itself is ended (`kill_on_drop`
 /// covers a dropped launch). The podman runtime is a Linux backend; this keeps the servers
 /// building for Windows, where the session is the native launcher's (`SessionKind::NativeWindows`).
 #[cfg(not(unix))]
@@ -863,7 +883,7 @@ impl InstallGroup {
     fn disarm(&mut self) {}
 }
 
-/// The last `lines` lines of a command's stderr (`install-rs.sh` names what is missing/stale or
+/// The last `lines` lines of a command's stderr (the install tool names what is missing/stale or
 /// which containers hold the tree). Pure.
 pub fn stderr_tail(text: &str, lines: usize) -> String {
     let trimmed = text.trim();
@@ -920,7 +940,7 @@ pub const FOCUS_ARGS: [&str; 4] = [
 ];
 
 /// Shell line run inside the Wine tools container (`bash -c`). Matches run_vtest.sh:62 and
-/// runtime.sh:120; the testscript flag and user args go between `-insecure` and the engine flag.
+/// `cargo bridge runtime`; the testscript flag and user args go between `-insecure` and the engine flag.
 /// The program is the launcher (`cs2mcp_launch.exe`), NOT `cs2.exe`: it starts the game suspended,
 /// injects the Metamod loader and waits (see [`stop_argv`]); the arguments after it are cs2's.
 pub fn wine_command(addon: Option<&str>, spec: &LaunchSpec) -> String {
@@ -1000,7 +1020,7 @@ pub fn wait_argv(name: &str) -> Vec<String> {
     vec!["wait".into(), "--condition=exited".into(), name.into()]
 }
 
-/// The argv `vtmsend.exe` runs with inside the session (runtime.sh `vtmsend`). Published so a
+/// The argv `vtmsend.exe` runs with inside the session (`cargo bridge runtime`'s `vtmsend`). Published so a
 /// caller can post a payload through [`DockerRuntime::exec_in`] on a container this runtime did
 /// **not** launch (the tools session belongs to the orchestrator), the way the file-route compile
 /// tools exec `resourcecompiler.exe` there.
@@ -1008,12 +1028,12 @@ pub fn vtmsend_program_argv() -> Vec<String> {
     s(&["bash", "-c", "cd /app && ./entrypoint.sh vtmsend.exe 2>&1"])
 }
 
-/// `vtmsend.exe` inside the session, as runtime.sh `vtmsend` runs it (behind `podman exec -i`).
+/// `vtmsend.exe` inside the session, as `cargo bridge runtime`'s `vtmsend` runs it (behind `podman exec -i`).
 pub fn vtmsend_argv(name: &str) -> Vec<String> {
     exec_argv(name, &vtmsend_program_argv())
 }
 
-/// A vtmsend payload: the kv3 header and the body in braces (runtime.sh `put_payload`).
+/// A vtmsend payload: the kv3 header and the body in braces (`cargo bridge runtime`'s `put_payload`).
 pub fn vtm_payload(body: &str) -> String {
     format!(
         "<!-- kv3 encoding:text:version{{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d}} format:generic:version{{7412167c-06e9-4698-aff2-e63eb59037e7}} -->\n{{\n{body}\n}}\n"
@@ -1021,7 +1041,7 @@ pub fn vtm_payload(body: &str) -> String {
 }
 
 /// A VToolMessage `command` payload: one console command the engine runs
-/// (`idabins/worknotes/vtmsend/`; `runtime.sh` `put_payload` + `vtmsend`, the `vcmd.sh` recipe).
+/// (`idabins/worknotes/vtmsend/`; `cargo bridge runtime`'s `put_payload` + `vtmsend`, the `vcmd.sh` recipe).
 /// This is the route a tool takes to put a line into the engine console while the bridge's
 /// `console.exec` is gated on `-testscript` or `-tools` (it answers `-32011` in any other session).
 ///
@@ -1033,12 +1053,12 @@ pub fn vtm_command_payload(command: &str) -> String {
     vtm_payload(&format!("\t_message = \"command\"\n\t_data = \"{escaped}\""))
 }
 
-/// The channel probe: a `command` that echoes a marker (runtime.sh `wait_channel`).
+/// The channel probe: a `command` that echoes a marker (`cargo bridge runtime`'s `wait_channel`).
 pub fn channel_probe_payload() -> String {
     vtm_command_payload("echo mcp_runtime_channel_probe")
 }
 
-/// The bridge load: a `tool_request` for `cs2_bridge` (runtime.sh `load_rs_bridge`).
+/// The bridge load: a `tool_request` for `cs2_bridge` (`cargo bridge runtime`'s `load_bridge`).
 pub fn bridge_request_payload() -> String {
     vtm_payload("\t_message = \"tool_request\"\n\ttool_name = \"cs2_bridge\"\n\t_data = -1")
 }
@@ -1073,7 +1093,7 @@ pub fn discovery_fresh(path: &Path, launched_at: SystemTime) -> bool {
         .unwrap_or(false)
 }
 
-/// `podman exec -i <name> <argv...>` (run_vtest/runtime.sh use `exec -i` for helpers).
+/// `podman exec -i <name> <argv...>` (run_vtest/`cargo bridge runtime` use `exec -i` for helpers).
 pub fn exec_argv(name: &str, argv: &[String]) -> Vec<String> {
     let mut a = vec!["exec".into(), "-i".into(), name.into()];
     a.extend(argv.iter().cloned());
@@ -1100,7 +1120,7 @@ pub fn exec_in_argv(name: &str, argv: &[String]) -> Vec<String> {
 /// A podman-plausible container name for `exec_in`: non-empty, no whitespace or control
 /// characters, no leading separator. NOT [`valid_name`]: that one is for `cs2mcp-*` session
 /// containers this runtime manages, while `exec_in` targets foreign containers too (the ModelDoc
-/// instance is named `cs2tools`, bridge/runtime.sh `CONTAINER`).
+/// instance is named `cs2tools`, `cargo bridge runtime`'s `CONTAINER`).
 pub fn valid_container_name(name: &str) -> bool {
     !name.is_empty()
         && name.len() <= 128
@@ -1130,7 +1150,7 @@ pub fn inspect_state_argv(name: &str) -> Vec<String> {
 }
 
 /// `podman inspect` for the addon a tools container was started with: the `cs2mcp.addon` label
-/// (`bridge/runtime.sh up`), then the launch command (`-addon <name>`), separated by `|`.
+/// (`cargo bridge runtime up`), then the launch command (`-addon <name>`), separated by `|`.
 pub fn inspect_addon_argv(name: &str) -> Vec<String> {
     vec![
         "inspect".into(),
@@ -1472,7 +1492,7 @@ pub fn shared_mount_conflict(
 /// a flock, see `client-mcp/docker/lib-preamble.sh`), so only the same kind conflicts.
 ///
 /// `native`: the client is run by the launcher package ([`DockerOptions::native_package`]). It
-/// writes the volume's game tree for the whole session (and may move an install-rs.sh layout out),
+/// writes the volume's game tree for the whole session (and may move an older install layout out),
 /// so then a client and a dedicated server never run together.
 pub fn may_conflict(spec: &LaunchSpec, other: &str, native: bool) -> bool {
     match spec.kind {
@@ -1486,7 +1506,7 @@ pub fn may_conflict(spec: &LaunchSpec, other: &str, native: bool) -> bool {
     }
 }
 
-/// Newest `xauth_*` file in `dir` (run_vtest.sh:44 and runtime.sh:51 use `ls -t | head -1`).
+/// Newest `xauth_*` file in `dir` (run_vtest.sh:44 and `cargo bridge runtime` use `ls -t | head -1`).
 pub fn newest_xauth_in(dir: &Path) -> Option<PathBuf> {
     std::fs::read_dir(dir)
         .ok()?
@@ -1631,18 +1651,17 @@ struct MarkerScan {
 
 impl DockerRuntime {
     pub fn new(opts: DockerOptions) -> Self {
-        // logged once, at startup: the script every launch runs before `podman run`
-        match opts
-            .install_script
-            .clone()
-            .or_else(|| install_script_for(&opts.linux_client_script))
-        {
-            Some(script) => {
-                tracing::info!(path = %script.display(), "launch ensure: bridge/install-rs.sh")
+        // logged once, at startup: the tool every launch runs before `podman run`
+        match opts.install_tool.clone().or_else(default_install_tool) {
+            Some(tool) if tool.is_file() => {
+                tracing::info!(path = %tool.display(), "launch ensure: cs2-bridge-tools install")
             }
+            Some(tool) => tracing::warn!(
+                path = %tool.display(),
+                "no install tool there (build it: cargo build --release -p cs2-bridge-tools); launches will be refused"
+            ),
             None => tracing::warn!(
-                linux_script = %opts.linux_client_script.display(),
-                "no bridge/install-rs.sh resolved (set install_script); launches that need ensure will be refused"
+                "no install tool resolved (pass --install-tool); launches will be refused"
             ),
         }
         Self {
@@ -1656,7 +1675,7 @@ impl DockerRuntime {
             xauthority: opts.xauthority,
             vk_layer_dir: opts.vk_layer_dir,
             s2sdk_probe_dir: opts.s2sdk_probe_dir,
-            install_script: opts.install_script,
+            install_tool: opts.install_tool,
             native_package: opts.native_package,
             install_timeout: opts.install_timeout,
             short_timeout: opts.short_timeout,
@@ -1702,62 +1721,56 @@ impl DockerRuntime {
         self.project_root.join("workshop/run/app")
     }
 
-    /// The `install-rs.sh` to run: the configured one, else the `bridge/install-rs.sh` of the
-    /// checkout `linux_client_script` belongs to ([`install_script_for`]). A missing script is a
-    /// configuration error and fails the launch by path, never a skipped ensure.
-    fn resolved_install_script(&self) -> anyhow::Result<PathBuf> {
-        let script = match &self.install_script {
+    /// The install tool to run: the configured one, else the `cs2-bridge-tools` next to this
+    /// binary ([`default_install_tool`]). A missing tool is a configuration error and fails the
+    /// launch by path, never a skipped ensure.
+    fn resolved_install_tool(&self) -> anyhow::Result<PathBuf> {
+        let tool = match &self.install_tool {
             Some(p) => p.clone(),
-            None => install_script_for(&self.linux_client_script).ok_or_else(|| {
-                RuntimeError::InstallScriptMissing {
-                    path: format!(
-                        "cannot derive bridge/install-rs.sh from {}",
-                        self.linux_client_script.display()
-                    ),
-                }
+            None => default_install_tool().ok_or_else(|| RuntimeError::InstallToolMissing {
+                path: format!("cannot locate this binary to find {INSTALL_TOOL_NAME} next to it"),
             })?,
         };
-        if !script.is_file() {
-            return Err(RuntimeError::InstallScriptMissing {
-                path: script.display().to_string(),
+        if !tool.is_file() {
+            return Err(RuntimeError::InstallToolMissing {
+                path: tool.display().to_string(),
             }
             .into());
         }
-        Ok(script)
+        Ok(tool)
     }
 
-    /// Run `bridge/install-rs.sh --platform <wine|linux> ensure` for a kind before it launches.
+    /// Run `cs2-bridge-tools install --platform <wine|linux> ensure` for a kind before it launches.
     /// Read-only while the tree is current; only a missing/stale tree is repaired, and that part
     /// refuses (exit 4 -> [`RuntimeError::InstallBusy`]) while a running container mounts it.
     /// Bounded by `install_timeout`; every failure aborts the launch before `podman run`.
     ///
-    /// The script runs in its own process group. A timeout SIGTERMs the group, waits
+    /// The tool runs in its own process group. A timeout SIGTERMs the group, waits
     /// [`INSTALL_KILL_GRACE`], then SIGKILLs it and reaps the leader, all while the caller still
     /// holds the launch lock; a dropped (cancelled) launch kills the group through [`InstallGroup`].
     async fn ensure_install(&self, kind: &SessionKind) -> anyhow::Result<()> {
         let args = ensure_argv(kind);
-        let script = self.resolved_install_script()?;
+        let tool = self.resolved_install_tool()?;
         let xdg = self.project_root.join(".podman/xdg");
         std::fs::create_dir_all(&xdg)?;
-        let mut cmd = tokio::process::Command::new("bash");
-        cmd.arg(&script)
-            .args(&args)
+        let mut cmd = tokio::process::Command::new(&tool);
+        cmd.args(&args)
             .env("PODMAN_XDG", &xdg)
             .env("XDG_RUNTIME_DIR", &xdg)
-            // the same project root as this runtime: install-rs.sh derives its REAL Wine tree
-            // (the busy guard compares CS2_GAME with it) and its install lock from it
+            // the same project root as this runtime: the tool derives its REAL Wine tree (the
+            // busy guard compares CS2_GAME with it) and its install lock from it
             .env("CS2_MCP_PROJECT_ROOT", &self.project_root)
-            // install-rs.sh looks `podman` up on PATH; forward the binary this runtime was
-            // configured with, so a non-default podman is the one its guards and installs use
+            // the tool looks `podman` up on PATH; forward the binary this runtime was configured
+            // with, so a non-default podman is the one its guards and installs use
             .env("PODMAN", &self.podman)
             .stdin(Stdio::null())
             .stdout(Stdio::null())
             .stderr(Stdio::piped())
             // backstop for cancellation only: the group kill below is the real cleanup
             .kill_on_drop(true);
-        // Always name the Wine tree (canonicalized, so install-rs.sh can compare it with its own
-        // real tree and its busy guard applies). The Linux tree is the cs2-home volume, which the
-        // script addresses itself.
+        // Always name the Wine tree (canonicalized, so the tool can compare it with its own real
+        // tree and its busy guard applies). The Linux tree is the cs2-home volume, which the tool
+        // addresses itself.
         if matches!(
             kind,
             SessionKind::WineTools { .. } | SessionKind::WineClient
@@ -1774,12 +1787,22 @@ impl DockerRuntime {
         // its own process group, so a timeout takes the writers it spawned with it
         #[cfg(unix)]
         cmd.as_std_mut().process_group(0);
-        let shown = format!("{} {}", script.display(), args.join(" "));
-        let mut child = cmd
-            .spawn()
-            .map_err(|e| anyhow::anyhow!("cannot run {shown}: {e}"))?;
+        let shown = format!("{} {}", tool.display(), args.join(" "));
+        // a tool binary that is being (re)written right now (a concurrent cargo build, a test's
+        // fresh stub) fails the exec with ETXTBSY for a moment: retry briefly, like podman_raw
+        let mut attempt = 0;
+        let mut child = loop {
+            match cmd.spawn() {
+                Ok(child) => break child,
+                Err(e) if e.raw_os_error() == Some(26) && attempt < 5 => {
+                    attempt += 1;
+                    tokio::time::sleep(Duration::from_millis(20)).await;
+                }
+                Err(e) => return Err(anyhow::anyhow!("cannot run {shown}: {e}")),
+            }
+        };
         let mut group = InstallGroup::new(child.id());
-        // read stderr concurrently: a chatty script must not block on a full pipe while we wait
+        // read stderr concurrently: a chatty tool must not block on a full pipe while we wait
         let pipe = child.stderr.take();
         let mut stderr_reader = tokio::spawn(async move {
             let mut buf = Vec::new();
@@ -1800,10 +1823,10 @@ impl DockerRuntime {
                 }
                 let tail = stderr_tail(&text, INSTALL_STDERR_LINES);
                 if !tail.is_empty() {
-                    tracing::warn!(stderr = %tail, "install-rs.sh ensure timed out; last output");
+                    tracing::warn!(stderr = %tail, "install ensure timed out; last output");
                 }
                 return Err(RuntimeError::InstallTimeout {
-                    path: script.display().to_string(),
+                    path: tool.display().to_string(),
                     args: args.join(" "),
                     secs: self.install_timeout.as_secs(),
                 }
@@ -1830,7 +1853,7 @@ impl DockerRuntime {
             tracing::info!(
                 args = %args.join(" "),
                 stderr = %shown_stderr,
-                "install-rs.sh ensure"
+                "install ensure"
             );
             return Ok(());
         }
@@ -1839,7 +1862,7 @@ impl DockerRuntime {
             return Err(RuntimeError::InstallBusy { stderr }.into());
         }
         Err(RuntimeError::InstallFailed {
-            path: script.display().to_string(),
+            path: tool.display().to_string(),
             args: args.join(" "),
             code,
             stderr,
@@ -3009,7 +3032,7 @@ impl DockerRuntime {
         Ok(rep)
     }
 
-    /// Wine channel stage (runtime.sh `wait_channel`): one vtmsend probe per [`CHANNEL_PROBE_EVERY`];
+    /// Wine channel stage (`cargo bridge runtime`'s `wait_channel`): one vtmsend probe per [`CHANNEL_PROBE_EVERY`];
     /// true once it prints [`CHANNEL_UP_MARKER`]. The result is kept in `Owned`, so a later wait does
     /// not probe again. A probe that fails is recorded for the timeout note and retried.
     async fn channel_check(
@@ -3060,7 +3083,7 @@ impl DockerRuntime {
         }
     }
 
-    /// Wine bridge stage (runtime.sh `load_bridge`). While the discovery file is missing or older
+    /// Wine bridge stage (`cargo bridge runtime`'s `load_bridge`). While the discovery file is missing or older
     /// than the launch, the tool_request is posted once and again every [`BRIDGE_REPOST_EVERY`].
     /// A fresh file is then checked with `control.hello` every [`HELLO_EVERY`]; the hello is the
     /// authoritative signal, the file's mtime only says when to ask.
@@ -3125,7 +3148,7 @@ impl DockerRuntime {
         }
     }
 
-    /// Write `payload` as the vtmsend payload and run vtmsend once in the session (runtime.sh
+    /// Write `payload` as the vtmsend payload and run vtmsend once in the session (`cargo bridge runtime`
     /// `put_payload` + `vtmsend`). Returns its output (stdout and stderr: vtmsend's exit is not used).
     /// Bounded by `left`, and by the short podman timeout.
     async fn vtmsend_once(

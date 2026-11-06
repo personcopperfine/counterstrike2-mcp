@@ -5,7 +5,7 @@
 #   --pkg   the package dir (default target/cs2mcp-native-linux: package.sh --os linux)
 #   --base  the client image (default $CS2_MCP_IMAGE or ghcr.io/personcopperfine/cs2-docker:latest)
 #   --tag   default localhost/cs2mcp-native-test:latest
-# podman runs with XDG_RUNTIME_DIR=<project root>/.podman/xdg (bridge/lib-root.sh).
+# podman runs with XDG_RUNTIME_DIR=<project root>/.podman/xdg (crates/cs2-native/scripts/lib-root.sh).
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/../../.." && pwd)"
@@ -25,8 +25,8 @@ done
 grep -q '^target=x86_64-unknown-linux-gnu' "$pkg/BUILDINFO.txt" \
     || { echo "build.sh: $pkg is not a Linux package" >&2; exit 1; }
 (cd "$pkg" && sha256sum --quiet -c SHA256SUMS) || { echo "build.sh: $pkg fails its SHA256SUMS" >&2; exit 1; }
-# shellcheck source-path=SCRIPTDIR source=../../../bridge/lib-root.sh
-. "$repo/bridge/lib-root.sh"
+# shellcheck source-path=SCRIPTDIR source=../../../crates/cs2-native/scripts/lib-root.sh
+. "$repo/crates/cs2-native/scripts/lib-root.sh"
 root="$(cs2mcp_project_root "$repo")"
 export XDG_RUNTIME_DIR="$root/.podman/xdg"
 

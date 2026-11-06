@@ -1,5 +1,5 @@
 //! `world.render`: the Hammer-less offscreen render of the running map
-//! (`bridge/mcp_bridge.c:2861-3105`).
+//! (`mcp_bridge.c:2861-3105`).
 //!
 //! The engine's own pieces: `SceneSystem_002` Begin/AddView/Finish/Wait, the `Tools` (-> CSGO)
 //! rendering pipeline, the view's own scratch colour/depth targets at the requested size and
@@ -59,7 +59,7 @@ const RESULT_BUF: usize = 4096;
 #[cfg(windows)]
 const WR_COLOR_FMT: i32 = IMAGE_FORMAT_BGRA8888 as i32;
 
-/// The C's `S2RenderTargetDesc` (`bridge/s2sdk.h:85`): `{int w, h; u8 msaa, pad;}` - a
+/// The C's `S2RenderTargetDesc` (`s2sdk.h:85`): `{int w, h; u8 msaa, pad;}` - a
 /// bridge-owned layout with no upstream type.
 #[repr(C)]
 #[allow(dead_code)] // constructed and passed by pointer; the C never reads the fields either
@@ -71,7 +71,7 @@ struct RenderTargetDesc {
     pad: u8,
 }
 
-/// The C's `S2Rect` (`bridge/s2sdk.h:88`), the same layout as upstream `Rect_t`.
+/// The C's `S2Rect` (`s2sdk.h:88`), the same layout as upstream `Rect_t`.
 #[repr(C)]
 #[allow(dead_code)] // constructed and passed by pointer
 #[cfg(windows)]
@@ -103,7 +103,7 @@ static mut WR_ATTRS: core::mem::MaybeUninit<AttrsBlock> = core::mem::MaybeUninit
 #[cfg(windows)]
 static mut WR_FRUSTUM: core::mem::MaybeUninit<CFrustum> = core::mem::MaybeUninit::uninit();
 
-/// The C's `EngineFns` (`bridge/s2sdk.h:749-753`): non-virtual, non-exported engine2 functions.
+/// The C's `EngineFns` (`s2sdk.h:749-753`): non-virtual, non-exported engine2 functions.
 #[derive(Clone, Copy)]
 #[cfg(windows)]
 struct EngineFns {
@@ -112,7 +112,7 @@ struct EngineFns {
     attrs_set_handle: unsafe extern "C" fn(*mut c_void, u32, i64),
 }
 
-/// The C's `SceneFns` (`bridge/s2sdk.h:745-748`).
+/// The C's `SceneFns` (`s2sdk.h:745-748`).
 #[derive(Clone, Copy)]
 #[cfg(windows)]
 struct SceneFns {
@@ -152,7 +152,7 @@ fn factory_get(name: &str) -> *mut c_void {
     let Ok(cname) = std::ffi::CString::new(name) else {
         return core::ptr::null_mut();
     };
-    // `S2CreateInterfaceFn` (`bridge/s2sdk.h:60`): `void *(const char *, int *)`.
+    // `S2CreateInterfaceFn` (`s2sdk.h:60`): `void *(const char *, int *)`.
     type CreateInterfaceFn = unsafe extern "C" fn(*const c_char, *mut c_int) -> *mut c_void;
     // SAFETY: `g_connectFactory` is the factory `Connect` was handed (a real app-system factory);
     // the signature is the C header's, `cname` outlives the call and `ret` is its out-parameter.
@@ -202,7 +202,7 @@ fn engine_ifaces() -> Result<Engine, &'static str> {
         ($base:expr, $pin:ident, $ty:ty) => {{
             let address = $base + pins::$pin.value as usize;
             // SAFETY: `address` is a verified module's image at the pinned function RVA and
-            // `$ty` is the C header's own signature (`bridge/s2sdk.h:745-753`).
+            // `$ty` is the C header's own signature (`s2sdk.h:745-753`).
             unsafe { core::mem::transmute::<usize, $ty>(address) }
         }};
     }
@@ -238,15 +238,15 @@ fn engine_ifaces() -> Result<Engine, &'static str> {
     Ok(engine)
 }
 
-/// `void *(*WaitForRenderingToComplete)(ISceneSystem *)` (`bridge/s2sdk.h:160`): the C's `u8`
+/// `void *(*WaitForRenderingToComplete)(ISceneSystem *)` (`s2sdk.h:160`): the C's `u8`
 /// return, never a Rust `bool`.
 #[cfg(windows)]
 type FnWait = unsafe extern "C" fn(*mut ISceneSystem) -> u8;
-/// `u8 (*IsUsingReverseDepth)(IRenderDevice *)` (`bridge/s2sdk.h:274`).
+/// `u8 (*IsUsingReverseDepth)(IRenderDevice *)` (`s2sdk.h:274`).
 #[cfg(windows)]
 type FnReverseDepth = unsafe extern "C" fn(*mut IRenderDevice) -> u8;
 /// `u8 (*ReadTexturePixels)(IRenderDevice *, void *texture, S2Rect *src, u32 a3, int a4,
-/// S2Rect *dst, void *pixels, int format, int pitch)` (`bridge/s2sdk.h:271-273`).
+/// S2Rect *dst, void *pixels, int format, int pitch)` (`s2sdk.h:271-273`).
 #[cfg(windows)]
 type FnReadPixels = unsafe extern "C" fn(
     *mut IRenderDevice,
@@ -521,7 +521,7 @@ fn render_with(eng: Engine, params: Option<&str>, out: &mut Sb) -> Result<(), Op
         let vt = IRenderingPipeline::vtable(pipe);
         // The generated names are the header's anonymous slots: `unk108` is
         // `ScratchTargetFlags` (slot 8), `unk109` `ColorBindFlags` (9), `unk1010`
-        // `DepthBindFlags` (10) - `bridge/s2sdk.h:212-214`.
+        // `DepthBindFlags` (10) - `s2sdk.h:212-214`.
         let color = vt.unk109.expect("pinned ColorBindFlags slot")(pipe);
         let depth = vt.unk1010.expect("pinned DepthBindFlags slot")(pipe);
         let flags = vt.unk108.expect("pinned ScratchTargetFlags slot")(pipe);

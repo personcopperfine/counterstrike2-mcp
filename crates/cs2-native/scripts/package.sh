@@ -7,12 +7,12 @@
 #   <out>/cs2mcp-launcher[.exe]          the desktop app (crates/cs2-launcher)
 #   <out>/cs2mcp-native[.exe]  client-mcp[.exe]  hammer-mcp[.exe]
 #   <out>/sigs/                          sigs/signatures (the servers' signature DB)
-#   <out>/payload/bridge-rs/<plat>/      bridge/build-rs.sh output (win64 | linuxsteamrt64)
+#   <out>/payload/bridge-rs/<plat>/      cargo bridge build output (win64 | linuxsteamrt64)
 #   <out>/payload/metamod/<plat>/addons/ the Metamod build (win64 | linux)
 #   <out>/payload/gbe/<plat>/            scripts/stage-gbe.sh output (win64 | linux64), + GBE_REF.txt
 #   <out>/payload/vklayer/<plat>/        the capture layer (crates/cs2-vk-capture, built here):
 #                                        VkLayer_cs2mcp_capture.json + cs2_vk_capture.dll | libcs2_vk_capture.so
-#   <out>/BUILDINFO.txt                  git sha, toolchain, the pins gate (bridge/build-rs.sh's
+#   <out>/BUILDINFO.txt                  git sha, toolchain, the pins gate (`cargo bridge build`'s
 #                                        PINS_GATE.txt), gbe tag, Metamod source/version + sha256,
 #                                        the hl2sdk (s2sdk) commit; "not code-signed"
 #   <out>/SHA256SUMS                     every file above (payload.rs verifies payload/ with it)
@@ -21,9 +21,9 @@
 # `git describe --tags --always --dirty`).
 #
 # Inputs (each must exist; nothing is fetched): BRIDGE_DIR (default <repo>/target/bridge-rs),
-# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: bridge/lib-root.sh; both
-# platforms come from bridge/metamod/fetch-metamod.sh linux|win64, the official dev builds; a
-# Linux tree from build-metamod.sh linux (development) is recorded as such),
+# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: crates/cs2-native/scripts/lib-root.sh;
+# both platforms come from crates/metamod/fetch-metamod.sh linux|win64, the official dev builds; a
+# Linux tree from `cargo bridge metamod linux` (development) is recorded as such),
 # GBE_DIR (<repo>/target/gbe).
 # The binaries are built with cargo --release (-j${JOBS:-2}, the OOM guard) unless --no-build.
 # The dev tool cs2mcp-native-dev is not shipped. Valve binaries never go in: the payload is ours
@@ -52,12 +52,12 @@ out="${out:-$repo/target/cs2mcp-native-$os}"
 bridge="${BRIDGE_DIR:-$repo/target/bridge-rs}"
 gbe="${GBE_DIR:-$repo/target/gbe}"
 metamod="${METAMOD_DIR:-$repo/target/metamod}"
-# shellcheck source=../../../bridge/lib-root.sh
-. "$repo/bridge/lib-root.sh"
+# shellcheck source=lib-root.sh
+. "$repo/crates/cs2-native/scripts/lib-root.sh"
 [ -d "$metamod/$mplat" ] || metamod="$(cs2mcp_main_checkout "$repo")/target/metamod"
 
 need() { [ -e "$1" ] || { echo "package.sh: missing $1 ($2)" >&2; exit 1; }; }
-need "$bridge/$bplat" "bridge/build-rs.sh, or set BRIDGE_DIR"
+need "$bridge/$bplat" "cargo bridge build, or set BRIDGE_DIR"
 need "$metamod/$mplat/addons/metamod" "the Metamod build, or set METAMOD_DIR"
 need "$gbe/$gplat" "scripts/stage-gbe.sh, or set GBE_DIR"
 
@@ -101,17 +101,17 @@ kv() { sed -n "s/^$1=//p" "$2" 2>/dev/null | head -n1; }
     echo "cargo=$(cargo -V 2>/dev/null || echo unknown)"
     echo "target=${triple:-$(rustc -vV 2>/dev/null | sed -n 's/^host: //p')}"
     echo "game_build_targeted=$(tr -d '[:space:]' < "$repo/sigs/CURRENT_BUILD")"
-    echo "pins_gate=$(cat "$bridge/PINS_GATE.txt" 2>/dev/null || echo "unknown (no $bridge/PINS_GATE.txt: the bridge was not built by this build-rs.sh)")"
+    echo "pins_gate=$(cat "$bridge/PINS_GATE.txt" 2>/dev/null || echo "unknown (no $bridge/PINS_GATE.txt: the bridge was not built by this checkout's cargo bridge build)")"
     echo "gbe=$(tr '\n' ' ' < "$gbe/GBE_REF.txt" 2>/dev/null | sed 's/ *$//' || true)"
     if [ -f "$mm_info" ]; then
-        echo "metamod_source=official AlliedModders dev build (bridge/metamod/fetch-metamod.sh $mplat; not built here)"
+        echo "metamod_source=official AlliedModders dev build (crates/metamod/fetch-metamod.sh $mplat; not built here)"
         echo "metamod_build=$(kv build "$mm_info")"
         echo "metamod_version=$(kv version "$mm_info")"
         echo "metamod_url=$(kv url "$mm_info")"
         echo "metamod_archive_sha256=$(kv archive_sha256 "$mm_info")"
     elif [ "$mplat" = linux ] && [ -f "$metamod/BUILDINFO.txt" ]; then
         f="$metamod/BUILDINFO.txt"
-        echo "metamod_source=built from source (bridge/metamod/build-metamod.sh linux; development, not a release input)"
+        echo "metamod_source=built from source (cargo bridge metamod linux; development, not a release input)"
         echo "metamod_commit=$(kv metamod_commit "$f")"
         echo "metamod_version=$(kv metamod_describe "$f")"
         echo "hl2sdk_commit=$(kv s2sdk_commit "$f") (alliedmodders/s2sdk, branch $(kv s2sdk_branch "$f"))"

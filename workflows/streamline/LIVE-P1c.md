@@ -1,6 +1,6 @@
 # Live check of live-fix C (2026-10-26, streamline/agent-ux at b724e13, bridge m3.16)
 
-I ran one Hammer tools session (`TOOL=hammer ADDON=mcp_test bridge/runtime.sh up`, no `runtime.sh
+I ran one Hammer tools session (`TOOL=hammer ADDON=mcp_test cargo bridge runtime up`, no `runtime.sh
 open`) and drove it through the worktree's `target/debug/hammer-mcp` (`--project-root
 <project root>`, no other flags). I only tested and recorded; no code was changed. The
 raw evidence is under `target/live-p1c/`:
@@ -134,7 +134,7 @@ None found in the checked items.
     stop; that was fixed with `shutdown()`.
 
 **Session (left RUNNING).**
-- `TOOL=hammer ADDON=accept_p1 bridge/runtime.sh up`: container `cs2tools`, label
+- `TOOL=hammer ADDON=accept_p1 cargo bridge runtime up`: container `cs2tools`, label
   `cs2mcp.addon=accept_p1` (`runtime-up-accept_p1.txt`).
 - The driver was started with:
   `mcp_session.py start <repo>/.claude/worktrees/streamline/target/debug/hammer-mcp --project-root <project root> --addon accept_p1`
@@ -144,6 +144,6 @@ None found in the checked items.
   - 33 methods, hammer.dll `not_loaded`, no document.
 - This server holds the bridge connection (one client). Another hammer-mcp that calls a bridge tool
   gets `Busy`.
-- To tear down: `mcp_session.py stop`, then `bridge/runtime.sh down`.
+- To tear down: `mcp_session.py stop`, then `cargo bridge runtime down`.
 
 No commit was made.

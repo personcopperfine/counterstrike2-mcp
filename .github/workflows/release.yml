@@ -5,12 +5,13 @@
 #   workflow_dispatch      dry run: builds everything, uploads the files as workflow artifacts,
 #                          creates no release
 #
-# There are no game binaries on a runner, so the bridge is built with `build-rs.sh
+# There are no game binaries on a runner, so the bridge is built with `cargo bridge build
 # --no-pins-check`; that is written into every BUILDINFO.txt and the release notes. The pins are
 # held to the game by the maintainer's local checks before tagging (RELEASING.md). The export
 # gates still run here. Metamod:Source (both platforms) is AlliedModders' newest official dev
-# build, recorded in BUILDINFO and the notes (bridge/metamod/fetch-metamod.sh). The Windows Rust binaries are cross-built on Linux (xwin + rust-lld);
-# windows-latest only runs WiX for the MSI. Nothing is code-signed.
+# build, recorded in BUILDINFO and the notes (crates/metamod/fetch-metamod.sh). The Windows Rust
+# binaries are cross-built on Linux (xwin + rust-lld); windows-latest only runs WiX for the MSI.
+# Nothing is code-signed.
 name: release
 
 on:
@@ -111,7 +112,7 @@ jobs:
           ls target/xwin/crt/lib/x86_64 >/dev/null
 
       - name: Bridge + Metamod loader (both targets; export gates; pins gate skipped)
-        run: bridge/build-rs.sh --no-pins-check
+        run: cargo bridge build --no-pins-check
 
       - name: Metamod:Source linux + win64 (the official dev builds, recorded)
         env:
@@ -119,8 +120,8 @@ jobs:
           MM_LINUX_SHA256: ${{ inputs.metamod_linux_sha256 || vars.MM_LINUX_SHA256 }}
           MM_WIN64_SHA256: ${{ inputs.metamod_win64_sha256 || vars.MM_WIN64_SHA256 }}
         run: |
-          bridge/metamod/fetch-metamod.sh linux
-          bridge/metamod/fetch-metamod.sh win64
+          crates/metamod/fetch-metamod.sh linux
+          crates/metamod/fetch-metamod.sh win64
 
       - name: gbe_fork (release mode, pinned + hashed)
         env:

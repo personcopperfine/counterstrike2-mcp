@@ -1,4 +1,4 @@
-//! JSON string-body unescaping - the Rust port of `bridge/json_text.h` (m2.13 WP-B1).
+//! JSON string-body unescaping - the Rust port of `json_text.h` (m2.13 WP-B1).
 //!
 //! `pet.apply` carries the whole document as one JSON string; this is the exact inverse of the
 //! escape set the Rust client's serde_json emits: `\" \\ \/ \b \f \n \r \t` and `\uXXXX`.
@@ -8,19 +8,19 @@
 //! closed. The caller sizes the output from the escaped length (unescaping never grows: every
 //! escape is at least one byte in, one byte out).
 //!
-//! This is a line-for-line port of the C (`bridge/json_text.h`, 113 lines); the C output is the
+//! This is a line-for-line port of the C (`json_text.h`, 113 lines); the C output is the
 //! spec and the differential corpus test (`crates/cs2-bridge/tests/json_text.rs`) proves the
 //! bytes identical case by case. The Rust API replaces the C's raw pointers with slices: where
 //! the C takes `(src, srcLen)` and `(out, outCap)` this takes `&[u8]` and `&mut [u8]`, and where
 //! the C writes a reason string the Rust returns a [`Reason`]. Everything the C test observes
 //! carries over unchanged, including the terminating NUL: on accept [`unescape`] writes `out`
-//! `[0..len]` **and** the NUL at `out[len]` (`bridge/json_text.h:60` - the text goes to C-string
+//! `[0..len]` **and** the NUL at `out[len]` (`json_text.h:60` - the text goes to C-string
 //! APIs such as tier0's LoadKV3), so `out` must have room for one byte more than the decoded
 //! text, exactly like the C.
 //!
-//! No static mutable state: re-entrant, like the C header (`bridge/json_text.h:14`).
+//! No static mutable state: re-entrant, like the C header (`json_text.h:14`).
 
-/// Why [`unescape`] refused an input - the exact reason strings of `bridge/json_text.h:24-30`.
+/// Why [`unescape`] refused an input - the exact reason strings of `json_text.h:24-30`.
 ///
 /// [`Reason::as_str`] returns those strings; the differential corpus compares this against what
 /// the C harness recorded, character for character.
@@ -45,7 +45,7 @@ pub enum Reason {
 }
 
 impl Reason {
-    /// The C reason string this variant mirrors (`bridge/json_text.h:24-30`); the differential
+    /// The C reason string this variant mirrors (`json_text.h:24-30`); the differential
     /// corpus compares byte for byte against what the C harness wrote.
     pub fn as_str(self) -> &'static str {
         match self {
@@ -64,7 +64,7 @@ impl Reason {
 /// `src` (i.e. `src` is the byte after the opening quote), or [`None`] when there is none. Used
 /// for sizing. An escaped quote (`\"`) does not end the string.
 ///
-/// Port of `json_text_end` (`bridge/json_text.h:36-49`); the C's 0 return is [`None`], the
+/// Port of `json_text_end` (`json_text.h:36-49`); the C's 0 return is [`None`], the
 /// pointer is the index.
 pub fn end(src: &[u8]) -> Option<usize> {
     let mut i = 0;
@@ -95,7 +95,7 @@ pub fn end(src: &[u8]) -> Option<usize> {
 ///   point stay written in `out`; the refusal itself never writes (`json_text.h:59`, `:88`,
 ///   `:103`, `:106` all return before `:107`).
 ///
-/// Port of `json_text_unescape` (`bridge/json_text.h:51-111`). `src` may contain any bytes -
+/// Port of `json_text_unescape` (`json_text.h:51-111`). `src` may contain any bytes -
 /// it is binary-safe, and raw bytes >= 0x20 (including invalid UTF-8) pass through unchanged,
 /// exactly what serde_json does (`test_json_text.c:74-75`).
 pub fn unescape(src: &[u8], out: &mut [u8]) -> Result<usize, Reason> {

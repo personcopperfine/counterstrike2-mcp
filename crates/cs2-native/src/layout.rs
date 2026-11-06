@@ -1,26 +1,28 @@
 //! The bytes this launcher writes that are not copies of a build artefact: the Metamod vdf, the
 //! `sdkenginetools.txt` edit, the gbe config files and `steam_interfaces.txt`.
 //!
-//! The vdf and the manifest edit are byte-identical to `bridge/install-rs.sh` (`wine_vdf_text`,
-//! `linux_vdf_text`, `apply_manifest_edit`), so a tree prepared here and a tree `install-rs.sh`
-//! prepared load the bridge the same way.
+//! The vdf and the manifest edit are byte-identical to `cargo bridge install`'s
+//! (`crates/cs2-bridge-tools/src/install/text.rs`: `WINE_VDF`, `LINUX_VDF`,
+//! `apply_manifest_edit`), so a tree prepared here and a tree `cargo bridge install` prepared load
+//! the bridge the same way.
 
 /// `game/csgo/addons/metamod/cs2mcp.vdf` on Windows: relative to the mod dir (`game/csgo`), it
 /// names the **tools** copy of the bridge, so Metamod and toolframework2 hold one image
-/// (install-rs.sh header, "install (wine)").
+/// (`cargo bridge install`, the Wine layout in its module doc).
 pub const WINDOWS_VDF: &str =
     "\"Metamod Plugin\"\n{\n\t\"alias\"\t\t\"cs2mcp\"\n\t\"file\"\t\t\"../bin/win64/tools/cs2_bridge.dll\"\n}\n";
 
 /// `csgo/addons/metamod/cs2mcp.vdf` on Linux (no tools manifest there; single tabs, the
-/// live-verified byte form of install-rs.sh `linux_vdf_text`).
+/// live-verified byte form of `cargo bridge install`'s `LINUX_VDF`).
 pub const LINUX_VDF: &str =
     "\"Metamod Plugin\"\n{\n\t\"alias\"\t\"cs2mcp\"\n\t\"file\"\t\"addons/cs2mcp/bin/linuxsteamrt64/libcs2_bridge.so\"\n}\n";
 
-/// The marker install-rs.sh uses to tell an edited manifest.
+/// The marker `cargo bridge install` uses to tell an edited manifest.
 const ENTRY_MARKER: &str = "m_Name = \"cs2_bridge\"";
 
 /// Insert the `cs2_bridge` tool entry before the `hammer` entry of `game/bin/sdkenginetools.txt`
-/// (install-rs.sh `apply_manifest_edit`: same anchor, same text, the file's own line ending).
+/// (`cargo bridge install`'s `apply_manifest_edit`: same anchor, same text, the file's own line
+/// ending).
 /// Idempotent. `None` when the hammer anchor is missing (Valve changed the file: refuse).
 pub fn sdkenginetools_edit(text: &str) -> Option<String> {
     if text.contains(ENTRY_MARKER) {

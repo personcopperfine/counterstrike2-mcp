@@ -3,8 +3,8 @@
 //! * the launcher's state dir was deleted while the tree was prepared: our files are still in it,
 //!   and a new `prepare` would see them as the user's own (identical bytes are not recorded), so
 //!   they would never be removed;
-//! * `bridge/install-rs.sh` installed the bridge into this tree (its current layout, or the old
-//!   gameinfo-era one: `game/metamod/`, `content/metamod/`, the `Game metamod` search path, the
+//! * `cargo bridge install` (formerly `bridge/install-rs.sh`) installed the bridge into this tree
+//!   (its current layout, or the shell installer's old gameinfo-era one: `game/metamod/`, `content/metamod/`, the `Game metamod` search path, the
 //!   second bridge copy under `game/csgo/addons/cs2mcp/` on Windows, the Linux VSP loader vdfs);
 //! * the client image's `setup_gbe.sh` replaced the Linux `libsteam_api.so` with the emulator and
 //!   linked `steam_settings` (its own backup of Valve's file is `~/.steam/gbe_orig_libsteam_api.so`).
@@ -13,7 +13,7 @@
 //! (`cs2mcp-native cleanup --yes`, the GUI's "Clean up" after a confirmation). Cleanup never
 //! deletes: it moves what it takes away into `<state root>/cleanup-<ts>/`, un-edits
 //! `sdkenginetools.txt` only when that gives a byte-exact Valve file back, and leaves
-//! `gameinfo.gi` to `install-rs.sh uninstall` (it is never edited here).
+//! `gameinfo.gi` to Steam's Verify integrity (it is never edited here).
 
 use crate::findings::{Code, Finding, Severity, VERIFY_ADVICE};
 use crate::install::Os;
@@ -24,7 +24,7 @@ use serde_json::{json, Value};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
-/// Every path this launcher (or install-rs.sh) writes, with the bytes it would write today.
+/// Every path this launcher (or `cargo bridge install`) writes, with the bytes it would write today.
 #[derive(Debug, Clone, Default)]
 pub struct Known {
     /// rel path -> acceptable sha256s
@@ -235,11 +235,11 @@ pub fn findings(s: &Seen, os: Os) -> Vec<Finding> {
             Finding::new(
                 Code::Orphans,
                 Severity::Decision,
-                "files of cs2-mcp are in this install, but no manifest of this launcher records them (its state dir was deleted while the tree was prepared, or bridge/install-rs.sh installed them)",
+                "files of cs2-mcp are in this install, but no manifest of this launcher records them (its state dir was deleted while the tree was prepared, or `cargo bridge install` installed them)",
             )
             .paths(ours)
             .advice("`cs2mcp-native cleanup --yes` (GUI: Clean up) moves them out of the install (into the state dir's cleanup-<time>/) and removes our sdkenginetools.txt entry")
-            .advice("installed with bridge/install-rs.sh? `bridge/install-rs.sh uninstall` restores its own backups")
+            .advice("installed with `cargo bridge install` (or the older bridge/install-rs.sh)? `cargo bridge install uninstall` restores its own backups")
             .advice("--accept-conflicts (GUI: Continue anyway) keeps them: they are treated as the tree's own and left as found after the session"),
         );
     } else if !s.metamod_exact.is_empty() {
@@ -273,7 +273,7 @@ pub fn findings(s: &Seen, os: Os) -> Vec<Finding> {
             f = f.advice("`cs2mcp-native cleanup --yes` (GUI: Clean up) moves the old files out of the install");
         }
         if !s.gameinfo_lines.is_empty() {
-            f = f.advice("the gameinfo.gi lines are never edited here: `bridge/install-rs.sh uninstall` reverts them, or Verify integrity in Steam");
+            f = f.advice("the gameinfo.gi lines are never edited here: Verify integrity of game files in Steam reverts them (`cargo bridge install` no longer handles that layout)");
         }
         if s.steam_settings_link {
             f = f.advice("with --accept-conflicts the steam_settings link is taken out for the session (nothing is written through it) and put back afterwards");
@@ -542,7 +542,7 @@ mod tests {
         let f = findings(&s, Os::Linux);
         let codes: Vec<_> = f.iter().map(|f| (f.code, f.severity)).collect();
         assert_eq!(codes, [(Code::ReplacedGameFile, Severity::Decision), (Code::Legacy, Severity::Decision)]);
-        assert!(f[1].advice.iter().any(|a| a.contains("install-rs.sh uninstall")));
+        assert!(f[1].advice.iter().any(|a| a.contains("gameinfo.gi lines") && a.contains("Verify integrity")));
 
         let plan = plan_cleanup(&s, Os::Linux);
         cleanup(&root, &plan, &base.join("q"), &crate::events::Events::null()).unwrap();

@@ -161,7 +161,7 @@ refuses without `-insecure` itself.
 
 **Not verified live:** the Wine/Proton container path with this branch's bridge (renders still go
 to `Z:\app\renders` when `Z:\app` exists, unit-tested; the gate needs `-insecure`, which
-`bridge/runtime.sh` and the client-mcp runtime always pass); FIXME 7/8 fixes (unit test /
+`cargo bridge runtime` and the client-mcp runtime always pass); FIXME 7/8 fixes (unit test /
 compile only); the Linux launcher (FIXME 3).
 
 ## FIXMEs round (branch `native-launcher-fixmes`), 2026-11-05

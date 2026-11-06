@@ -149,7 +149,7 @@ unsafe fn load_bridge() -> (libloading::Library, CreateInterfaceFn) {
     let lib = unsafe { libloading::Library::new(&path) }
         .unwrap_or_else(|e| panic!("dlopen {}: {e}", path.display()));
     // SAFETY: `CreateInterface` is the crate's one exported symbol with this signature
-    // (`bridge/mcp_bridge.c:6846`), and `lib` is kept alive by the caller.
+    // (`mcp_bridge.c:6846`), and `lib` is kept alive by the caller.
     let create: libloading::Symbol<'_, CreateInterfaceFn> =
         unsafe { lib.get(b"CreateInterface\0") }
             .unwrap_or_else(|e| panic!("dlsym CreateInterface in {}: {e}", path.display()));

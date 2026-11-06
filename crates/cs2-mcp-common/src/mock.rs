@@ -42,7 +42,7 @@ pub const DEFAULT_FIXTURES: &str = include_str!("../fixtures/bridge-latest.jsonl
 /// Synthetic m2.10 replies (`game.rules`, `game.entities`), tagged with `method`; not a live recording.
 pub const SYNTHETIC_FIXTURES: &str = include_str!("../fixtures/synthetic-m2.10.jsonl");
 
-/// The six ModelDoc bridge methods (m2.11, `bridge/protocol-diff-m2.11.md` / modeldoc-plan §2 WP4)
+/// The six ModelDoc bridge methods (m2.11, `crates/cs2-bridge/PROTOCOL.md` §16)
 /// plus the m2.14 render method. Advertised by hello only when the mock was built with
 /// [`MockBuilder::modeldoc`]; the six m2.11 built-ins answer regardless (tests decide per call),
 /// `modeldoc.render` only when advertised (gated like `pet.*`). No `model_doc` = no session for
@@ -2091,7 +2091,7 @@ fn no_active_document() -> Value {
 }
 
 /// The Hammer render built-ins (WP-D: `view.render` + `world.render`, semantics exactly
-/// `bridge/mcp_bridge.c` `op_view_render` / `op_world_render` plus the dispatch gates). The
+/// `mcp_bridge.c` `op_view_render` / `op_world_render` plus the dispatch gates). The
 /// chain refusals come first (the C handlers gate on the object chain before any parameter,
 /// and the `view.render` dispatch answers `-32003 NoActiveDocument` when there is no active
 /// document), then the size/fov/name bounds, then the result object with the mock's synthetic

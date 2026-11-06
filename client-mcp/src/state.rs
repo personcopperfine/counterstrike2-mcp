@@ -152,7 +152,7 @@ impl ClientState {
                 vk_layer_dir: Some(cfg.common.vk_layer_dir.clone()),
                 s2sdk_probe_dir: cfg.common.s2sdk_probe_dir.clone(),
                 native_package: cfg.common.native_package.clone(),
-                install_script: cfg.common.install_script.clone(),
+                install_tool: cfg.common.install_tool.clone(),
                 image: cfg.common.image.clone(),
                 // docker/linux-client.sh ships in this crate; the container gets it read-only
                 linux_client_script: PathBuf::from(concat!(

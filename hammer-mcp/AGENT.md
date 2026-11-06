@@ -109,7 +109,7 @@ at all) and watches `game/csgo/console.log` for the load signal.
 `map.run` is `-32011` (and `console.exec` is `-32011` on a bridge older than m3.13, whose gate was
 `-testscript` only), while the engine's **command channel** answers any
 session — `vtmsend.exe` posts a kv3 `command` payload and the engine's `console` runs the line
-(`runtime.sh` `wait_channel` and the bridge load itself use it; the shared helpers are
+(`cargo bridge runtime up`'s channel wait and the bridge load itself use it; the shared helpers are
 `cs2_mcp_common::runtime::docker::{vtm_command_payload, vtmsend_program_argv}`). It is **not** the
 console tool (`console_exec`, "Console" below): the command templates are fixed (each optional `game_type N`/`game_mode M` as its own
 post — the proven recipe, and whether the channel splits a line on `;` is unverified [review-1 L4]
@@ -780,7 +780,7 @@ compile note, and the three cache rules; `crates/cs2-mcp-common/tests/mock_entit
 (`node_set_transform_shape_and_negatives`) pins the wire-level gates. The relative-scales test uses
 the plain mock (`entity.get` reports `scales` since review-2 W2 #4) and a responder without the
 field for the refusal path. **Not live-verified**: the bridge side is WP-B's (`node.setTransform` is
-`[I: offline]` until the orchestrator's live run — `bridge/test_props.py` covers it and asserts the
+`[I: offline]` until the orchestrator's live run; the retired live test `test_props.py` asserted the
 origin refusal names 1048576, W2 #5) — nothing here was run against a real Hammer.
 
 ### entity I/O (WP-R2, branch `props/wp-r2`)
@@ -847,7 +847,7 @@ live keyvalues are unaffected; `crates/cs2-mcp-common/tests/mock_entities.rs`
 shapes and the remove reply's `count`/`remaining` split. **Inferred (`[I]`)**: the match
 comparison's case-insensitivity in the mock (the bridge's own is exact/case-sensitive — the Rust
 tool does not normalize). Not live-verified as *tools* (the bridge methods are `[I: offline]` until
-the orchestrator's live run; `test_props.py` is the live half and now asserts `landed`, the
+the orchestrator's live run; the retired live test `test_props.py` asserted `landed`, the
 `remaining` field and the origin text).
 The add's body is one gate-free core, `connection_run` (`ConnectionSource::Node` reads the live
 source and writes, `ConnectionSource::Class` is WP-T's pre-flight and sends nothing), so
@@ -2015,10 +2015,10 @@ The orchestrator's acceptance flow ran the block end to end against the real add
 - **`logic_timer` first fire = InitialDelay + RefireTime.**
 - `resourcecompiler` checks **syntax only**: unknown base/children/keys/vsnds compile OK, so
   `edit_soundevents`' checks are the only ones (research/sounds-re.md Q1).
-- The live bridge check is `python3 -I bridge/test_sound_params.py` (bridge m2.20, tools session
-  up): PASS (exit 0) needs at least one via-11 event whose `params` decoded; zero decoded params,
-  or an unreachable bridge, is `RESULT: NOT RUN` (exit 2), never a pass; a failed check is exit 1.
-  `--static` checks the bridge source against the pins without a game.
+- The live bridge check was `test_sound_params.py` (retired with the other Python live tests;
+  `git show 8cdea42:bridge/test_sound_params.py`): a pass needed at least one via-11 event whose
+  `params` decoded; zero decoded params was never a pass. The wire contract is
+  `crates/cs2-bridge/PROTOCOL.md` §18.
 
 ## Selection (bridge m3.12, `src/tools/selection_live.rs`)
 
@@ -2208,7 +2208,7 @@ documentAddon}`; `set_addon` with no argument lists the addons available; an unk
 Caches are keyed by addon: the model catalog and the soundevent index carry the addon they were
 built for and are rebuilt (never rescanned from) when it differs.
 ModelDoc is the one thing the server cannot switch: the container is started with `-addon <a>`
-(`bridge/runtime.sh` also labels it `cs2mcp.addon=<a>`). `model_open` reads that
+(`cargo bridge runtime up` also labels it `cs2mcp.addon=<a>`). `model_open` reads that
 (`DockerRuntime::container_addon`: label, else the `-addon` word of the launch command; unreadable =
 passes) and refuses with `AddonMismatch` (`selectedAddon`, `modeldocAddon`, `hint` = restart ModelDoc
 on the selected addon, `useInstead` = the optional `set_addon` to ModelDoc's addon) when it differs from the selection; it also checks that the
@@ -2359,7 +2359,8 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
 
 ```
 <repo>/                     THIS repo = the default project root
-├── bridge/                 pins.py/bridge_pins.h + build-rs/install-rs/runtime.sh; the bridge is crates/cs2-bridge (frozen C reference kept)
+├── crates/cs2-bridge/      the bridge DLL (PROTOCOL.md: its wire contract)
+├── crates/cs2-bridge-tools/ `cargo bridge`: pins, build, install/ensure, the Wine tools runtime
 ├── crates/cs2-mcp-common/  shared crate: bridge client, tool registry, rmcp adapter, runtime, sigs, capture, mock
 ├── hammer-mcp/             this server
 ├── client-mcp/             the game-client server (own AGENT.md)
@@ -2367,7 +2368,7 @@ This repo is its own project root (override with `--project-root` / `CS2_MCP_PRO
     └── run/app             Windows CS2 + tools + Proton prefix (gitignored runtime state; mounted at /app)
 ```
 
-Paths below are written from the repo root as `bridge/...`, `crates/cs2-mcp-common/...`,
+Paths below are written from the repo root as `crates/cs2-bridge/...`, `crates/cs2-mcp-common/...`,
 `workshop/...`. Override with `--sigs` / `--project-root`.
 Citations of the form `../idabins/...`, `../harness/...`, `../tests/...`, `../cs2-gym/...`,
 `../.github/skills/...` point into the maintainer's private research checkout (the directory this
@@ -2379,10 +2380,10 @@ Required reading in idabins (skim; cite them, do not re-derive):
 |---|---|
 | Page format, evidence tags `[V] [I] [?] [S] [D]` | `../idabins/docs/FORMAT.md` |
 | Addresses, game update, bridge/runtime rules | `../idabins/docs/WORKFLOW.md` §9, §10, §11 |
-| Bridge wire protocol, method table (§7), error codes (§8) | `../idabins/docs/data/bridge-protocol.md` |
+| Bridge wire protocol, methods, error codes (§5) | `crates/cs2-bridge/PROTOCOL.md` |
 | Signature DB format | `../idabins/docs/data/signatures-format.md` |
 | Python POC (the contract we ported) | `../idabins/worknotes/mcpserver/README.md`, `server.py`, `bridge_client.py`, `mock_bridge.py` |
-| Bridge DLL (this repo) | `bridge/README.md`, `crates/cs2-bridge/src/registry.rs` (the method table), `bridge/pins.py --rust` -> `crates/cs2-bridge/src/generated/pins.rs` (+ `bridge/bridge_pins.h`), `build-rs.sh`, `install-rs.sh`, `runtime.sh` |
+| Bridge DLL (this repo) | `crates/cs2-bridge/README.md`, `crates/cs2-bridge/src/registry.rs` (the method table), `cargo bridge pins` -> `crates/cs2-bridge/src/generated/pins.rs`, `cargo bridge build` / `install` / `runtime` |
 | Hammer flows | `../idabins/docs/flows/hammer-engine.md`, `hammer-entity-edit.md`, `hammer-mesh-edit.md`, `hammer-mesh-operators.md`, `hammer-save-compile.md`, `hammer-undo.md`, `hammer-view-render.md`, `map-preview-freecam.md`, `file-edit-reload-compile.md` |
 | Other tools | `modeldoc-edit.md`, `particles-edit.md`, `tool-plugin-admission.md`, `tools-frame-hook.md`, `tools-startup.md` |
 | Wine runtime bring-up | `../idabins/worknotes/wine-tools-bringup.md` |
@@ -2439,15 +2440,15 @@ MCP client (stdio) ──rmcp──▶ cs2-mcp-common::mcp     transport adapter
   `paths` (Windows->host map), `vmap` (saved-map reads).
 - **Runtime backend first, game second.** Tools never shell out to podman; they ask `runtime::Runtime`
   (`status/up/down/exec/paths/logs`). `docker` is the only backend in phase 1 (facts from
-  `bridge/runtime.sh`: the client image (`--image` / `CS2_MCP_IMAGE`, default
+  `cargo bridge runtime`: the client image (`--image` / `CS2_MCP_IMAGE`, default
   `ghcr.io/personcopperfine/cs2-docker:latest`), `/app` + `/cache` mounts, `--network=host`,
   `+engine_no_focus_sleep 0 +r_always_render_all_windows 1`, host X display). `local` comes later with the same trait (workflow 10).
 - **Attach-only by default.** `--launch` opts into `runtime.up()` when the bridge is unreachable
   (not implemented until workflow 01; the flag is accepted and warns). `session_status` reports the
-  launch command (`bridge/runtime.sh up`) when the bridge is down.
+  launch command (`cargo bridge runtime up`) when the bridge is down.
 - **Bridge load trigger** is not TCP: a `tool_request cs2_bridge` record posted into the VToolMessage
   channel (`vtmsend.exe`, `../idabins/worknotes/vtmsend/`) after the manifest entry from
-  `bridge/install-rs.sh` (`game/bin/sdkenginetools.txt`). The runtime backend owns that step.
+  `cargo bridge install` (`game/bin/sdkenginetools.txt`). The runtime backend owns that step.
 - **Reads vs writes.** Live edits go over the bridge; reads of map contents come from the **saved**
   `.vmap` (file route) and say so (`staleRead`). Verification is save + parse, never the viewport.
 
@@ -2459,13 +2460,13 @@ says otherwise. `bridge_client.py` is fully ported (`crates/cs2-mcp-common/src/b
 `mock_bridge.py` is ported (`crates/cs2-mcp-common/src/mock.rs`, same knobs); the 24 tool bodies are
 workflow 03.
 
-The bridge DLL source now lives in **this repo** (`bridge/`): new methods (ModelDoc, pet, asset
-info, client-side reads) are added there, pinned from `../idabins/signatures` through `pins.py`, and
-documented in idabins' `bridge-protocol.md` §7 (`bridge/README.md` "Adding a method"). This server
+The bridge DLL source now lives in **this repo** (`crates/cs2-bridge`): new methods (ModelDoc, pet, asset
+info, client-side reads) are added there, pinned from `sigs/signatures` through `cargo bridge pins`, and
+documented in `crates/cs2-bridge/PROTOCOL.md` (`crates/cs2-bridge/README.md` "Adding a method"). This server
 is a client of protocol 1 / bridge m2.8 and must keep working when the bridge gains methods
 (capability gating) and refuse cleanly when it does not (`NotImplemented` + `data.missing`).
 
-Bridge method status that matters here (bridge-protocol.md §7, m2.8): implemented —
+Bridge method status that matters here (as of m2.8; the current list is `PROTOCOL.md`): implemented —
 `control.*`, `doc.active`, `edit.batch`, `entity.create`, `entity.setKeyValues`, `undo.undo`,
 `undo.redo` (m2.17; bridge-only — no tool here calls it), `map.save`, `map.reload`, `map.open`
 (m2.16), `view.render`, `world.render`, `node.list`, `node.delete`, `mesh.create`,
@@ -2475,17 +2476,14 @@ asset route is not an open/reload primitive), `map.run` (which nothing here uses
 `run_map` takes the VToolMessage command channel, above), `job.status`,
 `mesh.get`; not registered — `console.command` (the bridge method; the *engine
 console* is reachable through the VToolMessage channel, which is what `run_map` uses and what
-runtime.sh itself posts the bridge load with), `map.compile`. Every undoable write's reply carries the m2.17 `doc` state its dispatch read
-(`bridge/protocol-diff-m2.17.md`); `undo.redo` exists in the bridge from m2.17 but has no MCP tool. m2.11 adds the six `modeldoc.*` methods
-(`bridge/protocol-diff-m2.11.md`); m2.12 adds the seven `pet.*` methods
-(`bridge/protocol-diff-m2.12.md`, live test `bridge/test_pet.py`); m2.13 adds the five
-live-edit/render ones making twelve `pet.*` total (`bridge/protocol-diff-m2.13.md`, live tests
-`test_pet_live.py` / `test_pet_render.py`; both workflow-05 passes shipped and verified live); m2.14 adds
-`modeldoc.render` (`bridge/protocol-diff-m2.14.md`, live test `test_modeldoc_render_live.py`); m2.15 adds
-`entity.get`/`entity.find` and `entity.setKeyValues` by nodeID (`bridge/protocol-diff-m2.15.md`, test
-`test_entities.py`); m2.16 adds `map.open` (`bridge/protocol-diff-m2.16.md`); m2.17 adds the write
-`doc` tail and `undo.redo` (`bridge/protocol-diff-m2.17.md`). The
-remaining bridge work in `bridge/` is the asset-browser methods (workflow 06).
+`cargo bridge runtime up` itself posts the bridge load with), `map.compile`. Every undoable write's reply carries the m2.17 `doc` state its dispatch read
+(`PROTOCOL.md` §6.4); `undo.redo` exists in the bridge from m2.17 but has no MCP tool. m2.11 adds the six `modeldoc.*` methods
+(§16); m2.12 adds the seven `pet.*` methods (§17); m2.13 adds the five
+live-edit/render ones making twelve `pet.*` total (both workflow-05 passes shipped and verified live); m2.14 adds
+`modeldoc.render` (§15.4); m2.15 adds
+`entity.get`/`entity.find` and `entity.setKeyValues` by nodeID (§9.1, §9.2, §9.4); m2.16 adds `map.open` (§8.2); m2.17 adds the write
+`doc` tail and `undo.redo` (§6.4, §8.6). The
+remaining bridge work in `crates/cs2-bridge` is the asset-browser methods (workflow 06).
 
 ## Build, run, test
 
@@ -2504,11 +2502,11 @@ MCP client config (stdio):
   "args": ["--project-root", "<repo>"] } } }
 ```
 
-Live session today (until workflow 01 lands): `bridge/runtime.sh up|open|status|logs`
+Live session today (until workflow 01 lands): `cargo bridge runtime up|open|status|logs`
 (needs the host X display and `XAUTHORITY`; one CS2 at a time — ~13 GB RSS, measured on a host without swap).
-ModelDoc: **one instance at a time**, started with `TOOL=modeldoc bridge/runtime.sh up`;
-`runtime.sh` refuses a second one and refuses `.vmdl` opens elsewhere (workflow 04).
-pet: runs in the default tools container (`cs2tools`, `TOOL=hammer`); `runtime.sh up` clears pet's
+ModelDoc: **one instance at a time**, started with `TOOL=modeldoc cargo bridge runtime up`;
+`cargo bridge runtime` refuses a second one and refuses `.vmdl` opens elsewhere (workflow 04).
+pet: runs in the default tools container (`cs2tools`, `TOOL=hammer`); `cargo bridge runtime up` clears pet's
 unclean-exit flags ("Recover Files?" modal after a kill) unless another tools container shares the
 tree — one tools container at a time (workflow 05).
 
@@ -2524,10 +2522,11 @@ default `ghcr.io/personcopperfine/cs2-docker:latest`), `--sigs` (`CS2_MCP_SIGS`,
 ## Conventions (binding)
 
 1. **No addresses in Rust.** Never write an RVA, vtable slot number or struct offset in any crate of
-   this repo. Addresses live in `../idabins/signatures/<module>.json` and reach the game only through
-   the bridge DLL (`bridge/pins.py` -> `bridge_pins.h`, fail-closed, `-32017 PrerequisiteFailed`).
+   this repo. Addresses live in `sigs/signatures/<module>.json` and reach the game only through
+   the bridge DLL (`cargo bridge pins` -> `crates/cs2-bridge/src/generated/pins.rs`, fail-closed,
+   `-32017 PrerequisiteFailed`).
    `common::sigs` reads the DB for build pinning and the `doctor` report, by **entry name** only.
-   Need a new symbol? Signature entry (WORKFLOW §9) + bridge method in `bridge/`, then consume the
+   Need a new symbol? Signature entry (WORKFLOW §9) + bridge method in `crates/cs2-bridge`, then consume the
    method here.
 2. **stdout is the protocol.** All logs via `tracing` to stderr (`RUST_LOG`). Never `println!`.
    The stdio e2e test asserts every stdout line is a JSON-RPC frame.
@@ -2578,7 +2577,7 @@ default `ghcr.io/personcopperfine/cs2-docker:latest`), `--sigs` (`CS2_MCP_SIGS`,
     `[V]` claims; `[I]`/`[?]` items are upgraded first (runtime check) and listed under Open questions.
 11. **Ask before driving the desktop** (keypresses, focus). Prefer the bridge; UI equivalence checks
     (Ctrl+Z, Ctrl+S) are opt-in.
-12. **Game update** = idabins WORKFLOW §10 + `bridge/pins.py --rust`/`bridge/build-rs.sh`. This crate's only reaction is
+12. **Game update** = `workflows/game-update.md` + `cargo bridge pins`/`cargo bridge build`. This crate's only reaction is
     `BuildMismatch` until the sig DB records the new build and the bridge is rebuilt; `session_status`
     /`doctor` must say exactly that.
 13. **Agent-readable results (`cs2_mcp_common::tools`, WP2.1).** `tools/list` carries MCP annotations
@@ -2690,7 +2689,7 @@ per face, in one undo entry. `faces` are `get_mesh` indices (default every face)
 
 ## Live-fix A (compile / particle paths / open_map, bridge m3.16)
 
-- **Bridge m3.16** (`bridge/protocol-diff-m3.16.md`): `job.start` takes `-world -phys -vis
+- **Bridge m3.16** (`crates/cs2-bridge/PROTOCOL.md` §14.1): `job.start` takes `-world -phys -vis
   -bakelighting` (plus the old `-nav`...). `cs2_bridge::ops::job::{PLAIN_FLAGS, NUMERIC_FLAGS}` are
   public; hammer-mcp dev-depends on cs2-bridge and `compile_map.rs`
   `bridge_flags_are_all_in_the_job_allowlist` runs every mode and every stage subset through the
@@ -2724,7 +2723,7 @@ per face, in one undo entry. `faces` are `get_mesh` indices (default every face)
   the budget the error is `OpenUnconfirmed` (outcome unknown, not retry-safe: a modal such as
   "Error opening file" may be up; call `session_status`, do not post another open blind). With no
   tools container to post through the old `NotImplemented` (`missing:["map.open"]`) stays, with
-  `data.hint` naming `bridge/runtime.sh open`. Later opens use `map.open`.
+  `data.hint` naming `cargo bridge runtime open`. Later opens use `map.open`.
   The vtm route is taken ONLY while the bridge reports `modules["hammer.dll"].state` as
   `not_loaded`/`verifying` (a loaded Hammer without `map.open` keeps `NotImplemented`: `open_asset`
   bypasses the session-leak guard). Before hammer.dll loads, the bridge answers `doc.active` with
@@ -3240,7 +3239,7 @@ Old description: Offscreen render of the running particle editor's preview viewp
 - Keyvalues validated against the FGD database, sent as strings; unknown class -> UnknownClass; `classname` key or strict FGD issue refuses with nothing sent. FGD warnings (e.g. integral float on an integer key) pass; `strict` turns FGD errors into InvalidArguments.
 - `sound`-typed keyvalue (e.g. snd_event_point.soundName) is looked up in the soundevent index: unknown -> SoundEventNotFound unless allowUnknownSoundEvent (then a warning; a misspelt name is silent at runtime). Only sound-typed keys are affected.
 - keyValues: max 32 keys, values string/number (sent as JSON text)/bool ("1"/"0"); arrays/objects/null refused; classname/origin/angles/scales refused (use entity fields); value max 511 bytes.
-- undoLabel is echoed as requestedUndoLabel; the bridge labels the group "MCP: batch" (a create); a set-only batch is "MCP: set keyvalues" (protocol-diff-m2.15.md section 7, item 16).
+- undoLabel is echoed as requestedUndoLabel; the bridge labels the group "MCP: batch" (a create); a set-only batch is "MCP: set keyvalues" (`crates/cs2-bridge/PROTOCOL.md` §6.5).
 
 ### undo_last
 - Undo groups close implicitly, so the top group may contain the user's own edits; refuses a non-MCP group unless acceptUserEdits.

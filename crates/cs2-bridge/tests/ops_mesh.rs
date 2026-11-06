@@ -50,7 +50,7 @@ fn request(method: &str, id: &str) -> Request {
     }
 }
 
-/// The rows this lane serves (`bridge/mcp_bridge.c:5972-5977`).
+/// The rows this lane serves (`mcp_bridge.c:5972-5977`).
 const ROWS: [&str; 3] = ["mesh.create", "mesh.setGeometry", "mesh.setMaterial"];
 
 #[test]

@@ -51,7 +51,7 @@ shows the refusal.
 ## Launcher mode (`--native-package`)
 
 With `client-mcp --native-package <dir>` (`CS2_MCP_NATIVE_PACKAGE`), linux-client sessions no longer
-depend on `bridge/install-rs.sh`: the container runs the launcher, which prepares the `cs2-home`
+depend on `cargo bridge install`: the container runs the launcher, which prepares the `cs2-home`
 volume itself and gives it back unchanged when the game exits. `<dir>` is a cs2mcp package
 (`crates/cs2-native/scripts/package.sh --os linux` output, or an unpacked
 `cs2mcp-<version>-linux-x86_64.tar.gz` release).
@@ -74,15 +74,17 @@ What a launch adds: `-v <dir>:/cs2mcp/native:ro -e CS2MCP_NATIVE=/cs2mcp/native`
   with `podman stop -t 60` (`NATIVE_STOP_SECS`); a plain `podman stop` (10 s) or `-t 0` would kill
   the restore, which the next run then does first. Stop it by hand with `podman stop -t 60 <name>`.
 - **gbe belongs to the launcher**: the preamble's gbe steps (settings + `steam_settings` link,
-  `/app/setup_gbe.sh`) are skipped. `--cleanup-legacy` moves what an older install-rs.sh /
-  setup_gbe.sh left on the volume into the state dir first, and puts Valve's `libsteam_api.so` back
-  from setup_gbe.sh's `~/.steam/gbe_orig_libsteam_api.so`. Leftovers it cannot place stop the
+  `/app/setup_gbe.sh`) are skipped. `--cleanup-legacy` moves what an older `cargo bridge
+  install` (install-rs.sh) / setup_gbe.sh left on the volume into the state dir first, and puts
+  Valve's `libsteam_api.so` back from setup_gbe.sh's `~/.steam/gbe_orig_libsteam_api.so`. Leftovers it cannot place stop the
   launch (exit 2, findings in the JSON); `CS2MCP_NATIVE_ACCEPT_CONFLICTS=1` goes on regardless.
-- **No dedicated server beside it**: dedicated servers keep install-rs.sh on the same volume, so in
+- **No dedicated server beside it**: dedicated servers keep `cargo bridge install` on the same volume, so in
   this mode a client and a server never run together (`may_conflict`).
 - **The package can also be baked into an image** instead of mounted: put it at `/cs2mcp/native`
   (read-only is fine; nothing writes there) and set `CS2MCP_NATIVE=/cs2mcp/native`.
-- The Wine tools tree is unaffected (install-rs.sh, as before).
+- The Wine tools tree is unaffected (`cargo bridge install`, as before).
 
-**Unverified live**: this mode has been checked with a fake game tree (prepare, SIGTERM, restore,
-byte-identical tree, exit code), not yet with the real game on a `cs2-home` volume.
+**Live**: `linux-client.sh` in this mode ran the real game on the `cs2-home` volume in the
+native-test image (`native-test/`, `workflows/native-launcher-report.md`): prepare, the bridge's
+hello, `podman kill` + recovery, `podman stop` + a verified restore. A launch through client-mcp
+itself (`--native-package`) has been checked only with a fake game tree.

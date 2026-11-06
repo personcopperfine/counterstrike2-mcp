@@ -1,7 +1,7 @@
 {
  "module": "engine2.dll",
  "image_base": 6442450944,
- "_doc": "engine2.dll entries for the bridge (bridge/pins.py). Format: sigs/README.md.",
+ "_doc": "engine2.dll entries for the bridge (cargo bridge pins). Format: sigs/README.md.",
  "builds": {
   "2000921": {
    "sha256": "d51f38d013adc2e9",

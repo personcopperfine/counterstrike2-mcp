@@ -7,7 +7,7 @@ Facts the sound tools are built on (`list_soundevents`, `edit_soundevents`,
 
 **Never copy a number from this file into code**: the bridge's offsets for the packed-params
 pointer/length are sig-DB entries (`sigs/signatures/soundsystem.json`,
-`SNOFF_SEP_PACKED_PTR` / `SNOFF_SEP_PACKED_LEN` -> `bridge/bridge_structs.h`); everything else
+`SNOFF_SEP_PACKED_PTR` / `SNOFF_SEP_PACKED_LEN` -> `bridge_structs.h`); everything else
 here is either evidence or an engine-internal the sig DB does not need.
 
 Evidence tags: **[V live]** seen in the running tools game/Hammer, **[V bin]** read in the

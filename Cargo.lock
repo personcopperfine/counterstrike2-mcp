@@ -886,6 +886,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "cs2-bridge-tools"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "cs2-vtm",
+ "libc",
+ "regex",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+]
+
+[[package]]
 name = "cs2-dmx"
 version = "0.0.1"
 dependencies = [

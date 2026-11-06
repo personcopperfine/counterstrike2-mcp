@@ -293,7 +293,7 @@ impl App {
             if ui.add_enabled(idle, egui::Button::new("Repair")).on_hover_text("cs2mcp-native uninstall: restore a prepared install without a session (after a crash or a reboot)").clicked() {
                 self.start(&ctx, Action::Uninstall, Answers::default());
             }
-            if ui.add_enabled(idle, egui::Button::new("Clean up leftovers…")).on_hover_text("cs2mcp-native cleanup: files of ours no manifest records (a deleted state dir, an older install-rs.sh layout)").clicked() {
+            if ui.add_enabled(idle, egui::Button::new("Clean up leftovers…")).on_hover_text("cs2mcp-native cleanup: files of ours no manifest records (a deleted state dir, a `cargo bridge install` layout)").clicked() {
                 self.start(&ctx, Action::CleanupPreview, Answers::default());
             }
         });

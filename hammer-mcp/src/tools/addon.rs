@@ -158,13 +158,13 @@ fn source_phrase(state: &HammerState) -> &'static str {
 
 fn restart_hint(container: &str, selected: &str) -> String {
     format!(
-        "restart ModelDoc on {selected:?}: CONTAINER={container} bridge/runtime.sh down, then \
-         TOOL=modeldoc ADDON={selected} bridge/runtime.sh up"
+        "restart ModelDoc on {selected:?}: CONTAINER={container} cargo bridge runtime down, then \
+         TOOL=modeldoc ADDON={selected} cargo bridge runtime up"
     )
 }
 
 /// `model_open` only: refuse while the running ModelDoc was started with another addon than the
-/// selected one (`bridge/runtime.sh` starts it with `-addon <addon>`; the server cannot switch
+/// selected one (`cargo bridge runtime` starts it with `-addon <addon>`; the server cannot switch
 /// it, and an open now would load the wrong addon's file or fail). File writes are NOT refused
 /// (they are correct file writes whatever ModelDoc runs): see [`modeldoc_addon_warning`].
 pub async fn modeldoc_addon_guard(state: &HammerState) -> Result<(), ToolError> {

@@ -31,7 +31,7 @@ format `cs2-gym` can replay.
    weapon), `weapons` (ammo + inventory), `radar` (every player/bomb/hostage with the game's spotted flags,
    projected onto the overview), `sounds_drain` (sound events since the last observation: name, source
    entindex, origin). Console `getpos` stays as the cross-check oracle. All fields are schema-resolved
-   at runtime (no offsets in Rust or C); the bridge handlers are `bridge/mcp_bridge_game.inc`.
+   at runtime (no offsets in Rust or C); the bridge handlers are `mcp_bridge_game.inc`.
    **Not live-verified yet** (11 step 4).
 3. **Step semantics**: `step {action, frames}` = `input_set` then wait until `game.tick` advanced by
    `ceil(frames/…)`; expose `wait_ticks {n}`. Document that CS2 ticks at 64/s and the hook applies
