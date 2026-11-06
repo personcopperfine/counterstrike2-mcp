@@ -271,6 +271,9 @@ pub fn findings(s: &Seen, os: Os) -> Vec<Finding> {
         if !s.gameinfo_lines.is_empty() {
             f = f.advice("the gameinfo.gi lines are never edited here: `bridge/install-rs.sh uninstall` reverts them, or Verify integrity in Steam");
         }
+        if s.steam_settings_link {
+            f = f.advice("with --accept-conflicts the steam_settings link is taken out for the session (nothing is written through it) and put back afterwards");
+        }
         v.push(f.advice("--accept-conflicts (GUI: Continue anyway) leaves them in place"));
     }
     v

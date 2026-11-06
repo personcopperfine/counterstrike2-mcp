@@ -326,7 +326,11 @@ fn run(cli: Cli, ev: &Events) -> anyhow::Result<Done> {
     let mut code = Done::from(0);
     let v = match cli.cmd {
         Cmd::Discover => {
-            let pre = c.preflight()?;
+            let mut pre = c.preflight()?;
+            // no manifest: our files in the tree are leftovers no record covers (like status)
+            if c.install.root.is_dir() && c.dirs.store().load()?.is_none() {
+                pre.extend(c.leftovers().1);
+            }
             for f in &pre {
                 f.report(ev);
             }

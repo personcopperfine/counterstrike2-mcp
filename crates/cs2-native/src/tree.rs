@@ -10,6 +10,7 @@ use std::path::Path;
 pub type Listing = BTreeMap<String, Option<(u64, Option<u64>)>>;
 
 /// Walk `root`, calling `f(rel, path, metadata)` for every entry (dirs first, rel ends in `/`).
+/// Links are not followed: a link is an entry of its own (its `lstat` metadata).
 pub fn walk(
     root: &Path,
     f: &mut dyn FnMut(&str, &Path, &std::fs::Metadata) -> anyhow::Result<()>,

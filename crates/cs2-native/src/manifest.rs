@@ -30,6 +30,20 @@ pub enum State {
 pub enum Kind {
     File,
     Dir,
+    /// a symbolic link on the way to one of our files (setup_gbe.sh's `steam_settings` link out of
+    /// the install): removed for the session, so nothing is written through it, and created again
+    /// by restore with its old target and mtime ([`Link`])
+    Link,
+}
+
+/// A symbolic link as it was before us.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Link {
+    pub target: String,
+    /// the link's own modification time (ns since the epoch, lstat)
+    #[serde(default)]
+    pub mtime_ns: Option<u64>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -94,6 +108,9 @@ pub struct Entry {
     pub before: Option<Before>,
     /// what we wrote (`None` for directories and runtime files)
     pub after: Option<Meta>,
+    /// [`Kind::Link`]: the link to put back
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub link: Option<Link>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -278,6 +295,66 @@ pub fn op_bytes(root: &Path, src: &Source, rel: &str) -> anyhow::Result<Vec<u8>>
     }
 }
 
+fn is_link(p: &Path) -> bool {
+    std::fs::symlink_metadata(p).is_ok_and(|m| m.file_type().is_symlink())
+}
+
+/// A directory link to take out for the session: Unix only (a Windows junction or symlink in the
+/// install is refused; no layout of ours makes one).
+fn link_of(p: &Path) -> anyhow::Result<Link> {
+    if cfg!(not(unix)) {
+        bail!("{} is a link or junction; cs2mcp-native does not write through one (remove it, or `cs2mcp-native cleanup --yes`)", p.display());
+    }
+    let target = std::fs::read_link(p).with_context(|| format!("read the link {}", p.display()))?;
+    let mtime_ns = std::fs::symlink_metadata(p).ok().and_then(|m| crate::tree::mtime_ns(&m));
+    Ok(Link { target: target.to_string_lossy().into_owned(), mtime_ns })
+}
+
+/// A file we write (or the game writes) must not be a link: writing would replace the link with a
+/// file, and restore would put back the bytes it pointed at, not the link.
+fn refuse_link(p: &Path) -> anyhow::Result<()> {
+    if is_link(p) {
+        bail!("{} is a symbolic link; cs2mcp-native does not replace one (remove it, or `cs2mcp-native cleanup --yes`)", p.display());
+    }
+    Ok(())
+}
+
+/// Create the link `l` at `p` again, with its old mtime.
+fn put_back_link(p: &Path, l: &Link) -> anyhow::Result<()> {
+    #[cfg(unix)]
+    {
+        use std::os::unix::ffi::OsStrExt;
+        std::os::unix::fs::symlink(&l.target, p).with_context(|| format!("symlink {} -> {}", p.display(), l.target))?;
+        if let Some(ns) = l.mtime_ns {
+            let c = std::ffi::CString::new(p.as_os_str().as_bytes())?;
+            let t = libc::timespec { tv_sec: (ns / 1_000_000_000) as libc::time_t, tv_nsec: (ns % 1_000_000_000) as libc::c_long };
+            // [atime, mtime] of the link itself
+            // SAFETY: a valid C path and two timespecs.
+            if unsafe { libc::utimensat(libc::AT_FDCWD, c.as_ptr(), [t, t].as_ptr(), libc::AT_SYMLINK_NOFOLLOW) } != 0 {
+                return Err(std::io::Error::last_os_error()).with_context(|| format!("set the mtime of the link {}", p.display()));
+            }
+        }
+        Ok(())
+    }
+    #[cfg(not(unix))]
+    bail!("cannot create the link {} -> {} here", p.display(), l.target)
+}
+
+/// Is `rel` under a [`Kind::Link`] entry of `m` whose link is in place again? Then the path leads
+/// out of the install, to what the link points at: never touched or checked from here.
+fn beyond_link(m: &Manifest, root: &Path, rel: &str) -> bool {
+    m.entries.iter().any(|l| {
+        l.kind == Kind::Link
+            && rel.starts_with(&format!("{}/", l.path))
+            && l.link.as_ref().is_some_and(|k| link_matches(&under(root, &l.path), k))
+    })
+}
+
+/// Is `p` the link `l` (same target)?
+fn link_matches(p: &Path, l: &Link) -> bool {
+    is_link(p) && std::fs::read_link(p).is_ok_and(|t| t.to_string_lossy() == l.target)
+}
+
 /// Apply `plan` to `root`. Refuses when the store still holds an unfinished manifest (restore it
 /// first; `up` does).
 pub fn apply(plan: &Plan, root: &Path, store: &Store, header: &Header) -> anyhow::Result<Manifest> {
@@ -306,13 +383,20 @@ pub fn apply(plan: &Plan, root: &Path, store: &Store, header: &Header) -> anyhow
         let target = under(root, &op.rel);
         let bytes = op_bytes(root, &op.source, &op.rel)?;
         let after = hash_bytes(&bytes);
-        // parents first, each recorded before it is created
+        // parents first, each recorded before it is created; a link among them is taken out first
+        // (written through, it would put our files wherever it points, out of the install)
         let parts: Vec<&str> = op.rel.split('/').collect();
         for i in 1..parts.len() {
             let drel = parts[..i].join("/");
             let d = under(root, &drel);
+            if is_link(&d) {
+                let link = link_of(&d)?;
+                m.entries.push(Entry { path: drel.clone(), kind: Kind::Link, role: Role::Ours, before: None, after: None, link: Some(link) });
+                store.save(&m)?;
+                std::fs::remove_file(&d).with_context(|| format!("remove the link {}", d.display()))?;
+            }
             if !d.exists() {
-                m.entries.push(Entry { path: drel, kind: Kind::Dir, role: Role::Ours, before: None, after: None });
+                m.entries.push(Entry { path: drel, kind: Kind::Dir, role: Role::Ours, before: None, after: None, link: None });
                 store.save(&m)?;
                 std::fs::create_dir(&d).with_context(|| format!("mkdir {}", d.display()))?;
             }
@@ -320,6 +404,7 @@ pub fn apply(plan: &Plan, root: &Path, store: &Store, header: &Header) -> anyhow
         if target.is_dir() {
             bail!("{} is a directory; expected a file", target.display());
         }
+        refuse_link(&target)?;
         let before = match std::fs::read(&target) {
             Ok(b) => {
                 if hash_bytes(&b) == after {
@@ -330,18 +415,19 @@ pub fn apply(plan: &Plan, root: &Path, store: &Store, header: &Header) -> anyhow
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
             Err(e) => return Err(e).with_context(|| format!("read {}", target.display())),
         };
-        m.entries.push(Entry { path: op.rel.clone(), kind: Kind::File, role: Role::Ours, before, after: Some(after) });
+        m.entries.push(Entry { path: op.rel.clone(), kind: Kind::File, role: Role::Ours, before, after: Some(after), link: None });
         store.save(&m)?;
         write_atomic(&target, &bytes)?;
     }
     for rel in &plan.runtime {
         let target = under(root, rel);
+        refuse_link(&target)?;
         let before = match std::fs::read(&target) {
             Ok(b) => Some(before_of(store, &m, &target, &b)?),
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
             Err(e) => return Err(e).with_context(|| format!("read {}", target.display())),
         };
-        m.entries.push(Entry { path: rel.clone(), kind: Kind::File, role: Role::Runtime, before, after: None });
+        m.entries.push(Entry { path: rel.clone(), kind: Kind::File, role: Role::Runtime, before, after: None, link: None });
     }
     m.state = State::Applied;
     store.save(&m)?;
@@ -525,7 +611,22 @@ pub fn restore(root: &Path, store: &Store, logs: &Path, opts: RestoreOpts) -> an
     let stamp = now_secs();
     for e in m.entries.iter().rev() {
         let target = under(root, &e.path);
+        if beyond_link(&m, root, &e.path) {
+            r.unchanged.push(e.path.clone());
+            continue;
+        }
         match (e.kind, e.role) {
+            (Kind::Link, _) => {
+                let Some(l) = &e.link else { bail!("{}: a link entry without its target", e.path) };
+                if link_matches(&target, l) {
+                    r.unchanged.push(e.path.clone());
+                } else if std::fs::symlink_metadata(&target).is_err() {
+                    put_back_link(&target, l)?;
+                    r.restored.push(e.path.clone());
+                } else {
+                    r.conflicts.push(format!("{}: something else is where the link {} was; left in place", e.path, l.target));
+                }
+            }
             (Kind::Dir, _) => match std::fs::read_dir(&target) {
                 Ok(mut it) => {
                     if it.next().is_none() {
@@ -633,11 +734,21 @@ pub fn restore(root: &Path, store: &Store, logs: &Path, opts: RestoreOpts) -> an
         if tagged(&r.conflicts) || tagged(&r.lost) {
             continue;
         }
+        if beyond_link(&m, root, &e.path) {
+            continue;
+        }
         let target = under(root, &e.path);
         r.checked += 1;
         match (&e.kind, &e.before) {
+            (Kind::Link, _) => {
+                if !e.link.as_ref().is_some_and(|l| link_matches(&target, l)) {
+                    r.verify_failures.push(format!("{}: the link is not back", e.path));
+                }
+            }
             (Kind::Dir, _) | (Kind::File, None) => {
-                if target.exists() {
+                // not followed: a link put back at the same path is that link's entry's business
+                let relinked = m.entries.iter().any(|x| x.kind == Kind::Link && x.path == e.path) && is_link(&target);
+                if std::fs::symlink_metadata(&target).is_ok() && !relinked {
                     r.verify_failures.push(format!("{}: still exists", e.path));
                 }
             }
@@ -780,6 +891,54 @@ mod tests {
         assert!(store.load().unwrap().is_none());
         assert!(!store.dir.join("backup").exists());
         assert!(restore(&root, &store, &logs, RestoreOpts::default()).unwrap().is_none());
+    }
+
+    /// setup_gbe.sh's `steam_settings` link out of the install: nothing is written through it, and
+    /// it is back afterwards (same target, same mtime), also after a crash right after it went.
+    #[cfg(unix)]
+    #[test]
+    fn a_linked_settings_dir_is_taken_out_for_the_session_and_put_back() {
+        let (root, store, logs, plan) = setup("manifest-link");
+        let home = root.parent().unwrap().join("home-settings");
+        put(&home.join("configs.main.ini"), b"the image's settings");
+        let link = root.join("game/bin/win64/steam_settings");
+        std::os::unix::fs::symlink(&home, &link).unwrap();
+        let old = std::time::UNIX_EPOCH + std::time::Duration::from_secs(1_600_000_000);
+        let lmt = |p: &Path| std::fs::symlink_metadata(p).unwrap().modified().unwrap();
+        put_back_link(&root.join("probe"), &Link { target: "x".into(), mtime_ns: Some(1_600_000_000_000_000_000) }).unwrap();
+        assert_eq!(lmt(&root.join("probe")), old);
+        std::fs::remove_file(root.join("probe")).unwrap();
+        let before = snapshot(&root);
+        let link_mtime = lmt(&link);
+        let m = apply(&plan, &root, &store, &header()).unwrap();
+        let k: Vec<_> = m.entries.iter().filter(|e| e.path == "game/bin/win64/steam_settings").map(|e| e.kind).collect();
+        assert_eq!(k, [Kind::Link, Kind::Dir]);
+        assert!(!is_link(&link) && link.join("configs.main.ini").is_file());
+        assert_eq!(std::fs::read(home.join("configs.main.ini")).unwrap(), b"the image's settings");
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
+        assert!(r.byte_for_byte(), "{r:?}");
+        assert!(r.restored.contains(&"game/bin/win64/steam_settings".to_string()));
+        assert_eq!(std::fs::read_link(&link).unwrap(), home);
+        assert_eq!(lmt(&link), link_mtime);
+        assert_eq!(snapshot(&root), before);
+        assert_eq!(std::fs::read(home.join("configs.main.ini")).unwrap(), b"the image's settings");
+
+        // a crash right after the link went: restore creates it again
+        let mut m = Manifest { state: State::Applying, entries: Vec::new(), ..m };
+        m.entries.push(Entry { path: "game/bin/win64/steam_settings".into(), kind: Kind::Link, role: Role::Ours, before: None, after: None, link: link_of(&link).ok() });
+        store.save(&m).unwrap();
+        std::fs::remove_file(&link).unwrap();
+        let r = restore(&root, &store, &logs, RestoreOpts::default()).unwrap().unwrap();
+        assert!(r.byte_for_byte(), "{r:?}");
+        assert_eq!(std::fs::read_link(&link).unwrap(), home);
+
+        // a linked file of ours is refused before anything is written
+        let api = root.join("game/bin/win64/steam_api64.dll");
+        std::fs::rename(&api, root.join("api.real")).unwrap();
+        std::os::unix::fs::symlink(root.join("api.real"), &api).unwrap();
+        let err = apply(&plan, &root, &store, &header()).unwrap_err();
+        assert!(err.to_string().contains("is a symbolic link"), "{err}");
+        assert_eq!(std::fs::read(root.join("api.real")).unwrap(), b"valve api");
     }
 
     #[test]

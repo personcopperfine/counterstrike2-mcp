@@ -130,6 +130,10 @@ the old gameinfo-era layout) or the client image's `setup_gbe.sh` installed into
 moves them into `<state root>/cleanup-<ts>/` (never deletes), puts Valve's library back from
 setup_gbe's own backup, un-edits `sdkenginetools.txt` only when that gives the byte-exact Valve
 file back, and never touches `gameinfo.gi` (`install-rs.sh uninstall` owns that).
+Accepted instead (`--accept-conflicts`), setup_gbe.sh's `steam_settings` symlink (into
+`~/.steam/sdk64`) is a `link` entry in the manifest: `prepare` removes the link before it writes
+our settings into a real directory there, so nothing is written through it, and restore creates
+it again with its old target and mtime. A link where we would write a file is refused.
 
 **Recorded pids carry their identity** (`src/procid.rs`): the start time, the boot id and the
 PID namespace (Linux), the creation time (Windows). A pid in an old `session.json` after a reboot,

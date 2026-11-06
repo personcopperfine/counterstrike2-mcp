@@ -34,6 +34,8 @@
 #   * install-rs.sh is not run on the host for this kind, and --cleanup-legacy moves an older
 #     install-rs.sh / setup_gbe.sh layout out of the volume first (into the state dir; Valve's
 #     libsteam_api.so comes back from setup_gbe.sh's own copy in ~/.steam);
+#     CS2MCP_NATIVE_CLEANUP_LEGACY=0 leaves it (with CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 the session
+#     then runs over it and puts it back as found: the native-test image's acceptance run);
 #   * CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 passes --accept-conflicts (leftovers it cannot place are
 #     otherwise a stop, exit 2, with the findings as JSON on stdout).
 # The rest (Xvfb, preamble env, the console.log mirror, teardown) is the same.
@@ -108,10 +110,12 @@ if [ -n "$NATIVE" ]; then
     # the harness flags and the caller's args follow `--`. Its JSON result goes to /work.
     accept=()
     [ "${CS2MCP_NATIVE_ACCEPT_CONFLICTS:-0}" = 1 ] && accept=(--accept-conflicts)
+    cleanup=(--cleanup-legacy)
+    [ "${CS2MCP_NATIVE_CLEANUP_LEGACY:-1}" = 0 ] && cleanup=()
     CS2_BRIDGE_LOG="$OUT/mcp_bridge_rs.log" \
         "$NATIVE/cs2mcp-native" --game-root "$(dirname "$G")" --state-dir /home/steam/.cs2mcp-native \
         --gbe-save-dir "$GSE_SAVE_DIR" "${accept[@]}" \
-        run --steam gbe --no-capture --cleanup-legacy -- -novid -nosound -conclearlog "$@" \
+        run --steam gbe --no-capture "${cleanup[@]}" -- -novid -nosound -conclearlog "$@" \
         > "$OUT/cs2mcp-native-run.json" &
     GPID=$!
 else

@@ -88,6 +88,10 @@ fn tree_hash(root: &Path, out: &Path, sha_max: u64) -> anyhow::Result<()> {
     cs2_native::tree::walk(root, &mut |rel, p, md| {
         if md.is_dir() {
             m.insert(rel.to_string(), json!(null));
+        } else if md.file_type().is_symlink() {
+            // the link itself, never what it points at (that may be out of the tree)
+            let to = std::fs::read_link(p)?.to_string_lossy().into_owned();
+            m.insert(rel.to_string(), json!(["link", to, cs2_native::tree::mtime_ns(md)]));
         } else {
             let sha = if md.len() <= sha_max { manifest::hash_file(p)?.map(|h| h.sha256) } else { None };
             m.insert(rel.to_string(), json!([md.len(), sha, cs2_native::tree::mtime_ns(md)]));
