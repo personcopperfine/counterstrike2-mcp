@@ -20,7 +20,8 @@ struct Cli {
 enum Cmd {
     /// Print steam_interfaces.txt as generated from a Steam API library.
     GbeInterfaces { library: PathBuf },
-    /// Hash a tree: `{rel: [size, sha256|null, mtime_ns]}`, sha for files up to --sha-max-mb.
+    /// Hash a tree: `{rel: [size, sha256|null, mtime_ns, "uid:gid mode"]}` (a link: `["link", target,
+    /// mtime_ns, "uid:gid mode"]`, never followed), sha for files up to --sha-max-mb.
     TreeHash {
         root: PathBuf,
         #[arg(long)]
@@ -83,6 +84,20 @@ fn wait_pid(_pid: u32, _ms: u32) -> anyhow::Result<()> {
     anyhow::bail!("wait-pid is Windows-only")
 }
 
+/// `"uid:gid mode"` (octal) on Unix: a restore must put those back too; `null` elsewhere.
+fn owner_mode(md: &std::fs::Metadata) -> Value {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        json!(format!("{}:{} {:o}", md.uid(), md.gid(), md.mode() & 0o7777))
+    }
+    #[cfg(not(unix))]
+    {
+        let _ = md;
+        Value::Null
+    }
+}
+
 fn tree_hash(root: &Path, out: &Path, sha_max: u64) -> anyhow::Result<()> {
     let mut m = serde_json::Map::new();
     cs2_native::tree::walk(root, &mut |rel, p, md| {
@@ -91,10 +106,10 @@ fn tree_hash(root: &Path, out: &Path, sha_max: u64) -> anyhow::Result<()> {
         } else if md.file_type().is_symlink() {
             // the link itself, never what it points at (that may be out of the tree)
             let to = std::fs::read_link(p)?.to_string_lossy().into_owned();
-            m.insert(rel.to_string(), json!(["link", to, cs2_native::tree::mtime_ns(md)]));
+            m.insert(rel.to_string(), json!(["link", to, cs2_native::tree::mtime_ns(md), owner_mode(md)]));
         } else {
             let sha = if md.len() <= sha_max { manifest::hash_file(p)?.map(|h| h.sha256) } else { None };
-            m.insert(rel.to_string(), json!([md.len(), sha, cs2_native::tree::mtime_ns(md)]));
+            m.insert(rel.to_string(), json!([md.len(), sha, cs2_native::tree::mtime_ns(md), owner_mode(md)]));
         }
         Ok(())
     })?;

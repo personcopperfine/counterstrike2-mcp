@@ -44,6 +44,9 @@ pub struct Link {
     /// the link's own modification time (ns since the epoch, lstat)
     #[serde(default)]
     pub mtime_ns: Option<u64>,
+    /// the link's own `[uid, gid]`
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<[u32; 2]>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -73,6 +76,44 @@ pub struct Before {
     /// Unix permission bits, put back with the bytes
     #[serde(default)]
     pub mode: Option<u32>,
+    /// Unix `[uid, gid]`, put back with the bytes (a restore as root, in a container, would
+    /// otherwise leave root's file where the user's was)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<[u32; 2]>,
+}
+
+/// `[uid, gid]` of `md` (Unix); `None` elsewhere.
+fn owner_of(md: &std::fs::Metadata) -> Option<[u32; 2]> {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        Some([md.uid(), md.gid()])
+    }
+    #[cfg(not(unix))]
+    {
+        let _ = md;
+        None
+    }
+}
+
+/// Give `p` (not followed) the owner `o` when it has another one. Only root may give a file away;
+/// anyone else wrote it as themselves, which is who owned it, so `EPERM` there is not an error.
+fn put_back_owner(p: &Path, o: Option<[u32; 2]>) -> anyhow::Result<()> {
+    #[cfg(unix)]
+    if let Some([uid, gid]) = o {
+        let md = std::fs::symlink_metadata(p)?;
+        if owner_of(&md) != Some([uid, gid]) {
+            match std::os::unix::fs::lchown(p, Some(uid), Some(gid)) {
+                Ok(()) => {}
+                // SAFETY: getuid has no preconditions.
+                Err(e) if e.raw_os_error() == Some(libc::EPERM) && unsafe { libc::getuid() } != 0 => {}
+                Err(e) => return Err(e).with_context(|| format!("chown {uid}:{gid} {}", p.display())),
+            }
+        }
+    }
+    #[cfg(not(unix))]
+    let _ = (p, o);
+    Ok(())
 }
 
 fn file_times(p: &Path) -> (Option<u64>, Option<u32>) {
@@ -96,7 +137,8 @@ fn before_of(store: &Store, m: &Manifest, target: &Path, bytes: &[u8]) -> anyhow
     let backup = store.backup(m, bytes)?;
     let meta = hash_bytes(bytes);
     let (mtime_ns, mode) = file_times(target);
-    Ok(Before { sha256: meta.sha256, size: meta.size, backup, mtime_ns, mode })
+    let owner = std::fs::metadata(target).ok().as_ref().and_then(owner_of);
+    Ok(Before { sha256: meta.sha256, size: meta.size, backup, mtime_ns, mode, owner })
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -306,8 +348,10 @@ fn link_of(p: &Path) -> anyhow::Result<Link> {
         bail!("{} is a link or junction; cs2mcp-native does not write through one (remove it, or `cs2mcp-native cleanup --yes`)", p.display());
     }
     let target = std::fs::read_link(p).with_context(|| format!("read the link {}", p.display()))?;
-    let mtime_ns = std::fs::symlink_metadata(p).ok().and_then(|m| crate::tree::mtime_ns(&m));
-    Ok(Link { target: target.to_string_lossy().into_owned(), mtime_ns })
+    let md = std::fs::symlink_metadata(p).ok();
+    let mtime_ns = md.as_ref().and_then(crate::tree::mtime_ns);
+    let owner = md.as_ref().and_then(owner_of);
+    Ok(Link { target: target.to_string_lossy().into_owned(), mtime_ns, owner })
 }
 
 /// A file we write (or the game writes) must not be a link: writing would replace the link with a
@@ -325,6 +369,7 @@ fn put_back_link(p: &Path, l: &Link) -> anyhow::Result<()> {
     {
         use std::os::unix::ffi::OsStrExt;
         std::os::unix::fs::symlink(&l.target, p).with_context(|| format!("symlink {} -> {}", p.display(), l.target))?;
+        put_back_owner(p, l.owner)?;
         if let Some(ns) = l.mtime_ns {
             let c = std::ffi::CString::new(p.as_os_str().as_bytes())?;
             let t = libc::timespec { tv_sec: (ns / 1_000_000_000) as libc::time_t, tv_nsec: (ns % 1_000_000_000) as libc::c_long };
@@ -566,6 +611,7 @@ fn put_back(store: &Store, root: &Path, e: &Entry, b: &Before) -> anyhow::Result
         std::fs::create_dir_all(parent)?;
     }
     write_atomic(&target, &bytes)?;
+    put_back_owner(&target, b.owner)?;
     #[cfg(unix)]
     if let Some(mode) = b.mode {
         use std::os::unix::fs::PermissionsExt;
@@ -905,7 +951,7 @@ mod tests {
         std::os::unix::fs::symlink(&home, &link).unwrap();
         let old = std::time::UNIX_EPOCH + std::time::Duration::from_secs(1_600_000_000);
         let lmt = |p: &Path| std::fs::symlink_metadata(p).unwrap().modified().unwrap();
-        put_back_link(&root.join("probe"), &Link { target: "x".into(), mtime_ns: Some(1_600_000_000_000_000_000) }).unwrap();
+        put_back_link(&root.join("probe"), &Link { target: "x".into(), mtime_ns: Some(1_600_000_000_000_000_000), owner: None }).unwrap();
         assert_eq!(lmt(&root.join("probe")), old);
         std::fs::remove_file(root.join("probe")).unwrap();
         let before = snapshot(&root);
@@ -922,6 +968,21 @@ mod tests {
         assert_eq!(lmt(&link), link_mtime);
         assert_eq!(snapshot(&root), before);
         assert_eq!(std::fs::read(home.join("configs.main.ini")).unwrap(), b"the image's settings");
+
+        // owners are recorded (and a give-away a non-root restore cannot do is not an error)
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::MetadataExt;
+            let api = root.join("game/bin/win64/steam_api64.dll");
+            let md = std::fs::metadata(&api).unwrap();
+            let e = m.entries.iter().find(|e| e.path == "game/bin/win64/steam_api64.dll").unwrap();
+            assert_eq!(e.before.as_ref().unwrap().owner, Some([md.uid(), md.gid()]));
+            assert_eq!(m.entries.iter().find(|e| e.kind == Kind::Link).unwrap().link.as_ref().unwrap().owner, Some([md.uid(), md.gid()]));
+            put_back_owner(&api, Some([md.uid(), md.gid()])).unwrap();
+            if unsafe { libc::getuid() } != 0 {
+                put_back_owner(&api, Some([0, 0])).unwrap();
+            }
+        }
 
         // a crash right after the link went: restore creates it again
         let mut m = Manifest { state: State::Applying, entries: Vec::new(), ..m };
