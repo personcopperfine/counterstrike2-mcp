@@ -9,7 +9,6 @@
 #![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
 mod app;
-mod register;
 mod worker;
 
 use std::ffi::OsString;

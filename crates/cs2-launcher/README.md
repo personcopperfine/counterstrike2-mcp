@@ -2,8 +2,8 @@
 
 A window over `cs2mcp-native` (`crates/cs2-native`, read its README for what the launcher does to
 an install and how it puts it back). It prepares the user's own Steam CS2 install in one click,
-starts the game, shows the readiness ladder until the bridge answers, and registers the MCP
-servers with Claude. Everything runs in-process through the `cs2_native` library on worker
+starts the game, shows the readiness ladder until the bridge answers, and puts the install back.
+It writes no MCP client config (`cs2mcp-native mcp-config` prints one). Everything runs in-process through the `cs2_native` library on worker
 threads; no command line is parsed or scraped. eframe/egui 0.37 (glow renderer, X11 + Wayland).
 
 ## The window
@@ -40,32 +40,6 @@ resolve that finding:
 | Copy details | the findings as JSON, for a bug report |
 
 A blocker (a tampered payload) has no "Continue anyway".
-
-## Register with Claude
-
-The MCP config is the one `cs2mcp-native mcp-config` prints (both servers, absolute paths; from
-the AppImage the command is `$APPIMAGE client-mcp ...`). The transport selector offers stdio;
-HTTP is listed and disabled until the servers speak it.
-
-* **Claude Desktop**: the config files offered are
-  * Windows: `%APPDATA%\Claude\claude_desktop_config.json` (the documented location, offered even
-    when it does not exist yet), and the Microsoft Store build's
-    `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\claude_desktop_config.json` only
-    when that file exists;
-  * macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`;
-  * Linux (no official build): `$XDG_CONFIG_HOME/Claude/claude_desktop_config.json` only when it
-    exists;
-  * or any path typed in.
-
-  The servers are merged into `mcpServers` member by member: every other member keeps its text
-  and its place, a file that is not a JSON object is refused. The diff is shown; **Back up the
-  file and write** copies the old file to `<name>.cs2mcp-backup-<timestamp>` next to it and writes
-  the new one atomically. Claude Desktop reads the file at start: restart it.
-* **Claude Code**: the commands are shown first (`claude mcp add-json --scope user <name>
-  <json>`, with `claude mcp remove --scope user <name>` before each when "replace entries of the
-  same name" is ticked) and can be copied; **Run** appears when a `claude` executable is on
-  `PATH` and runs them, showing their output.
-* **Copy JSON**: the `mcpServers` block for any other client.
 
 ## Multicall and `supervise`
 
@@ -119,12 +93,9 @@ Nothing is code-signed.
 
 ## Status
 
-* **Run here** (Linux): the window starts (Wayland and XWayland), `cargo test -p cs2-launcher`
-  (the config merge, its order and refusals, the diff, the backup + write, the Claude Code
-  commands). The AppImage and the .deb were built and run (multicall, `cs2mcp-native up`/`down`
+* **Run here** (Linux): the window starts (Wayland and XWayland), `cargo test -p cs2-launcher`. The AppImage and the .deb were built and run (multicall, `cs2mcp-native up`/`down`
   through the AppImage on a fake game tree). The actions the buttons start are the
   `cs2_native` functions the CLI runs; the buttons themselves were not clicked through.
 * **Not verified**: how the window looks (an automated screenshot came out blank on this
   Wayland desktop; nobody has looked at it with a real game install), anything on Windows (the
-  win64 build is `cargo check`/`clippy` only here, the MSI is built in CI only), the Claude
-  Desktop paths on a machine with Claude Desktop installed, **Run** with a real `claude` CLI.
+  win64 build is `cargo check`/`clippy` only here, the MSI is built in CI only).

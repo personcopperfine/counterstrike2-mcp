@@ -381,8 +381,7 @@ or `cs2mcp-native`'s own dir outside a package, when `hammer-mcp` is there, else
 repo's `target/release` when it exists on this machine, else that same dir;
 from an AppImage the command is `$APPIMAGE` with `client-mcp`/`hammer-mcp` as its first
 argument). `--transport stdio` is the only transport so far; `http` is refused with "not
-available yet". The desktop app writes the same block into Claude Desktop's config or registers
-it with Claude Code (`crates/cs2-launcher/README.md`):
+available yet". Nothing here writes a client's config file: paste the block yourself.
 
 ```json
 { "mcpServers": {

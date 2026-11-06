@@ -1,18 +1,15 @@
 //! The window: settings, status, the actions, the readiness ladder, the log, and the dialogs for
 //! findings that need the user's decision (never resolved behind their back).
 
-use crate::register::{self, Line};
 use crate::worker::{self, Action, Job, Outcome, Settings};
 use cs2_native::events::Event;
 use cs2_native::findings::{Code, Finding, Policy, Severity};
 use cs2_native::install::Os;
-use cs2_native::mcpconfig::Transport;
 use cs2_native::plan::SteamMode;
 use cs2_native::state::Strategy;
 use eframe::egui::{self, Color32, RichText};
 use serde_json::Value;
 use std::path::PathBuf;
-use std::sync::mpsc::Receiver;
 use std::time::Duration;
 
 /// The readiness ladder, in order (`session::wait_ready`).
@@ -44,32 +41,6 @@ enum Dialog {
     ConfirmLost { action: Action, policy: Policy, paths: Vec<String> },
 }
 
-#[derive(PartialEq, Eq, Clone, Copy)]
-enum Tab {
-    Desktop,
-    Code,
-    Copy,
-}
-
-struct RegisterUi {
-    tab: Tab,
-    candidates: Vec<(PathBuf, bool)>,
-    path: String,
-    preview: Option<Result<(String, Vec<Line>), String>>,
-    written: Option<String>,
-    replace: bool,
-    code_run: Option<Receiver<String>>,
-    code_log: String,
-}
-
-impl RegisterUi {
-    fn new() -> RegisterUi {
-        let candidates = register::desktop_candidates();
-        let path = candidates.first().map(|(p, _)| p.display().to_string()).unwrap_or_default();
-        RegisterUi { tab: Tab::Desktop, candidates, path, preview: None, written: None, replace: true, code_run: None, code_log: String::new() }
-    }
-}
-
 pub struct App {
     settings: Settings,
     game_root: String,
@@ -84,10 +55,6 @@ pub struct App {
     last: Option<(Action, Value)>,
     error: Option<String>,
     dialog: Option<Dialog>,
-    register: Option<RegisterUi>,
-    mcp: Option<Value>,
-    mcp_notes: Vec<String>,
-    transport: Transport,
 }
 
 fn severity_color(s: Severity) -> Color32 {
@@ -124,10 +91,6 @@ impl App {
             last: None,
             error: None,
             dialog: None,
-            register: None,
-            mcp: None,
-            mcp_notes: Vec::new(),
-            transport: Transport::Stdio,
         };
         a.start(ctx, Action::Status, Policy::default());
         a
@@ -190,10 +153,6 @@ impl App {
     fn finished(&mut self, action: Action, policy: Policy, v: Value) {
         match action {
             Action::Status => self.status = Some(v),
-            Action::McpConfig => {
-                self.mcp = Some(v["config"]["mcpServers"].clone());
-                self.mcp_notes = serde_json::from_value(v["notes"].clone()).unwrap_or_default();
-            }
             Action::CleanupPreview => {
                 let steps: Vec<String> = serde_json::from_value(v["wouldDo"].clone()).unwrap_or_default();
                 if steps.is_empty() {
@@ -250,10 +209,6 @@ impl App {
             }
             if ui.add_enabled(idle, egui::Button::new("Clean up leftovers…")).on_hover_text("files of ours no manifest records (a deleted state dir, an older install-rs.sh layout)").clicked() {
                 self.start(&ctx, Action::CleanupPreview, Policy::default());
-            }
-            if ui.button("Register with Claude…").clicked() {
-                self.register = Some(RegisterUi::new());
-                self.start(&ctx, Action::McpConfig, Policy::default());
             }
         });
     }
@@ -508,169 +463,6 @@ impl App {
             self.start(ctx, a, p);
         }
     }
-
-    fn register_window(&mut self, ctx: &egui::Context) {
-        let Some(r) = &mut self.register else { return };
-        if let Some(rx) = &r.code_run {
-            while let Ok(s) = rx.try_recv() {
-                r.code_log.push_str(&s);
-            }
-        }
-        let mut open = true;
-        let servers = self.mcp.clone();
-        let notes = self.mcp_notes.clone();
-        let transport = &mut self.transport;
-        egui::Window::new("Register with an MCP client").open(&mut open).default_width(760.0).show(ctx, |ui| {
-            ui.horizontal(|ui| {
-                ui.label("Transport");
-                egui::ComboBox::from_id_salt("transport").selected_text(transport.label()).show_ui(ui, |ui| {
-                    ui.selectable_value(transport, Transport::Stdio, Transport::Stdio.label());
-                    ui.add_enabled_ui(Transport::Http.available(), |ui| {
-                        ui.selectable_value(transport, Transport::Http, Transport::Http.label());
-                    });
-                });
-            });
-            ui.label("stdio servers are started by your MCP client (Claude Desktop, Claude Code) from this config; the launcher does not run them. Start the game here first: the servers attach to its session.");
-            for n in &notes {
-                ui.label(RichText::new(format!("note: {n}")).weak());
-            }
-            ui.separator();
-            let Some(servers) = servers else {
-                ui.horizontal(|ui| {
-                    ui.spinner();
-                    ui.label("reading the install…");
-                });
-                return;
-            };
-            ui.horizontal(|ui| {
-                ui.selectable_value(&mut r.tab, Tab::Desktop, "Claude Desktop");
-                ui.selectable_value(&mut r.tab, Tab::Code, "Claude Code");
-                ui.selectable_value(&mut r.tab, Tab::Copy, "Copy JSON");
-            });
-            ui.separator();
-            match r.tab {
-                Tab::Desktop => {
-                    ui.label("Config file (claude_desktop_config.json):");
-                    for (p, exists) in &r.candidates {
-                        let s = p.display().to_string();
-                        if ui.radio(r.path == s, format!("{s}{}", if *exists { "" } else { "  (new)" })).clicked() {
-                            r.path = s;
-                            r.preview = None;
-                        }
-                    }
-                    if r.candidates.is_empty() {
-                        ui.label(RichText::new("No Claude Desktop config found here (there is no official Linux build). Type the file's path if you have one, or copy the JSON.").weak());
-                    }
-                    if ui.add(egui::TextEdit::singleline(&mut r.path).desired_width(700.0)).changed() {
-                        r.preview = None;
-                    }
-                    if ui.add_enabled(!r.path.trim().is_empty(), egui::Button::new("Show the changes")).clicked() {
-                        let p = PathBuf::from(r.path.trim());
-                        let old = std::fs::read_to_string(&p).ok();
-                        r.written = None;
-                        r.preview = Some(register::merge(old.as_deref(), &servers).map(|new| {
-                            let d = register::diff(old.as_deref().unwrap_or(""), &new);
-                            (new, d)
-                        }).map_err(|e| format!("{e:#}")));
-                    }
-                    match &r.preview {
-                        Some(Ok((new, d))) => {
-                            egui::ScrollArea::vertical().max_height(320.0).show(ui, |ui| {
-                                for l in d {
-                                    match l {
-                                        Line::Same(s) => ui.monospace(RichText::new(format!("  {s}")).weak()),
-                                        Line::Removed(s) => ui.monospace(RichText::new(format!("- {s}")).color(Color32::from_rgb(220, 90, 90))),
-                                        Line::Added(s) => ui.monospace(RichText::new(format!("+ {s}")).color(Color32::from_rgb(90, 190, 90))),
-                                    };
-                                }
-                            });
-                            let changed = d.iter().any(|l| !matches!(l, Line::Same(_)));
-                            if !changed {
-                                ui.label("the file already has these entries");
-                            } else if ui.button("Back up the file and write").clicked() {
-                                let p = PathBuf::from(r.path.trim());
-                                r.written = Some(match register::write(&p, new) {
-                                    Ok(Some(b)) => format!("written; the old file is at {}. Restart Claude Desktop to load it.", b.display()),
-                                    Ok(None) => "written (a new file). Restart Claude Desktop to load it.".to_string(),
-                                    Err(e) => format!("not written: {e:#}"),
-                                });
-                                r.preview = None;
-                            }
-                        }
-                        Some(Err(e)) => {
-                            ui.colored_label(severity_color(Severity::Blocker), e);
-                        }
-                        None => {}
-                    }
-                    if let Some(w) = &r.written {
-                        ui.label(w);
-                    }
-                }
-                Tab::Code => {
-                    ui.checkbox(&mut r.replace, "replace entries of the same name");
-                    let cmds = register::claude_code_commands(&servers, r.replace);
-                    let lines: Vec<String> = cmds.iter().map(|c| register::shell_line("claude", c)).collect();
-                    egui::ScrollArea::vertical().max_height(220.0).show(ui, |ui| {
-                        for l in &lines {
-                            ui.monospace(l);
-                        }
-                    });
-                    ui.horizontal(|ui| {
-                        if ui.button("Copy the commands").clicked() {
-                            ui.ctx().copy_text(lines.join("\n"));
-                        }
-                        match register::claude_cli() {
-                            Some(cli) => {
-                                let running = r.code_run.is_some() && r.code_log.ends_with("…\n");
-                                if ui.add_enabled(!running, egui::Button::new(format!("Run them ({})", cli.display()))).clicked() {
-                                    r.code_log.clear();
-                                    r.code_run = Some(run_claude(cli, cmds, ui.ctx().clone()));
-                                }
-                            }
-                            None => {
-                                ui.label(RichText::new("`claude` is not on PATH: copy the commands into a terminal").weak());
-                            }
-                        }
-                    });
-                    if !r.code_log.is_empty() {
-                        egui::ScrollArea::vertical().max_height(200.0).show(ui, |ui| ui.monospace(&r.code_log));
-                    }
-                }
-                Tab::Copy => {
-                    let text = serde_json::to_string_pretty(&serde_json::json!({"mcpServers": servers})).unwrap_or_default();
-                    if ui.button("Copy to clipboard").clicked() {
-                        ui.ctx().copy_text(text.clone());
-                    }
-                    egui::ScrollArea::vertical().max_height(360.0).show(ui, |ui| ui.monospace(text));
-                }
-            }
-        });
-        if !open {
-            self.register = None;
-        }
-    }
-}
-
-/// Run the `claude mcp` commands one after the other; their output comes back line by line.
-fn run_claude(cli: PathBuf, cmds: Vec<Vec<String>>, ctx: egui::Context) -> Receiver<String> {
-    let (tx, rx) = std::sync::mpsc::channel();
-    std::thread::spawn(move || {
-        for c in cmds {
-            let _ = tx.send(format!("$ {}\n", register::shell_line("claude", &c)));
-            let mut cmd = std::process::Command::new(&cli);
-            cmd.args(&c);
-            cs2_native::selfexe::scrub_appimage_env(&mut cmd);
-            let out = match cmd.output() {
-                Ok(o) => format!("{}{}(exit {})\n", String::from_utf8_lossy(&o.stdout), String::from_utf8_lossy(&o.stderr), o.status.code().unwrap_or(-1)),
-                Err(e) => format!("{e}\n"),
-            };
-            let _ = tx.send(out);
-            ctx.request_repaint();
-        }
-        let _ = tx.send("done\n".into());
-        ctx.request_repaint();
-    });
-    rx
 }
 
 impl eframe::App for App {
@@ -698,7 +490,6 @@ impl eframe::App for App {
             });
         });
         self.dialogs(&ctx);
-        self.register_window(&ctx);
         if self.busy() {
             ctx.request_repaint_after(Duration::from_millis(100));
         }

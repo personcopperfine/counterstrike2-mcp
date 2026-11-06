@@ -6,10 +6,9 @@
 use cs2_native::args::GameArgs;
 use cs2_native::events::{Event, Events};
 use cs2_native::findings::{Policy, Stopped};
-use cs2_native::mcpconfig::{self, Which};
 use cs2_native::plan::SteamMode;
 use cs2_native::session::{self, Ctx, CtxOpts, UpOpts};
-use serde_json::{json, Value};
+use serde_json::Value;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Receiver};
 use std::sync::Arc;
@@ -29,8 +28,6 @@ pub enum Action {
     CleanupPreview,
     /// move the leftovers out
     Cleanup,
-    /// the `mcpServers` block
-    McpConfig,
 }
 
 impl Action {
@@ -43,7 +40,6 @@ impl Action {
             Action::Uninstall => "Repair (restore the install)",
             Action::CleanupPreview => "Clean up (preview)",
             Action::Cleanup => "Clean up",
-            Action::McpConfig => "MCP config",
         }
     }
 }
@@ -164,10 +160,5 @@ fn run(action: Action, s: &Settings, policy: Policy, ev: Events, cancel: &Atomic
         Action::Uninstall => session::uninstall(&ctx),
         Action::CleanupPreview => session::cleanup(&ctx, false),
         Action::Cleanup => session::cleanup(&ctx, true),
-        Action::McpConfig => {
-            let servers = mcpconfig::default_servers();
-            let notes = mcpconfig::notes(cs2_native::install::Os::host(), &servers);
-            Ok(json!({"config": session::mcp_config(&ctx, Which::Both, &servers), "notes": notes}))
-        }
     }
 }

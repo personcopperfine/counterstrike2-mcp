@@ -1,7 +1,7 @@
 [package]
 name = "cs2-launcher"
 version = "0.0.1"
-description = "cs2mcp-launcher: the desktop app over cs2mcp-native (prepare + launch the user's Steam CS2 install, repair it, register the MCP servers)"
+description = "cs2mcp-launcher: the desktop app over cs2mcp-native (prepare + launch the user's Steam CS2 install, repair it)"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -14,8 +14,7 @@ path = "src/main.rs"
 [dependencies]
 anyhow.workspace = true
 serde.workspace = true
-# raw_value: the Claude Desktop config is merged member by member, the untouched text kept
-serde_json = { workspace = true, features = ["raw_value"] }
+serde_json.workspace = true
 cs2-native = { path = "../cs2-native" }
 # glow (OpenGL) instead of the default wgpu: a smaller binary, and it runs on Mesa's software GL
 # in a VM without a GPU.
