@@ -226,15 +226,28 @@ pub fn process_start(pid: u32) -> Option<u64> {
     Some((u64::from(created.dwHighDateTime) << 32) | u64::from(created.dwLowDateTime))
 }
 
-/// Terminate `pid` (exit code 1). `Ok(false)` when it was already gone.
+/// Terminate `pid` (exit code 1). `Ok(false)` when it was already gone or already exiting.
 pub fn terminate(pid: u32) -> std::io::Result<bool> {
+    const ERROR_ACCESS_DENIED: i32 = 5;
     // SAFETY: plain open/terminate on a pid we recorded.
-    let h = Handle(unsafe { OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, 0, pid) });
+    let mut h = Handle(unsafe { OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_SYNCHRONIZE, 0, pid) });
+    if h.0.is_null() {
+        // SAFETY: the same open without SYNCHRONIZE (granted to fewer callers)
+        h = Handle(unsafe { OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, 0, pid) });
+    }
     if h.0.is_null() {
         return Ok(false);
     }
     if unsafe { TerminateProcess(h.0, 1) } == 0 {
-        return Err(std::io::Error::last_os_error());
+        let e = std::io::Error::last_os_error();
+        // TerminateProcess on a process that is already terminating fails with access denied
+        // (seen live: the game going down with the launcher's kill-on-close job): not an error
+        // when it is gone within a moment
+        // SAFETY: our handle; a handle without SYNCHRONIZE fails the wait and keeps the error.
+        if e.raw_os_error() == Some(ERROR_ACCESS_DENIED) && unsafe { WaitForSingleObject(h.0, 2_000) } == WAIT_OBJECT_0 {
+            return Ok(false);
+        }
+        return Err(e);
     }
     Ok(true)
 }

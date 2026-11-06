@@ -443,11 +443,16 @@ impl App {
         }
         ui.separator();
         ui.heading("Readiness");
+        // a read-only checkbox per stage: drawn, not a glyph (the bundled fonts have no ✔, it
+        // rendered as a box on Windows), and screen readers get its state
         for (key, label) in STAGES {
-            match self.stages.iter().find(|(s, _)| s == key) {
-                Some((_, secs)) => ui.label(format!("✔ {label}  ({secs:.1}s)")),
-                None => ui.label(RichText::new(format!("○ {label}")).weak()),
+            let reached = self.stages.iter().find(|(s, _)| s == key).map(|(_, secs)| *secs);
+            let mut done = reached.is_some();
+            let text = match reached {
+                Some(secs) => RichText::new(format!("{label}  ({secs:.1}s)")),
+                None => RichText::new(label.to_string()).weak(),
             };
+            ui.add_enabled(false, egui::Checkbox::new(&mut done, text));
         }
     }
 
