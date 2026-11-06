@@ -295,6 +295,20 @@ impl From<i32> for Done {
 
 /// 2 (with the findings) when the result still holds a decision the policy did not accept (a
 /// restore with conflicts).
+/// Append `more` to `v["findings"]`, leaving out the ones already there: `status` and the
+/// preflight both report the game build (seen live: the warning shown twice).
+fn add_findings(v: &mut Value, more: &[Finding]) {
+    if !v["findings"].is_array() {
+        v["findings"] = Value::Array(Vec::new());
+    }
+    let Some(f) = v["findings"].as_array_mut() else { return };
+    for x in more.iter().filter_map(|x| serde_json::to_value(x).ok()) {
+        if !f.contains(&x) {
+            f.push(x);
+        }
+    }
+}
+
 fn finished(v: &Value, policy: Policy) -> Done {
     let f: Vec<Finding> = serde_json::from_value(v["findings"].clone()).unwrap_or_default();
     let code = findings::exit_code(&f, policy);
@@ -379,12 +393,7 @@ fn run(cli: Cli, ev: &Events) -> anyhow::Result<Done> {
         Cmd::Status { hello, preflight } => {
             let mut v = session::status(&c, hello)?;
             if preflight {
-                let pre = c.preflight()?;
-                if let Some(f) = v["findings"].as_array_mut() {
-                    f.extend(pre.iter().filter_map(|x| serde_json::to_value(x).ok()));
-                } else {
-                    v["findings"] = serde_json::to_value(&pre)?;
-                }
+                add_findings(&mut v, &c.preflight()?);
             }
             v
         }
@@ -437,6 +446,18 @@ fn fetch_gbe(g: &Global, out: Option<PathBuf>, archive: Option<PathBuf>, ev: &Ev
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn status_preflight_reports_a_finding_once() {
+        let build = cs2_native::install::build_finding(Some("1")).unwrap();
+        let info = Finding::new(findings::Code::PayloadUnverified, findings::Severity::Info, "dev build");
+        let mut v = json!({"findings": [build]});
+        add_findings(&mut v, &[info, build.clone()]);
+        assert_eq!(v["findings"].as_array().unwrap().len(), 2);
+        let mut v = json!({});
+        add_findings(&mut v, &[build]);
+        assert_eq!(v["findings"].as_array().unwrap().len(), 1);
+    }
 
     /// The command line dialog.rs builds for the Windows box parses, whatever the message starts with.
     #[test]
