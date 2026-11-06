@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  cs2-mcp's MSI: a per-user install (InstallScope="perUser", no UAC prompt) into
+  %LOCALAPPDATA%\Programs\cs2-mcp, the package layout of scripts/package.sh as is.
+
+  A handlebars template for cargo-packager 0.11.8 (wix.template). It replaces cargo-packager's
+  built-in main.wxs, which installs per machine and keys its file components on the files
+  themselves: a per-user install must key every component on an HKCU registry value and remove
+  every directory it creates (ICE38, ICE64). The files come from the fragment packaging/packager.py
+  generates (ComponentGroup "PackageFiles", one component per directory); the launcher's File Id
+  there is "LauncherExe". cargo-packager's own binaries/resources variables are not used.
+-->
+<?if $(sys.BUILDARCH)="x64"?>
+    <?define Win64 = "yes" ?>
+<?else?>
+    <?error cs2-mcp is x64 only (sys.BUILDARCH=$(sys.BUILDARCH))?>
+<?endif?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product
+            Id="*"
+            Name="{{product_name}}"
+            UpgradeCode="{{upgrade_code}}"
+            Language="!(loc.CargoPackagerLanguage)"
+            Manufacturer="{{manufacturer}}"
+            Version="{{version}}">
+
+        <Package Id="*"
+                 Keywords="Installer"
+                 InstallerVersion="500"
+                 Languages="0"
+                 Compressed="yes"
+                 InstallScope="perUser"
+                 InstallPrivileges="limited"
+                 SummaryCodepage="!(loc.CargoPackagerCodepage)"/>
+
+        <!-- reinstall all files; rewrite all registry entries; reinstall all shortcuts -->
+        <Property Id="REINSTALLMODE" Value="amus" />
+
+        <!-- the old version is removed first, so a file set that changed between versions is fine -->
+        <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" AllowSameVersionUpgrades="yes" />
+
+        <Media Id="1" Cabinet="app.cab" EmbedCab="yes" />
+
+        {{#if icon_path}}
+        <Icon Id="ProductIcon" SourceFile="{{icon_path}}"/>
+        <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+        {{/if}}
+        <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+        <SetProperty Id="ARPNOMODIFY" Value="1" After="InstallValidate" Sequence="execute"/>
+        <SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" After="CostFinalize"/>
+
+        <!-- the previous install dir, when there is one -->
+        <Property Id="INSTALLDIR">
+            <RegistrySearch Id="PrevInstallDirReg" Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="InstallDir" Type="raw"/>
+        </Property>
+
+        <!-- "Launch cs2-mcp" on the last page -->
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.LaunchApp)" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
+        <Property Id="WixShellExecTarget" Value="[#LauncherExe]" />
+        <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+
+        <UI>
+            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+            <!-- no license page -->
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="2">1</Publish>
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">1</Publish>
+        </UI>
+        <UIRef Id="WixUI_InstallDir" />
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="LocalAppDataFolder">
+                <Directory Id="UserProgramsFolder" Name="Programs">
+                    <Directory Id="INSTALLDIR" Name="{{product_name}}"/>
+                </Directory>
+            </Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="{{product_name}}"/>
+            </Directory>
+            <Directory Id="DesktopFolder" Name="Desktop"/>
+        </Directory>
+
+        <DirectoryRef Id="INSTALLDIR">
+            <Component Id="RegistryEntries" Guid="*">
+                <RegistryKey Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}">
+                    <RegistryValue Name="InstallDir" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
+                </RegistryKey>
+                <RemoveFolder Id="RemoveInstallDir" Directory="INSTALLDIR" On="uninstall" />
+                <!-- removed only when empty (other per-user apps live there too) -->
+                <RemoveFolder Id="RemoveUserProgramsFolder" Directory="UserProgramsFolder" On="uninstall" />
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut"
+                          Name="{{product_name}}"
+                          Description="Prepare and launch CS2 for the cs2-mcp MCP servers"
+                          Target="[#LauncherExe]"
+                          {{#if icon_path}}
+                          Icon="ProductIcon"
+                          {{/if}}
+                          WorkingDirectory="INSTALLDIR">
+                    <ShortcutProperty Key="System.AppUserModel.ID" Value="{{identifier}}"/>
+                </Shortcut>
+                <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall"/>
+                <RegistryValue Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="Start Menu Shortcut" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="DesktopFolder">
+            <Component Id="ApplicationShortcutDesktop" Guid="*">
+                <Shortcut Id="ApplicationDesktopShortcut"
+                          Name="{{product_name}}"
+                          Description="Prepare and launch CS2 for the cs2-mcp MCP servers"
+                          Target="[#LauncherExe]"
+                          {{#if icon_path}}
+                          Icon="ProductIcon"
+                          {{/if}}
+                          WorkingDirectory="INSTALLDIR" />
+                <RegistryValue Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="Desktop Shortcut" Type="integer" Value="1" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+
+        <Feature
+                Id="MainProgram"
+                Title="{{product_name}}"
+                Description="!(loc.InstallAppFeature)"
+                Level="1"
+                ConfigurableDirectory="INSTALLDIR"
+                AllowAdvertise="no"
+                Display="expand"
+                Absent="disallow">
+            <ComponentRef Id="RegistryEntries"/>
+            <ComponentRef Id="ApplicationShortcut"/>
+            {{#each component_group_refs as |id| ~}}
+            <ComponentGroupRef Id="{{ id }}"/>
+            {{/each~}}
+            <Feature Id="DesktopShortcut" Title="Desktop shortcut" Level="1" AllowAdvertise="no">
+                <ComponentRef Id="ApplicationShortcutDesktop"/>
+            </Feature>
+        </Feature>
+    </Product>
+</Wix>

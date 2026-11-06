@@ -2,6 +2,8 @@
 //!
 //! * the portable zip / tarball and the MSI: `scripts/package.sh`'s layout, every binary next to
 //!   `payload/`, `sigs/` and `SHA256SUMS` (the "package dir");
+//! * the .deb: the same layout at `/opt/cs2mcp/`, the GUI at `/usr/bin/` (both found as
+//!   `<exe dir>/../../opt/cs2mcp`, which holds inside the AppImage too);
 //! * the AppImage: the same layout at `$APPDIR/opt/cs2mcp/`, the GUI at `$APPDIR/usr/bin/`. The
 //!   mount path changes on every start and vanishes when the AppImage exits, so anything that has
 //!   to outlive this process (the supervisor, the MCP config) names `$APPIMAGE` itself, a
@@ -39,15 +41,28 @@ fn appimage_from(appdir: Option<OsString>, appimage: Option<OsString>, exe: Opti
     exe.starts_with(&appdir).then_some((appdir, image))
 }
 
-/// The package dir: next to this executable when the layout is there (`payload/` or the
-/// `cs2mcp-native` binary), else `$APPDIR/opt/cs2mcp` inside an AppImage, else `None` (a
-/// development build).
+/// Does `d` hold the package layout (`payload/` or the `cs2mcp-native` binary)?
+fn is_package(d: &Path) -> bool {
+    d.join("payload").is_dir() || d.join(exe_name("cs2mcp-native")).is_file()
+}
+
+/// The package dir for an executable in `exe_dir`: that dir when the layout is there, else
+/// `<exe dir>/../../opt/cs2mcp` (`/usr/bin` -> `/opt/cs2mcp`; `$APPDIR/usr/bin` the same).
+fn package_dir_of(exe_dir: &Path) -> Option<PathBuf> {
+    if is_package(exe_dir) {
+        return Some(exe_dir.to_path_buf());
+    }
+    let opt = exe_dir.parent()?.parent()?.join(APPDIR_PACKAGE);
+    is_package(&opt).then_some(opt)
+}
+
+/// The package dir: next to this executable, or the `opt/cs2mcp` of a .deb / an AppImage
+/// ([`package_dir_of`]), else `$APPDIR/opt/cs2mcp` inside an AppImage, else `None` (a development
+/// build).
 pub fn package_dir() -> Option<PathBuf> {
     let exe_dir = std::env::current_exe().ok().and_then(|e| e.parent().map(Path::to_path_buf));
-    if let Some(d) = &exe_dir {
-        if d.join("payload").is_dir() || d.join(exe_name("cs2mcp-native")).is_file() {
-            return Some(d.clone());
-        }
+    if let Some(d) = exe_dir.as_deref().and_then(package_dir_of) {
+        return Some(d);
     }
     if let Some((appdir, _)) = appimage() {
         let d = appdir.join(APPDIR_PACKAGE);
@@ -179,6 +194,18 @@ mod tests {
         assert_eq!(appimage_from(Some("/tmp/.mount_x".into()), None, exe.clone()), None);
         // inherited variables in a process that is not the AppImage's (the game, a server)
         assert_eq!(appimage_from(Some("/tmp/.mount_y".into()), Some("/a".into()), exe), None);
+    }
+
+    #[test]
+    fn the_package_is_next_to_the_exe_or_in_opt() {
+        let base = crate::testutil::scratch("selfexe-pkg");
+        std::fs::create_dir_all(base.join("zip/payload")).unwrap();
+        assert_eq!(package_dir_of(&base.join("zip")), Some(base.join("zip")));
+        // the .deb and the AppImage: usr/bin/<gui>, opt/cs2mcp/<package>
+        std::fs::create_dir_all(base.join("root/usr/bin")).unwrap();
+        assert_eq!(package_dir_of(&base.join("root/usr/bin")), None);
+        std::fs::create_dir_all(base.join("root/opt/cs2mcp/payload")).unwrap();
+        assert_eq!(package_dir_of(&base.join("root/usr/bin")), Some(base.join("root/opt/cs2mcp")));
     }
 
     #[test]
