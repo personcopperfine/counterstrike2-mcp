@@ -258,7 +258,9 @@ fn prepare_locked(ctx: &Ctx, steam: SteamMode, tools: bool) -> anyhow::Result<Va
     let os = Os::host();
     let saves = ctx.gbe_saves();
     std::fs::create_dir_all(&saves)?;
-    let input = PlanInput { os, steam, tools, root: &ctx.install.root, gbe_save_dir: &saves };
+    let home = std::env::var_os("HOME").map(PathBuf::from);
+    let valve_api = (os == Os::Linux).then(|| home.as_deref().and_then(crate::leftovers::gbe_orig)).flatten();
+    let input = PlanInput { os, steam, tools, root: &ctx.install.root, gbe_save_dir: &saves, valve_api: valve_api.as_deref() };
     let recovered = if ctx.strategy == Strategy::InPlace { recover(ctx, &mut found)? } else { None };
     if recovered.is_none() {
         // no manifest: anything of ours in the tree now is a leftover no record covers

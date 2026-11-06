@@ -164,6 +164,13 @@ fn gameinfo_markers(text: &str) -> Vec<String> {
         .collect()
 }
 
+/// Valve's `libsteam_api.so` as the client image's setup_gbe.sh kept it (`$HOME/.steam/`), when
+/// that file is there and is not an emulator itself.
+pub fn gbe_orig(home: &Path) -> Option<PathBuf> {
+    let orig = home.join(".steam/gbe_orig_libsteam_api.so");
+    std::fs::read(&orig).is_ok_and(|b| !layout::is_gbe_library(&b)).then_some(orig)
+}
+
 /// Look at `root` for files of ours that no manifest records. `home` is where setup_gbe.sh kept
 /// its backup (`$HOME`).
 pub fn look(root: &Path, os: Os, k: &Known, home: Option<&Path>) -> Seen {
@@ -199,12 +206,7 @@ pub fn look(root: &Path, os: Os, k: &Known, home: Option<&Path>) -> Seen {
         s.emulated_steam_api = layout::is_gbe_library(&b);
     }
     if os == Os::Linux {
-        if let Some(h) = home {
-            let orig = h.join(".steam/gbe_orig_libsteam_api.so");
-            if std::fs::read(&orig).is_ok_and(|b| !layout::is_gbe_library(&b)) {
-                s.gbe_orig = Some(orig);
-            }
-        }
+        s.gbe_orig = home.and_then(gbe_orig);
     }
     for rel in legacy_paths(os) {
         if std::fs::symlink_metadata(under(root, rel)).is_ok() {
@@ -254,7 +256,9 @@ pub fn findings(s: &Seen, os: Os) -> Vec<Finding> {
         )
         .paths([steam_api_rel(os).to_string()]);
         v.push(match &s.gbe_orig {
-            Some(o) => f.advice(format!("the image's setup_gbe.sh kept Valve's file at {}: `cs2mcp-native cleanup --yes` puts it back", o.display())),
+            Some(o) => f
+                .advice(format!("the image's setup_gbe.sh kept Valve's file at {}: `cs2mcp-native cleanup --yes` puts it back", o.display()))
+                .advice("--accept-conflicts keeps the emulator in place: --steam gbe reads the interfaces from that copy, and the session puts the image's file back afterwards"),
             None => f.advice(VERIFY_ADVICE),
         });
     }

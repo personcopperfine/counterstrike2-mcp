@@ -106,6 +106,10 @@ pub struct PlanInput<'a> {
     pub root: &'a Path,
     /// gbe's `local_save_path` (outside the tree)
     pub gbe_save_dir: &'a Path,
+    /// Valve's Steam API library kept out of the tree by the client image's setup_gbe.sh
+    /// ([`crate::leftovers::gbe_orig`]): `steam_interfaces.txt` is generated from it when the
+    /// tree's own copy is already gbe (an accepted `replacedGameFile`)
+    pub valve_api: Option<&'a Path>,
 }
 
 fn copy(rel: &str, src: PathBuf) -> Op {
@@ -177,8 +181,13 @@ pub fn build(input: &PlanInput<'_>, art: &Artifacts) -> anyhow::Result<Plan> {
     match (input.steam, input.os) {
         (SteamMode::Gbe, os) => {
             let api_rel = steam_api_rel(os);
-            let original = std::fs::read(input.root.join(api_rel))
+            let mut original = std::fs::read(input.root.join(api_rel))
                 .with_context(|| format!("reading the game's Steam API library {api_rel}"))?;
+            if layout::is_gbe_library(&original) {
+                if let Some(b) = input.valve_api.and_then(|p| std::fs::read(p).ok()).filter(|b| !layout::is_gbe_library(b)) {
+                    original = b;
+                }
+            }
             if layout::is_gbe_library(&original) {
                 bail!(
                     "{api_rel} in this install is already a Steam emulator (gbe); restore Valve's file \
@@ -304,7 +313,7 @@ mod tests {
     fn windows_gbe_tools_is_the_install_rs_layout_plus_gbe() {
         let (root, art) = fixture("plan-win-gbe");
         let save = root.join("saves");
-        let input = PlanInput { os: Os::Windows, steam: SteamMode::Gbe, tools: true, root: &root, gbe_save_dir: &save };
+        let input = PlanInput { os: Os::Windows, steam: SteamMode::Gbe, tools: true, root: &root, gbe_save_dir: &save, valve_api: None };
         let p = build(&input, &art).unwrap();
         assert_eq!(
             rels(&p),
@@ -333,20 +342,28 @@ mod tests {
     fn windows_client_adds_no_steam_files_and_refuses_an_emulated_install() {
         let (root, art) = fixture("plan-win-client");
         let save = root.join("saves");
-        let input = PlanInput { os: Os::Windows, steam: SteamMode::Client, tools: false, root: &root, gbe_save_dir: &save };
+        let input = PlanInput { os: Os::Windows, steam: SteamMode::Client, tools: false, root: &root, gbe_save_dir: &save, valve_api: None };
         let p = build(&input, &art).unwrap();
         assert!(!rels(&p).iter().any(|r| r.contains("steam") || r.contains("sdkenginetools")));
         put(&root.join("game/bin/win64/steam_api64.dll"), b"configs.main.ini");
         assert!(build(&input, &art).unwrap_err().to_string().contains("Steam emulator"));
         let gbe = PlanInput { steam: SteamMode::Gbe, ..input };
         assert!(build(&gbe, &art).unwrap_err().to_string().contains("already a Steam emulator"));
+        // setup_gbe.sh's copy of Valve's file: the interfaces come from it; a gbe copy is no help
+        let orig = root.join("gbe_orig_steam_api");
+        put(&orig, b"configs.main.ini");
+        assert!(build(&PlanInput { valve_api: Some(&orig), ..gbe }, &art).is_err());
+        put(&orig, b"\0SteamClient017\0SteamUser023\0");
+        let p = build(&PlanInput { valve_api: Some(&orig), ..gbe }, &art).unwrap();
+        let ifaces = p.ops.iter().find(|o| o.rel.ends_with("steam_interfaces.txt")).unwrap();
+        assert_eq!(ifaces.source, Source::Text("SteamClient017\nSteamUser023\n".into()));
     }
 
     #[test]
     fn linux_gbe_copies_the_whole_metamod_build_and_refuses_tools() {
         let (root, art) = fixture("plan-linux-gbe");
         let save = root.join("saves");
-        let input = PlanInput { os: Os::Linux, steam: SteamMode::Gbe, tools: false, root: &root, gbe_save_dir: &save };
+        let input = PlanInput { os: Os::Linux, steam: SteamMode::Gbe, tools: false, root: &root, gbe_save_dir: &save, valve_api: None };
         let p = build(&input, &art).unwrap();
         let r = rels(&p);
         assert!(r.contains(&"game/csgo/addons/metamod/bin/linuxsteamrt64/libserver.so"));
@@ -378,7 +395,7 @@ mod tests {
         let (root, mut art) = fixture("plan-missing");
         art.bridge = root.join("nope");
         let save = root.join("saves");
-        let input = PlanInput { os: Os::Windows, steam: SteamMode::Client, tools: false, root: &root, gbe_save_dir: &save };
+        let input = PlanInput { os: Os::Windows, steam: SteamMode::Client, tools: false, root: &root, gbe_save_dir: &save, valve_api: None };
         let e = build(&input, &art).unwrap_err().to_string();
         assert!(e.contains("bridge/build-rs.sh"), "{e}");
     }
