@@ -1,0 +1,25 @@
+[package]
+name = "cs2-launcher"
+version = "0.0.1"
+description = "cs2mcp-launcher: the desktop app over cs2mcp-native (prepare + launch the user's Steam CS2 install, repair it, register the MCP servers)"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[[bin]]
+name = "cs2mcp-launcher"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+serde.workspace = true
+# raw_value: the Claude Desktop config is merged member by member, the untouched text kept
+serde_json = { workspace = true, features = ["raw_value"] }
+cs2-native = { path = "../cs2-native" }
+# glow (OpenGL) instead of the default wgpu: a smaller binary, and it runs on Mesa's software GL
+# in a VM without a GPU.
+eframe = { version = "0.37", default-features = false, features = ["accesskit", "clipboard", "default_fonts", "glow", "links", "wayland", "x11"] }
+# eframe's own winit, with its default features as eframe's default set has them (Wayland/X11
+# libraries dlopened, not linked: the AppImage then runs on either)
+winit = "0.30.13"
