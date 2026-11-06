@@ -433,3 +433,20 @@ fn fetch_gbe(g: &Global, out: Option<PathBuf>, archive: Option<PathBuf>, ev: &Ev
     }
     emit(&v)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The command line dialog.rs builds for the Windows box parses, whatever the message starts with.
+    #[test]
+    fn show_dialog_takes_a_message_that_starts_like_an_option() {
+        let m = "--steam client: the Steam client is not running";
+        let a = dialog::argv(dialog::Tool::MessageBox, dialog::TITLE, m);
+        let cli = Cli::try_parse_from(std::iter::once("cs2mcp-native".to_string()).chain(a)).unwrap();
+        match cli.cmd {
+            Cmd::ShowDialog { title, text } => assert_eq!((title.as_str(), text.as_str()), (dialog::TITLE, m)),
+            _ => panic!("not show-dialog"),
+        }
+    }
+}

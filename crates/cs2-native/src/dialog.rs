@@ -137,11 +137,14 @@ pub fn message(error: &str, findings: &[Finding]) -> String {
 pub const TITLE: &str = "cs2-mcp";
 
 /// The command line of `tool` (Linux tools; the Windows one runs this binary's `show-dialog`).
+/// Every value is passed as `--name=value`: a message can start with `-` (`--steam client: …`),
+/// and as a separate argument the parser takes it for an option (seen live: clap refused it and
+/// `show-dialog` exited without a box).
 pub fn argv(tool: Tool, title: &str, text: &str) -> Vec<String> {
     match tool {
         Tool::Zenity => vec!["zenity".into(), "--error".into(), "--no-markup".into(), format!("--title={title}"), format!("--text={text}")],
-        Tool::Kdialog => vec!["kdialog".into(), "--title".into(), title.into(), "--error".into(), text.into()],
-        Tool::MessageBox => vec!["show-dialog".into(), "--title".into(), title.into(), "--text".into(), text.into()],
+        Tool::Kdialog => vec!["kdialog".into(), format!("--title={title}"), format!("--error={text}")],
+        Tool::MessageBox => vec!["show-dialog".into(), format!("--title={title}"), format!("--text={text}")],
     }
 }
 
@@ -249,7 +252,10 @@ mod tests {
         let a = argv(Tool::Zenity, TITLE, "a <b> & $(c)");
         assert_eq!(a.last().unwrap(), "--text=a <b> & $(c)");
         assert!(a.contains(&"--no-markup".to_string()));
-        assert_eq!(argv(Tool::Kdialog, TITLE, "x"), ["kdialog", "--title", "cs2-mcp", "--error", "x"]);
-        assert_eq!(argv(Tool::MessageBox, TITLE, "x")[0], "show-dialog");
+        assert_eq!(argv(Tool::Kdialog, TITLE, "x"), ["kdialog", "--title=cs2-mcp", "--error=x"]);
+        // a message that starts like an option stays one value
+        let m = "--steam client: the Steam client is not running";
+        assert_eq!(argv(Tool::MessageBox, TITLE, m), ["show-dialog", "--title=cs2-mcp", &format!("--text={m}")]);
+        assert_eq!(argv(Tool::Kdialog, TITLE, m)[2], format!("--error={m}"));
     }
 }
