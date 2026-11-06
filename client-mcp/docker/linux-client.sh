@@ -88,14 +88,17 @@ cs2mcp_preamble_env
 
 echo "=== [4] launch cs2.sh === (run-cs2.sh:147-175; client/entrypoint.sh:205-250)"
 # client/entrypoint.sh:246: remove the game's console.log so a stale 'SwitchToLoop game' from an
-# earlier run in the same home volume cannot satisfy readiness
+# earlier run in the same home volume cannot satisfy readiness. Launcher mode keeps it: the log is
+# a runtime file of cs2mcp-native's manifest (the user's copy is backed up and put back), so the
+# mirror waits for a log written after this point instead.
 cd "$G" || exit 1
-rm -f "$G/csgo/console.log"
-# MCP addition: mirror console.log into /work once the engine creates it (client/entrypoint.sh:247-250
-# does the same with tail -F). The mirror starts only after the rm above, so its existence means
-# the engine started.
 mkdir -p "$OUT"
-( until [ -f "$G/csgo/console.log" ]; do sleep 1; done
+STARTED="$OUT/.linux-client-started"
+: > "$STARTED"
+[ -z "$NATIVE" ] && rm -f "$G/csgo/console.log"
+# MCP addition: mirror console.log into /work once the engine writes it (client/entrypoint.sh:247-250
+# does the same with tail -F), so its existence means the engine started.
+( until [ -f "$G/csgo/console.log" ] && [ "$G/csgo/console.log" -nt "$STARTED" ]; do sleep 1; done
   exec tail -n +1 -F "$G/csgo/console.log" >"$OUT/console.log" ) &
 TAILPID=$!
 # run-cs2.sh:148 flags, then -insecure: Metamod:Source refuses to load without `-dedicated` or

@@ -1,0 +1,24 @@
+# The Linux acceptance image of the launcher package: the client image with a cs2mcp-native
+# package (crates/cs2-native/scripts/package.sh --os linux) baked in at /cs2mcp/native, and
+# linux-client.sh in its launcher mode as the entrypoint. It runs
+# `cs2mcp-native run --steam gbe` against the game in the `cs2-home` volume: prepare in place,
+# the game, then (exit or `podman stop`) restore + verify. Built by build.sh next to this file;
+# run as README.md says. Valve's files are not in it: the game stays in the volume.
+ARG BASE=ghcr.io/personcopperfine/cs2-docker:latest
+FROM ${BASE}
+
+COPY native/ /cs2mcp/native/
+COPY linux-client.sh lib-preamble.sh /cs2mcp/
+
+# docker.rs (native_argv / linux_argv) sets the same for a launcher-run LinuxClient session.
+# CS2MCP_NATIVE_ACCEPT_CONFLICTS / CS2MCP_NATIVE_CLEANUP_LEGACY: linux-client.sh's header.
+ENV CS2MCP_NATIVE=/cs2mcp/native \
+    CS2_GAME_DIR="/home/steam/steamapps/common/Counter-Strike Global Offensive/game" \
+    CS2MCP_NATIVE_ACCEPT_CONFLICTS=0 \
+    CS2MCP_NATIVE_CLEANUP_LEGACY=1
+USER 0
+# linux-client.sh forwards TERM to cs2mcp-native, which stops the game and restores the tree
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["bash", "/cs2mcp/linux-client.sh"]
+# a client session's bridge listens once a map runs
+CMD ["+map", "de_dust2"]
