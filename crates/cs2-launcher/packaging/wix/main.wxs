@@ -110,12 +110,14 @@
             </Component>
         </DirectoryRef>
 
+        <!-- the desktop shortcut is its own feature: a [#LauncherExe] target there is an ICE69 error
+             (a file of another feature), so it names the path -->
         <DirectoryRef Id="DesktopFolder">
             <Component Id="ApplicationShortcutDesktop" Guid="*">
                 <Shortcut Id="ApplicationDesktopShortcut"
                           Name="{{product_name}}"
                           Description="Prepare and launch CS2 for the cs2-mcp MCP servers"
-                          Target="[#LauncherExe]"
+                          Target="[INSTALLDIR]cs2mcp-launcher.exe"
                           {{#if icon_path}}
                           Icon="ProductIcon"
                           {{/if}}
