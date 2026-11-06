@@ -47,3 +47,42 @@ layer's effective uid matches the directory owner. Rootful podman (container roo
 `screenshot`/`observe` answer `CaptureUnavailable` after the timeout. Check the host's `podman info`
 (`rootless: true`) before launching with capture; the layer's own debug log (`CS2MCP_CAPTURE_DEBUG=1`)
 shows the refusal.
+
+## Launcher mode (`--native-package`)
+
+With `client-mcp --native-package <dir>` (`CS2_MCP_NATIVE_PACKAGE`), linux-client sessions no longer
+depend on `bridge/install-rs.sh`: the container runs the launcher, which prepares the `cs2-home`
+volume itself and gives it back unchanged when the game exits. `<dir>` is a cs2mcp package
+(`crates/cs2-native/scripts/package.sh --os linux` output, or an unpacked
+`cs2mcp-<version>-linux-x86_64.tar.gz` release).
+
+What a launch adds: `-v <dir>:/cs2mcp/native:ro -e CS2MCP_NATIVE=/cs2mcp/native`, and
+`linux-client.sh` then runs
+
+```sh
+/cs2mcp/native/cs2mcp-native --game-root <volume game root> --state-dir /home/steam/.cs2mcp-native \
+    --gbe-save-dir "$GSE_SAVE_DIR" run --steam gbe --no-capture --cleanup-legacy -- <harness flags> <args>
+```
+
+- **One command, in the foreground**: it lays the bridge, the Metamod loader and gbe down in place
+  (each change in a write-ahead manifest with backups, in the state dir on the same volume), runs
+  `cs2.sh` in its own process group, and when the game exits restores and verifies the tree. Its
+  exit code is the game's (3: the tree was not restored; the next run restores it first). The JSON
+  result is written to `<artifacts>/cs2mcp-native-run.json`.
+- **Stopping**: SIGTERM/SIGINT reach the launcher (PID 1 is the script, which forwards them); it
+  TERMs the game's group, KILLs it after 15 s, then restores. The runtime stops these containers
+  with `podman stop -t 60` (`NATIVE_STOP_SECS`); a plain `podman stop` (10 s) or `-t 0` would kill
+  the restore, which the next run then does first. Stop it by hand with `podman stop -t 60 <name>`.
+- **gbe belongs to the launcher**: the preamble's gbe steps (settings + `steam_settings` link,
+  `/app/setup_gbe.sh`) are skipped. `--cleanup-legacy` moves what an older install-rs.sh /
+  setup_gbe.sh left on the volume into the state dir first, and puts Valve's `libsteam_api.so` back
+  from setup_gbe.sh's `~/.steam/gbe_orig_libsteam_api.so`. Leftovers it cannot place stop the
+  launch (exit 2, findings in the JSON); `CS2MCP_NATIVE_ACCEPT_CONFLICTS=1` goes on regardless.
+- **No dedicated server beside it**: dedicated servers keep install-rs.sh on the same volume, so in
+  this mode a client and a server never run together (`may_conflict`).
+- **The package can also be baked into an image** instead of mounted: put it at `/cs2mcp/native`
+  (read-only is fine; nothing writes there) and set `CS2MCP_NATIVE=/cs2mcp/native`.
+- The Wine tools tree is unaffected (install-rs.sh, as before).
+
+**Unverified live**: this mode has been checked with a fake game tree (prepare, SIGTERM, restore,
+byte-identical tree, exit code), not yet with the real game on a `cs2-home` volume.

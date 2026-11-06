@@ -22,6 +22,21 @@
 #     README.md, "Launching");
 #   * console.log is mirrored to /work (the host artifacts dir) for the host-side readiness check;
 #   * the game's output stays on stdout, so `podman logs` shows it.
+#
+# Launcher mode (CS2MCP_NATIVE set: docker.rs mounts a cs2mcp package read-only at /cs2mcp/native
+# when client-mcp runs with --native-package): `cs2mcp-native run` prepares the volume's game tree
+# itself (bridge, Metamod loader, gbe in place, each change in a manifest under
+# /home/steam/.cs2mcp-native on the same volume), runs cs2.sh in its own process group, and on
+# exit or on SIGTERM (podman stop -t 60) stops the game, restores and verifies the tree, then exits
+# with the game's code (3: the tree was not restored; the next run restores it first). Then:
+#   * the preamble's gbe steps ([0c] settings + steam_settings link, [0d] setup_gbe.sh) are
+#     skipped (CS2MCP_NATIVE_GBE=1);
+#   * install-rs.sh is not run on the host for this kind, and --cleanup-legacy moves an older
+#     install-rs.sh / setup_gbe.sh layout out of the volume first (into the state dir; Valve's
+#     libsteam_api.so comes back from setup_gbe.sh's own copy in ~/.steam);
+#   * CS2MCP_NATIVE_ACCEPT_CONFLICTS=1 passes --accept-conflicts (leftovers it cannot place are
+#     otherwise a stop, exit 2, with the findings as JSON on stdout).
+# The rest (Xvfb, preamble env, the console.log mirror, teardown) is the same.
 # =============================================================================
 set -u
 
@@ -36,6 +51,12 @@ OUT="${CS2_OUT_DIR:-/work}"
 # shared preamble (functions only; see lib-preamble.sh for the lock and the order)
 . "$(dirname "$0")/lib-preamble.sh"
 
+NATIVE="${CS2MCP_NATIVE:-}"
+if [ -n "$NATIVE" ]; then
+    [ -x "$NATIVE/cs2mcp-native" ] || { echo "[cs2mcp-native] FAIL: $NATIVE/cs2mcp-native is missing (CS2MCP_NATIVE)" >&2; exit 1; }
+    export CS2MCP_NATIVE_GBE=1
+fi
+
 cs2mcp_lock
 cs2mcp_preamble_fix
 cs2mcp_unlock
@@ -46,7 +67,8 @@ cs2mcp_unlock
 # engine loads its own server image and Metamod never loads, so refuse to start instead of
 # running a bridge-less session.
 MMLOAD="csgo/addons/cs2mcp/bin/linuxsteamrt64/libcs2mcp_mmload.so"
-if [ ! -f "$G/$MMLOAD" ]; then
+# launcher mode: cs2mcp-native run installs the loader itself (and prepends it to LD_PRELOAD)
+if [ -z "$NATIVE" ] && [ ! -f "$G/$MMLOAD" ]; then
     echo "[cs2mcp-mmload] FAIL: $G/$MMLOAD is missing; Metamod would not load - run 'bridge/install-rs.sh --platform linux ensure' (or install) and retry" >&2
     exit 1
 fi
@@ -81,13 +103,31 @@ TAILPID=$!
 # No -steam: the gbe emulator handles that. Testscript runs are refused on Linux before this point.
 # LD_PRELOAD is set for THIS command only (the preamble's audio libs + optional s2sdk probe stay
 # behind it), so the loader reaches the game process and not the rest of the session.
+if [ -n "$NATIVE" ]; then
+    # cs2mcp-native adds -console -condebug -insecure (always), the focus flags and the loader;
+    # the harness flags and the caller's args follow `--`. Its JSON result goes to /work.
+    accept=()
+    [ "${CS2MCP_NATIVE_ACCEPT_CONFLICTS:-0}" = 1 ] && accept=(--accept-conflicts)
+    CS2_BRIDGE_LOG="$OUT/mcp_bridge_rs.log" \
+        "$NATIVE/cs2mcp-native" --game-root "$(dirname "$G")" --state-dir /home/steam/.cs2mcp-native \
+        --gbe-save-dir "$GSE_SAVE_DIR" "${accept[@]}" \
+        run --steam gbe --no-capture --cleanup-legacy -- -novid -nosound -conclearlog "$@" \
+        > "$OUT/cs2mcp-native-run.json" &
+    GPID=$!
+else
 LD_PRELOAD="$MMLOAD${LD_PRELOAD:+ $LD_PRELOAD}" \
     "$G/cs2.sh" -novid -nosound -condebug -conclearlog -insecure "$@" &                       # run-cs2.sh:174
 GPID=$!
+fi
 # PID 1 ignores SIGTERM without a handler; forward it so a graceful podman stop reaches the game
+# (launcher mode: cs2mcp-native, which stops the game and restores the volume before it exits)
 trap 'kill -TERM $GPID 2>/dev/null' TERM INT
-wait $GPID
-GAME_RC=$?
+# a trapped signal ends `wait` early: wait again until the child is really gone
+while :; do
+    wait $GPID
+    GAME_RC=$?
+    kill -0 "$GPID" 2>/dev/null || break
+done
 echo "GAME_EXIT=$GAME_RC"                                                                   # run-cs2.sh:210
 
 echo "=== [5] teardown + artifacts === (run-cs2.sh:211-226)"

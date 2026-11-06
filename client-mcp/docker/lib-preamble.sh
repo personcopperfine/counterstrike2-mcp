@@ -8,6 +8,10 @@
 #   G        game dir inside the cs2-home volume (CS2_GAME_DIR)
 #   B        G/bin/linuxsteamrt64
 #   GSE_SAVE_DIR, OUT  (see the scripts)
+#   CS2MCP_NATIVE_GBE  optional: 1 when `cs2mcp-native run` sets gbe up itself (linux-client.sh
+#                      with the launcher package): then the steps that edit gbe's settings, link
+#                      steam_settings and run the image's setup_gbe.sh are skipped here, because the
+#                      launcher writes them with a manifest and reverts them when the game exits
 #
 # Functions, in the order the scripts call them:
 #   cs2mcp_lock             take the home-volume flock (fd 9); the caller releases it
@@ -98,6 +102,9 @@ fi
 mkdir -p "$CS2MCP_SHADER_DIR/vulkan"
 
 echo "=== [0c] gbe portable saves === (run-cs2.sh:31-44)"
+if [ "${CS2MCP_NATIVE_GBE:-0}" = 1 ]; then
+  echo "GBE-BY-LAUNCHER: cs2mcp-native run writes gbe's settings (local_save_path=$GSE_SAVE_DIR) and reverts them"
+else
 UCFG="$HOME/.steam/sdk64/steam_settings/configs.user.ini"
 mkdir -p "$(dirname "$UCFG")"; touch "$UCFG"
 if grep -qE '^[[:space:]]*local_save_path[[:space:]]*=' "$UCFG"; then
@@ -111,6 +118,7 @@ BN_ST="$B/steam_settings"
 if [ -d "$HOME/.steam/sdk64/steam_settings" ] && [ "$(readlink "$BN_ST" 2>/dev/null)" != "$HOME/.steam/sdk64/steam_settings" ]; then
   ln -sfn "$HOME/.steam/sdk64/steam_settings" "$BN_ST"; echo "LINKED $BN_ST -> $HOME/.steam/sdk64/steam_settings"
 fi
+fi
 # run-cs2.sh:45-51: seed the save-dir video config from the game's default when missing
 SVCFG="$GSE_SAVE_DIR/730/local/cfg/cs2_video.txt"
 if [ ! -f "$SVCFG" ]; then
@@ -122,7 +130,11 @@ fi
 
 echo "=== [0d] gbe setup === (client/entrypoint.sh:112)"
 # client/entrypoint.sh:112 always runs the image's gbe setup before launching; run-cs2.sh does not.
-[ -x /app/setup_gbe.sh ] && /app/setup_gbe.sh || echo "SETUP-GBE-SKIPPED (/app/setup_gbe.sh missing)"
+if [ "${CS2MCP_NATIVE_GBE:-0}" = 1 ]; then
+  echo "SETUP-GBE-SKIPPED (cs2mcp-native run installs gbe in place and restores Valve's library afterwards)"
+else
+  [ -x /app/setup_gbe.sh ] && /app/setup_gbe.sh || echo "SETUP-GBE-SKIPPED (/app/setup_gbe.sh missing)"
+fi
 
 echo "=== [0e] video identity + low preset === (client/entrypoint.sh:126-196)"
 # client/entrypoint.sh:131-137: llvmpipe = PCI vendor 0x10005 (65541), device 0; a detected

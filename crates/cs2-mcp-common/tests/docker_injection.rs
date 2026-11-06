@@ -73,6 +73,7 @@ fn wine_args_are_quoted_inside_the_shell_line() {
             display: ":0",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     let line = argv.last().unwrap();

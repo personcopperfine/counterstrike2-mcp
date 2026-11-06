@@ -8,7 +8,7 @@ use cs2_mcp_common::runtime::docker::{
     bridge_request_payload, channel_probe_payload, ensure_argv, exec_argv, exec_in_argv,
     install_script_for, logs_argv, newest_xauth_in, parse_mounts, parse_ps, parse_ps_entries,
     ps_argv, ps_label_argv, rm_argv, run_argv, sh_quote, shared_mount_conflict, stderr_tail,
-    stop_argv, valid_container_name, valid_name, vtmsend_argv, wait_argv, DockerOptions,
+    stop_argv, stop_argv_grace, valid_container_name, valid_name, vtmsend_argv, wait_argv, DockerOptions,
     DockerRuntime, RunPlan, RuntimeError, StopOutcome, DEFAULT_LINUX_GAME_DIR,
 };
 use cs2_mcp_common::runtime::readiness::ReadyStage;
@@ -91,6 +91,7 @@ fn golden_linux_client_argv() {
             display: ":99",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(
@@ -123,6 +124,43 @@ fn golden_linux_client_argv() {
     );
 }
 
+/// The launcher-package client: the same argv plus the read-only package mount and
+/// `CS2MCP_NATIVE`, before `CS2_GAME_DIR`; its stop gives the restore time.
+#[test]
+fn golden_linux_client_native_argv() {
+    let out = PathBuf::from("/proj/artifacts/cs2mcp-linux-client-deadbeef-1700000000");
+    let script = PathBuf::from("/repo/client-mcp/docker/linux-client.sh");
+    let pkg = PathBuf::from("/opt/cs2mcp");
+    let plan = |native: Option<&'static Path>| RunPlan {
+        name: "cs2mcp-linux-client-deadbeef",
+        image: "localhost/cs2-docker",
+        out_dir: &out,
+        linux_script: &script,
+        linux_game_dir: DEFAULT_LINUX_GAME_DIR,
+        app_dir: Path::new("/unused"),
+        cache_dir: Path::new("/unused"),
+        xauthority: None,
+        display: ":99",
+        capture_layer: None,
+        s2sdk_probe: None,
+        native_package: native,
+    };
+    let plain = run_argv(&linux_spec(false, &[]), &plan(None));
+    let native = run_argv(&linux_spec(false, &[]), &plan(Some(Path::new("/opt/cs2mcp"))));
+    let at = plain.iter().position(|a| a.starts_with("CS2_GAME_DIR=")).unwrap() - 1;
+    let mut want = plain.clone();
+    want.splice(
+        at..at,
+        s(&["-v", &format!("{}:/cs2mcp/native:ro", pkg.display()), "-e", "CS2MCP_NATIVE=/cs2mcp/native"]),
+    );
+    assert_eq!(native, want);
+    // a dedicated server never gets the package, whatever the plan says
+    let mut ded = linux_spec(false, &[]);
+    ded.kind = SessionKind::LinuxDedicated;
+    assert!(!run_argv(&ded, &plan(Some(Path::new("/opt/cs2mcp")))).iter().any(|a| a.contains("CS2MCP_NATIVE")));
+    assert_eq!(stop_argv_grace("cs2mcp-x", 60), s(&["stop", "-t", "60", "cs2mcp-x"]));
+}
+
 #[test]
 fn golden_linux_dedicated_argv() {
     use cs2_mcp_common::runtime::docker::server_game_args;
@@ -153,6 +191,7 @@ fn golden_linux_dedicated_argv() {
             display: ":99",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(
@@ -240,6 +279,7 @@ fn golden_linux_client_gpus_and_game_args() {
             display: ":99",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(&argv[..4], &s(&["run", "-d", "--gpus", "all"])[..]);
@@ -269,6 +309,7 @@ fn golden_wine_tools_argv() {
             display: ":0",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(
@@ -320,6 +361,7 @@ fn golden_wine_user_args_are_quoted_inside_the_shell_line() {
             display: ":0",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     // no xauthority: no XAUTHORITY mount or env
@@ -350,6 +392,7 @@ fn golden_wine_client_argv() {
             display: ":0",
             capture_layer: None,
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(
@@ -550,6 +593,7 @@ fn golden_linux_client_argv_with_capture_layer() {
             display: ":99",
             capture_layer: Some(&layer),
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     assert_eq!(
@@ -610,6 +654,7 @@ fn golden_wine_tools_argv_with_capture_layer() {
             display: ":0",
             capture_layer: Some(&layer),
             s2sdk_probe: None,
+            native_package: None,
         },
     );
     // the artifacts dir is mounted at /work (only when capturing), then the layer and its env;
@@ -683,6 +728,7 @@ fn golden_linux_dedicated_argv_with_s2sdk_probe() {
             display: ":99",
             capture_layer: None,
             s2sdk_probe: probe,
+            native_package: None,
         }
     }
     assert_eq!(
@@ -2796,6 +2842,27 @@ async fn a_timed_out_ensure_kills_members_that_ignore_sigterm() {
         fake.calls_to("run").is_empty(),
         "no podman run after a timed-out ensure"
     );
+}
+
+/// With the launcher package configured, a Linux client prepares its own tree in the container:
+/// no install-rs.sh ensure runs (a missing script is no error) and the package is mounted. (The
+/// client/server volume rule for this mode: the `may_conflict` unit test.)
+#[tokio::test]
+async fn a_launcher_package_client_skips_install_rs_and_mounts_the_package() {
+    let fake = FakePodman::new("native-client");
+    let proj = project(&fake);
+    let mut opts = options(&fake, &proj, 3);
+    opts.install_script = Some(proj.join("no-such-install-rs.sh"));
+    let pkg = proj.join("cs2mcp-package");
+    std::fs::create_dir_all(&pkg).unwrap();
+    opts.native_package = Some(pkg.clone());
+    let rt = DockerRuntime::new(opts);
+    let l = rt.launch(&linux_spec(false, &[])).await.unwrap();
+    let runs = fake.calls_to("run");
+    assert_eq!(runs.len(), 1);
+    assert!(runs[0].argv.contains(&format!("{}:/cs2mcp/native:ro", pkg.display())), "{:?}", runs[0]);
+    assert!(runs[0].argv.contains(&"CS2MCP_NATIVE=/cs2mcp/native".to_string()));
+    assert!(l.argv.iter().any(|a| a == "CS2MCP_NATIVE=/cs2mcp/native"));
 }
 
 #[tokio::test]

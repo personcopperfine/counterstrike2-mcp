@@ -527,8 +527,11 @@ pub(crate) fn game_command(s: &Session, dirs: &Dirs, log: Option<std::fs::File>,
             }
         }
     }
-    // the bridge's default Windows log is the container's Z:\app\...
-    cmd.env("CS2_BRIDGE_LOG", dirs.bridge_log());
+    // the bridge's default Windows log is the container's Z:\app\...; a log the caller named
+    // (linux-client.sh: the host-visible /work) wins
+    if std::env::var_os("CS2_BRIDGE_LOG").is_none_or(|v| v.is_empty()) {
+        cmd.env("CS2_BRIDGE_LOG", dirs.bridge_log());
+    }
     crate::selfexe::scrub_appimage_env(&mut cmd);
     // the capture layer, for the game only: an explicit layer named in its environment (the
     // launcher and cs2.exe inherit it; Linux: cs2.sh and the game inside the namespace)

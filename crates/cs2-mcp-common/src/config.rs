@@ -113,6 +113,15 @@ pub struct CommonConfig {
     #[arg(long, env = "CS2_MCP_S2SDK_PROBE_DIR")]
     pub s2sdk_probe_dir: Option<PathBuf>,
 
+    /// A cs2mcp package dir (`crates/cs2-native/scripts/package.sh` output, or an unpacked release
+    /// tarball). When set, linux-client sessions are prepared by the launcher inside the container
+    /// (`cs2mcp-native run`: bridge, Metamod and gbe in place on the cs2-home volume, restored and
+    /// verified before the container exits) instead of `bridge/install-rs.sh`; the dir is mounted
+    /// read-only at /cs2mcp/native. Dedicated servers keep install-rs.sh and never run beside such
+    /// a client. Unset: install-rs.sh for every kind, as before.
+    #[arg(long, env = "CS2_MCP_NATIVE_PACKAGE")]
+    pub native_package: Option<PathBuf>,
+
     /// Fallback addon for the file-route tools (under `<project>/content/csgo_addons/<addon>`):
     /// used only while no `set_addon` choice is pinned and the active Hammer document is not in
     /// an addon. The ModelDoc container is started with `-addon <addon>` (bridge/runtime.sh).

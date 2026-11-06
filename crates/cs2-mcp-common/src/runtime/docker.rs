@@ -78,6 +78,11 @@ pub const DEFAULT_LINUX_GAME_DIR: &str =
 pub const LINUX_HOME_VOLUME: &str = "cs2-home";
 pub const LINUX_HOME_DEST: &str = "/home/steam";
 pub const LINUX_SCRIPT_DEST: &str = "/cs2mcp/linux-client.sh";
+/// Where a LinuxClient sees the launcher package ([`DockerOptions::native_package`]).
+pub const CONTAINER_NATIVE_DIR: &str = "/cs2mcp/native";
+/// `podman stop -t` for a launcher-run LinuxClient: the game's 15 s TERM grace (cs2-native
+/// `run::STOP_GRACE`), the restore and its verify, with room to spare.
+pub const NATIVE_STOP_SECS: u64 = 60;
 pub const LINUX_DEDICATED_SCRIPT_DEST: &str = "/cs2mcp/linux-dedicated.sh";
 /// Shared preamble, sourced by both Linux scripts; mounted next to them (see `sibling_script`).
 pub const LINUX_LIB_DEST: &str = "/cs2mcp/lib-preamble.sh";
@@ -224,6 +229,13 @@ pub struct DockerOptions {
     pub install_script: Option<PathBuf>,
     /// Upper bound for that ensure call (see [`DEFAULT_INSTALL_TIMEOUT`]).
     pub install_timeout: Duration,
+    /// A cs2mcp package dir (`crates/cs2-native/scripts/package.sh` output). When `Some`, a
+    /// LinuxClient session is prepared by the launcher inside the container (`cs2mcp-native run`:
+    /// bridge, Metamod and gbe in place on the volume, reverted before the container exits): the
+    /// dir is mounted read-only at [`CONTAINER_NATIVE_DIR`], `install-rs.sh ensure` is skipped for
+    /// that kind, its stop waits [`NATIVE_STOP_SECS`], and it never shares the volume with a
+    /// running dedicated server (whose tree install-rs.sh keeps). `None`: install-rs.sh as before.
+    pub native_package: Option<PathBuf>,
 }
 
 impl DockerOptions {
@@ -245,6 +257,7 @@ impl DockerOptions {
             s2sdk_probe_dir: None,
             install_script: None,
             install_timeout: DEFAULT_INSTALL_TIMEOUT,
+            native_package: None,
         }
     }
 }
@@ -425,6 +438,8 @@ pub struct DockerRuntime {
     pub s2sdk_probe_dir: Option<PathBuf>,
     /// `bridge/install-rs.sh` (see [`DockerOptions::install_script`])
     pub install_script: Option<PathBuf>,
+    /// the launcher package for LinuxClient sessions (see [`DockerOptions::native_package`])
+    pub native_package: Option<PathBuf>,
     install_timeout: Duration,
     short_timeout: Duration,
     run_timeout: Duration,
@@ -468,6 +483,9 @@ pub struct RunPlan<'a> {
     /// Host directory with `libs2sdk_probe.so`. `Some` mounts it read-only and preloads the probe
     /// (Linux sessions only); `None`: no probe. Consumed by [`linux_argv`] only.
     pub s2sdk_probe: Option<&'a Path>,
+    /// LinuxClient: the cs2mcp package dir ([`DockerOptions::native_package`]), mounted read-only
+    /// at [`CONTAINER_NATIVE_DIR`] with `CS2MCP_NATIVE` naming it. `None`: the install-rs.sh flow.
+    pub native_package: Option<&'a Path>,
 }
 
 /// The capture-layer arguments: layer mount and the explicit-layer environment. Pure.
@@ -509,6 +527,21 @@ pub fn s2sdk_probe_argv(probe_dir: &Path) -> Vec<String> {
 }
 
 /// `podman run` arguments for a session. Pure: no I/O. Containers are NOT started with `--rm`.
+/// The launcher-package arguments of a LinuxClient: the package mount and `CS2MCP_NATIVE`. Pure.
+pub fn native_argv(package: &Path) -> Vec<String> {
+    let mut a = Vec::new();
+    push(
+        &mut a,
+        &[
+            "-v",
+            &format!("{}:{CONTAINER_NATIVE_DIR}:ro", package.display()),
+            "-e",
+            &format!("CS2MCP_NATIVE={CONTAINER_NATIVE_DIR}"),
+        ],
+    );
+    a
+}
+
 pub fn run_argv(spec: &LaunchSpec, plan: &RunPlan) -> Vec<String> {
     let mut a: Vec<String> = vec!["run".into(), "-d".into()];
     match &spec.kind {
@@ -516,12 +549,12 @@ pub fn run_argv(spec: &LaunchSpec, plan: &RunPlan) -> Vec<String> {
             if spec.gpus {
                 push(&mut a, &["--gpus", "all"]);
             }
-            linux_argv(&mut a, plan, LINUX_SCRIPT_DEST, true);
+            linux_argv(&mut a, plan, LINUX_SCRIPT_DEST, true, plan.native_package);
             a.extend(spec.args.iter().cloned());
         }
         SessionKind::LinuxDedicated => {
             // no GPU, no shader cache: the server needs neither
-            linux_argv(&mut a, plan, LINUX_DEDICATED_SCRIPT_DEST, false);
+            linux_argv(&mut a, plan, LINUX_DEDICATED_SCRIPT_DEST, false, None);
             a.extend(spec.args.iter().cloned());
         }
         SessionKind::WineTools { addon } => {
@@ -585,7 +618,13 @@ fn wine_container_argv(a: &mut Vec<String>, plan: &RunPlan) {
 
 /// The shared Linux container shape (`run -d --name --network=host -v ... --entrypoint bash IMAGE
 /// <script>`). `shadercache` is mounted for the client only: a server never draws.
-fn linux_argv(a: &mut Vec<String>, plan: &RunPlan, script_dest: &str, shadercache: bool) {
+fn linux_argv(
+    a: &mut Vec<String>,
+    plan: &RunPlan,
+    script_dest: &str,
+    shadercache: bool,
+    native: Option<&Path>,
+) {
     push(a, &["--name", plan.name, "--network=host"]);
     let mut mounts = vec![
         "-v".to_string(),
@@ -612,6 +651,10 @@ fn linux_argv(a: &mut Vec<String>, plan: &RunPlan, script_dest: &str, shadercach
     // the s2sdk probe mount + preload/report env (Linux sessions only)
     if let Some(probe) = plan.s2sdk_probe {
         mounts.extend(s2sdk_probe_argv(probe));
+    }
+    // the launcher package (LinuxClient only): linux-client.sh runs `cs2mcp-native run` from it
+    if let Some(pkg) = native {
+        mounts.extend(native_argv(pkg));
     }
     mounts.extend([
         "-e".to_string(),
@@ -942,7 +985,14 @@ pub fn rm_argv(name: &str) -> Vec<String> {
 /// `cs2.exe`: a zero timeout SIGKILLs PID 1 and the container's PID namespace takes `cs2.exe`
 /// with it. There is no graceful teardown path to wait for.
 pub fn stop_argv(name: &str) -> Vec<String> {
-    vec!["stop".into(), "-t".into(), "0".into(), name.into()]
+    stop_argv_grace(name, 0)
+}
+
+/// `podman stop -t <secs> <name>`. A LinuxClient run by the launcher package needs time after
+/// SIGTERM: `cs2mcp-native run` stops the game (TERM, KILL after 15 s), then restores and verifies
+/// the volume before it exits ([`NATIVE_STOP_SECS`]).
+pub fn stop_argv_grace(name: &str, secs: u64) -> Vec<String> {
+    vec!["stop".into(), "-t".into(), secs.to_string(), name.into()]
 }
 
 /// `podman wait --condition=exited <name>`: read-only, prints the exit code. Safe to time out.
@@ -1420,8 +1470,15 @@ pub fn shared_mount_conflict(
 /// and everything unknown are checked against every kind. The Linux kinds share the `cs2-home`
 /// volume: a client and a dedicated server may run together (the shared preamble is serialised by
 /// a flock, see `client-mcp/docker/lib-preamble.sh`), so only the same kind conflicts.
-pub fn may_conflict(spec: &LaunchSpec, other: &str) -> bool {
+///
+/// `native`: the client is run by the launcher package ([`DockerOptions::native_package`]). It
+/// writes the volume's game tree for the whole session (and may move an install-rs.sh layout out),
+/// so then a client and a dedicated server never run together.
+pub fn may_conflict(spec: &LaunchSpec, other: &str, native: bool) -> bool {
     match spec.kind {
+        SessionKind::LinuxClient | SessionKind::LinuxDedicated if native => {
+            matches!(other, "linux-client" | "linux-dedicated" | "unknown")
+        }
         SessionKind::LinuxClient | SessionKind::LinuxDedicated => {
             other == kind_slug(&spec.kind) || other == "unknown"
         }
@@ -1600,6 +1657,7 @@ impl DockerRuntime {
             vk_layer_dir: opts.vk_layer_dir,
             s2sdk_probe_dir: opts.s2sdk_probe_dir,
             install_script: opts.install_script,
+            native_package: opts.native_package,
             install_timeout: opts.install_timeout,
             short_timeout: opts.short_timeout,
             run_timeout: opts.run_timeout,
@@ -2307,7 +2365,7 @@ impl DockerRuntime {
         let app = self.wine_app_dir();
         let mut mounts = self.inspect_mounts(running).await?;
         for name in running {
-            if !may_conflict(spec, kind_of_name(name)) {
+            if !may_conflict(spec, kind_of_name(name), self.native_package.is_some()) {
                 continue;
             }
             // unreadable mounts: the container is gone or broken and holds nothing we can see
@@ -2410,7 +2468,10 @@ impl DockerRuntime {
         self.check_kind_busy(spec, &running).await?;
         // Metamod/the bridge live in the shared game tree: make it current before `podman run`.
         // Only a real launch reaches this point (a reused session returned above).
-        self.ensure_install(&spec.kind).await?;
+        // A LinuxClient run by the launcher package prepares its own tree inside the container.
+        if !(self.native_package.is_some() && matches!(spec.kind, SessionKind::LinuxClient)) {
+            self.ensure_install(&spec.kind).await?;
+        }
 
         let name = match &spec.container_name {
             Some(n) => n.clone(),
@@ -2480,6 +2541,7 @@ impl DockerRuntime {
                     capture_layer: layer,
                     // Linux-only: wine_argv never reads it (see `s2sdk_probe_argv`)
                     s2sdk_probe: None,
+                    native_package: None,
                 };
                 (paths, run_argv(spec, &plan))
             }
@@ -2508,6 +2570,7 @@ impl DockerRuntime {
                     display: &display,
                     capture_layer: layer,
                     s2sdk_probe: self.s2sdk_probe_dir.as_deref(),
+                    native_package: self.native_package.as_deref(),
                 };
                 (paths, run_argv(spec, &plan))
             }
@@ -2715,7 +2778,12 @@ impl DockerRuntime {
             .lock()
             .expect("stop lock")
             .insert(name.to_string(), Instant::now());
-        let mut child = self.spawn_podman(&stop_argv(name), None).await?;
+        let grace = if self.native_package.is_some() && kind_of_name(name) == "linux-client" {
+            NATIVE_STOP_SECS
+        } else {
+            0
+        };
+        let mut child = self.spawn_podman(&stop_argv_grace(name, grace), None).await?;
         let name = name.to_string();
         // only the exit status is logged: the state wait decides
         tokio::spawn(async move {
@@ -3491,12 +3559,12 @@ mod mount_rules {
         let client = linux_spec(SessionKind::LinuxClient);
         let server = linux_spec(SessionKind::LinuxDedicated);
         // a running client does not block a server, and the reverse
-        assert!(!may_conflict(&server, "linux-client"));
-        assert!(!may_conflict(&client, "linux-dedicated"));
+        assert!(!may_conflict(&server, "linux-client", false));
+        assert!(!may_conflict(&client, "linux-dedicated", false));
         // the same kind does, and so does a name this server cannot classify
-        assert!(may_conflict(&server, "linux-dedicated"));
-        assert!(may_conflict(&client, "linux-client"));
-        assert!(may_conflict(&server, "unknown"));
+        assert!(may_conflict(&server, "linux-dedicated", false));
+        assert!(may_conflict(&client, "linux-client", false));
+        assert!(may_conflict(&server, "unknown", false));
         assert_eq!(
             shared_mount_conflict(&server, app, &home),
             Some("cs2-home volume")
@@ -3507,8 +3575,14 @@ mod mount_rules {
         );
         // a wine-tools session holds /app, not the home volume
         let wine = linux_spec(SessionKind::WineTools { addon: None });
-        assert!(may_conflict(&wine, "linux-client"));
+        assert!(may_conflict(&wine, "linux-client", false));
         assert_eq!(shared_mount_conflict(&wine, app, &home), None);
+        // a client run by the launcher package writes the volume's tree for its whole session:
+        // then client and server never share it
+        assert!(may_conflict(&server, "linux-client", true));
+        assert!(may_conflict(&client, "linux-dedicated", true));
+        assert!(may_conflict(&client, "linux-client", true));
+        assert!(may_conflict(&wine, "linux-client", true));
     }
 
     #[test]
