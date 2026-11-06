@@ -62,9 +62,10 @@ defaults below read:
 
 Inputs: `BRIDGE_DIR`, `METAMOD_DIR`, `GBE_DIR` (defaults `<repo>/target/{bridge-rs,metamod,gbe}`,
 Metamod falling back to the main checkout's). Nothing is fetched; a missing input stops it.
-Metamod for Linux is `bridge/metamod/build-metamod.sh linux` (built from source in a container);
-for Windows it is the official AlliedModders dev build, `bridge/metamod/fetch-metamod-win64.sh`
-(AMBuild cannot cross-build win64 here), recorded with its version, URL and SHA-256.
+Metamod on both platforms is AlliedModders' newest official dev build,
+`bridge/metamod/fetch-metamod.sh linux|win64`, recorded with its build name, URL and SHA-256
+(`bridge/metamod/build-metamod.sh linux` still builds Linux from source for development; a
+package made from that says so in its BUILDINFO).
 `--archive` also writes `target/dist/cs2mcp-<VERSION>-<os>-x86_64.{zip,tar.gz}` (`VERSION`,
 default `git describe`). A package whose `payload/gbe` lacks the host's files still runs
 `--steam gbe` on Linux after `cs2mcp-native fetch-gbe` (below).

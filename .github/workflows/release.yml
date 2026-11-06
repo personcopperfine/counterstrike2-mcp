@@ -8,7 +8,8 @@
 # There are no game binaries on a runner, so the bridge is built with `build-rs.sh
 # --no-pins-check`; that is written into every BUILDINFO.txt and the release notes. The pins are
 # held to the game by the maintainer's local checks before tagging (RELEASING.md). The export
-# gates still run here. The Windows Rust binaries are cross-built on Linux (xwin + rust-lld);
+# gates still run here. Metamod:Source (both platforms) is AlliedModders' newest official dev
+# build, recorded in BUILDINFO and the notes (bridge/metamod/fetch-metamod.sh). The Windows Rust binaries are cross-built on Linux (xwin + rust-lld);
 # windows-latest only runs WiX for the MSI. Nothing is code-signed.
 name: release
 
@@ -17,6 +18,10 @@ on:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
+      metamod_linux_sha256:
+        description: "Refuse the downloaded Metamod linux dev build unless it has this SHA-256 (empty: the MM_LINUX_SHA256 variable, else record whatever 'latest' is)"
+        required: false
+        default: ""
       metamod_win64_sha256:
         description: "Refuse the downloaded Metamod win64 dev build unless it has this SHA-256 (empty: the MM_WIN64_SHA256 variable, else record whatever 'latest' is)"
         required: false
@@ -63,7 +68,7 @@ jobs:
           echo "version=$v" >> "$GITHUB_OUTPUT"
           echo "cs2-mcp $v"
 
-      - name: Free disk space (two Rust targets, the xwin sysroot, the Metamod build image)
+      - name: Free disk space (two Rust targets, the xwin sysroot)
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
           df -h .
@@ -72,8 +77,8 @@ jobs:
         # llvm: llvm-readobj/llvm-nm for the export gates; p7zip-full: gbe_fork's Windows release
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends llvm p7zip-full podman
-          llvm-readobj --version | head -n2; podman --version
+          sudo apt-get install -y --no-install-recommends llvm p7zip-full
+          llvm-readobj --version | head -n2
 
       - name: Rust ${{ env.RUST_VERSION }}
         run: |
@@ -108,28 +113,14 @@ jobs:
       - name: Bridge + Metamod loader (both targets; export gates; pins gate skipped)
         run: bridge/build-rs.sh --no-pins-check
 
-      - name: Metamod:Source linux (built from source in a container)
+      - name: Metamod:Source linux + win64 (the official dev builds, recorded)
         env:
-          MM_REF: ${{ github.workspace }}/target/ext/metamod-source
-        run: |
-          mkdir -p .podman/xdg && chmod 700 .podman/xdg
-          # the reference clone build-metamod.sh reads (it never fetches itself); its commit is
-          # the script's MM_COMMIT, which build-metamod.sh verifies
-          mm_commit="$(sed -n 's/^MM_COMMIT=.*:-\([0-9a-f]\{40\}\)}.*/\1/p' bridge/metamod/build-metamod.sh)"
-          [ -n "$mm_commit" ] || { echo "::error::no MM_COMMIT in build-metamod.sh"; exit 1; }
-          git clone --quiet https://github.com/alliedmodders/metamod-source "$MM_REF"
-          git -C "$MM_REF" checkout --quiet "$mm_commit"
-          git -C "$MM_REF" submodule update --init --recursive --quiet
-          bridge/metamod/build-metamod.sh linux
-          cat target/metamod/BUILDINFO.txt
-
-      - name: Metamod:Source win64 (the official dev build, recorded)
-        env:
-          # the dispatch input, else the repository variable MM_WIN64_SHA256 (RELEASING.md)
+          # the dispatch inputs, else the repository variables (RELEASING.md); empty: the newest
+          MM_LINUX_SHA256: ${{ inputs.metamod_linux_sha256 || vars.MM_LINUX_SHA256 }}
           MM_WIN64_SHA256: ${{ inputs.metamod_win64_sha256 || vars.MM_WIN64_SHA256 }}
         run: |
-          bridge/metamod/fetch-metamod-win64.sh
-          cat target/metamod/win64/BUILDINFO-download.txt
+          bridge/metamod/fetch-metamod.sh linux
+          bridge/metamod/fetch-metamod.sh win64
 
       - name: gbe_fork (release mode, pinned + hashed)
         env:

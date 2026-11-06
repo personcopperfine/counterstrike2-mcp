@@ -21,8 +21,9 @@
 # `git describe --tags --always --dirty`).
 #
 # Inputs (each must exist; nothing is fetched): BRIDGE_DIR (default <repo>/target/bridge-rs),
-# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: bridge/lib-root.sh; win64 comes
-# from bridge/metamod/fetch-metamod-win64.sh, linux from build-metamod.sh linux),
+# METAMOD_DIR (<repo>/target/metamod, else the main checkout's: bridge/lib-root.sh; both
+# platforms come from bridge/metamod/fetch-metamod.sh linux|win64, the official dev builds; a
+# Linux tree from build-metamod.sh linux (development) is recorded as such),
 # GBE_DIR (<repo>/target/gbe).
 # The binaries are built with cargo --release (-j${JOBS:-2}, the OOM guard) unless --no-build.
 # The dev tool cs2mcp-native-dev is not shipped. Valve binaries never go in: the payload is ours
@@ -78,11 +79,14 @@ for b in "${bins[@]}"; do cp "$rel/$b$ext" "$out/"; done
 cp -r "$repo/sigs/signatures" "$out/sigs"
 cp -r "$bridge/$bplat" "$out/payload/bridge-rs/$bplat"
 cp -r "$metamod/$mplat/addons" "$out/payload/metamod/$mplat/addons"
-# the Metamod provenance: build-metamod.sh's BUILDINFO.txt (linux), fetch-metamod-win64.sh's (win64)
-case "$mplat" in
-    linux) cp -f "$metamod/BUILDINFO.txt" "$out/payload/metamod/BUILDINFO-linux.txt" 2>/dev/null || true ;;
-    win64) cp -f "$metamod/win64/BUILDINFO-download.txt" "$out/payload/metamod/BUILDINFO-win64.txt" 2>/dev/null || true ;;
-esac
+# the Metamod provenance: fetch-metamod.sh's BUILDINFO-download.txt, else (a development Linux
+# build) build-metamod.sh's BUILDINFO.txt
+mm_info="$metamod/$mplat/BUILDINFO-download.txt"
+if [ -f "$mm_info" ]; then
+    cp -f "$mm_info" "$out/payload/metamod/BUILDINFO-$mplat.txt"
+elif [ "$mplat" = linux ] && [ -f "$metamod/BUILDINFO.txt" ]; then
+    cp -f "$metamod/BUILDINFO.txt" "$out/payload/metamod/BUILDINFO-$mplat.txt"
+fi
 cp -r "$gbe/$gplat" "$out/payload/gbe/$gplat"
 cp -f "$gbe/GBE_REF.txt" "$out/payload/gbe/" 2>/dev/null || true
 cp "$rel/$vlib" "$out/payload/vklayer/$vplat/"
@@ -99,18 +103,20 @@ kv() { sed -n "s/^$1=//p" "$2" 2>/dev/null | head -n1; }
     echo "game_build_targeted=$(tr -d '[:space:]' < "$repo/sigs/CURRENT_BUILD")"
     echo "pins_gate=$(cat "$bridge/PINS_GATE.txt" 2>/dev/null || echo "unknown (no $bridge/PINS_GATE.txt: the bridge was not built by this build-rs.sh)")"
     echo "gbe=$(tr '\n' ' ' < "$gbe/GBE_REF.txt" 2>/dev/null | sed 's/ *$//' || true)"
-    if [ "$mplat" = win64 ]; then
-        f="$metamod/win64/BUILDINFO-download.txt"
-        echo "metamod_source=official AlliedModders dev build (downloaded; not built here)"
-        echo "metamod_version=$(kv version "$f")"
-        echo "metamod_url=$(kv url "$f")"
-        echo "metamod_archive_sha256=$(kv archive_sha256 "$f")"
-    else
+    if [ -f "$mm_info" ]; then
+        echo "metamod_source=official AlliedModders dev build (bridge/metamod/fetch-metamod.sh $mplat; not built here)"
+        echo "metamod_build=$(kv build "$mm_info")"
+        echo "metamod_version=$(kv version "$mm_info")"
+        echo "metamod_url=$(kv url "$mm_info")"
+        echo "metamod_archive_sha256=$(kv archive_sha256 "$mm_info")"
+    elif [ "$mplat" = linux ] && [ -f "$metamod/BUILDINFO.txt" ]; then
         f="$metamod/BUILDINFO.txt"
-        echo "metamod_source=built from source (bridge/metamod/build-metamod.sh linux)"
+        echo "metamod_source=built from source (bridge/metamod/build-metamod.sh linux; development, not a release input)"
         echo "metamod_commit=$(kv metamod_commit "$f")"
         echo "metamod_version=$(kv metamod_describe "$f")"
         echo "hl2sdk_commit=$(kv s2sdk_commit "$f") (alliedmodders/s2sdk, branch $(kv s2sdk_branch "$f"))"
+    else
+        echo "metamod_source=unknown (no BUILDINFO-download.txt in $metamod/$mplat)"
     fi
     for m in $(cd "$out/payload/metamod/$mplat" && find addons -type f | sort); do
         echo "metamod_file_sha256=$(sha256sum "$out/payload/metamod/$mplat/$m" | cut -d' ' -f1)  $m"

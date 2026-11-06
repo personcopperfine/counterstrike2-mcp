@@ -16,8 +16,8 @@ Release. Nothing is published until the maintainer publishes the draft.
 
 The release notes are written from the two BUILDINFO files
 (`crates/cs2-launcher/packaging/release-notes.py`): the target game build, the pins gate, the git
-sha and toolchain, gbe_fork, and Metamod (win64: the official dev build's version, URL and
-SHA-256; linux: the metamod-source commit and the hl2sdk commit it was built against). They say
+sha and toolchain, gbe_fork, and Metamod (per platform: the official dev build's name, version,
+URL and SHA-256). They say
 that nothing is code-signed and that the game always runs with `-insecure`.
 
 ## 1. Before tagging: the checks a runner cannot do
@@ -53,8 +53,8 @@ must pass. If CS2 updated since `sigs/CURRENT_BUILD`, do the game update first
 
 GitHub → Actions → **release** → *Run workflow* on the branch. It builds everything under the
 version `v0.0.0-dryrun.<run number>` and uploads it as workflow artifacts
-(`release-<version>` holds the assets and `notes.md`); it creates no release. Its input
-`metamod_win64_sha256` pins the Metamod win64 download for that run.
+(`release-<version>` holds the assets and `notes.md`); it creates no release. Its inputs
+`metamod_linux_sha256` / `metamod_win64_sha256` pin the Metamod downloads for that run.
 
 ## 3. Tag
 
@@ -69,12 +69,13 @@ git push origin v0.1.0
 (an MSI version is numbers only), so `v0.1.0-rc.1` and `v0.1.0` install as the same MSI version;
 the MSI allows same-version upgrades, so installing the final over the rc works.
 
-Metamod for Windows is the newest AlliedModders dev build at build time, on purpose
-(`bridge/metamod/fetch-metamod-win64.sh`); the notes record which one. To hold a release to the
-build you tested, set the repository variable `MM_WIN64_SHA256` (Settings → Secrets and
-variables → Actions → Variables) to that archive's SHA-256 (the dry run's BUILDINFO-windows.txt
-has it): a different build then fails the release instead of shipping. Clear the variable again
-afterwards, or it fails the next release once AlliedModders publishes a newer build.
+Metamod (Linux and Windows) is the newest AlliedModders dev build at build time, on purpose
+(`bridge/metamod/fetch-metamod.sh linux|win64`); the notes record which one. To hold a release
+to the builds you tested, set the repository variables `MM_LINUX_SHA256` / `MM_WIN64_SHA256`
+(Settings → Secrets and variables → Actions → Variables) to those archives' SHA-256 (the dry
+run's BUILDINFO-linux.txt / BUILDINFO-windows.txt have them): a different build then fails the
+release instead of shipping. Clear the variables again afterwards, or they fail the next release
+once AlliedModders publishes a newer build.
 
 ## 4. Review the draft, then publish
 
@@ -82,7 +83,7 @@ The workflow ends with a draft at GitHub → Releases. Before *Publish release*:
 
 * `sha256sum -c SHA256SUMS` over the downloaded files;
 * the notes: the game build, the `pins gate SKIPPED` line (expected: you ran the checks in
-  step 1), the Metamod win64 version (is it the one you tested?);
+  step 1), the Metamod versions (are they the ones you tested?);
 * Windows: install the MSI as a normal user (no UAC prompt), start cs2-mcp from the Start menu,
   Prepare + Launch, Stop, check the Status says the install is not prepared; uninstall it from
   *Settings → Apps*. SmartScreen warns about an unsigned installer: that is expected;

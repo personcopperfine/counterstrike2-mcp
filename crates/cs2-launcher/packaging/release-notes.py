@@ -21,6 +21,17 @@ def kv(path):
     return out, lines
 
 
+def metamod(title, info):
+    """One line per platform: the official dev build fetch-metamod.sh took (or, for a development
+    Linux tree, the source build)."""
+    if info.get("metamod_commit"):
+        return (f"- Metamod:Source for {title}: built from source at `{info['metamod_commit']}` "
+                f"({info.get('metamod_version', '?')}), against hl2sdk `{info.get('hl2sdk_commit', '?')}`")
+    return (f"- Metamod:Source for {title}: the official AlliedModders dev build **{info.get('metamod_version', '?')}** "
+            f"(`{info.get('metamod_build', '?')}`), downloaded from {info.get('metamod_url', '?')} "
+            f"(sha256 `{info.get('metamod_archive_sha256', '?')}`)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", required=True)
@@ -70,8 +81,8 @@ game. Check the download against `SHA256SUMS` first.
 - **{pins}**{': the runner had no game binaries; RELEASING.md has the maintainer run the full checks (sdkcheck, sigcheck resolve --strict) against them before tagging' if 'SKIPPED' in pins else ''}
 - git: `{win.get('git_sha') or lin.get('git_sha', '?')}`; {win.get('rustc') or lin.get('rustc', '?')}
 - gbe_fork (the Steam emulator, `--steam gbe`): {win.get('gbe') or lin.get('gbe') or '?'}
-- Metamod:Source for Windows: the official AlliedModders dev build **{win.get('metamod_version', '?')}**, downloaded from {win.get('metamod_url', '?')} (sha256 `{win.get('metamod_archive_sha256', '?')}`)
-- Metamod:Source for Linux: built from source at `{lin.get('metamod_commit', '?')}` ({lin.get('metamod_version', '?')}), against hl2sdk (alliedmodders/s2sdk) `{lin.get('hl2sdk_commit', '?')}`
+{metamod('Windows', win)}
+{metamod('Linux', lin)}
 """)
     for title, lines in [("Windows", win_lines), ("Linux", lin_lines)]:
         if lines:

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
 # build-metamod.sh — build Metamod:Source 2.0-dev (cs2 SDK only, x86_64) in a container,
-# from the same metamod-source commit our s2sdk headers pin against.
+# from the same metamod-source commit our s2sdk headers pin against. Development only: releases
+# and the containers take the official dev builds (fetch-metamod.sh linux|win64, README.md).
 #
 #   bridge/metamod/build-metamod.sh linux          -> target/metamod/linux/addons
 #   bridge/metamod/build-metamod.sh win64          -> STOP: AMBuild cannot cross-compile with

@@ -680,7 +680,7 @@ preflight_wine() {
     local f
     for f in "$MM_BUILD/metamod/bin/win64/server.dll" "$MM_BUILD/metamod/bin/win64/metamod.2.cs2.dll" \
              "$MM_BUILD/metamod/metaplugins.ini"; do
-        [ -f "$f" ] || die "missing metamod build file: $f (build metamod per bridge/metamod/README.md, or point CS2_MM at the build)"
+        [ -f "$f" ] || die "missing metamod build file: $f (bridge/metamod/fetch-metamod.sh win64 fetches it, or point CS2_MM at a build)"
     done
 }
 
@@ -1657,7 +1657,7 @@ linux_preflight() {
     local mf
     for mf in "$MM_BUILD/metamod/bin/linux64/server.so" "$MM_BUILD/metamod/bin/linuxsteamrt64/libserver.so" \
               "$MM_BUILD/metamod/bin/linuxsteamrt64/metamod.2.cs2.so" "$MM_BUILD/metamod/metaplugins.ini"; do
-        [ -f "$mf" ] || die "missing metamod build file: $mf (build metamod per bridge/metamod/README.md, or point CS2_MM_LINUX at the build)"
+        [ -f "$mf" ] || die "missing metamod build file: $mf (bridge/metamod/fetch-metamod.sh linux fetches it, or point CS2_MM_LINUX at a build)"
     done
     # install only ADDS files, but it must never invent a game tree: csgo/ has to be there
     local out rc=0

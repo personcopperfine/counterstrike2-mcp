@@ -161,7 +161,7 @@ pub fn build(input: &PlanInput<'_>, art: &Artifacts) -> anyhow::Result<Plan> {
             let mm = art.metamod.join("linux/addons/metamod");
             let mut files = Vec::new();
             walk_files(&mm, &mm, &mut files)
-                .with_context(|| format!("Metamod build {} (bridge/metamod/README.md builds it)", mm.display()))?;
+                .with_context(|| format!("Metamod build {} (bridge/metamod/fetch-metamod.sh linux fetches it)", mm.display()))?;
             files.sort();
             for f in files {
                 ops.push(copy(&format!("game/csgo/addons/metamod/{f}"), mm.join(&f)));
@@ -239,7 +239,7 @@ fn hint_for(rel: &str) -> &'static str {
     if rel.contains("steam_api") || rel.contains("steamclient") {
         "run `cs2mcp-native fetch-gbe` (Linux) or crates/cs2-native/scripts/stage-gbe.sh, or pass --gbe-dir"
     } else if rel.contains("addons/metamod") {
-        "see bridge/metamod/README.md, or pass --metamod-dir"
+        "bridge/metamod/fetch-metamod.sh linux|win64 fetches it, or pass --metamod-dir"
     } else {
         "build it with bridge/build-rs.sh, or pass --bridge-dir"
     }

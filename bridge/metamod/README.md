@@ -1,5 +1,24 @@
 # bridge/metamod — Metamod:Source 2.0-dev binaries for the spikes
 
+## Releases and the containers: the official dev builds (`fetch-metamod.sh`)
+
+`fetch-metamod.sh linux|win64` takes AlliedModders' newest official Metamod:Source 2.0 dev build
+from the mmsdrop listing (`mmsource-latest-linux` / `mmsource-latest-windows`), checks the
+archive's SHA-256 against `MM_SHA256` (or `MM_LINUX_SHA256` / `MM_WIN64_SHA256`) when one is set,
+extracts only the CS2 files plan.rs and install-rs.sh install, and writes
+`target/metamod/<plat>/addons/metamod/` plus `target/metamod/<plat>/BUILDINFO-download.txt`
+(build name, version, URL, archive and file SHA-256s). It is unpinned on purpose: each release
+takes the newest build and records which one (`package.sh` copies the record into
+`BUILDINFO.txt`; the release notes quote it). The release workflow, `package.sh` and the docker
+path (`install-rs.sh` reads `target/metamod/linux/addons`) all use it. `MM_ARCHIVE=<file>` uses
+a local archive instead of downloading.
+
+`build-metamod.sh` below builds Linux from source at a pinned metamod-source commit. **Releases
+do not use it**; it stays for development (a Metamod change of ours, or bisecting against the
+headers' commit).
+
+## Building from source (development only)
+
 The Rust bridge (WP0.M) is loaded as a **Metamod:Source 2.0-dev** plugin, so WP0.1 (Wine
 `cs2.exe -tools`) and WP0.2 (Linux client) need Metamod binaries built from the same
 metamod-source commit our s2sdk headers pin against: `170058a` ("Bump khook with the latest
