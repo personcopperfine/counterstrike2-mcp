@@ -436,7 +436,7 @@
       "itanium-x86_64",
       "msvc-x86_64"
     ],
-    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+    "commit": "fe0a242185ceea6ab80360807ed142d437207794"
   },
   "vtables": [
     {
@@ -827,7 +827,7 @@
           "msvc_slot": 27,
           "name": "GetMultisampleType",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> u8"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderService) -> i8"
         },
         {
           "cxx_signature": "void (const RenderViewport_t &, CSplitScreenSlot, RenderViewport_t *)",

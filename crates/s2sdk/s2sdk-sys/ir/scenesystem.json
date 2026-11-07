@@ -1140,7 +1140,7 @@
       "itanium-x86_64",
       "msvc-x86_64"
     ],
-    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+    "commit": "fe0a242185ceea6ab80360807ed142d437207794"
   },
   "vtables": [
     {
@@ -1887,7 +1887,7 @@
           "msvc_slot": 76,
           "name": "ComputePipelineRenderTargetInfo",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nWidth: i32, nHeight: i32, nMultisampleType: u8, bUnk: bool, pInfo: *mut ::core::ffi::c_void)"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneSystem, nWidth: i32, nHeight: i32, nMultisampleType: i8, bUnk: bool, pInfo: *mut ::core::ffi::c_void)"
         },
         {
           "cxx_signature": "void (SwapChainHandle_t)",
@@ -4037,7 +4037,7 @@
           "msvc_slot": 88,
           "name": "CreateScratchTargets",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nCount: i32, ppNames: *mut *const ::core::ffi::c_char, pFormats: *const i32, pBindFlags: *const u32, ppOutTargets: *mut *mut *mut ::core::ffi::c_void, nWidth: u32, nHeight: u32, nMultisampleType: u8, nFlags: u32)"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneView, nCount: i32, ppNames: *mut *const ::core::ffi::c_char, pFormats: *const i32, pBindFlags: *const u32, ppOutTargets: *mut *mut *mut ::core::ffi::c_void, nWidth: u32, nHeight: u32, nMultisampleType: i8, nFlags: u32)"
         },
         {
           "cxx_signature": "void (void *)",
@@ -4747,7 +4747,7 @@
           "msvc_slot": 38,
           "name": "CreateScalableAORenderer",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk: *mut ::core::ffi::c_void, nMultisampleType: u8, flRadius: f32, flBias: f32, flStrength: f32, bBlur: bool, nUnk: i32) -> *mut ::core::ffi::c_void"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut ISceneUtils, pUnk: *mut ::core::ffi::c_void, nMultisampleType: i8, flRadius: f32, flBias: f32, flStrength: f32, bBlur: bool, nUnk: i32) -> *mut ::core::ffi::c_void"
         },
         {
           "cxx_signature": "IProceduralLayerRenderer *(const char *)",

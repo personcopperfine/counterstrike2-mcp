@@ -542,7 +542,7 @@
       "itanium-x86_64",
       "msvc-x86_64"
     ],
-    "commit": "d88f0fbdeb9ced4a257949b9a2ea869933d69191"
+    "commit": "fe0a242185ceea6ab80360807ed142d437207794"
   },
   "vtables": [
     {
@@ -1553,7 +1553,7 @@
           "msvc_slot": 96,
           "name": "GetTextureMultisampleType",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> u8"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, hTexture: HRenderTexture) -> i8"
         },
         {
           "cxx_signature": "ImageFormat (SwapChainHandle_t)",
@@ -1583,7 +1583,7 @@
           "msvc_slot": 99,
           "name": "MultisampleTypeToString",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: u8) -> *const ::core::ffi::c_char"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nType: i8) -> *const ::core::ffi::c_char"
         },
         {
           "cxx_signature": "bool (HRenderTexture)",
@@ -1725,7 +1725,7 @@
           "msvc_slot": 112,
           "name": "GetRenderTargetDescDimensions",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void, pWidthOut: *mut i32, pHeightOut: *mut i32, pMultisampleTypeOut: *mut u8)"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, desc: *mut ::core::ffi::c_void, pWidthOut: *mut i32, pHeightOut: *mut i32, pMultisampleTypeOut: *mut i8)"
         },
         {
           "cxx_signature": "bool (CRenderPipelineFrameStats &)",
@@ -3169,7 +3169,7 @@
           "msvc_slot": 254,
           "name": "IsMultisampleTypeSupported",
           "overrides": null,
-          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFormat: ImageFormat, nType: u8) -> bool"
+          "rust_fn": "unsafe extern \"C\" fn(this: *mut IRenderDevice, nFormat: ImageFormat, nType: i8) -> bool"
         }
       ],
       "msvc": {
