@@ -1,145 +1,192 @@
 # cs2-mcp
 
-Two Rust **stdio MCP servers** for Counter-Strike 2 / Source 2, built on the in-process bridge DLL
-(`crates/cs2-bridge`, pinned by the signature database in `sigs/`), Rust bindings of the Source 2 SDK
-(`crates/s2sdk/`), and two container images: the game client image
-`ghcr.io/personcopperfine/cs2-docker` (built by CI in
-[personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker)) and the workshop
-tools image published from the `workshop/` submodule:
+MCP servers that let an AI assistant (Claude, Codex, Cursor, ...) drive **Counter-Strike 2** and
+its **Workshop Tools** on your own machine: build and edit Hammer maps, import and compile models
+and particles, then load the map, walk around in it, take screenshots and run playtests.
 
-| Crate | Target | Guide |
+There are two servers:
+
+| Server | What it drives | Platforms |
 |---|---|---|
-| [`hammer-mcp/`](hammer-mcp/) | Windows workshop tools under Proton: Hammer, ModelDoc, particle editor (pet), asset browser; SFM low priority (workshop publishing deferred) | [hammer-mcp/AGENT.md](hammer-mcp/AGENT.md) |
-| [`client-mcp/`](client-mcp/) | the game client: in-game unit tests, multiplayer, CS script / VScript, demo -> video, AI playtest | [client-mcp/AGENT.md](client-mcp/AGENT.md) |
-| [`crates/cs2-mcp-common/`](crates/cs2-mcp-common/) | shared library: bridge client, tool registry, rmcp adapter, runtime abstraction, sig-DB reader, capture, mock bridge (feature `mock`) | module docs |
-| [`crates/cs2-bridge/`](crates/cs2-bridge/) | the bridge DLL/.so the game loads (tool plugin + Metamod plugin) and its JSON-RPC wire contract | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md), [PROTOCOL.md](crates/cs2-bridge/PROTOCOL.md) |
-| [`crates/cs2-bridge-tools/`](crates/cs2-bridge-tools/) | `cargo bridge <command>`: the pins generator (`crates/cs2-bridge/src/generated/pins.rs`), build + export gate, install/ensure, the Wine tools runtime, the Metamod build | [crates/cs2-bridge/README.md](crates/cs2-bridge/README.md) "The commands" |
-| [`sigs/`](sigs/) | signature database the bridge pins come from, resolver and update judge | [sigs/README.md](sigs/README.md) |
-| [`crates/s2sdk/`](crates/s2sdk/) | Rust bindings generated from the s2sdk headers (`crates/s2sdk/upstream` submodule: personcopperfine/s2sdk, a fork of alliedmodders/s2sdk), safe layer, live probe | [crates/s2sdk/README.md](crates/s2sdk/README.md) |
-| [`crates/cs2-native/`](crates/cs2-native/) | `cs2mcp-native`, the launcher for a CS2 the user installed through Steam (no containers) | [crates/cs2-native/README.md](crates/cs2-native/README.md) |
+| `cs2-client` (`client-mcp`) | the running game: player state, input, console, screenshots, in-game tests | Windows, Linux |
+| `cs2-hammer` (`hammer-mcp`) | the Workshop Tools: Hammer, ModelDoc, the particle editor, compiles, and the game inside the tools | Windows |
 
-Agents start at [AGENTS.md](AGENTS.md); after a CS2 update follow
-[workflows/game-update.md](workflows/game-update.md).
+## Requirements
 
-Each server directory is self-contained for **docs** (own `AGENT.md`, `workflows/`); shared
-conventions are duplicated in both guides on purpose. The **code** behind those conventions is
-shared through `cs2-mcp-common`.
+* Counter-Strike 2 installed through Steam (the Workshop Tools as well, for `cs2-hammer`).
+* Windows 10/11 x64, or Linux x86_64 (kernel 5.11 or newer) with a Vulkan GPU driver.
+* An MCP client: Claude Code, Claude Desktop, Codex, Cursor, or anything else that runs stdio
+  MCP servers.
 
-## Layout and project root
+> **Warning.** The game is always started with `-insecure`, so VAC is off and you can't join
+> official or secure servers while cs2-mcp is running. The launcher puts your install back the
+> way it was when you press **Stop**.
 
-```sh
-git clone --recurse-submodules https://github.com/personcopperfine/counterstrike2-mcp.git
-# or, in an existing clone:
-git submodule update --init crates/s2sdk/upstream crates/metamod/upstream workshop
-git -C crates/metamod/upstream submodule update --init third_party/khook
-```
+## 1. Install
 
-| Submodule | Repo | What it is |
+Download the file for your system from the
+[latest release](https://github.com/personcopperfine/counterstrike2-mcp/releases):
+
+| System | File | Install |
 |---|---|---|
-| `crates/s2sdk/upstream` | [personcopperfine/s2sdk](https://github.com/personcopperfine/s2sdk) (branch `cs2mcp/main`) | the Source 2 SDK headers the bindings are generated from |
-| `crates/metamod/upstream` | [alliedmodders/metamod-source](https://github.com/alliedmodders/metamod-source) | Metamod:Source + KHook headers |
-| `workshop` | [personcopperfine/cs2-docker-workshop](https://github.com/personcopperfine/cs2-docker-workshop) | the workshop tools image (Hammer etc. under Wine/Proton, a file-source image), published as `ghcr.io/personcopperfine/cs2-workshop` |
+| Windows | `cs2mcp-<version>-windows-x86_64.msi` | Run it. It installs per user (no admin prompt) to `%LOCALAPPDATA%\Programs\cs2-mcp` and adds a Start menu entry. |
+| Windows (portable) | `cs2mcp-<version>-windows-x86_64.zip` | Unzip it anywhere. |
+| Linux (any distro) | `cs2mcp-<version>-linux-x86_64.AppImage` | `chmod +x` it and run it. |
+| Debian / Ubuntu | `cs2mcp-<version>-linux-amd64.deb` | `sudo apt install ./cs2mcp-<version>-linux-amd64.deb` (installs to `/opt/cs2mcp`) |
+| Linux (portable) | `cs2mcp-<version>-linux-x86_64.tar.gz` | Extract it anywhere. |
 
-The **project root** is this checkout unless `CS2_MCP_PROJECT_ROOT` (or the servers'
-`--project-root`) says otherwise; `CS2DOCKER_ROOT` is still read by the shell tools as a
-deprecated alias. Runtime state lives under it and is never committed:
+`SHA256SUMS` in the release lists the checksum of every file. Nothing is code-signed, so Windows
+SmartScreen may ask you to confirm the first run.
 
-```
-<project root>/workshop/run/app     the Windows CS2 + tools tree with its Proton prefix (mounted at /app)
-<project root>/workshop/run/cache   the tools container's /cache
-<project root>/.podman/xdg          podman's XDG_RUNTIME_DIR (also the `cargo bridge install` locks in .podman/)
-<project root>/artifacts/           client-mcp run artifacts
-```
+## 2. Start the game
 
-`cargo bridge` (and the shell tools in `crates/cs2-native/scripts/`) resolve a linked git
-worktree to the repo's main checkout, so worktrees share one game tree; a Rust server defaults to
-the checkout it was built in (pass `--project-root` to a worktree build). A parent directory
-holding this repo as `cs2-mcp/` next to `workshop/` (the layout this repo grew up in) works when
-`CS2_MCP_PROJECT_ROOT` names it.
+Open **cs2mcp-launcher** (Start menu, the AppImage, or `cs2mcp-launcher` in the extracted
+folder):
 
-Images: the servers and `cargo bridge runtime` run `ghcr.io/personcopperfine/cs2-docker:latest`
-(podman pulls it on first use); its source is
-[personcopperfine/cs2-docker](https://github.com/personcopperfine/cs2-docker) (`client/`), whose
-CI publishes it. A custom build from a clone of that repo is selected with `CS2_MCP_IMAGE` /
-`--image` (servers) or `IMG` / `--image` (`cargo bridge runtime up`):
+1. Pick the Steam mode. `gbe` runs offline with no Steam account. `client` uses the Steam client
+   you're already logged in to.
+2. On Windows, tick **Workshop Tools** if you want `cs2-hammer`.
+3. Press **Prepare + Launch** and wait until every step is checked.
+4. When you're done, press **Stop** (or just close the window). That stops the game and restores
+   your install.
+
+## 3. Add the servers to your MCP client
+
+The launcher prints the server config for your machine. Run it once, in a terminal:
 
 ```sh
-git clone https://github.com/personcopperfine/cs2-docker.git <clone>
-podman build -t localhost/cs2-docker <clone>/client
-export CS2_MCP_IMAGE=localhost/cs2-docker
+# Windows (PowerShell)
+& "$env:LOCALAPPDATA\Programs\cs2-mcp\cs2mcp-native.exe" mcp-config
+# Linux, AppImage
+./cs2mcp-<version>-linux-x86_64.AppImage cs2mcp-native mcp-config
+# Linux, .deb
+/opt/cs2mcp/cs2mcp-native mcp-config
+# zip / tar.gz: run cs2mcp-native from the extracted folder
 ```
 
-The thin derived images (`client-mcp/docker/Dockerfile`, `hammer-mcp/docker/Dockerfile`) take
-the base as `--build-arg BASE=<image>` (default the ghcr ref). The workshop image is a scratch
-image of files (the game + tools tree and its Proton prefix); its `/app/` is the tree the tools
-container mounts. Copy it to `workshop/run/app` once (it is large):
+It prints a standard `mcpServers` block with the absolute paths for your machine:
+
+```json
+{ "mcpServers": {
+  "cs2-hammer": { "command": "C:\\Users\\you\\AppData\\Local\\Programs\\cs2-mcp\\hammer-mcp.exe",
+                  "args": ["--discovery", "...", "--expect-build", "..."] },
+  "cs2-client": { "command": "C:\\Users\\you\\AppData\\Local\\Programs\\cs2-mcp\\client-mcp.exe",
+                  "args": ["--discovery", "...", "--expect-build", "...", "--console-log", "..."] } } }
+```
+
+Use `--server client` or `--server hammer` to print only one of them. If it says "no CS2 install
+found", point it at your Steam library: `--library <steam library folder>` (before
+`mcp-config`). The servers connect to the
+game the launcher started, so start the game first (step 2). After a game or cs2-mcp update, run
+`mcp-config` again.
+
+Your MCP client starts the servers from this config (stdio). Add them as follows:
+
+### Claude Code
+
+Per project: save the printed block as `.mcp.json` in the project's root folder. Claude Code asks
+you to approve the servers the first time.
+
+Or add them for every project, one server at a time, with the `command` and `args` from the
+printed block:
 
 ```sh
-id=$(podman create ghcr.io/personcopperfine/cs2-workshop:latest /entrypoint.sh)
-mkdir -p workshop/run/app && podman cp "$id:/app/." workshop/run/app/ && podman rm "$id"
+claude mcp add --scope user cs2-client -- <command> <args...>
+claude mcp add --scope user cs2-hammer -- <command> <args...>
 ```
 
-`cargo bridge install install` then installs the bridge, Metamod and the launcher into it
-([crates/cs2-bridge/README.md](crates/cs2-bridge/README.md)).
+Check with `claude mcp list`, or `/mcp` inside a session.
 
-## Supported targets
+### Claude Desktop
 
-* **Linux with containers** (podman; Docker untested) — the default. Both servers drive sessions in containers of the
-  published client image: the Wine tools session (Hammer, ModelDoc, pet; `hammer-mcp`, and
-  `client-mcp`'s WineTools flavour with the bridge) runs the tree at `workshop/run/app` and needs
-  the host X display; the Linux client (`client-mcp`'s LinuxClient flavour) runs headless under
-  in-container Xvfb with the game in the `cs2-home` volume (the image's own entrypoint installs it
-  there with steamcmd, anonymous login). Wine sessions run with `--gpus all` (an NVIDIA GPU and its
-  container toolkit); the Linux client defaults to the image's lavapipe (software Vulkan) and takes
-  `gpus: true`. podman is what the code calls (`--podman` / `CS2_MCP_PODMAN`, `PODMAN` for the
-  scripts); a `docker`-compatible CLI in its place is untested.
-* **Linux native** — `cs2mcp-native` (`crates/cs2-native`) prepares a CS2 the user installed
-  through Steam (the Linux build), launches it with the bridge loaded as a Metamod plugin and
-  prints the MCP server config; the user's tree is never written (kernel overlayfs in an
-  unprivileged user namespace, Linux 5.11+; `--strategy in-place` otherwise). It needs the
-  packaged payload (`crates/cs2-native/scripts/package.sh --os linux`: the bridge, the Metamod
-  build, the capture layer) and, for `--steam gbe`, the gbe_fork Linux libraries
-  (`cs2mcp-native fetch-gbe`, curl + tar). The workshop tools are Windows-only, so this target
-  serves `client-mcp`; `--tools` is refused on Linux.
+Settings → Developer → **Edit Config** opens `claude_desktop_config.json`. Merge the printed
+`mcpServers` entries into it, then restart Claude Desktop.
 
-`cs2mcp-native` also runs on Windows against a Steam install (`workflows/windows-native.md`);
-that path is not a supported target of this repo yet.
-
-## Building
+### Codex (CLI and IDE extension)
 
 ```sh
-cargo build --workspace                 # Linux half (servers, bridge .so, tools)
-cargo bridge build                      # the bridge + loader for win64 + linux (needs target/game-bins*)
+codex mcp add cs2-client -- <command> <args...>
+codex mcp add cs2-hammer -- <command> <args...>
 ```
 
-The win64 half (`--target x86_64-pc-windows-msvc`: the bridge DLL, the launcher, the capture
-layer) cross-builds on Linux and needs two things on top of `rustup target add
-x86_64-pc-windows-msvc`:
+Or write the servers into `~/.codex/config.toml` yourself:
 
-* **`lld-link`** on PATH (LLVM's lld; some distributions ship it as `lld-link-<version>`:
-  symlink it, or set `CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER`);
-* the **MSVC CRT + Windows SDK** libraries in `target/xwin`
-  (`crates/s2sdk/s2sdk-sys/gen/fetch-xwin.sh` installs `xwin` and splats them there, accepting
-  Microsoft's license; a sysroot elsewhere can be symlinked to `target/xwin`).
-  `.cargo/config.toml` links against `target/xwin/{crt,sdk}/lib/...` relative to the workspace
-  root.
-
-Status (2026-10-11): **bootstrapped** — both servers speak MCP over stdio, the bridge client and
-mock are full ports of the Python POC, `session_status` works in both (plus a guarded
-`console_exec` in client-mcp); the remaining tools are capability-gated stubs that point at their
-workflow. Phase order everywhere: **docker runtime first**, **local game install later** (same
-`Runtime` trait).
-
-```sh
-cargo clippy --workspace --all-targets   # warning-free
-cargo test  --workspace                  # no game needed
+```toml
+[mcp_servers.cs2-client]
+command = '<command>'
+args = ['--discovery', '<...>', '--expect-build', '<...>', '--console-log', '<...>']
+startup_timeout_sec = 30
 ```
 
-Design decisions (details in each AGENT.md): `rmcp` 3.5 for MCP over stdio behind a one-file
-adapter; our own tool registry with capability gating, per-call budgets and handle stripping;
-`runtime::Runtime` trait with `docker` (podman) now and `local` later; **no addresses in Rust** —
-the signature DB (`sigs/signatures`) pins the bridge DLL and the servers only read it by name
-for build pinning; vision = bridge renders and game frames read from the Vulkan swapchain by our
-capture layer (`cs2-vk-capture`), returned as MCP image blocks, OCR via the `tesseract` CLI (no
-X server grabs); headless = Linux client under in-container Xvfb today (the display only),
-Wine tools still need the host X display (work item).
+(Single-quoted TOML strings keep Windows backslashes as they are.) Check with `codex mcp list`,
+or `/mcp` inside Codex.
+
+### Cursor, Gemini CLI, Windsurf and others
+
+Most clients read the same `mcpServers` format. Paste the printed block into the client's MCP
+config: `~/.cursor/mcp.json` (Cursor), `~/.gemini/settings.json` (Gemini CLI),
+`~/.codeium/windsurf/mcp_config.json` (Windsurf). VS Code's `.vscode/mcp.json` calls the key
+`servers` instead of `mcpServers`, with the same entries inside.
+
+### Try it
+
+Ask your assistant to *"call session_status on cs2-client"*. It should report the connected game
+and its build. From there, try *"load de_dust2, walk to the A site and take a screenshot"*, or, on
+Windows with the Workshop Tools, *"make a new map with a small room and a light, compile it and
+run it"*.
+
+## Tools
+
+A selection. Each server lists all of its tools to your MCP client, with full descriptions.
+
+**`cs2-client`, the game**
+
+| Tool | What it does |
+|---|---|
+| `session_status` | game build, connection, which tool groups are available |
+| `game_state` | local player: map, position, view angles, health, active weapon |
+| `radar` | players, bomb and hostages, projected onto the map overview |
+| `game_rules` | round and warmup state, round times, bomb planted |
+| `entity_find` | find entities in the running game by class or name |
+| `console_exec`, `console_tail`, `cvar_get` | run console commands, read the console and cvars |
+| `setpos`, `look_at`, `input_set`, `input_sequence` | teleport, aim and press buttons, as a player would |
+| `fire_weapon`, `select_weapon`, `use_entity` | shoot, switch weapons, press use on an entity |
+| `game_snapshot`, `game_restore`, `round_start` | save and restore the player's state; put the round in a known state |
+| `screenshot`, `observe`, `ocr` | capture the game view and read text from it |
+| `game_test` | declarative in-game test: setup, steps, expectations, teardown (JUnit output) |
+| `demo_record_start`, `demo_record_stop` | record a SourceTV demo |
+
+**`cs2-hammer`, the Workshop Tools**
+
+| Tool | What it does |
+|---|---|
+| `new_map`, `open_map`, `save_map` | create, open and save Hammer maps |
+| `create_block`, `create_mesh`, `extrude_mesh_face`, `set_mesh_material`, `align_texture` | build and texture geometry |
+| `apply_layout` | build many meshes and entities from one JSON layout |
+| `create_entities`, `set_entity_keyvalues`, `add_entity_connections` | place entities and wire their inputs/outputs, checked against the FGD |
+| `create_props`, `list_models`, `find_assets` | find models, materials, sounds, particles and place props |
+| `create_trigger`, `create_sound_entities`, `prefab` | triggers, sound entities, prefabs |
+| `look`, `render_view` | see the map: framed images of a target, renders from any camera |
+| `get_selection`, `set_selection` | read or change what's selected in Hammer |
+| `compile_map`, `run_map`, `play_test` | compile the map, load it in the engine, play through steps |
+| `model_import`, `model_edit`, `model_compile`, `model_render` | import glTF/FBX models, edit .vmdl files, compile and render them in ModelDoc |
+| `particle_create`, `particle_live_edit`, `particle_compile`, `particle_render` | build and preview particle systems |
+| `cs_script` | TypeScript map scripts (`point_script`) for the addon |
+| `report_ready` | pre-release check of the map, with a fix for each problem |
+| `get_playbook` | step-by-step procedures for whole tasks (blockout a map, import a model, ...) |
+
+## Uninstalling
+
+Press **Stop** in the launcher first (or **Repair** after a crash), so your game install is put
+back. Then uninstall the app (Windows "Apps", `sudo apt remove cs2-mcp`, or delete the AppImage or
+folder). If you skipped that, any version of cs2-mcp can still restore the install later with
+`cs2mcp-native uninstall`.
+
+## Contributing
+
+Building from source, the architecture and the game-update procedure are documented for
+developers and agents in [AGENTS.md](AGENTS.md).
+
+## License
+
+See [LICENSE](LICENSE).
